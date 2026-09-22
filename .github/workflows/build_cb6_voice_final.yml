@@ -1,0 +1,167 @@
+name: CB6 Runtime Final APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cb6-runtime-final
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: CB6 Runtime Final arm64
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SKIP_MAP_DOWNLOAD: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate source package
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p out
+          python3 validate_package.py | tee out/PACKAGE_VALIDATION.txt
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build cmake qt6-base-dev qt6-declarative-dev qt6-positioning-dev libqt6svg6-dev optipng libfreetype-dev libharfbuzz-dev libxkbcommon-dev libxkbcommon-x11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev python3-pip python3-venv rsync jq zlib1g-dev unzip
+          pip install "protobuf<3.21" --break-system-packages
+      - name: Clone pinned CoMaps
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin 7113ccb5f086183f8884b2aa4e58c987466b6704
+          git -C comaps checkout --detach FETCH_HEAD
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          for attempt in 1 2 3 4 5 6; do
+            if git -C comaps submodule update --init --recursive --depth=1 --jobs=8; then break; fi
+            sleep $((attempt*15))
+          done
+          test -f comaps/3party/protobuf/protobuf/src/google/protobuf/arena.cc
+      - name: Apply CB6 implementation
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 scripts/adapt_apply_for_pinned_comaps.py
+          python3 scripts/apply_cb6_complete.py comaps
+          python3 scripts/fix_cb6_vehicle_priorities.py comaps
+          python3 scripts/apply_cb6_v11_fixes.py comaps
+          python3 scripts/apply_cb6_v12_fixes.py comaps
+          python3 scripts/apply_cb6_v13_display_fixes.py comaps
+          python3 scripts/apply_cb6_v14_realdevice_fixes.py comaps
+          python3 scripts/apply_cb6_v15_finalrender_fixes.py comaps
+          python3 scripts/apply_cb6_v16_native_signal_reset.py comaps
+          python3 scripts/apply_cb6_v17_ui_voice.py comaps
+          python3 scripts/apply_cb6_v18_forward_signal.py comaps
+          python3 scripts/apply_cb6_v19_near_signal_immediate.py comaps
+          python3 scripts/apply_cb6_v110_signal_fetch_resilience.py comaps
+          python3 scripts/apply_cb6_v111_signal_dedicated_group.py comaps
+          python3 scripts/apply_cb6_release_fuzzy.py comaps
+          python3 scripts/apply_cb6_runtime_final.py comaps
+          python3 scripts/apply_cb6_final_hardening.py comaps
+          python3 scripts/apply_cb6_production_identity.py comaps
+      - name: Configure resources
+        shell: bash
+        run: |
+          set -o pipefail
+          cd comaps
+          bash -x ./configure.sh --skip-map-download 2>&1 | tee ../configure-runtime-final.log
+      - name: Reapply runtime behavior after generation
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 scripts/apply_cb6_runtime_final.py comaps
+          python3 scripts/apply_cb6_final_hardening.py comaps
+          python3 scripts/apply_cb6_production_identity.py comaps
+      - name: Full source and generated-resource audits
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 CB6_V17_AUDIT.py comaps
+          python3 CB6_V18_AUDIT.py comaps
+          python3 CB6_V19_AUDIT.py comaps
+          python3 CB6_V110_AUDIT.py comaps
+          python3 CB6_V111_AUDIT.py comaps
+          python3 CB6_FULL_SPEC_AUDIT.py comaps
+          python3 CB6_PRODUCTION_AUDIT.py comaps
+          python3 CB6_FINAL_STATIC_AUDIT.py comaps
+          python3 CB6_SYMBOL_ATLAS_AUDIT.py comaps
+      - name: Runtime invariants
+        shell: bash
+        run: |
+          set -euxo pipefail
+          grep -q "project.ext.appId = 'jp.cb6.navi'" comaps/android/app/build.gradle
+          ! grep -q "ndk.debugSymbolLevel = 'full'" comaps/android/app/build.gradle
+          grep -q 'class Cb6SignalMark final : public DebugMarkPoint' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
+          grep -q 'DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING)' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
+          grep -q 'SetIsVisible(UserMark::Type::CB6_DRIVING, true)' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
+          grep -q 'android.permission.RECORD_AUDIO' comaps/android/app/src/main/AndroidManifest.xml
+          grep -q 'createOnDeviceSpeechRecognizer' comaps/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+          grep -q 'launchCb6VoiceFallback' comaps/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+          grep -q 'intent.resolveActivity(requireContext().getPackageManager()) != null' comaps/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+          grep -q 'cb6NormalizeSearchQuery' comaps/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+          grep -q 'SearchEngine.INSTANCE.search(requireContext(), cb6NormalizeSearchQuery(getQuery())' comaps/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+          grep -q 'mCb6StartupLocationRetryCount < 20' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
+          grep -q 'mCb6StartupHeadingApplied' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
+          grep -q 'postImmediateSignals(signals);' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          grep -q 'private void postImmediateSignals' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          ! grep -q 'postPoints(signals, "NET-SIG");' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          grep -q 'highway=stop' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          grep -q 'shop=convenience' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          ! grep -Rqs '\[highway=traffic_signals\]' comaps/data/styles/*/include/Icons.mapcss
+      - name: Build production arm64 APK
+        shell: bash
+        run: |
+          set -o pipefail
+          cd comaps/android
+          ./gradlew -Parm64 app:assembleWebRelease --no-daemon --stacktrace 2>&1 | tee ../../gradle-runtime-final.log
+      - name: Verify and package APK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p out verify-apk
+          APK="$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | head -1)"
+          test -n "$APK"
+          cp "$APK" out/CB6-Navi-Runtime-Final-arm64.apk
+          unzip -q out/CB6-Navi-Runtime-Final-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
+          ! readelf -S verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -q '\.debug_info'
+          file verify-apk/lib/arm64-v8a/liborganicmaps.so | tee out/NATIVE_VERIFY.txt
+          ! file verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -q 'not stripped'
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)"
+          "$AAPT" dump badging out/CB6-Navi-Runtime-Final-arm64.apk | head -1 | tee out/PACKAGE_VERIFY.txt
+          grep -q "package: name='jp.cb6.navi'" out/PACKAGE_VERIFY.txt
+          python3 CB6_FULL_SPEC_AUDIT.py comaps out/CB6-Navi-Runtime-Final-arm64.apk | tee out/FULL_SPEC_AUDIT.txt
+          sha256sum out/CB6-Navi-Runtime-Final-arm64.apk > out/SHA256SUMS.txt
+          unzip -l out/CB6-Navi-Runtime-Final-arm64.apk > out/APK_CONTENTS.txt
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-Navi-Runtime-Final-arm64
+          path: out/*
+          if-no-files-found: error
+          retention-days: 30
+      - name: Diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cb6-runtime-final-diagnostics
+          path: |
+            configure-runtime-final.log
+            gradle-runtime-final.log
+            out/*
+          if-no-files-found: warn
