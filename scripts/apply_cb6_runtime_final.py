@@ -3,38 +3,25 @@ from pathlib import Path
 import re, sys
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path('comaps').resolve()
 
-def strip_building_rules(text: str):
-    lines=text.splitlines(keepends=True); out=[]; block=[]; depth=0; removed=0
-    for line in lines:
-        block.append(line)
-        depth += line.count('{') - line.count('}')
-        if depth == 0 and '}' in line:
-            b=''.join(block); selector, body = b.split('{', 1)
-            selector = re.sub(r'/\*.*?\*/|//[^\n]*', '', selector, flags=re.S)
-            parts = selector.split(',')
-            kept = [part for part in parts if not re.search(r'\[(?:building|building:part)(?:[=\]])', part)]
-            removed += len(parts) - len(kept)
-            kept = [part for part in kept if re.search(r'\b(?:node|area|way|relation)\b', re.sub(r'/\*.*?\*/', '', part, flags=re.S))]
-            if kept:
-                out.append(','.join(kept) + '{' + body)
-            block=[]
-    if block: out.append(''.join(block))
-    return ''.join(out), removed
+def suppress_buildings(root):
+    count = 0
+    for p in sorted((root/'data/styles').glob('*/include/Basemap.mapcss')):
+        body = p.read_text(encoding='utf-8')
+        marker = '/* CB6 runtime-final building geometry hidden */'
+        if marker not in body:
+            body += '\n' + marker + '\narea|z1-[building],\narea|z1-[building:part]\n{fill-opacity:0; line-width:0;}\n'
+            p.write_text(body, encoding='utf-8')
+            count += 1
+    for p in sorted((root/'data/styles').glob('*/include/Basemap_label.mapcss')):
+        body = p.read_text(encoding='utf-8')
+        marker = '/* CB6 runtime-final building labels hidden */'
+        if marker not in body:
+            body += '\n' + marker + '\narea|z1-[building]\n{text:none;}\n'
+            p.write_text(body, encoding='utf-8')
+            count += 1
+    return count
 
-removed_total=0
-for p in sorted((ROOT/'data/styles').glob('*/include/*.mapcss')):
-    before=p.read_text(encoding='utf-8'); after,n=strip_building_rules(before)
-    removed_total += n
-    if after != before: p.write_text(after,encoding='utf-8')
-# Buildings are intentionally not rendered, but retain an explicit text:none rule so
-# house numbers cannot leak back as labels and the final audit can distinguish
-# suppression from building geometry rendering.
-for p in sorted((ROOT/'data/styles').glob('*/include/Basemap_label.mapcss')):
-    s=p.read_text(encoding='utf-8')
-    marker='CB6 runtime-final: buildings hidden; suppress building house numbers'
-    if marker not in s:
-        s += '\n\n/* '+marker+' */\nnode|z10-[building][addr:housenumber]\n{text:none;}\n'
-        p.write_text(s,encoding='utf-8')
+removed_total = suppress_buildings(ROOT)
 
 fw=ROOT/'android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp';s=fw.read_text(encoding='utf-8')
 required=('class Cb6SignalMark final : public DebugMarkPoint','DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING)','session.SetIsVisible(UserMark::Type::CB6_DRIVING, true);','bool SymbolIsPOI() const override { return true; }','bool IsNonDisplaceable() const override { return true; }','bool GetDepthTestEnabled() const override { return false; }','void SetForward(bool forward)','int GetMinZoom() const override { return 15; }')

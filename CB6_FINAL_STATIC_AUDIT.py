@@ -8,18 +8,13 @@ def text(rel):
  if not p.exists(): F.append('missing '+rel); return ''
  return p.read_text(encoding='utf-8',errors='replace')
 mwm=text('android/app/src/main/java/app/organicmaps/MwmActivity.java');mgr=text('android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java');search=text('android/app/src/main/java/app/organicmaps/search/SearchFragment.java');vehicle=text('data/styles/vehicle/include/Icons.mapcss');fw=text('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp')
-# Positive building selectors are forbidden except the explicit text:none house-number
-# suppression rule. This preserves 'buildings hidden' while preventing address clutter.
-for p in sorted((ROOT/'data/styles').glob('*/include/*.mapcss')):
- s=p.read_text(encoding='utf-8',errors='replace');bad=[]
- for block in re.split(r'(?<=\})',s):
-  if '{' not in block: continue
-  selector,body=block.split('{',1)
-  if re.search(r'\[(?:building|building:part)(?:=|\])',selector):
-   allowed='[building][addr:housenumber]' in selector and re.sub(r'[\s;}]','',body)=='text:none'
-   if not allowed: bad.append(selector.strip()[:160])
- check(not bad,'building drawing selectors absent: '+str(p.relative_to(ROOT)))
-check('[building][addr:housenumber]' in '\n'.join(p.read_text(encoding='utf-8',errors='replace') for p in ROOT.glob('data/styles/**/*.mapcss')),'building house-number suppression retained')
+# Keep CoMaps rules intact and require CB6 building suppression at the end of each style.
+for p in sorted((ROOT/'data/styles').glob('*/include/Basemap.mapcss')):
+ check('CB6 runtime-final building geometry hidden' in p.read_text(encoding='utf-8'),
+       'building geometry suppression: '+str(p.relative_to(ROOT)))
+for p in sorted((ROOT/'data/styles').glob('*/include/Basemap_label.mapcss')):
+ check('CB6 runtime-final building labels hidden' in p.read_text(encoding='utf-8'),
+       'building label suppression: '+str(p.relative_to(ROOT)))
 for token in ('railway=station','aeroway=aerodrome','amenity=hospital','amenity=parking','amenity=fuel','shop=supermarket','tourism=museum','amenity=community_centre','boundary=national_park','highway=speed_camera','shop=convenience'):
  check(token in vehicle,'major facility retained in vehicle style: '+token)
 for token in ('CB6_POSITION_LOWER_DP = 96','updateMyPositionRoutingOffset(Math.max(0, offsetY - cb6LowerPx))','landscape ? 150 : 190','landscape ? 48 : 52','landscape ? 30 : 34','mCb6RoadHud.setTranslationX(cb6Dp(24));','info.currentStreet'):
