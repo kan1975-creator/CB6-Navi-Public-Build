@@ -10,6 +10,7 @@ def strip_building_rules(text: str):
         depth += line.count('{') - line.count('}')
         if depth == 0 and '}' in line:
             b=''.join(block); selector, body = b.split('{', 1)
+            selector = re.sub(r'/\*.*?\*/|//[^\n]*', '', selector, flags=re.S)
             parts = selector.split(',')
             kept = [part for part in parts if not re.search(r'\[(?:building|building:part)(?:[=\]])', part)]
             removed += len(parts) - len(kept)
