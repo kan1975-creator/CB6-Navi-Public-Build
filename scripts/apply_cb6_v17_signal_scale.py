@@ -6,24 +6,24 @@ ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path("comaps").reso
 fw = ROOT / "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
 s = fw.read_text(encoding="utf-8")
 
-# v1.8 intentionally replaces the v1.7 zoom policy while preserving the same
-# Run #138 DebugMarkPoint renderer. CB6_V16_AUDIT runs both before and after
-# generated-resource creation, so treat an already-applied v1.8 class as a valid
-# idempotent state instead of trying to rewrite it back to v1.7.
+# v1.8 replaces the v1.7 zoom policy while preserving the proven renderer.
+# The real-device requirement is: signals remain visible in the 500 m class,
+# while 1 km remains hidden.  On the pinned CoMaps zoom mapping the 500 m class
+# requires z14, not z15.
 if 'void SetForward(bool forward)' in s:
     required_v18 = (
         'class Cb6SignalMark final : public DebugMarkPoint',
-        'symbols->insert({15, "cb6-signal"});',
+        'symbols->insert({14, "cb6-signal"});',
         'symbols->insert({17, "cb6-signal-m"});',
         'symbols->insert({19, "cb6-signal-l"});',
-        'int GetMinZoom() const override { return 15; }',
+        'int GetMinZoom() const override { return 14; }',
         'auto * mark = session.CreateUserMark<Cb6SignalMark>(pt);',
         'mark->SetForward(static_cast<int>(kinds[i]) == 22);',
     )
     for token in required_v18:
         if token not in s:
             raise SystemExit("v1.8 signal policy incomplete: " + token)
-    print("CB6 signal scale: v1.8 forward policy already applied; v1.7 patch skipped")
+    print("CB6 signal scale: v1.8 500m policy already applied; v1.7 patch skipped")
     raise SystemExit(0)
 
 old = '''      drape_ptr<df::UserPointMark::SymbolNameZoomInfo> GetSymbolNames() const override
@@ -35,8 +35,6 @@ old = '''      drape_ptr<df::UserPointMark::SymbolNameZoomInfo> GetSymbolNames()
 new = '''      drape_ptr<df::UserPointMark::SymbolNameZoomInfo> GetSymbolNames() const override
       {
         auto symbols = make_unique_dp<SymbolNameZoomInfo>();
-        // CB6 v1.7 compatibility policy. v1.8 supersedes this after the baseline
-        // renderer is established.
         symbols->insert({1, "cb6-signal-s"});
         symbols->insert({15, "cb6-signal"});
         symbols->insert({17, "cb6-signal-m"});
@@ -49,8 +47,6 @@ if old not in s:
 else:
     s = s.replace(old, new, 1)
 
-# Preserve the exact Run #138 proven-visible class path. Do not add back any
-# extra render-policy overrides here.
 for forbidden in (
     'bool SymbolIsPOI() const override { return true; }',
     'bool IsNonDisplaceable() const override { return true; }',
@@ -73,4 +69,4 @@ for token in required:
         raise SystemExit("scaled signal policy missing: " + token)
 
 fw.write_text(s, encoding="utf-8")
-print("CB6 signal scale applied: z1 small, z15 normal, z17 medium, z19 large")
+print("CB6 signal scale baseline applied")
