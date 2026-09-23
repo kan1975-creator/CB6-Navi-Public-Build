@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - clean-import
       - cb6-runtime-final
 
 permissions:
