@@ -22,7 +22,7 @@ for p in sorted((ROOT/'data/styles').glob('*/include/*.mapcss')):
 check('[building][addr:housenumber]' in '\n'.join(p.read_text(encoding='utf-8',errors='replace') for p in ROOT.glob('data/styles/**/*.mapcss')),'building house-number suppression retained')
 for token in ('railway=station','aeroway=aerodrome','amenity=hospital','amenity=parking','amenity=fuel','shop=supermarket','tourism=museum','amenity=community_centre','boundary=national_park','highway=speed_camera','shop=convenience'):
  check(token in vehicle,'major facility retained in vehicle style: '+token)
-for token in ('CB6_POSITION_LOWER_DP = 96','updateMyPositionRoutingOffset(Math.max(0, offsetY - cb6LowerPx))','landscape ? 150 : 190','landscape ? 48 : 52','landscape ? 92 : 100','mCb6RoadHud.setTranslationX(cb6Dp(24));','info.currentStreet'):
+for token in ('CB6_POSITION_LOWER_DP = 96','updateMyPositionRoutingOffset(Math.max(0, offsetY - cb6LowerPx))','landscape ? 150 : 190','landscape ? 48 : 52','landscape ? 30 : 34','mCb6RoadHud.setTranslationX(cb6Dp(24));','info.currentStreet'):
  check(token in mwm,'UI/HUD invariant: '+token)
 for token in ('scheduleCb6StartupLocationAttempt(350L);','mCb6StartupLocationRetryCount < 20','scheduleCb6StartupLocationAttempt(500L);','LocationState.nativeStartPendingPositionMode();','LocationState.nativeSwitchToNextMode();','mCb6StartupHeadingApplied || !mCb6StartupHeadingPending','mCb6StartupHeadingApplied = true;'):
  check(token in mwm,'startup invariant: '+token)

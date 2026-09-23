@@ -6,11 +6,10 @@ ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path('comaps').reso
 def strip_building_rules(text: str):
     lines=text.splitlines(keepends=True); out=[]; block=[]; depth=0; removed=0
     for line in lines:
-        if depth == 0: block=[line]
-        else: block.append(line)
+        block.append(line)
         depth += line.count('{') - line.count('}')
-        if depth == 0 and block:
-            b=''.join(block); selector=b.split('{',1)[0] if '{' in b else ''
+        if depth == 0 and '}' in line:
+            b=''.join(block); selector=b.split('{',1)[0]
             if re.search(r'\[(?:building|building:part)(?:[=\]])', selector): removed += 1
             else: out.append(b)
             block=[]
