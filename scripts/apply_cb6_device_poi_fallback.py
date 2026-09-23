@@ -6,7 +6,7 @@ root = Path(sys.argv[1] if len(sys.argv) > 1 else "comaps")
 
 # Real-device fallback: keep the CB6 supplemental renderer, but also allow
 # downloaded CoMaps map data to render critical driving POIs when Overpass/JNI
-# supplementation is unavailable.
+# supplementation is unavailable. Applied only after the existing static audits.
 for style in ("vehicle", "default"):
     p = root / "data/styles" / style / "include" / "Icons.mapcss"
     if not p.exists():
