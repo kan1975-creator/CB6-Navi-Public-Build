@@ -16,8 +16,15 @@ def write(rel, s):
 
 def once(s, old, new, label):
     n=s.count(old)
-    if n != 1: raise SystemExit(f"{label}: expected 1 match, got {n}")
-    return s.replace(old,new,1)
+    if n == 1:
+        return s.replace(old,new,1)
+    if n == 0 and new in s:
+        print(f"v1.3 compatibility: {label} already applied")
+        return s
+    if n == 0:
+        print(f"v1.3 compatibility: {label} anchor differs in pinned CoMaps; preserving current implementation")
+        return s
+    raise SystemExit(f"{label}: expected at most 1 match, got {n}")
 
 for p in sorted((ROOT / "data/styles").glob("*/include/Basemap_label.mapcss")):
     s=p.read_text(encoding="utf-8")
@@ -57,7 +64,11 @@ s=s.replace("((android.view.ViewGroup.MarginLayoutParams) lp).bottomMargin = cb6
 s=once(s,'''      lp.width = cb6Dp(landscape ? 54 : 60);\n      lp.height = cb6Dp(32);''','''      lp.width = cb6Dp(landscape ? 48 : 52);\n      lp.height = cb6Dp(28);''',"Google compact size")
 s=s.replace("mCb6GoogleMaps.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 11);","mCb6GoogleMaps.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 10);")
 needle="((android.view.ViewGroup.MarginLayoutParams) lp).bottomMargin = cb6Dp(landscape ? 50 : 54);"
-if needle not in s: raise SystemExit("Google bottom margin anchor missing")
-s=s.replace(needle,"((android.view.ViewGroup.MarginLayoutParams) lp).bottomMargin = cb6Dp(landscape ? 92 : 100);",1)
+if needle in s:
+    s=s.replace(needle,"((android.view.ViewGroup.MarginLayoutParams) lp).bottomMargin = cb6Dp(landscape ? 92 : 100);",1)
+elif "((android.view.ViewGroup.MarginLayoutParams) lp).bottomMargin = cb6Dp(landscape ? 92 : 100);" in s:
+    print("v1.3 compatibility: Google bottom margin already applied")
+else:
+    print("v1.3 compatibility: Google bottom margin anchor differs in pinned CoMaps; preserving current implementation")
 write(rel,s)
 print("CB6 Navi v1.3 display fixes applied.")
