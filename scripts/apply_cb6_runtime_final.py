@@ -9,9 +9,12 @@ def strip_building_rules(text: str):
         block.append(line)
         depth += line.count('{') - line.count('}')
         if depth == 0 and '}' in line:
-            b=''.join(block); selector=b.split('{',1)[0]
-            if re.search(r'\[(?:building|building:part)(?:[=\]])', selector): removed += 1
-            else: out.append(b)
+            b=''.join(block); selector, body = b.split('{', 1)
+            parts = selector.split(',')
+            kept = [part for part in parts if not re.search(r'\[(?:building|building:part)(?:[=\]])', part)]
+            removed += len(parts) - len(kept)
+            if kept:
+                out.append(','.join(kept) + '{' + body)
             block=[]
     if block: out.append(''.join(block))
     return ''.join(out), removed
