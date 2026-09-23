@@ -78,7 +78,8 @@ write(rel, s)
 
 rel = "android/app/src/main/java/app/organicmaps/MwmActivity.java"
 s = read(rel)
-s = once(s, "import android.widget.Toast;", "import android.widget.Toast;\nimport android.widget.TextView;", "TextView import")
+s = once(s, "import android.widget.Toast;",
+         "import android.widget.Toast;\nimport android.widget.TextView;", "TextView import")
 field_anchor = "  private int mNavBarHeight;\n"
 field_new = '''  private int mNavBarHeight;
   @Nullable
@@ -90,10 +91,16 @@ field_new = '''  private int mNavBarHeight;
   private static final int CB6_POSITION_LOWER_DP = 72;
 '''
 s = once(s, field_anchor, field_new, "fields")
-s = once(s, "    initViews(isLaunchByDeepLink);\n    updateViewsInsets();", "    initViews(isLaunchByDeepLink);\n    initCb6Ui();\n    updateViewsInsets();", "init")
-s = once(s, "      mMapController.updateMyPositionRoutingOffset(offsetY);", '''      final int cb6LowerPx = Math.round(CB6_POSITION_LOWER_DP
+s = once(s,
+         "    initViews(isLaunchByDeepLink);\n    updateViewsInsets();",
+         "    initViews(isLaunchByDeepLink);\n    initCb6Ui();\n    updateViewsInsets();",
+         "init")
+s = once(s,
+         "      mMapController.updateMyPositionRoutingOffset(offsetY);",
+         '''      final int cb6LowerPx = Math.round(CB6_POSITION_LOWER_DP
           * getResources().getDisplayMetrics().density);
-      mMapController.updateMyPositionRoutingOffset(Math.max(0, offsetY - cb6LowerPx));''', "routing offset")
+      mMapController.updateMyPositionRoutingOffset(Math.max(0, offsetY - cb6LowerPx));''',
+         "routing offset")
 
 loc_old = '''    dismissLocationErrorDialog();
     final RoutingController routing = RoutingController.get();
@@ -135,34 +142,56 @@ helpers = '''  private void initCb6Ui()
         final Location loc = MwmApplication.from(this).getLocationHelper().getSavedLocation();
         final Uri uri;
         if (loc != null)
-          uri = Uri.parse("geo:" + loc.getLatitude() + "," + loc.getLongitude() + "?q=" + loc.getLatitude() + "," + loc.getLongitude());
+          uri = Uri.parse("geo:" + loc.getLatitude() + "," + loc.getLongitude()
+                          + "?q=" + loc.getLatitude() + "," + loc.getLongitude());
         else
           uri = Uri.parse("geo:0,0?q=");
         final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setPackage("com.google.android.apps.maps");
-        try { startActivity(intent); }
-        catch (Exception e) { startActivity(new Intent(Intent.ACTION_VIEW, uri)); }
+        try
+        {
+          startActivity(intent);
+        }
+        catch (Exception e)
+        {
+          startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        }
       });
     }
   }
 
   private void updateCb6RoadHud(@Nullable String raw)
   {
-    if (mCb6RoadHud == null) return;
+    if (mCb6RoadHud == null)
+      return;
     String value = raw == null ? "" : raw.trim();
-    if (value.isEmpty()) { mCb6RoadHud.setText("--------"); return; }
+    if (value.isEmpty())
+    {
+      mCb6RoadHud.setText("--------");
+      return;
+    }
     String[] parts = value.split(",");
     String best = "";
     for (String part : parts)
     {
       String p = part.trim();
-      if (p.isEmpty()) continue;
+      if (p.isEmpty())
+        continue;
       String lower = p.toLowerCase(java.util.Locale.ROOT);
-      if (p.contains("国道") || p.contains("道道") || p.contains("県道") || p.contains("市道") || p.contains("通") || p.contains("線") || lower.contains("road") || lower.contains("street")) { best = p; break; }
-      if (best.isEmpty() || p.length() < best.length()) best = p;
+      if (p.contains("国道") || p.contains("道道") || p.contains("県道")
+          || p.contains("市道") || p.contains("通") || p.contains("線")
+          || lower.contains("road") || lower.contains("street"))
+      {
+        best = p;
+        break;
+      }
+      if (best.isEmpty() || p.length() < best.length())
+        best = p;
     }
-    if (best.isEmpty()) best = value;
-    if (best.length() > 42) best = best.substring(0, 42);
+    if (best.isEmpty())
+      best = value;
+    if (best.length() > 42)
+      best = best.substring(0, 42);
     mCb6RoadHud.setText(best);
   }
 
@@ -181,7 +210,10 @@ write(rel, s)
 
 rel = "libs/map/user_mark.hpp"
 s = read(rel)
-s = once(s, "    COLORED,\n    TRAFFIC_LIGHT,\n    USER_MARK_TYPES_COUNT,", "    COLORED,\n    TRAFFIC_LIGHT,\n    CB6_DRIVING,\n    USER_MARK_TYPES_COUNT,", "mark enum")
+s = once(s,
+         "    COLORED,\n    TRAFFIC_LIGHT,\n    USER_MARK_TYPES_COUNT,",
+         "    COLORED,\n    TRAFFIC_LIGHT,\n    CB6_DRIVING,\n    USER_MARK_TYPES_COUNT,",
+         "mark enum")
 class_anchor = "class DebugMarkPoint : public UserMark\n"
 cb6_class = '''class Cb6DrivingMark : public UserMark
 {
@@ -194,6 +226,7 @@ public:
   bool SymbolIsPOI() const override { return true; }
   bool IsNonDisplaceable() const override { return true; }
   bool GetDepthTestEnabled() const override { return false; }
+
 private:
   int m_kind = 6;
 };
@@ -208,41 +241,63 @@ impl_anchor = "DebugMarkPoint::DebugMarkPoint(m2::PointD const & ptOrg) : UserMa
 impl = '''Cb6DrivingMark::Cb6DrivingMark(m2::PointD const & ptOrg)
   : UserMark(ptOrg, UserMark::Type::CB6_DRIVING)
 {}
-void Cb6DrivingMark::SetKind(int kind) { m_kind = kind; SetDirty(); }
+
+void Cb6DrivingMark::SetKind(int kind)
+{
+  m_kind = kind;
+  SetDirty();
+}
+
 drape_ptr<df::UserPointMark::SymbolNameZoomInfo> Cb6DrivingMark::GetSymbolNames() const
 {
   auto symbols = make_unique_dp<SymbolNameZoomInfo>();
   switch (m_kind)
   {
-  case 0: symbols->insert({15, "cb6-stop"}); symbols->insert({17, "cb6-stop-l"}); break;
+  case 0:
+    symbols->insert({15, "cb6-stop"});
+    symbols->insert({17, "cb6-stop-l"});
+    break;
   case 1: symbols->insert({13, "cb6-seven"}); break;
   case 2: symbols->insert({13, "cb6-familymart"}); break;
   case 3: symbols->insert({13, "cb6-lawson"}); break;
   case 4: symbols->insert({13, "cb6-seicomart"}); break;
   case 5: symbols->insert({13, "cb6-mybasket"}); break;
-  case 7: symbols->insert({14, "cb6-signal"}); symbols->insert({17, "cb6-signal-l"}); break;
+  case 7:
+    symbols->insert({14, "cb6-signal"});
+    symbols->insert({17, "cb6-signal-l"});
+    break;
   case 8: symbols->insert({13, "cb6-ministop"}); break;
   case 9: symbols->insert({13, "cb6-daily"}); break;
   default: symbols->insert({13, "cb6-convenience"}); break;
   }
   return symbols;
 }
+
 uint16_t Cb6DrivingMark::GetPriority() const
 {
-  if (m_kind == 7) return static_cast<uint16_t>(UserMark::Priority::TrafficLight);
-  if (m_kind == 0) return static_cast<uint16_t>(UserMark::Priority::RoadWarning);
+  if (m_kind == 7)
+    return static_cast<uint16_t>(UserMark::Priority::TrafficLight);
+  if (m_kind == 0)
+    return static_cast<uint16_t>(UserMark::Priority::RoadWarning);
   return static_cast<uint16_t>(UserMark::Priority::Default);
 }
+
 int Cb6DrivingMark::GetMinZoom() const
 {
-  if (m_kind == 7) return 14;
-  if (m_kind == 0) return 15;
+  if (m_kind == 7)
+    return 14;
+  if (m_kind == 0)
+    return 15;
   return 13;
 }
 
 '''
 s = once(s, impl_anchor, impl + impl_anchor, "Cb6DrivingMark implementation")
-s = once(s, '  case UserMark::Type::TRAFFIC_LIGHT: return "TRAFFIC_LIGHT";', '  case UserMark::Type::TRAFFIC_LIGHT: return "TRAFFIC_LIGHT";\n  case UserMark::Type::CB6_DRIVING: return "CB6_DRIVING";', "DebugPrint")
+s = once(s,
+         '  case UserMark::Type::TRAFFIC_LIGHT: return "TRAFFIC_LIGHT";',
+         '  case UserMark::Type::TRAFFIC_LIGHT: return "TRAFFIC_LIGHT";\n'
+         '  case UserMark::Type::CB6_DRIVING: return "CB6_DRIVING";',
+         "DebugPrint")
 write(rel, s)
 
 rel = "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
@@ -253,11 +308,15 @@ jni_anchor = '''JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_native
 }
 '''
 jni_new = jni_anchor + '''
-JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6DrivingMarks(JNIEnv * env, jclass, jdoubleArray latArray, jdoubleArray lonArray, jintArray kindArray)
+JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6DrivingMarks(
+    JNIEnv * env, jclass, jdoubleArray latArray, jdoubleArray lonArray, jintArray kindArray)
 {
-  if (latArray == nullptr || lonArray == nullptr || kindArray == nullptr) return;
+  if (latArray == nullptr || lonArray == nullptr || kindArray == nullptr)
+    return;
   jsize const n = env->GetArrayLength(latArray);
-  if (env->GetArrayLength(lonArray) != n || env->GetArrayLength(kindArray) != n) return;
+  if (env->GetArrayLength(lonArray) != n || env->GetArrayLength(kindArray) != n)
+    return;
+
   jdouble * lats = env->GetDoubleArrayElements(latArray, nullptr);
   jdouble * lons = env->GetDoubleArrayElements(lonArray, nullptr);
   jint * kinds = env->GetIntArrayElements(kindArray, nullptr);
@@ -268,16 +327,19 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6DrivingMar
     if (kinds != nullptr) env->ReleaseIntArrayElements(kindArray, kinds, JNI_ABORT);
     return;
   }
+
   {
     auto session = frm()->GetBookmarkManager().GetEditSession();
     session.ClearGroup(UserMark::Type::CB6_DRIVING);
     for (jsize i = 0; i < n; ++i)
     {
-      if (lats[i] < -90.0 || lats[i] > 90.0 || lons[i] < -180.0 || lons[i] > 180.0) continue;
+      if (lats[i] < -90.0 || lats[i] > 90.0 || lons[i] < -180.0 || lons[i] > 180.0)
+        continue;
       auto * mark = session.CreateUserMark<Cb6DrivingMark>(mercator::FromLatLon(lats[i], lons[i]));
       mark->SetKind(static_cast<int>(kinds[i]));
     }
   }
+
   env->ReleaseDoubleArrayElements(latArray, lats, JNI_ABORT);
   env->ReleaseDoubleArrayElements(lonArray, lons, JNI_ABORT);
   env->ReleaseIntArrayElements(kindArray, kinds, JNI_ABORT);

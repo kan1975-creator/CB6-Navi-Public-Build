@@ -22,6 +22,7 @@ if 'postPoints(signals, "NET-SIG");' in ms and 'String poiQuery = buildPoiQuery(
 if ms.count('postPoints(signals, "NET-SIG");') != 1:
     errors.append("immediate signal publish count is not exactly one")
 
+# Preserve validated v1.8 manager policy.
 for token, label in (
     ('KIND_SIGNAL_FORWARD = 22', 'kind 22'),
     ('FORWARD_SIGNAL_MAX_M = 450.0f', '450m forward limit'),
@@ -32,6 +33,7 @@ for token, label in (
 ):
     need(ms, token, label)
 
+# Preserve validated renderer path/properties.
 for token, label in (
     ('class Cb6SignalMark final : public DebugMarkPoint', 'DebugMarkPoint signal path'),
     ('GetMinZoom() const override { return 15; }', 'z15 minimum'),

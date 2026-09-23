@@ -41,6 +41,7 @@ def rewrite_caption_zoom(s: str) -> str:
 
 
 def strip_native_signal_rules(s: str) -> str:
+    """Remove CoMaps MapCSS signal icons so CB6 UserMarks are the only visible signal layer."""
     lines = s.splitlines(keepends=True)
     out = []
     block = []
@@ -74,12 +75,15 @@ def strip_native_signal_rules(s: str) -> str:
     result = re.sub(r"\n?/\* CB6[^*]*(?:traffic[- ]signal|native signal)[^*]*\*/\n?", "\n", result, flags=re.I)
     return result
 
+
+# 1) Keep the address/locality behavior already confirmed correct on the CB6.
 label_files = sorted((ROOT / "data/styles").glob("*/include/Basemap_label.mapcss"))
 if len(label_files) < 3:
     raise SystemExit(f"unexpected label style count: {len(label_files)}")
 for p in label_files:
     rw(p, rewrite_caption_zoom)
 
+# 2) Re-apply supplemental marks after renderer restart.
 activity = ROOT / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
 s = activity.read_text(encoding="utf-8")
 reapply_block = '''    refreshCb6FromSavedLocation();\n    if (mCb6SupplementManager != null)\n    {\n      final android.view.View cb6Decor = getWindow().getDecorView();\n      cb6Decor.postDelayed(() -> {\n        if (mCb6SupplementManager != null)\n          mCb6SupplementManager.reapplySavedMarks();\n      }, 1800L);\n      cb6Decor.postDelayed(() -> {\n        if (mCb6SupplementManager != null)\n          mCb6SupplementManager.reapplySavedMarks();\n      }, 5000L);\n    }\n'''
@@ -103,15 +107,36 @@ if "private void refreshCb6FromSavedLocation()" not in s:
 activity.write_text(s, encoding="utf-8")
 print("v1.5 patched:", activity.relative_to(ROOT))
 
+# 3) Online supplement remains restricted to CB6-only categories.
 manager = ROOT / "android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java"
 ms = manager.read_text(encoding="utf-8")
-required_manager = ("MAX_POINTS = 2200","KIND_SIGNAL_FULL = 7","KIND_SIGNAL_CLUSTER = 20","public void reapplySavedMarks()","[shop=convenience]","[highway=traffic_signals]","[highway=stop]","out center tags","mLastRequestTime = System.currentTimeMillis() - REFRESH_MS + 60_000L;",)
+required_manager = (
+    "MAX_POINTS = 2200",
+    "KIND_SIGNAL_FULL = 7",
+    "KIND_SIGNAL_CLUSTER = 20",
+    "public void reapplySavedMarks()",
+    "[shop=convenience]",
+    "[highway=traffic_signals]",
+    "[highway=stop]",
+    "out center tags",
+    "mLastRequestTime = System.currentTimeMillis() - REFRESH_MS + 60_000L;",
+)
 missing = [x for x in required_manager if x not in ms]
 if missing:
     raise SystemExit("CB6 supplement source missing: " + ", ".join(missing))
+# Accept either the legacy clustered-signal implementation or either generation
+# of the on-device diagnostic implementation. The persistent diagnostic keeps its
+# synthetic mark merged into every CACHE/NET update so ClearGroup cannot erase it.
 legacy_cluster = "SIGNAL_CLUSTER_M = 55.0f" in ms and "clusterSignals(signals, SIGNAL_CLUSTER_M)" in ms
 old_diagnostic = "MAX_SIGNAL_POINTS = 1400" in ms and "SIG TEST: JNIへ1件送信" in ms
-persistent_diagnostic = ("MAX_SIGNAL_POINTS = 1400" in ms and "mDiagnosticLat" in ms and "mDiagnosticLon" in ms and "postDiagnosticOnly()" in ms and "+ 0.00108" in ms and "merged.add(mDiagnosticLat, mDiagnosticLon, KIND_SIGNAL_FULL);" in ms)
+persistent_diagnostic = (
+    "MAX_SIGNAL_POINTS = 1400" in ms
+    and "mDiagnosticLat" in ms
+    and "mDiagnosticLon" in ms
+    and "postDiagnosticOnly()" in ms
+    and "+ 0.00108" in ms
+    and "merged.add(mDiagnosticLat, mDiagnosticLon, KIND_SIGNAL_FULL);" in ms
+)
 diagnostic_signals = old_diagnostic or persistent_diagnostic
 if not (legacy_cluster or diagnostic_signals):
     raise SystemExit("CB6 supplement signal policy missing: neither legacy cluster nor diagnostic signal path found")
@@ -119,15 +144,20 @@ for forbidden in ("[amenity=fuel]", "[amenity=hospital]", "[railway=station]", "
     if forbidden in ms:
         raise SystemExit("standard CoMaps POI must not be supplemented: " + forbidden)
 
+# 4) Signal scale policy calibrated from the latest real CB6 result.
+#    This legacy stage is subsequently overridden by v1.6. Keep it intact so
+#    historical regression checks continue to exercise the same patch sequence.
 u = ROOT / "libs/map/user_mark.cpp"
 us = u.read_text(encoding="utf-8")
 for name in ("seven", "familymart", "lawson", "seicomart", "mybasket", "ministop", "daily", "convenience"):
     us = re.sub(rf'\{{\d+, "cb6-{name}"\}}', f'{{11, "cb6-{name}"}}', us)
+
 signal_case = re.compile(r'''  case 7:\n(?:    symbols->insert\(\{\d+, "cb6-signal(?:-m|-l)?"\}\);\n)+    break;(?:\n  case 20:\n(?:    symbols->insert\(\{\d+, "cb6-signal(?:-m|-l)?"\}\);\n)+    break;)?''')
 signal_replacement = '''  case 7:\n    symbols->insert({10, "cb6-signal-m"});\n    symbols->insert({14, "cb6-signal-l"});\n    break;\n  case 20:\n    symbols->insert({9, "cb6-signal"});\n    symbols->insert({10, "cb6-signal-m"});\n    symbols->insert({14, "cb6-signal-l"});\n    break;'''
 us, signal_n = signal_case.subn(signal_replacement, us, count=1)
 if signal_n != 1:
     raise SystemExit("signal split-layer replacement failed")
+
 us = re.sub(r'\{\d+, "cb6-stop"\}', '{13, "cb6-stop"}', us)
 us = re.sub(r'\{\d+, "cb6-stop-l"\}', '{16, "cb6-stop-l"}', us)
 us, n = re.subn(r'int Cb6DrivingMark::GetMinZoom\(\) const\n\{.*?\n\}', '''int Cb6DrivingMark::GetMinZoom() const\n{\n  if (m_kind == 7)\n    return 10;\n  if (m_kind == 20)\n    return 9;\n  if (m_kind == 0)\n    return 13;\n  return 11;\n}''', us, count=1, flags=re.S)
@@ -139,6 +169,7 @@ for forbidden in ("cb6-fuel", "cb6-hospital", "cb6-station", "cb6-supermarket", 
 u.write_text(us, encoding="utf-8")
 print("v1.5 patched:", u.relative_to(ROOT))
 
+# 5) Make the CB6 split signal layer authoritative by removing native signal rendering only.
 signal_style_files = sorted((ROOT / "data/styles").glob("*/include/Icons.mapcss"))
 for p in signal_style_files:
     before = p.read_text(encoding="utf-8")
@@ -147,6 +178,7 @@ for p in signal_style_files:
         p.write_text(after, encoding="utf-8")
         print("v1.5 native signal rendering removed:", p.relative_to(ROOT))
 
+# 6) Major native landmarks remain CoMaps-native; only bridge their low zoom ranges.
 low_zoom_rules = {
     "default": '''\n\n/* CB6 v1.5: native major-landmark low-zoom bridge; no Overpass duplication. */\nnode|z12-13[amenity=fuel]\n{icon-image: fuel-s.svg; icon-min-distance: 24;}\nnode|z13-14[amenity=hospital]\n{icon-image: hospital-m.svg; icon-min-distance: 22;}\nnode|z13-15[shop=supermarket]\n{icon-image: supermarket-m.svg; icon-min-distance: 22;}\nnode|z12-13[shop=mall]\n{icon-image: shop-s.svg; icon-min-distance: 24;}\n''',
     "vehicle": '''\n\n/* CB6 v1.5: native major-landmark low-zoom bridge; no Overpass duplication. */\nnode|z13-14[amenity=hospital]\n{icon-image: hospital-m.svg; icon-min-distance: 20;}\nnode|z12-13[shop=supermarket]\n{icon-image: supermarket-m.svg; icon-min-distance: 20;}\nnode|z12-13[shop=mall]\n{icon-image: shop-m.svg; icon-min-distance: 20;}\n''',

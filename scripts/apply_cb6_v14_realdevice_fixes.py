@@ -40,14 +40,20 @@ for p in sorted((ROOT / "data/styles").glob("*/include/Basemap_label.mapcss")):
 if label_count < 3:
     raise SystemExit(f"unexpected label style count: {label_count}")
 
+# 2) Make the OFFLINE/native CoMaps features visible instead of relying only on
+# the Overpass supplement. The map data already contains shop=convenience and
+# highway=traffic_signals. Raise convenience visibility to z12 and keep signals z12.
 icon_count = 0
 conv_count = 0
 signal_count = 0
 for p in sorted((ROOT / "data/styles").glob("*/include/Icons.mapcss")):
     s = p.read_text(encoding="utf-8")
     before = s
+    # Existing CoMaps styles use z16/z17 (and occasionally later) for convenience.
     s, nconv = re.subn(r"node\|z1[6-9]-\[shop=convenience\]", "node|z12-[shop=convenience]", s)
-    s, nsig = re.subn(r"node\|z(?:1[3-9]|2[0-9])-\[highway=traffic_signals\]", "node|z12-[highway=traffic_signals]", s)
+    # Keep the CB6 fallback at z12 even if an older selector survived in a style.
+    s, nsig = re.subn(r"node\|z(?:1[3-9]|2[0-9])-\[highway=traffic_signals\]",
+                      "node|z12-[highway=traffic_signals]", s)
     p.write_text(s, encoding="utf-8")
     icon_count += 1
     conv_count += nconv
@@ -59,6 +65,11 @@ if icon_count < 3:
 if conv_count < 1:
     raise SystemExit("no native convenience selector was widened")
 
+# 3) CoMaps overlay priority files can contain generated commented placeholders.
+# A MapCSS selector without an active overlay priority can compile but never displace
+# other overlays on the real device. Activate convenience + traffic signals only in
+# root priority files (default and vehicle-like standalone files); imported child
+# files keep their placeholders commented to avoid duplicate priorities.
 prio_roots = 0
 for p in sorted((ROOT / "data/styles").glob("*/include/priorities_4_overlays.prio.txt")):
     s = p.read_text(encoding="utf-8")
@@ -82,6 +93,9 @@ for p in sorted((ROOT / "data/styles").glob("*/include/priorities_4_overlays.pri
 if prio_roots < 2:
     raise SystemExit(f"unexpected standalone priority count: {prio_roots}")
 
+# 4) Road-name HUD: 35 m was too strict for real CB6 GPS/map geometry.
+# Search the nearest named highway within 90 m, while retaining the existing
+# reverse-geocoder street fallback when no named road is found.
 rel = "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
 s = read(rel)
 old = "}, point, 35.0 /* toleranceInMeters */);"

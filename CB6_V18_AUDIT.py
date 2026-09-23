@@ -17,13 +17,17 @@ ck("1km hidden via z15 minimum", "int GetMinZoom() const override { return 15; }
 ck("normal signal starts at z15", 'symbols->insert({15, "cb6-signal"});' in fw)
 ck("forward-only medium at z17", 'if (m_forward)' in fw and 'symbols->insert({17, "cb6-signal-m"});' in fw)
 ck("forward-only large at z19", 'if (m_forward)' in fw and 'symbols->insert({19, "cb6-signal-l"});' in fw)
-ck("forward kind creates forward signal mark", 'static_cast<int>(kinds[i]) == 22' in fw and 'auto * mark = session.CreateUserMark<Cb6SignalMark>(pt);' in fw and 'mark->SetForward(static_cast<int>(kinds[i]) == 22);' in fw)
+ck("forward kind creates forward signal mark",
+   'static_cast<int>(kinds[i]) == 22' in fw and
+   'auto * mark = session.CreateUserMark<Cb6SignalMark>(pt);' in fw and
+   'mark->SetForward(static_cast<int>(kinds[i]) == 22);' in fw)
 ck("native MapCSS signal selector still absent", all("[highway=traffic_signals]" not in p.read_text(encoding="utf-8") for p in (R / "data/styles").glob("*/include/Icons.mapcss")))
 ck("manager forward kind present", "KIND_SIGNAL_FORWARD = 22" in mgr)
 ck("manager keeps current bearing", "location.hasBearing()" in mgr and "mCurrentBearing = location.getBearing();" in mgr)
 ck("manager forward cone limited", "FORWARD_SIGNAL_MAX_M = 450.0f" in mgr and "FORWARD_CONE_DEG = 45.0f" in mgr)
 ck("manager sends directional kinds", "kindsForCurrentDirection(points)" in mgr)
-ck("nearby signals prioritized before cap", "parseSignalsNearFirst" in mgr and "signals.sort((a, b) -> Double.compare(a[2], b[2]))" in mgr)
+ck("nearby signals prioritized before cap",
+   "parseSignalsNearFirst" in mgr and "signals.sort((a, b) -> Double.compare(a[2], b[2]))" in mgr)
 ck("Overpass signal acquisition preserved", "[highway=traffic_signals]" in mgr)
 ck("cache path preserved", "applySavedCache();" in mgr)
 print("CB6 v1.8 forward-signal audit passed")

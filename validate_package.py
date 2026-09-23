@@ -18,7 +18,8 @@ hard=(ROOT/'scripts/apply_cb6_final_hardening.py').read_text(encoding='utf-8')
 for token in ('mCb6StartupLocationRetryCount < 20','mCb6StartupHeadingApplied','launchCb6VoiceFallback','resolveActivity'):
     c(token in hard,'final hardening '+token)
 patch=(ROOT/'scripts/apply_cb6_complete.py').read_text(encoding='utf-8')
-for msg,ok in (('own-position SVG untouched','current-position.svg' not in patch),('own-position C++ untouched','my_position.cpp' not in patch),('no forced Japanese','Locale.JAPAN' not in patch),('unsafe entrance selector absent','[entrance][addr:housenumber]' not in patch),('mapping file untouched','mapcss-mapping.csv' not in patch),('priority files untouched','priorities_4_overlays' not in patch),('isolated mark type','CB6_DRIVING' in patch),('native mark creation','CreateUserMark<Cb6DrivingMark>' in patch)):
+for msg,ok in (
+ ('own-position SVG untouched','current-position.svg' not in patch),('own-position C++ untouched','my_position.cpp' not in patch),('no forced Japanese','Locale.JAPAN' not in patch),('unsafe entrance selector absent','[entrance][addr:housenumber]' not in patch),('mapping file untouched','mapcss-mapping.csv' not in patch),('priority files untouched','priorities_4_overlays' not in patch),('isolated mark type','CB6_DRIVING' in patch),('native mark creation','CreateUserMark<Cb6DrivingMark>' in patch)):
     c(ok,msg)
 required={'cb6-convenience.svg','cb6-daily.svg','cb6-familymart.svg','cb6-lawson.svg','cb6-ministop.svg','cb6-mybasket.svg','cb6-seicomart.svg','cb6-seven.svg','cb6-signal.svg','cb6-signal-s.svg','cb6-signal-m.svg','cb6-signal-l.svg','cb6-stop.svg','cb6-stop-l.svg'}
 for theme in ('light','dark'):

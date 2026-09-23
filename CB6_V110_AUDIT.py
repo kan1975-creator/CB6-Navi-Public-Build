@@ -23,6 +23,9 @@ for token,label in (
 for endpoint in ('https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.nchc.org.tw/api/interpreter'):
     need(ms,endpoint,'fallback endpoint')
 
+# A signal-only update must never call the whole-group postPoints publisher because
+# nativeSetCb6DrivingMarks clears/rebuilds CB6_DRIVING. Require preservation of every
+# non-signal kind from mLastPublishedPoints before adding fresh signals.
 if 'postPoints(signals, "NET-SIG");' in ms: errors.append('unsafe signal-only whole-group publisher remains')
 start=ms.find('  private void postImmediateSignals(@NonNull Points signals)'); end=ms.find('  private void postNearbySignals(',start)
 if start<0 or end<0: errors.append('unable to isolate immediate signal publisher')
