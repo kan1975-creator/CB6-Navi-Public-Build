@@ -4,8 +4,9 @@ import sys
 
 root = Path(sys.argv[1] if len(sys.argv) > 1 else "comaps")
 
-# First restore the exact DebugMarkPoint signal render behavior that was proven
-# on-device in Run #133/#138. Keep current Overpass/cache/JNI data logic intact.
+# This patch is deliberately bounded to two known files; do not recursively scan
+# the CoMaps tree. Restore the exact DebugMarkPoint signal render behavior proven
+# on the real device while keeping current Overpass/cache/JNI data logic intact.
 fw_path = root / "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
 s = fw_path.read_text(encoding="utf-8")
 typed_ctor = 'explicit Cb6SignalMark(m2::PointD const & pt) : DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING) {}'
@@ -33,7 +34,7 @@ if missing:
 fw_path.write_text(s, encoding="utf-8")
 print("restored proven Run133/Run138 DebugMarkPoint signal renderer")
 
-# Secondary real-device fallback: also allow downloaded CoMaps map data to render
+# Secondary real-device fallback: allow downloaded CoMaps map data to render
 # traffic signals if the supplemental network/JNI path has no data.
 for style in ("vehicle", "default"):
     p = root / "data/styles" / style / "include" / "Icons.mapcss"
