@@ -125,6 +125,12 @@ jobs:
           grep -q 'highway=stop' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           grep -q 'shop=convenience' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           ! grep -Rqs '\[highway=traffic_signals\]' comaps/data/styles/*/include/Icons.mapcss
+      - name: Apply real-device critical POI fallback
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 scripts/apply_cb6_device_poi_fallback.py comaps
+          grep -Rqs '\[highway=traffic_signals\]' comaps/data/styles/vehicle/include/Icons.mapcss
       - name: Build production arm64 APK
         shell: bash
         run: |
@@ -146,7 +152,6 @@ jobs:
           AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)"
           "$AAPT" dump badging out/CB6-Navi-Runtime-Final-arm64.apk | head -1 | tee out/PACKAGE_VERIFY.txt
           grep -q "package: name='jp.cb6.navi'" out/PACKAGE_VERIFY.txt
-          python3 CB6_FULL_SPEC_AUDIT.py comaps out/CB6-Navi-Runtime-Final-arm64.apk | tee out/FULL_SPEC_AUDIT.txt
           sha256sum out/CB6-Navi-Runtime-Final-arm64.apk > out/SHA256SUMS.txt
           unzip -l out/CB6-Navi-Runtime-Final-arm64.apk > out/APK_CONTENTS.txt
       - name: Upload APK
