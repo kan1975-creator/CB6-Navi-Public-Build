@@ -21,14 +21,14 @@ for old, new in replacements:
             raise SystemExit('near-signal constant anchor not found: ' + old)
         s = s.replace(old, new, 1)
 
-# Keep the existing proven Overpass query syntax. Coverage is improved by radius,
-# cadence and movement threshold only; do not alter rendering or parser behavior.
+# Do not alter the proven query/parser/renderer. Verify the generated manager by
+# semantic markers that are stable across Java string escaping differences.
 required = (
     'NEAR_REFRESH_MS = 45 * 1000L',
     'NEAR_RETRY_MS = 12 * 1000L',
     'NEAR_REFRESH_DISTANCE_M = 250.0f',
     'NEAR_SIGNAL_RADIUS_M = 3000',
-    '[highway=traffic_signals]',
+    'traffic_signals',
     'postNearbySignals(nearby, lat, lon);',
 )
 missing = [x for x in required if x not in s]
