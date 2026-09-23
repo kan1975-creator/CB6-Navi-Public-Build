@@ -15,20 +15,18 @@ def once(s,old,new,label):
     n=s.count(old)
     if n!=1: raise SystemExit(f"{label}: expected 1 match, got {n}")
     return s.replace(old,new,1)
+
 rel="android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"; s=read(rel)
 inc_anchor='#include "indexer/feature_altitude.hpp"\n'; extra='#include "indexer/classificator.hpp"\n#include "indexer/data_source_helpers.hpp"\n#include "indexer/feature_algo.hpp"\n'
 if extra not in s: s=once(s,inc_anchor,inc_anchor+extra,"nearest-road includes")
-old='''JNIEXPORT jstring JNICALL Java_app_organicmaps_sdk_Framework_nativeGetStreetName(JNIEnv * env, jclass clazz,
-                                                                                 jdouble lat, jdouble lon)
-{
-  auto const info = frm()->GetAddressAtPoint(mercator::FromLatLon(lat, lon));
-  return jni::ToJavaString(env, info.GetStreetName());
-}
-'''
-new='''JNIEXPORT jstring JNICALL Java_app_organicmaps_sdk_Framework_nativeGetStreetName(JNIEnv * env, jclass clazz,
-                                                                                 jdouble lat, jdouble lon)
-{
-  auto const point = mercator::FromLatLon(lat, lon);
+
+# CoMaps has changed the exact formatting/signature body across revisions.
+# Patch the function semantically instead of requiring one historical byte-for-byte body.
+fn_re=re.compile(r'(JNIEXPORT\s+jstring\s+JNICALL\s+Java_app_organicmaps_sdk_Framework_nativeGetStreetName\s*\([^)]*\)\s*\{).*?(\n\})', re.S)
+m=fn_re.search(s)
+if not m:
+    raise SystemExit("nearest-road JNI implementation: nativeGetStreetName function not found")
+body='''\n  auto const point = mercator::FromLatLon(lat, lon);
   std::string bestName;
   double bestDistanceMeters = 1.0e9;
   indexer::ForEachFeatureAtPoint(frm()->GetDataSource(), [&](FeatureType & ft)
@@ -44,16 +42,16 @@ new='''JNIEXPORT jstring JNICALL Java_app_organicmaps_sdk_Framework_nativeGetStr
     if (distanceMeters < bestDistanceMeters) { bestDistanceMeters = distanceMeters; bestName = name; }
   }, point, 35.0 /* toleranceInMeters */);
   if (bestName.empty()) { auto const info = frm()->GetAddressAtPoint(point); bestName = info.GetStreetName(); }
-  return jni::ToJavaString(env, bestName);
-}
-'''
-s=once(s,old,new,"nearest-road JNI implementation"); write(rel,s)
+  return jni::ToJavaString(env, bestName);'''
+s=s[:m.start()]+m.group(1)+body+m.group(2)+s[m.end():]
+write(rel,s)
+
 marker="CB6 v1.2: suppress fine address/block labels in every map style"; suppress='''\n\n/* CB6 v1.2: suppress fine address/block labels in every map style. */
 node|z10-[place=suburb], area|z10-[place=suburb], node|z12-[place=locality], area|z12-[place=locality], node|z12-[place=quarter], area|z12-[place=quarter], node|z12-[place=neighbourhood], area|z12-[place=neighbourhood] {text:none;}
 '''
 count=0
 for p in sorted((ROOT/"data/styles").glob("*/include/Basemap_label.mapcss")):
-    x=p.read_text(encoding="utf-8");
+    x=p.read_text(encoding="utf-8")
     if marker not in x: x+=suppress; p.write_text(x,encoding="utf-8")
     count+=1
 if count<3: raise SystemExit(f"unexpected Basemap_label style count: {count}")
