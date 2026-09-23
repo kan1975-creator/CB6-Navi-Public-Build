@@ -32,7 +32,7 @@ required_manifest = [
     "android.speech.RecognitionService",
 ]
 required_input = [
-    "SpeechRecognizer.isRecognitionAvailable(context)",
+    "mVoiceInputSupported = true;",
     'RecognizerIntent.EXTRA_LANGUAGE, "ja-JP"',
     "RecognizerIntent.EXTRA_MAX_RESULTS, 3",
 ]
@@ -43,7 +43,7 @@ required_search = [
     "SpeechRecognizer.createSpeechRecognizer(requireContext())",
     "mCb6AudioPermissionLauncher",
     'RecognizerIntent.EXTRA_LANGUAGE, "ja-JP"',
-    "mToolbarController.setQuery(values.get(0));",
+    "mToolbarController.setQuery(cb6NormalizeSearchQuery(values.get(0)));",
 ]
 required_signal = [
     "class Cb6SignalMark final : public DebugMarkPoint",
