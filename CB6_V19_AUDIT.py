@@ -36,7 +36,7 @@ for token, label in (
 # Preserve validated renderer path/properties.
 for token, label in (
     ('class Cb6SignalMark final : public DebugMarkPoint', 'DebugMarkPoint signal path'),
-    ('GetMinZoom() const override { return 15; }', 'z15 minimum'),
+    ('GetMinZoom() const override { return 14; }', 'z14 minimum for 500m signal visibility'),
     ('symbols->insert({17, "cb6-signal-m"});', 'z17 forward icon'),
     ('symbols->insert({19, "cb6-signal-l"});', 'z19 forward icon'),
     ('SymbolIsPOI() const override { return true; }', 'POI flag'),
@@ -53,4 +53,4 @@ if errors:
     for e in errors:
         print(" -", e)
     raise SystemExit(1)
-print("CB6 v1.9 AUDIT OK: fresh signals publish before optional POIs; v1.8 renderer/policy preserved")
+print("CB6 v1.9 AUDIT OK: fresh signals publish before optional POIs; v1.8 500m renderer/policy preserved")
