@@ -13,6 +13,7 @@ def strip_building_rules(text: str):
             parts = selector.split(',')
             kept = [part for part in parts if not re.search(r'\[(?:building|building:part)(?:[=\]])', part)]
             removed += len(parts) - len(kept)
+            kept = [part for part in kept if re.search(r'\b(?:node|area|way|relation)\b', re.sub(r'/\*.*?\*/', '', part, flags=re.S))]
             if kept:
                 out.append(','.join(kept) + '{' + body)
             block=[]
