@@ -14,12 +14,12 @@ def need(text, token, label):
     if token not in text:
         errors.append("missing " + label + ": " + token)
 
-need(ms, 'postPoints(signals, "NET-SIG");', "immediate signal publish")
+need(ms, 'postImmediateSignals(signals);', "immediate signal publish")
 need(ms, 'String poiQuery = buildPoiQuery(lat, lon);', "optional POI request")
-if 'postPoints(signals, "NET-SIG");' in ms and 'String poiQuery = buildPoiQuery(lat, lon);' in ms:
-    if ms.index('postPoints(signals, "NET-SIG");') > ms.index('String poiQuery = buildPoiQuery(lat, lon);'):
+if 'postImmediateSignals(signals);' in ms and 'String poiQuery = buildPoiQuery(lat, lon);' in ms:
+    if ms.index('postImmediateSignals(signals);') > ms.index('String poiQuery = buildPoiQuery(lat, lon);'):
         errors.append("immediate signal publish occurs after POI enrichment starts")
-if ms.count('postPoints(signals, "NET-SIG");') != 1:
+if ms.count('postImmediateSignals(signals);') != 1:
     errors.append("immediate signal publish count is not exactly one")
 
 # Preserve validated v1.8 manager policy.
@@ -44,6 +44,9 @@ for token, label in (
     ('GetDepthTestEnabled() const override { return false; }', 'depth test disabled'),
 ):
     need(fs, token, label)
+
+if 'postPoints(signals, "NET-SIG");' in ms:
+    errors.append("unsafe signal-only whole-group publisher remains")
 
 if errors:
     print("CB6 v1.9 AUDIT FAILED")
