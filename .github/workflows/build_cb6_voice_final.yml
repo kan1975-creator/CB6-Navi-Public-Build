@@ -89,6 +89,7 @@ jobs:
           python3 scripts/apply_cb6_runtime_final.py comaps
           python3 scripts/apply_cb6_final_hardening.py comaps
           python3 scripts/apply_cb6_production_identity.py comaps
+          python3 scripts/apply_cb6_500m_signal_visibility.py comaps
       - name: Full source and generated-resource audits
         shell: bash
         run: |
