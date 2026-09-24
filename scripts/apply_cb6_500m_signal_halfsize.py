@@ -22,4 +22,9 @@ if new not in s:
     else:
         raise SystemExit("z14 signal symbol anchor not found")
 fw.write_text(s, encoding="utf-8")
-print("CB6 wide/200m signal size applied with existing atlas symbol cb6-signal-s")
+# Create a dedicated narrower/smaller z14 resource from the validated small icon.
+# z15+ continues to use cb6-signal-s unchanged.
+for theme in ("light", "dark"):
+    dst = ROOT / "data/styles/default" / theme / "symbols" / "cb6-signal-xs.svg"
+    dst.write_text('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14"><rect x="1" y="1" width="6" height="11" rx="2" fill="#202020" stroke="#FFFFFF" stroke-width="0.7"/><circle cx="4" cy="3.4" r="1.35" fill="#EF5350"/><circle cx="4" cy="6.5" r="1.35" fill="#FFCA28"/><circle cx="4" cy="9.6" r="1.35" fill="#43A047"/><rect x="3.55" y="12" width="0.9" height="2" fill="#555555"/></svg>', encoding="utf-8")
+print("CB6 500m extra-small/narrow signal applied; 200m cb6-signal-s preserved")
