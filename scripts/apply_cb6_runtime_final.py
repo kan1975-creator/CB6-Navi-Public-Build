@@ -24,7 +24,7 @@ def suppress_buildings(root):
 removed_total = suppress_buildings(ROOT)
 
 fw=ROOT/'android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp';s=fw.read_text(encoding='utf-8')
-required=('class Cb6SignalMark final : public DebugMarkPoint','DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING)','session.SetIsVisible(UserMark::Type::CB6_DRIVING, true);','bool SymbolIsPOI() const override { return true; }','bool IsNonDisplaceable() const override { return true; }','bool GetDepthTestEnabled() const override { return false; }','void SetForward(bool forward)','int GetMinZoom() const override { return 15; }')
+required=('class Cb6SignalMark final : public DebugMarkPoint','DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING)','session.SetIsVisible(UserMark::Type::CB6_DRIVING, true);','bool SymbolIsPOI() const override { return true; }','bool IsNonDisplaceable() const override { return true; }','bool GetDepthTestEnabled() const override { return false; }','void SetForward(bool forward)','int GetMinZoom() const override { return 14; }')
 miss=[x for x in required if x not in s]
 if miss: raise SystemExit('runtime-final: dedicated signal renderer missing: '+', '.join(miss))
 if 'GetMarkType() const override' in s: raise SystemExit('runtime-final: invalid non-virtual GetMarkType override detected')
