@@ -22,7 +22,7 @@ block = s[start:end]
 
 if old_symbol in block:
     block = block.replace(old_symbol, new_symbol, 1)
-elif new_symbol not in block:
+elif new_symbol not in block and 'symbols->insert({14, "cb6-signal-xs"});' not in block:
     raise SystemExit("signal normal zoom anchor not found")
 if old_min in block:
     block = block.replace(old_min, new_min, 1)
