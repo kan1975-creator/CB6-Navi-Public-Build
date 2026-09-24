@@ -13,7 +13,7 @@ loop_anchor = "    for (jsize i = 0; i < n; ++i)\n    {\n"
 convenience_class = r'''    class Cb6ConvenienceMark final : public DebugMarkPoint
     {
     public:
-      Cb6ConvenienceMark(m2::PointD const & pt, int kind) : DebugMarkPoint(pt), m_kind(kind) {}
+      explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt) {}\n      void SetKind(int kind) { m_kind = kind; }
       drape_ptr<df::UserPointMark::SymbolNameZoomInfo> GetSymbolNames() const override
       {
         auto symbols = make_unique_dp<SymbolNameZoomInfo>();
@@ -61,7 +61,7 @@ old = '''      auto * mark = session.CreateUserMark<Cb6DrivingMark>(pt);
 new = '''      int const kind = static_cast<int>(kinds[i]);
       if ((kind >= 1 && kind <= 6) || kind == 8 || kind == 9)
       {
-        session.CreateUserMark<Cb6ConvenienceMark>(pt, kind);
+        auto * convenience = session.CreateUserMark<Cb6ConvenienceMark>(pt);\n        convenience->SetKind(kind);
         continue;
       }
       auto * mark = session.CreateUserMark<Cb6DrivingMark>(pt);
@@ -73,12 +73,12 @@ if new not in s:
 
 required = (
     'class Cb6ConvenienceMark final : public DebugMarkPoint',
-    'Cb6ConvenienceMark(m2::PointD const & pt, int kind) : DebugMarkPoint(pt), m_kind(kind) {}',
+    'explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt) {}',
     'symbols->insert({12, xs});',
     'symbols->insert({14, sm});',
     'symbols->insert({15, normal});',
     'int GetMinZoom() const override { return 12; }',
-    'session.CreateUserMark<Cb6ConvenienceMark>(pt, kind);',
+    'auto * convenience = session.CreateUserMark<Cb6ConvenienceMark>(pt);',
     'class Cb6SignalMark final : public DebugMarkPoint',
 )
 missing = [x for x in required if x not in s]
