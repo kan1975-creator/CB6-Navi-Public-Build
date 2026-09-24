@@ -257,18 +257,50 @@ drape_ptr<df::UserPointMark::SymbolNameZoomInfo> Cb6DrivingMark::GetSymbolNames(
     symbols->insert({15, "cb6-stop"});
     symbols->insert({17, "cb6-stop-l"});
     break;
-  case 1: symbols->insert({13, "cb6-seven"}); break;
-  case 2: symbols->insert({13, "cb6-familymart"}); break;
-  case 3: symbols->insert({13, "cb6-lawson"}); break;
-  case 4: symbols->insert({13, "cb6-seicomart"}); break;
-  case 5: symbols->insert({13, "cb6-mybasket"}); break;
+  case 1:
+    symbols->insert({12, "cb6-seven-xs"});
+    symbols->insert({14, "cb6-seven-s"});
+    symbols->insert({15, "cb6-seven"});
+    break;
+  case 2:
+    symbols->insert({12, "cb6-familymart-xs"});
+    symbols->insert({14, "cb6-familymart-s"});
+    symbols->insert({15, "cb6-familymart"});
+    break;
+  case 3:
+    symbols->insert({12, "cb6-lawson-xs"});
+    symbols->insert({14, "cb6-lawson-s"});
+    symbols->insert({15, "cb6-lawson"});
+    break;
+  case 4:
+    symbols->insert({12, "cb6-seicomart-xs"});
+    symbols->insert({14, "cb6-seicomart-s"});
+    symbols->insert({15, "cb6-seicomart"});
+    break;
+  case 5:
+    symbols->insert({12, "cb6-mybasket-xs"});
+    symbols->insert({14, "cb6-mybasket-s"});
+    symbols->insert({15, "cb6-mybasket"});
+    break;
   case 7:
     symbols->insert({14, "cb6-signal"});
     symbols->insert({17, "cb6-signal-l"});
     break;
-  case 8: symbols->insert({13, "cb6-ministop"}); break;
-  case 9: symbols->insert({13, "cb6-daily"}); break;
-  default: symbols->insert({13, "cb6-convenience"}); break;
+  case 8:
+    symbols->insert({12, "cb6-ministop-xs"});
+    symbols->insert({14, "cb6-ministop-s"});
+    symbols->insert({15, "cb6-ministop"});
+    break;
+  case 9:
+    symbols->insert({12, "cb6-daily-xs"});
+    symbols->insert({14, "cb6-daily-s"});
+    symbols->insert({15, "cb6-daily"});
+    break;
+  default:
+    symbols->insert({12, "cb6-convenience-xs"});
+    symbols->insert({14, "cb6-convenience-s"});
+    symbols->insert({15, "cb6-convenience"});
+    break;
   }
   return symbols;
 }
@@ -394,5 +426,26 @@ for theme in ("light", "dark"):
     for p in src.glob("*.svg"):
         shutil.copy2(p, dst / p.name)
         print("icon:", (dst / p.name).relative_to(ROOT))
+
+    # CB6 convenience-store zoom variants: marks only, no text labels.
+    # z12 (~1 km): very small, z14 (~500 m): small, z15+ (~200 m): normal.
+    convenience = ("seven", "familymart", "lawson", "seicomart",
+                   "mybasket", "ministop", "daily", "convenience")
+    import re
+    for name in convenience:
+        base = dst / ("cb6-" + name + ".svg")
+        svg = base.read_text(encoding="utf-8")
+        m = re.search(r'width="([0-9.]+)"\\s+height="([0-9.]+)"', svg)
+        if not m:
+            raise SystemExit("convenience icon dimensions missing: " + str(base))
+        w, h = float(m.group(1)), float(m.group(2))
+        for suffix, scale in (("-xs", 0.58), ("-s", 0.76)):
+            scaled = re.sub(
+                r'width="[0-9.]+"\\s+height="[0-9.]+"',
+                'width="{:.2f}" height="{:.2f}"'.format(w * scale, h * scale),
+                svg, count=1)
+            out = dst / ("cb6-" + name + suffix + ".svg")
+            out.write_text(scaled, encoding="utf-8")
+            print("icon:", out.relative_to(ROOT))
 
 print("CB6 Navi Complete patch applied.")
