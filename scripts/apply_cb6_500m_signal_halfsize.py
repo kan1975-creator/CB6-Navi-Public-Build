@@ -13,7 +13,7 @@ s = fw.read_text(encoding="utf-8")
 # without changing acquisition or the proven DebugMarkPoint rendering path.
 old = 'symbols->insert({14, "cb6-signal"});'
 old51 = 'symbols->insert({14, "cb6-signal-500"});\n        symbols->insert({15, "cb6-signal"});'
-new = 'symbols->insert({14, "cb6-signal-s"});\n        symbols->insert({15, "cb6-signal-s"});'
+new = 'symbols->insert({14, "cb6-signal-xs"});\n        symbols->insert({15, "cb6-signal-s"});'
 if new not in s:
     if old51 in s:
         s = s.replace(old51, new, 1)
