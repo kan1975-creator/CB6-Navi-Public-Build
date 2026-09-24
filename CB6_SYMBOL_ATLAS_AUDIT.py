@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys
 ROOT=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else Path('comaps').resolve()
-need=('cb6-signal','cb6-signal-s','cb6-signal-m','cb6-signal-l','cb6-stop','cb6-stop-l','cb6-seven','cb6-familymart','cb6-lawson','cb6-seicomart','cb6-ministop','cb6-daily','cb6-mybasket','cb6-convenience')
+need=('cb6-signal','cb6-signal-xs','cb6-signal-s','cb6-signal-m','cb6-signal-l','cb6-stop','cb6-stop-l','cb6-seven','cb6-familymart','cb6-lawson','cb6-seicomart','cb6-ministop','cb6-daily','cb6-mybasket','cb6-convenience')
 atlases=sorted(ROOT.glob('**/symbols.sdf'))
 if not atlases:
     raise SystemExit('ATLAS FAIL: no generated symbols.sdf found')
