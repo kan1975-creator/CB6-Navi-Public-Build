@@ -112,7 +112,14 @@ s = read(rel)
 s = once(s, 'symbols->insert({15, "cb6-stop"});', 'symbols->insert({14, "cb6-stop"});', "stop small zoom")
 s = once(s, 'symbols->insert({17, "cb6-stop-l"});', 'symbols->insert({16, "cb6-stop-l"});', "stop large zoom")
 for name in ("seven", "familymart", "lawson", "seicomart", "mybasket", "ministop", "daily", "convenience"):
-    s = once(s, f'{{13, "cb6-{name}"}}', f'{{12, "cb6-{name}"}}', f"{name} zoom")
+    old_symbol = f'{{13, "cb6-{name}"}}'
+    # Legacy single-size convenience marks are moved from z13 to z12.
+    # The current CB6 renderer already has explicit z12/z14/z15 size tiers,
+    # so do not rewrite or reject that newer established form.
+    if old_symbol in s:
+        s = once(s, old_symbol, f'{{12, "cb6-{name}"}}', f"{name} zoom")
+    elif f'{{12, "cb6-{name}-xs"}}' not in s or f'{{14, "cb6-{name}-s"}}' not in s or f'{{15, "cb6-{name}"}}' not in s:
+        raise SystemExit(f"{name} zoom: neither legacy nor scaled convenience mapping found")
 s = once(s, 'symbols->insert({14, "cb6-signal"});', 'symbols->insert({13, "cb6-signal"});', "signal small zoom")
 s = once(s, 'symbols->insert({17, "cb6-signal-l"});', 'symbols->insert({16, "cb6-signal-l"});', "signal large zoom")
 s = once(s, "    return 14;\n  if (m_kind == 0)\n    return 15;\n  return 13;",
