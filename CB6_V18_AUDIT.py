@@ -13,7 +13,7 @@ def ck(name, cond):
 
 ck("Run138 DebugMarkPoint path preserved", "class Cb6SignalMark final : public DebugMarkPoint" in fw)
 ck("500m class visible via z14 minimum", "int GetMinZoom() const override { return 14; }" in fw)
-ck("normal signal starts at z14", 'symbols->insert({14, "cb6-signal"});' in fw)
+ck("500m half-size signal at z14 and normal size restored at z15", 'symbols->insert({14, "cb6-signal-500"});' in fw and 'symbols->insert({15, "cb6-signal"});' in fw)
 ck("forward-only medium at z17", 'if (m_forward)' in fw and 'symbols->insert({17, "cb6-signal-m"});' in fw)
 ck("forward-only large at z19", 'if (m_forward)' in fw and 'symbols->insert({19, "cb6-signal-l"});' in fw)
 ck("forward kind creates forward signal mark", 'static_cast<int>(kinds[i]) == 22' in fw and 'auto * mark = session.CreateUserMark<Cb6SignalMark>(pt);' in fw and 'mark->SetForward(static_cast<int>(kinds[i]) == 22);' in fw)
