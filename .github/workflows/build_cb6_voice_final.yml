@@ -141,7 +141,8 @@ jobs:
           python3 scripts/apply_cb6_device_poi_fallback.py comaps
           python3 scripts/apply_cb6_proven_convenience_render.py comaps
           grep -q 'class Cb6ConvenienceMark final : public DebugMarkPoint' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
-          grep -q 'session.CreateUserMark<Cb6ConvenienceMark>(pt, kind);' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
+          grep -q 'CreateUserMark<Cb6ConvenienceMark>(pt);' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
+          grep -q 'convenience->SetKind(kind);' comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
           grep -q 'NEAR_SIGNAL_RADIUS_M = 3000' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           grep -q 'NEAR_REFRESH_MS = 45 \* 1000L' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           grep -Rqs '\[highway=traffic_signals\]' comaps/data/styles/vehicle/include/Icons.mapcss
