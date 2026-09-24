@@ -435,13 +435,13 @@ for theme in ("light", "dark"):
     for name in convenience:
         base = dst / ("cb6-" + name + ".svg")
         svg = base.read_text(encoding="utf-8")
-        m = re.search(r'width="([0-9.]+)"\\s+height="([0-9.]+)"', svg)
+        m = re.search(r'width="([0-9.]+)"\s+height="([0-9.]+)"', svg)
         if not m:
             raise SystemExit("convenience icon dimensions missing: " + str(base))
         w, h = float(m.group(1)), float(m.group(2))
         for suffix, scale in (("-xs", 0.58), ("-s", 0.76)):
             scaled = re.sub(
-                r'width="[0-9.]+"\\s+height="[0-9.]+"',
+                r'width="[0-9.]+"\s+height="[0-9.]+"',
                 'width="{:.2f}" height="{:.2f}"'.format(w * scale, h * scale),
                 svg, count=1)
             out = dst / ("cb6-" + name + suffix + ".svg")
