@@ -90,6 +90,7 @@ jobs:
           python3 scripts/apply_cb6_final_hardening.py comaps
           python3 scripts/apply_cb6_production_identity.py comaps
           python3 scripts/apply_cb6_500m_signal_visibility.py comaps
+          python3 scripts/apply_cb6_500m_signal_halfsize.py comaps
           # Apply the established nearby-signal acquisition policy before audits that validate it.
           # This does not alter the proven Run #30 renderer; that remains applied in its dedicated step below.
           python3 scripts/apply_cb6_near_signal_coverage.py comaps
