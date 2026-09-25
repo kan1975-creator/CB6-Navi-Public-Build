@@ -356,3 +356,32 @@ Do not replace the CoMaps engine merely because another project has a useful imp
 ### Development gate
 
 A major feature cannot move from detailed design to production implementation until its cross-project comparison is recorded in the V2 comparison matrix. If a project is not applicable to a feature, record N/A with the technical reason rather than forcing a comparison.
+
+
+## Proven-implementation adoption principle — MANDATORY
+
+V2 does not optimize for the smallest source diff as an end in itself.
+
+For each major feature, after the mandatory cross-project comparison, CB6 should actively adopt proven architecture, algorithms, state-management patterns and responsibility boundaries from mature navigation projects when they improve correctness, stability, maintainability or development speed and are compatible with the CoMaps base and applicable licenses.
+
+Decision order:
+1. reuse an already-good CoMaps implementation when it satisfies the CB6 requirement;
+2. adapt a proven implementation pattern from CoMaps/OsmAnd/Vela/MapLibre Navigation/Valhalla into the corresponding CoMaps responsibility;
+3. make a larger but well-isolated CoMaps extension when that is safer or cleaner than accumulating small patches;
+4. use an isolated CB6-specific implementation where no compatible native structure exists;
+5. use an external/network dependency only when the native/offline paths cannot satisfy the requirement.
+
+The phrase "minimal extension" means minimum unnecessary divergence from CoMaps; it does **not** mean refusing a better proven design merely because it changes more lines.
+
+For each adopted external pattern, record:
+- the source project/version or commit where practical;
+- what behavior/algorithm/module boundary is being adopted;
+- why that project uses the structure;
+- the corresponding CoMaps subsystem and data/lifecycle constraints;
+- whether direct code reuse is license-compatible or whether only the architecture/algorithm is being reimplemented;
+- integration and regression risks;
+- rejected alternatives.
+
+Never assume a foreign implementation can be transplanted unchanged. Prove compatibility at the data-model, threading/lifecycle, rendering/routing and Android boundaries, then verify by build and CB6 real-device testing.
+
+This principle is persistent across time gaps and future tasks and must not regress to chronological one-error-at-a-time patch accumulation.
