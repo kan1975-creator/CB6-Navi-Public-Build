@@ -304,3 +304,55 @@ These gates do not block the overall architecture. They block only the affected 
 - No guessed toll fees.
 - No destructive whole-list favorites synchronization.
 - No return to a long chronological legacy patch stack.
+
+
+## 25. Cross-project implementation comparison — MANDATORY
+
+Before detailed implementation of each major CB6 feature, compare how the same or closest problem is solved in these open-source projects:
+- CoMaps — authoritative implementation base for CB6.
+- OsmAnd — mature offline navigation/POI/routing reference.
+- Vela — modern Android/MapLibre driving UI, POI and offline/navigation reference.
+- MapLibre Navigation — navigation-core/UI separation, location and navigation-session reference.
+- Valhalla — routing graph, costing, map matching and maneuver-generation reference.
+
+This comparison is an engineering input, not permission to copy architectures wholesale. CoMaps compatibility and the CB6 formal specification remain authoritative.
+
+### Required comparison record per feature
+
+For every major feature, record:
+1. how CoMaps currently implements the relevant data/state/render/routing path;
+2. how OsmAnd approaches the equivalent problem;
+3. how Vela approaches it;
+4. how MapLibre Navigation approaches it, where applicable;
+5. how Valhalla approaches it, where applicable;
+6. strengths, risks, dependencies, offline behavior and map-data compatibility of each approach;
+7. the selected CB6 V2 structure and why it fits the existing CoMaps baseline;
+8. approaches explicitly rejected and why.
+
+### Features requiring comparison
+
+At minimum:
+- convenience stores / fuel / major-facility POIs;
+- traffic signals and directional stop information;
+- own-position rendering, heading, camera/follow mode and low-speed stability;
+- road-name/navigation HUD and driving UI;
+- text/fuzzy/voice search integration;
+- rerouting and navigation-session lifecycle;
+- free-expressway/toll avoidance semantics;
+- toll-fee presentation architecture;
+- offline behavior/data updates;
+- bookmarks/favorites and eventual phone synchronization.
+
+### Selection rule
+
+Use the comparison to learn proven patterns, then choose in this order:
+1. existing CoMaps native mechanism;
+2. minimal extension of CoMaps native mechanism;
+3. isolated CB6 implementation compatible with CoMaps state/data;
+4. external/network supplement only when native data/capability is proven insufficient.
+
+Do not replace the CoMaps engine merely because another project has a useful implementation. Do not introduce a new dependency until its benefit and regression impact are documented.
+
+### Development gate
+
+A major feature cannot move from detailed design to production implementation until its cross-project comparison is recorded in the V2 comparison matrix. If a project is not applicable to a feature, record N/A with the technical reason rather than forcing a comparison.
