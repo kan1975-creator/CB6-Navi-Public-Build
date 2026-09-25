@@ -81,3 +81,25 @@ When architecture knowledge changes, update:
 - `CB6_FROZEN_FEATURES.md`
 - this file
 in the same change where practical.
+
+
+## CB6 second-generation restart policy — MANDATORY
+
+The user explicitly approved a development restart whose purpose is to reset technical debt, **not** to reset the product specification or discard proven work. This policy is persistent and must be consulted before future CB6 implementation work.
+
+1. Preserve the current `clean-import` history and successful APK/runs as reference; never destroy the comparison baseline.
+2. Start second-generation implementation from the pinned clean CoMaps baseline, not by blindly copying the accumulated patch stack.
+3. Carry forward all formal CB6 specifications, architecture/internal-analysis records, known-failure records and regression knowledge.
+4. Carry forward real-device accepted/frozen features (especially the Run #65 traffic-signal behavior) without redesigning them. Port only the minimum proven implementation needed and regression-test it.
+5. Do not carry forward obsolete experiments, stale validators, redundant patch layers, temporary probes or accidental implementation constraints merely because they exist in the old branch.
+6. Prefer CoMaps' native architecture/data path first: native MWM/core capability > minimal native extension > isolated CB6 custom implementation > external network supplementation.
+7. Organize CB6 additions by responsibility (map data/POI, rendering, location/camera, navigation/routing, search/voice, UI/settings) instead of a long chronological stack of patches.
+8. Consolidate stable modifications so later scripts cannot silently undo earlier behavior. Patch ordering must remain explicit and audited.
+9. Audits verify specifications and regressions, not arbitrary historical function names.
+10. Before implementing each feature, consult `CB6_COMAPS_ARCHITECTURE.md`, `CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md`, `CB6_CHANGE_IMPACT_MAP.md`, and `CB6_FROZEN_FEATURES.md`.
+11. For data already present in MWM (convenience, fuel, facilities), prove actual existing-map type/name/brand/operator availability before choosing a network duplicate path.
+12. Development gate remains: architecture/impact analysis -> repo-wide search -> implementation -> obsolete-flow check -> syntax/generated-tree preflight -> build -> APK verification -> CB6 real-device test -> freeze.
+13. GitHub Actions success alone never marks a feature complete.
+14. The restart must improve maintainability without changing user-requested behavior outside the feature being worked on.
+
+This section is an absolute project rule. Do not revert to incremental one-error-at-a-time patch accumulation after a time gap or new chat.
