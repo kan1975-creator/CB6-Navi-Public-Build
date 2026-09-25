@@ -46,6 +46,10 @@ Development-only diagnostics expose evidence without changing production map beh
 
 ## 4. Static POI architecture
 
+Detailed contract: `docs/CB6_V2_NATIVE_POI_DESIGN.md` is mandatory for native MWM feature access and shared POI classification.
+
+
+
 Convenience stores, fuel stations and major facilities follow one shared architecture.
 
 1. Query/identify existing MWM feature.
