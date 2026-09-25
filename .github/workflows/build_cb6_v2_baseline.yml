@@ -1,0 +1,119 @@
+name: CB6 V2 Clean Baseline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cb6-v2-clean
+    paths:
+      - '.github/workflows/build_cb6_v2_baseline.yml'
+      - 'docs/CB6_V2_BASELINE.md'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: V2 Gate 0 clean arm64
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SKIP_MAP_DOWNLOAD: "true"
+    steps:
+      - name: Checkout V2 control repo
+        uses: actions/checkout@v4
+
+      - name: Verify V2 policy records
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test -s docs/CB6_V2_BASELINE.md
+          test -s docs/CB6_COMAPS_ARCHITECTURE.md
+          test -s docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md
+          test -s docs/CB6_CHANGE_IMPACT_MAP.md
+          test -s docs/CB6_FROZEN_FEATURES.md
+          test -s docs/CB6_KNOWN_FAILURES_AND_PROCESS.md
+          grep -F '7113ccb5f086183f8884b2aa4e58c987466b6704' docs/CB6_V2_BASELINE.md
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build cmake qt6-base-dev qt6-declarative-dev qt6-positioning-dev libqt6svg6-dev optipng libfreetype-dev libharfbuzz-dev libxkbcommon-dev libxkbcommon-x11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev python3-pip python3-venv rsync jq zlib1g-dev unzip
+          pip install 'protobuf<3.21' --break-system-packages
+
+      - name: Clone exact pinned CoMaps
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin 7113ccb5f086183f8884b2aa4e58c987466b6704
+          git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "7113ccb5f086183f8884b2aa4e58c987466b6704"
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          for attempt in 1 2 3 4 5 6; do
+            if git -C comaps submodule update --init --recursive --depth=1 --jobs=8; then break; fi
+            sleep $((attempt*15))
+          done
+          test -f comaps/3party/protobuf/protobuf/src/google/protobuf/arena.cc
+
+      - name: Record pristine source state
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p out
+          git -C comaps status --porcelain > out/PRE_CONFIG_GIT_STATUS.txt
+          test ! -s out/PRE_CONFIG_GIT_STATUS.txt
+          git -C comaps rev-parse HEAD | tee out/UPSTREAM_SHA.txt
+
+      - name: Configure pristine CoMaps resources
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd comaps
+          bash -x ./configure.sh --skip-map-download 2>&1 | tee ../out/CONFIGURE.log
+
+      - name: Build pristine arm64 release
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd comaps/android
+          ./gradlew -Parm64 app:assembleWebRelease --no-daemon --stacktrace 2>&1 | tee ../../out/GRADLE.log
+
+      - name: Verify baseline APK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p verify-apk
+          APK="$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | head -1)"
+          test -n "$APK"
+          cp "$APK" out/CB6-V2-Gate0-Pristine-CoMaps-arm64.apk
+          unzip -q out/CB6-V2-Gate0-Pristine-CoMaps-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
+          file verify-apk/lib/arm64-v8a/liborganicmaps.so | tee out/NATIVE_VERIFY.txt
+          readelf -h verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -E 'AArch64|ARM aarch64'
+          sha256sum out/CB6-V2-Gate0-Pristine-CoMaps-arm64.apk | tee out/SHA256SUMS.txt
+          unzip -l out/CB6-V2-Gate0-Pristine-CoMaps-arm64.apk > out/APK_CONTENTS.txt
+
+      - name: Upload Gate 0 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-V2-Gate0-Pristine-arm64
+          path: |
+            out/CB6-V2-Gate0-Pristine-CoMaps-arm64.apk
+            out/UPSTREAM_SHA.txt
+            out/SHA256SUMS.txt
+            out/NATIVE_VERIFY.txt
+            out/PRE_CONFIG_GIT_STATUS.txt
+            out/CONFIGURE.log
+            out/GRADLE.log
+          if-no-files-found: error
