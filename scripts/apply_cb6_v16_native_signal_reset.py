@@ -151,7 +151,7 @@ if n != 1:
 build_pattern = re.compile(
     r'  private static String buildQuery\(double lat, double lon\)\n  \{.*?\n  \}\n\n  private static String post',
     re.S)
-new_build = '''  private static String buildSignalQuery(double lat, double lon)\n  {\n    String ll = String.format(Locale.US, "%.6f,%.6f", lat, lon);\n    return "[out:json][timeout:18];("\n        + "node(around:5000," + ll + ")[highway=traffic_signals];"\n        + ");out body;";\n  }\n\n  private static String buildConvenienceQuery(double lat, double lon)\n  {\n    String ll = String.format(Locale.US, "%.6f,%.6f", lat, lon);\n    return "[out:json][timeout:18];("\n        + "nwr(around:2500," + ll + ")[shop=convenience];"\n        + ");out center tags;";\n  }\n\n  private static String post'''
+new_build = '''  private static String buildSignalQuery(double lat, double lon)\n  {\n    String ll = String.format(Locale.US, "%.6f,%.6f", lat, lon);\n    return "[out:json][timeout:18];("\n        + "node(around:5000," + ll + ")[highway=traffic_signals];"\n        + ");out body;";\n  }\n\n  private static String buildConvenienceQuery(double lat, double lon)\n  {\n    String ll = String.format(Locale.US, "%.6f,%.6f", lat, lon);\n    return "[out:json][timeout:18];("\n        + "nwr(around:2500," + ll + ")[shop=convenience];"\n        + ");out center tags;";\n  }\n\n  private static String buildStopQuery(double lat, double lon)\n  {\n    String ll = String.format(Locale.US, "%.6f,%.6f", lat, lon);\n    return "[out:json][timeout:12];("\n        + "node(around:2500," + ll + ")[highway=stop];"\n        + ");out body tags;";\n  }\n\n  private static String post'''
 ms, n = build_pattern.subn(new_build, ms, count=1)
 if n != 1:
     raise SystemExit("CB6 manager query split replacement failed")
@@ -167,7 +167,7 @@ for required_java in (
     'postPoints(merged, "NET");',
     'private static String buildSignalQuery',
     'node(around:5000,',
-    'private static String buildConvenienceQuery',\n    'convenience refresh loaded',
+    'private static String buildConvenienceQuery',\n    'private static String buildStopQuery',\n    'convenience refresh loaded',
     'void addAllNonSignals(Points other)',
 ):
     if required_java not in ms:
