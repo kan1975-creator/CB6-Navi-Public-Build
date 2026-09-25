@@ -167,7 +167,9 @@ for required_java in (
     'postPoints(merged, "NET");',
     'private static String buildSignalQuery',
     'node(around:5000,',
-    'private static String buildConvenienceQuery',\n    'private static String buildStopQuery',\n    'convenience refresh loaded',
+    'private static String buildConvenienceQuery',
+    'private static String buildStopQuery',
+    'convenience refresh loaded',
     'void addAllNonSignals(Points other)',
 ):
     if required_java not in ms:
