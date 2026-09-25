@@ -15,10 +15,10 @@ def need(text, token, label):
         errors.append("missing " + label + ": " + token)
 
 need(ms, 'postImmediateSignals(signals);', "immediate signal publish")
-need(ms, 'String poiQuery = buildPoiQuery(lat, lon);', "optional POI request")
-if 'postImmediateSignals(signals);' in ms and 'String poiQuery = buildPoiQuery(lat, lon);' in ms:
-    if ms.index('postImmediateSignals(signals);') > ms.index('String poiQuery = buildPoiQuery(lat, lon);'):
-        errors.append("immediate signal publish occurs after POI enrichment starts")
+need(ms, 'String convenienceQuery = buildConvenienceQuery(lat, lon);', "optional convenience request")
+if 'postImmediateSignals(signals);' in ms and 'String convenienceQuery = buildConvenienceQuery(lat, lon);' in ms:
+    if ms.index('postImmediateSignals(signals);') > ms.index('String convenienceQuery = buildConvenienceQuery(lat, lon);'):
+        errors.append("immediate signal publish occurs after convenience enrichment starts")
 if ms.count('postImmediateSignals(signals);') != 1:
     errors.append("immediate signal publish count is not exactly one")
 
@@ -53,4 +53,4 @@ if errors:
     for e in errors:
         print(" -", e)
     raise SystemExit(1)
-print("CB6 v1.9 AUDIT OK: fresh signals publish before optional POIs; v1.8 500m renderer/policy preserved")
+print("CB6 v1.9 AUDIT OK: fresh signals publish before optional convenience enrichment; v1.8 500m renderer/policy preserved")
