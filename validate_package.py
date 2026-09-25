@@ -8,7 +8,7 @@ for p in sorted(ROOT.glob('*.py'))+sorted((ROOT/'scripts').glob('*.py')):
     try: ast.parse(p.read_text(encoding='utf-8')); P.append('python syntax '+str(p.relative_to(ROOT)))
     except Exception as e: F.append('python syntax '+str(p.relative_to(ROOT))+': '+str(e))
 wf=(ROOT/'.github/workflows/build_cb6_voice_final.yml').read_text(encoding='utf-8')
-for token in ('cb6-runtime-final','7113ccb5f086183f8884b2aa4e58c987466b6704','checkout --detach','apply_cb6_v17_ui_voice.py','apply_cb6_v111_signal_dedicated_group.py','apply_cb6_release_fuzzy.py','apply_cb6_runtime_final.py','apply_cb6_final_hardening.py','apply_cb6_production_identity.py','CB6_V111_AUDIT.py','CB6_FULL_SPEC_AUDIT.py','assembleWebRelease','CB6-Navi-Runtime-Final-arm64.apk'):
+for token in ('cb6-runtime-final','7113ccb5f086183f8884b2aa4e58c987466b6704','checkout --detach','apply_cb6_v17_ui_voice.py','apply_cb6_v111_signal_dedicated_group.py','apply_cb6_independent_convenience.py','apply_cb6_release_fuzzy.py','apply_cb6_runtime_final.py','apply_cb6_final_hardening.py','apply_cb6_production_identity.py','CB6_V111_AUDIT.py','CB6_CONVENIENCE_AUDIT.py','CB6_FULL_SPEC_AUDIT.py','assembleWebRelease','CB6-Navi-Runtime-Final-arm64.apk'):
     c(token in wf,'runtime workflow '+token)
 for obsolete in ('assembleFdroidBeta','CB6-Navi-Ver1.6-NativeSignalReset-arm64.apk'):
     c(obsolete not in wf,'runtime workflow excludes obsolete '+obsolete)
