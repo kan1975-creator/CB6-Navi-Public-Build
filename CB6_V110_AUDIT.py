@@ -34,9 +34,10 @@ else:
     for token in ('mLastPublishedPoints.size()','KIND_SIGNAL_FULL','KIND_SIGNAL_FORWARD','KIND_SIGNAL_CLUSTER','continue;','merged.add(mLastPublishedPoints.lat.get(i)','merged.add(signals.lat.get(i)','mLastPublishedPoints = merged.copy();','Framework.nativeSetCb6DrivingMarks(merged.lats(), merged.lons(), kindsForCurrentDirection(merged));'):
         need(body,token,'immediate signal POI preservation')
 
-need(ms,'String poiQuery = buildPoiQuery(lat, lon);','optional POI enrichment')
-if 'postImmediateSignals(signals);' in ms and 'String poiQuery = buildPoiQuery(lat, lon);' in ms and ms.index('postImmediateSignals(signals);') > ms.index('String poiQuery = buildPoiQuery(lat, lon);'):
-    errors.append('immediate broad signal publish moved after POI request')
+need(ms,'String convenienceQuery = buildConvenienceQuery(lat, lon);','convenience enrichment request')
+need(ms,'String stopQuery = buildStopQuery(lat, lon);','stop-sign enrichment request')
+if 'postImmediateSignals(signals);' in ms and 'String convenienceQuery = buildConvenienceQuery(lat, lon);' in ms and ms.index('postImmediateSignals(signals);') > ms.index('String convenienceQuery = buildConvenienceQuery(lat, lon);'):
+    errors.append('immediate broad signal publish moved after convenience request')
 
 for token,label in (('KIND_SIGNAL_FORWARD = 22','kind 22'),('FORWARD_SIGNAL_MAX_M = 450.0f','450m forward limit'),('FORWARD_CONE_DEG = 45.0f','45 degree cone'),('parseSignalsNearFirst','near-first retention'),('MAX_SIGNAL_POINTS = 1400','signal cap'),('kindsForCurrentDirection(points)','direction mapping')): need(ms,token,label)
 for token,label in (('class Cb6SignalMark final : public DebugMarkPoint','DebugMarkPoint signal path'),('GetMinZoom() const override { return 14; }','z14 minimum for 500m signal visibility'),('symbols->insert({14, "cb6-signal-xs"});','500m small signal icon'),('symbols->insert({15, "cb6-signal-s"});','small signal icon through 200m class'),('symbols->insert({17, "cb6-signal-m"});','z17 forward icon'),('symbols->insert({19, "cb6-signal-l"});','z19 forward icon'),('IsNonDisplaceable() const override { return true; }','non-displaceable'),('GetDepthTestEnabled() const override { return false; }','depth disabled')): need(fs,token,label)
