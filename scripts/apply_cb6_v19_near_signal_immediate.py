@@ -7,20 +7,20 @@ mgr = ROOT / "android/app/src/main/java/app/organicmaps/Cb6SupplementManager.jav
 s = mgr.read_text(encoding="utf-8")
 
 # Keep the validated v1.8 signal renderer/policy unchanged. The signal-only
-# Overpass request already completes before the optional POI request, but v1.6
+# Overpass request already completes before the optional convenience request, but v1.6
 # waited for the POI enrichment before sending those fresh signals to JNI. On a
 # slow/failed POI endpoint that can delay current nearby signals for tens of
 # seconds. Publish the fresh signal set immediately, then enrich and publish the
 # merged set as before.
 anchor = '''    Points merged = signals.copy();
-    String poiQuery = buildPoiQuery(lat, lon);'''
+    String convenienceQuery = buildConvenienceQuery(lat, lon);'''
 replacement = '''    // Nearby/current signals are the time-critical layer. Publish them as soon as
-    // the dedicated signal request succeeds; optional POI enrichment must never
+    // the dedicated signal request succeeds; optional convenience enrichment must never
     // delay physical traffic-signal visibility.
     postPoints(signals, "NET-SIG");
 
     Points merged = signals.copy();
-    String poiQuery = buildPoiQuery(lat, lon);'''
+    String convenienceQuery = buildConvenienceQuery(lat, lon);'''
 
 if 'postPoints(signals, "NET-SIG");' not in s:
     if anchor not in s:
