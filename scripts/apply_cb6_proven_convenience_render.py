@@ -8,12 +8,12 @@ s = fw.read_text(encoding="utf-8")
 
 # Run #69 real-device result: proven traffic signals render, convenience marks do not.
 # Keep the signal class/branch byte-for-byte unchanged and route only convenience
-# kinds through an explicit DebugMarkPoint-derived renderer in the same proven group.
+# kinds through an explicit DebugMarkPoint-derived renderer. Unlike the frozen signal\n# renderer (DEBUG_MARK), convenience must belong to CB6_DRIVING because nativeSetCb6DrivingMarks\n# clears and shows that group. This fixes the real-device case where store marks were created in\n# DEBUG_MARK after DEBUG_MARK had already been cleared earlier in the same JNI update.
 loop_anchor = "    for (jsize i = 0; i < n; ++i)\n    {\n"
 convenience_class = '''    class Cb6ConvenienceMark final : public DebugMarkPoint
     {
     public:
-      explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt) {}\n      void SetKind(int kind) { m_kind = kind; }
+      explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING) {}\n      void SetKind(int kind) { m_kind = kind; }
       drape_ptr<df::UserPointMark::SymbolNameZoomInfo> GetSymbolNames() const override
       {
         auto symbols = make_unique_dp<SymbolNameZoomInfo>();
@@ -73,7 +73,7 @@ if new not in s:
 
 required = (
     'class Cb6ConvenienceMark final : public DebugMarkPoint',
-    'explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt) {}',
+    'explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt, UserMark::Type::CB6_DRIVING) {}',
     'symbols->insert({12, xs});',
     'symbols->insert({14, sm});',
     'symbols->insert({15, normal});',
