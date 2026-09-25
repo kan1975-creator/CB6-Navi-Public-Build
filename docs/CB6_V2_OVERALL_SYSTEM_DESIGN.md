@@ -30,6 +30,9 @@ Development-only diagnostics expose evidence without changing production map beh
 
 ## 3. Module plan
 
+Implementation boundaries are mandatory in `docs/CB6_V2_MODULE_CONTRACTS.md`.
+
+
 | Module | Responsibility | Primary data | Output | Must not own |
 |---|---|---|---|---|
 | V2 Baseline | reproducible pinned source/build/identity | pinned SHA | verified arm64 APK | feature behavior |
