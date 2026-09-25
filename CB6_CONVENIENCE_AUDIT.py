@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys
 ROOT=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else Path("comaps").resolve()
-mgr=(ROOT/"android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java").read_text(encoding="utf-8")
+mgr=(ROOT/"android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java").read_text(encoding="utf-8")\nfw=(ROOT/"android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp").read_text(encoding="utf-8")
 errors=[]
 def need(t,label):
     if t not in mgr: errors.append("missing "+label+": "+t)
