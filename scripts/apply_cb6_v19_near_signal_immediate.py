@@ -29,7 +29,7 @@ if 'postPoints(signals, "NET-SIG");' not in s:
 
 if s.count('postPoints(signals, "NET-SIG");') != 1:
     raise SystemExit("v1.9 immediate-signal publish duplicated")
-if s.index('postPoints(signals, "NET-SIG");') > s.index('String poiQuery = buildPoiQuery(lat, lon);'):
+if s.index('postPoints(signals, "NET-SIG");') > s.index('String convenienceQuery = buildConvenienceQuery(lat, lon);'):
     raise SystemExit("v1.9 signal publish must precede optional POI request")
 
 # Guard all validated v1.8 behavior against accidental changes in this patch.
