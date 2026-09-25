@@ -29,7 +29,7 @@ for theme in ('light','dark'):
         try: ET.parse(p); P.append('SVG '+theme+'/'+p.name)
         except Exception as e: F.append('SVG '+str(p)+': '+str(e))
 
-for doc in ('docs/CB6_COMAPS_ARCHITECTURE.md','docs/CB6_CHANGE_IMPACT_MAP.md','docs/CB6_FROZEN_FEATURES.md','docs/CB6_KNOWN_FAILURES_AND_PROCESS.md'):
+for doc in ('docs/CB6_COMAPS_ARCHITECTURE.md','docs/CB6_CHANGE_IMPACT_MAP.md','docs/CB6_FROZEN_FEATURES.md','docs/CB6_KNOWN_FAILURES_AND_PROCESS.md','docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md'):
     p=ROOT/doc
     c(p.exists() and p.stat().st_size>500,'canonical CB6 development record '+doc)
 print(f'PACKAGE_CHECKS={len(P)+len(F)} PASS={len(P)} FAIL={len(F)}')
