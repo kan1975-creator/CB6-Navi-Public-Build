@@ -10,7 +10,7 @@ s = fw.read_text(encoding="utf-8")
 # Keep the signal class/branch byte-for-byte unchanged and route only convenience
 # kinds through an explicit DebugMarkPoint-derived renderer in the same proven group.
 loop_anchor = "    for (jsize i = 0; i < n; ++i)\n    {\n"
-convenience_class = r'''    class Cb6ConvenienceMark final : public DebugMarkPoint
+convenience_class = '''    class Cb6ConvenienceMark final : public DebugMarkPoint
     {
     public:
       explicit Cb6ConvenienceMark(m2::PointD const & pt) : DebugMarkPoint(pt) {}\n      void SetKind(int kind) { m_kind = kind; }
