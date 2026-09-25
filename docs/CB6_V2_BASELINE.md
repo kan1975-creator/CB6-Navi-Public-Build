@@ -32,7 +32,21 @@ V2 implementation must be reconstructed deliberately from that pinned baseline. 
 
 V2 proceeds in gates. A later gate must not be treated as complete until the previous gate has evidence.
 
-### Gate 0 — clean reproducible baseline
+### Gate 0A — pristine upstream proof
+- Checkout exact pinned CoMaps commit.
+- Apply no CB6 modifications.
+- Prove configure + arm64 WebRelease build + AArch64 native library from the pinned source.
+
+Evidence: Run #1 succeeded on 2026-09-25. Artifact `CB6-V2-Gate0-Pristine-arm64`; APK SHA256 `129bd3ced46f9d5d369c7413e6d6580e7fd261e5751bff076a51a1f0607eed5b`.
+
+### Gate 0B — minimal CB6 identity/build shell
+- Start again from the exact pinned CoMaps commit.
+- Apply only `v2/baseline/apply_identity.py` and its specification audit.
+- Require the pre-config identity diff to touch only `android/app/build.gradle`.
+- Verify final APK package `jp.cb6.navi`, label `CB6 Navi`, and AArch64 native library.
+- No CB6 feature implementation is permitted in this gate.
+
+### Gate 0 — clean reproducible baseline acceptance
 - Checkout exact pinned CoMaps commit.
 - Apply only minimum CB6 identity/build configuration required for an installable CB6 package.
 - No traffic signals, convenience, stop, GS, facility or experimental POI patches.
