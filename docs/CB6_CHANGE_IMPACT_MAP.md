@@ -35,3 +35,8 @@ Every data-source change: offline availability, cache/update policy, duplicate f
 - A DebugMarkPoint-derived class inherits its mark type from the constructor; the wrong type places it in the wrong group.
 - Resource generation can overwrite patched style/symbol state.
 - Later apply scripts can restore obsolete behavior after an earlier correct patch.
+
+
+## Architecture decision gate for native POIs
+
+Before adding/retaining an external POI source for data already present in MWM, inspect the actual existing-map FeatureID metadata (type/name/brand/operator). For convenience stores, this read-only diagnostic is required before choosing native style/render extension versus supplemental Overpass marks.
