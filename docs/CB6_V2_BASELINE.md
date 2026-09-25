@@ -17,6 +17,8 @@ V2 implementation must be reconstructed deliberately from that pinned baseline. 
 
 ## Mandatory reading before implementation
 
+- `docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md` — canonical V2 whole-system design and module/dependency contract
+
 - `docs/CB6_COMAPS_ARCHITECTURE.md`
 - `docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md`
 - `docs/CB6_CHANGE_IMPACT_MAP.md`
@@ -73,3 +75,8 @@ A temporary migration script is allowed only when it is idempotent, owned by one
 ## Completion authority
 
 GitHub Actions success proves build integrity only. Real-device CB6 behavior is the final feature acceptance authority.
+
+
+## Overall-design gate
+
+No V2 feature implementation may bypass `docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md`. If detailed evidence changes a design decision, update the overall design + impact map in the same development cycle before implementation. Open evidence gates are not permission to guess.
