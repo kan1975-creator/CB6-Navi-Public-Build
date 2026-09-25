@@ -96,6 +96,8 @@ jobs:
           # Apply the established nearby-signal acquisition policy before audits that validate it.
           # This does not alter the proven Run #30 renderer; that remains applied in its dedicated step below.
           python3 scripts/apply_cb6_near_signal_coverage.py comaps
+          # Convenience acquisition is independent from signal success/failure.
+          python3 scripts/apply_cb6_independent_convenience.py comaps
       - name: Full source and generated-resource audits
         shell: bash
         run: |
@@ -105,6 +107,7 @@ jobs:
           python3 CB6_V19_AUDIT.py comaps
           python3 CB6_V110_AUDIT.py comaps
           python3 CB6_V111_AUDIT.py comaps
+          python3 CB6_CONVENIENCE_AUDIT.py comaps
           python3 CB6_FULL_SPEC_AUDIT.py comaps
           python3 CB6_PRODUCTION_AUDIT.py comaps
           python3 CB6_FINAL_STATIC_AUDIT.py comaps
@@ -131,6 +134,8 @@ jobs:
           ! grep -q 'postPoints(signals, "NET-SIG");' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           grep -q 'highway=stop' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           grep -q 'shop=convenience' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          grep -q 'requestConvenienceIfNeeded(lat, lon, now);' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
+          grep -q 'CB6-CONVENIENCE JNI stores=' comaps/android/app/src/main/java/app/organicmaps/Cb6SupplementManager.java
           ! grep -Rqs '\[highway=traffic_signals\]' comaps/data/styles/*/include/Icons.mapcss
       - name: Apply proven real-device rendering and nearby coverage
         shell: bash
