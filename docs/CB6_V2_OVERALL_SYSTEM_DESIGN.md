@@ -385,3 +385,25 @@ For each adopted external pattern, record:
 Never assume a foreign implementation can be transplanted unchanged. Prove compatibility at the data-model, threading/lifecycle, rendering/routing and Android boundaries, then verify by build and CB6 real-device testing.
 
 This principle is persistent across time gaps and future tasks and must not regress to chronological one-error-at-a-time patch accumulation.
+
+
+## Hokkaido-only operational optimization — MANDATORY
+
+CB6 Navi V2 is operationally targeted at **Hokkaido, Japan only**. The upstream CoMaps worldwide-capable foundation must remain intact unless there is a separately reviewed reason to change it, but CB6-specific design, data validation, optimization, acceptance testing and information-density decisions shall use Hokkaido as the authoritative operating region.
+
+Consequences:
+- Do not spend CB6-specific complexity on worldwide edge cases that cannot occur in the intended Hokkaido operation.
+- Validate native MWM classifications, brand/operator/name evidence and routing semantics against actual Hokkaido map data before adding external duplicate data paths.
+- Optimize POI priorities for Hokkaido driving, including convenience stores (especially Seicomart), fuel, roadside stations, parking, toilets, hospitals, drugstores, supermarkets, home centers, airports, ferry terminals and other useful major facilities where reliable data exists.
+- Investigate Hokkaido-relevant road information such as passes and seasonally restricted roads as separate evidence-gated features; do not fabricate live/seasonal state.
+- Hokkaido-only scope permits richer useful information, but **information density must be scale- and context-controlled** rather than displaying everything simultaneously.
+- Default presentation principle: long range shows only high-value driving landmarks; medium range progressively adds fuel/convenience/facilities; close range may add traffic signals, stops and finer road information according to each frozen/formal feature specification.
+- Prefer offline/native Hokkaido MWM information. External/network data is supplemental only when native data is proven insufficient and must not make core offline navigation dependent on connectivity.
+- Real-device acceptance should cover representative Hokkaido environments: Sapporo urban roads, suburban roads and longer-distance/rural driving as relevant to the feature.
+- A feature need not be generalized for use outside Hokkaido unless doing so is essentially free or required to preserve CoMaps compatibility.
+
+### Hokkaido information inventory gate
+
+Before expanding static POI presentation, perform an evidence-based inventory of what the pinned/current Hokkaido MWM already contains for the CB6-relevant categories. Record actual type, brand, operator, name and other usable metadata from representative Hokkaido features. Use this inventory to decide what can be rendered offline, what needs classification improvements, and what truly requires supplemental data.
+
+The product goal is therefore not minimum map information. It is **high Hokkaido driving information value with controlled visual density and reliable offline behavior**.
