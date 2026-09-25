@@ -17,7 +17,9 @@ V2 implementation must be reconstructed deliberately from that pinned baseline. 
 
 ## Mandatory reading before implementation
 
-- `docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md` — canonical V2 whole-system design and module/dependency contract
+- `docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md` — canonical V2 whole-system design
+- `docs/CB6_V2_MODULE_CONTRACTS.md` — enforceable ownership and dependency boundaries
+- `docs/CB6_V2_NATIVE_POI_DESIGN.md` — native MWM POI access/classifier detailed design
 
 - `docs/CB6_COMAPS_ARCHITECTURE.md`
 - `docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md`
