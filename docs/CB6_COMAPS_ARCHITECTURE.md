@@ -157,3 +157,8 @@ GitHub Actions success proves build integrity only. It does **not** prove featur
 Before adding a network supplement, determine whether the downloaded MWM already contains the feature and needed brand/type data. If yes, prefer the native offline pipeline when it can satisfy CB6 behavior safely. Network supplemental marks are justified for data unavailable/inadequate in MWM or for genuinely dynamic data.
 
 This rule is especially important for convenience stores, fuel stations and major facilities.
+
+
+## 13. Pinned-source deep analysis
+
+Concrete internal findings for the exact pinned CoMaps commit are maintained in `docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md`. Consult it before selecting an implementation path.
