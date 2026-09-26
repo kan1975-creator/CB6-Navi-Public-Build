@@ -10,7 +10,9 @@ def run_case(name,mutate,needle):
   head=subprocess.run(["git","rev-parse","HEAD"],cwd=root,text=True,capture_output=True,check=True).stdout.strip()
   apk=root/"out/test.apk"; apk.parent.mkdir(exist_ok=True); apk.write_bytes(b"cb6-test-apk")
   apk_sha=hashlib.sha256(apk.read_bytes()).hexdigest()
-  d={"schema":1,"feature_id":"testfeature","build_commit":head,"apk_path":"out/test.apk","apk_sha256":apk_sha,"apk_checks":["manifest/resources verified"],"status":"VERIFIED"}
+  feature_rel="v2/gates/features/apk-test.json"
+  feature=root/feature_rel; feature.write_text(json.dumps({"feature_id":"testfeature","apk_checks":[{"id":"apk-integrity","description":"verify APK integrity"}]}))
+  d={"schema":1,"feature_id":"testfeature","build_commit":head,"feature_gate":feature_rel,"apk_path":"out/test.apk","apk_sha256":apk_sha,"apk_checks":[{"id":"apk-integrity","result":"PASS","evidence":"manifest/resources verified"}],"status":"VERIFIED"}
   mutate(d); rec.write_text(json.dumps(d))
   cp=subprocess.run(["python3","v2/gates/verify_apk_evidence.py","v2/gates/apk_evidence/test.json"],cwd=root,text=True,capture_output=True)
   out=cp.stdout+cp.stderr
@@ -25,6 +27,9 @@ cases=[
  ("wrong-apk-sha",lambda d:d.__setitem__("apk_sha256","b"*64),"APK SHA256 does not match artifact"),
  ("missing-apk",lambda d:d.__setitem__("apk_path","out/missing.apk"),"APK artifact missing"),
  ("empty-checks",lambda d:d.__setitem__("apk_checks",[]),"APK checks absent"),
+ ("pending-check",lambda d:d["apk_checks"][0].__setitem__("result","PENDING"),"APK check not verified"),
+ ("extra-check",lambda d:d["apk_checks"].append({"id":"unplanned","result":"PASS","evidence":"extra"}),"APK evidence does not cover planned checks"),
+ ("duplicate-check",lambda d:d["apk_checks"].append(dict(d["apk_checks"][0])),"APK evidence check ids duplicated"),
 ]
 for case in cases: run_case(*case)
 print("PASS APK evidence destructive cases rejected")
