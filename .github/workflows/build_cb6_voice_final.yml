@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Enforce CB6 development gate
+        run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=voice
       - name: Validate source package
         shell: bash
         run: |
