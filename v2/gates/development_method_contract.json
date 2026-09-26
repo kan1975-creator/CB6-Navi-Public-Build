@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "stage": "OVERALL_DESIGN_REBUILD",
+  "required_gate_scripts": [
+    "v2/gates/verify_project_gate.py",
+    "v2/gates/verify_project_integrity.py",
+    "v2/gates/verify_evidence_inventory_v2.py"
+  ],
+  "required_regression_tests": [
+    "v2/tests/test_gate_fail_closed.py",
+    "v2/tests/test_feature_gate_contract.py",
+    "v2/tests/test_apk_evidence_fail_closed.py",
+    "v2/tests/test_device_evidence_fail_closed.py",
+    "v2/tests/test_gate_stamp_fail_closed.py",
+    "v2/tests/test_final_acceptance_fail_closed.py"
+  ],
+  "acceptance_scripts": [
+    "v2/gates/verify_apk_evidence.py",
+    "v2/gates/verify_device_evidence.py",
+    "v2/gates/verify_final_acceptance.py"
+  ],
+  "post_gate_integrity_script": "v2/gates/create_gate_stamp.py"
+}
