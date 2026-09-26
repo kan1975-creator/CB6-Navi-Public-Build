@@ -157,6 +157,15 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
    if len(parts)>=2 and parts[0]=="git" and parts[1] in {"checkout","reset","switch","pull","fetch"}: dangerous.append(stripped)
   if dangerous: fail("control repo can change after feature gate: "+p.name+" -> "+" | ".join(dangerous))
 
+# APK-evidence template is part of the development method and must remain fail-closed.
+apk_template=load("v2/gates/apk_evidence/TEMPLATE.json")
+required_apk_template_fields={"schema","feature_id","build_commit","feature_gate","apk_path","apk_sha256","apk_checks","status"}
+if set(apk_template)!=required_apk_template_fields: fail("APK evidence template fields drifted")
+if apk_template.get("schema")!=1 or apk_template.get("status")!="PENDING": fail("APK evidence template is not fail-closed")
+atc=apk_template.get("apk_checks")
+if not isinstance(atc,list) or len(atc)!=1 or not isinstance(atc[0],dict) or set(atc[0])!={"id","result","evidence"} or atc[0].get("id")!="REPLACE_WITH_APK_CHECK_ID" or atc[0].get("result")!="PENDING" or atc[0].get("evidence")!="REPLACE_ME":
+ fail("APK evidence template check contract drifted")
+
 # Machine-readable current specification must be internally complete.
 sig=spec.get("signal",{})
 disp=sig.get("display",{})
