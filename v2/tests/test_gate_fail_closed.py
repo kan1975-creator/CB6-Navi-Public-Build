@@ -83,6 +83,13 @@ def mutate_invalid_revalidation_state(r):
  p.write_text(json.dumps(d))
 CASES.append(("invalid-evidence-revalidation-state", mutate_invalid_revalidation_state, "invalid evidence revalidation state"))
 
+def mutate_missing_historical_mixed_policy(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text())
+ x=next(x for x in d["evidence"] if x["status"]=="historical-mixed")
+ x.pop("clause_policy",None)
+ p.write_text(json.dumps(d))
+CASES.append(("missing-historical-mixed-policy", mutate_missing_historical_mixed_policy, "historical-mixed evidence lacks clause policy"))
+
 def mutate_duplicate_owner(r):
  p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
  x=next(x for x in d["decisions"] if x["id"]=="SIG-COVERAGE-001"); x["spec_key"]="signal.display.200m"
