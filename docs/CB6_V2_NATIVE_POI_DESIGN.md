@@ -1,6 +1,6 @@
 # CB6 V2 Native MWM Feature Access and POI Classifier Design
 
-Status: DETAILED DESIGN — implementation-ready after Gate 0 baseline evidence
+Status: PRIOR DETAILED DESIGN INPUT — NOT IMPLEMENTATION AUTHORITY DURING OVERALL DESIGN REBUILD\n\nThis document remains evidence for the rebuilt design. Its former implementation-ready status is suspended until the rebuilt overall design consumes the active requirements and revalidates this subsystem.
 Upstream: `comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704`
 
 ## 1. Purpose
