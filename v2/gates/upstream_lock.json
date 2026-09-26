@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "upstream": "CoMaps",
+  "repository": "https://github.com/CoMaps-app/CoMaps.git",
+  "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+  "policy": "exact"
+}
