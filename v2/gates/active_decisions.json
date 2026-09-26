@@ -309,6 +309,179 @@
       "acceptance": [
         "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
       ]
+    },
+    {
+      "id": "UI-LAYOUT-001",
+      "requirement": "CB6 driving UI keeps compass at upper left with north-lock toggle, scale below it with tap-to-show +/- controls, current-location at lower left, settings at lower right, and supports a tap-to-hide search/menu full-map presentation.",
+      "affected": [
+        "ui",
+        "camera",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design assigns ownership and preserves touch access to current-location control."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "MAP-LABEL-001",
+      "requirement": "Map presentation suppresses unnecessary address clutter while retaining scale-appropriate road names and required major-facility labels without excessive overlap.",
+      "affected": [
+        "renderer",
+        "style",
+        "poi"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines style/label ownership and zoom/collision verification."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "LOCATION-STABILITY-001",
+      "requirement": "Own-position/heading behavior must avoid rotation-axis offset, stationary jitter and false movement; stopped state must not present spurious driving motion.",
+      "affected": [
+        "location",
+        "camera",
+        "map-matching"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "GOOGLE-MAPS-001",
+      "requirement": "CB6 Navi provides a Google Maps handoff/auxiliary launch path while keeping CB6 Navi as the intended return application after navigation/arrival/restart flows where technically supported.",
+      "affected": [
+        "android",
+        "navigation",
+        "lifecycle",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design separates supported Android lifecycle behavior from behavior that cannot be guaranteed and defines verification."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "POI-MAJOR-001",
+      "requirement": "Required major facilities such as airports, roadside stations, parks, public facilities, department stores and supermarkets support scale-aware icon/label presentation; important large facilities may use stronger labels while avoiding urban overlap.",
+      "affected": [
+        "poi",
+        "renderer",
+        "style"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines categories, source, zoom/priority and collision policy."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "CAMERA-FIXED-001",
+      "requirement": "CB6 retains the requested fixed driving-camera behavior; automatic camera changes must not be introduced as collateral behavior.",
+      "affected": [
+        "camera",
+        "navigation",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design identifies the accepted camera behavior and regression checks before implementation."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "OFFLINE-FREE-001",
+      "requirement": "Core CB6 navigation remains usable without paid Google/Mapbox API registration and preserves CoMaps offline-map capability; external network supplementation cannot become the sole path for core static POIs.",
+      "affected": [
+        "baseline",
+        "offline",
+        "poi",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design documents offline/online ownership and no-paid-API dependency."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "SIGNAL-ZOOM-001",
+      "requirement": "Traffic signals are not required at 1 km; close-range visibility and forward/near scaling must preserve accepted driving behavior while honoring the later slim 200 m preference.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "CONVENIENCE-BRANDS-001",
+      "requirement": "Convenience-store classification covers 7-Eleven, FamilyMart, Lawson, Seicomart, MyBasket, Ministop and Daily Yamazaki, with generic fallback and CB6-specific brand presentation.",
+      "affected": [
+        "poi",
+        "classifier",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
+      ],
+      "status": "active",
+      "kind": "product"
+    },
+    {
+      "id": "TOLL-ROUTE-001",
+      "requirement": "Each route candidate that includes toll roads should present the normal passenger-car toll; free sections/candidates present 0 yen, subject to an authoritative fee model being established.",
+      "affected": [
+        "routing",
+        "toll",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
+      ],
+      "status": "active",
+      "kind": "product"
     }
   ]
 }
