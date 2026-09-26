@@ -236,6 +236,11 @@ def mutate_implementation_with_unverified_upload(r):
  p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(d))
  for rel in ("v2/gates/traceability.json","v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
   q=r/rel; x=json.loads(q.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; q.write_text(json.dumps(x))
+ t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text()); active=json.loads((r/"v2/gates/active_decisions.json").read_text())["decisions"]
+ active_ids={x["id"] for x in active if x.get("status")=="active"}
+ for x in td["traces"]:
+  if x["decision_id"] in active_ids: x.update({"state":"consumed","design_ref":"fixture","verification":["fixture"]})
+ t.write_text(json.dumps(td))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
 def mutate_upstream_lock_commit(r):
