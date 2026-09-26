@@ -17,8 +17,31 @@ if None in ids or len(ids)!=len(set(ids)): fail("decision IDs missing/duplicated
 valid_status={"active","superseded","retired"}
 for d in decisions:
  if d.get("status") not in valid_status: fail("invalid decision status "+str(d.get("id")))
- for k in ("kind","requirement","affected","evidence","acceptance"):
+ for k in ("kind","spec_key","requirement","affected","evidence","acceptance"):
   if not d.get(k): fail(f"{d.get('id')} missing {k}")
+# Evidence references are executable integrity inputs, not unchecked prose.
+for d in decisions:
+ for ev in d["evidence"]:
+  if ev.startswith(("docs/","v2/","AGENTS.md")) and not (ROOT/ev).is_file():
+   fail(f"{d['id']} evidence path missing: {ev}")
+
+# One current owner per single-valued specification key; supersession must be reciprocal.
+active_by_key={}
+by_id={d["id"]:d for d in decisions}
+for d in decisions:
+ if d["status"]=="active":
+  key=d["spec_key"]
+  if key in active_by_key: fail(f"multiple active owners for spec_key {key}: {active_by_key[key]},{d['id']}")
+  active_by_key[key]=d["id"]
+ for old in d.get("supersedes",[]):
+  if old not in by_id: fail(f"{d['id']} supersedes unknown decision: {old}")
+  if by_id[old]["status"]!="superseded" or by_id[old].get("superseded_by")!=d["id"]:
+   fail(f"non-reciprocal supersession: {d['id']} -> {old}")
+ if d["status"]=="superseded":
+  newer=d.get("superseded_by")
+  if not newer or newer not in by_id or by_id[newer]["status"]!="active" or d["id"] not in by_id[newer].get("supersedes",[]):
+   fail(f"superseded decision lacks active reciprocal replacement: {d['id']}")
+
 traces=trace.get("traces",[])
 tids=[t.get("decision_id") for t in traces]
 if len(tids)!=len(set(tids)): fail("duplicate trace rows")
