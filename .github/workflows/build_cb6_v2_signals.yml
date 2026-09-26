@@ -12,6 +12,7 @@ on:
       - 'v2/signals/**'
       - 'v2/tests/**'
       - 'v2/gates/**'
+      - 'v2/gates/create_apk_evidence.py'
 
 permissions:
   contents: read
