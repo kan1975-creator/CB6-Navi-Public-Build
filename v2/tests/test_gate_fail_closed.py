@@ -148,6 +148,14 @@ def mutate_feature_template_field_drift(r):
  p=r/"v2/gates/features/TEMPLATE.json"; d=json.loads(p.read_text()); d.pop("device_checks"); p.write_text(json.dumps(d))
 CASES.append(("feature-template-field-drift", mutate_feature_template_field_drift, "feature gate template fields drifted"))
 
+def mutate_domain_policy_invalid_kind(r):
+ p=r/"v2/gates/domain_verification_policy.json"; d=json.loads(p.read_text()); d["rules"]["renderer"]=["source","wishful-check"]; p.write_text(json.dumps(d))
+CASES.append(("domain-policy-invalid-kind", mutate_domain_policy_invalid_kind, "domain verification policy has invalid kinds"))
+
+def mutate_domain_policy_empty_rules(r):
+ p=r/"v2/gates/domain_verification_policy.json"; d=json.loads(p.read_text()); d["rules"]={}; p.write_text(json.dumps(d))
+CASES.append(("domain-policy-empty-rules", mutate_domain_policy_empty_rules, "domain verification policy invalid"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
