@@ -193,6 +193,15 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
  s=p.read_text(encoding="utf-8")
  if "git -C comaps fetch" in s and pinned not in s: fail("build workflow does not use pinned CoMaps commit: "+p.name)
 
+# The development gate must continuously execute every required method regression test.
+method=load("v2/gates/development_method_contract.json")
+if set(method)!={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script"} or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")
+for rel in method["required_gate_scripts"]+method["required_regression_tests"]+method["acceptance_scripts"]+[method["post_gate_integrity_script"]]:
+ if not (ROOT/rel).is_file(): fail("development method component missing: "+rel)
+devwf=(ROOT/".github/workflows/cb6_development_gate.yml").read_text(encoding="utf-8")
+for rel in method["required_regression_tests"]:
+ if rel not in devwf: fail("development gate omits required regression test: "+rel)
+
 # Machine-readable current specification must be internally complete.
 sig=spec.get("signal",{})
 disp=sig.get("display",{})
