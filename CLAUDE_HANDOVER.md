@@ -1,4 +1,4 @@
-# CB6 Navi — Claude Development Handover
+# CB6 Navi — Claude Development Handover\n\n> Status: HISTORICAL HANDOVER ONLY. This predates `cb6-v2-clean` and the active Development Gate. It must not override `AGENTS.md`, `v2/gates/project_state.json`, the active Requirement Registry, or the rebuilt-design process.
 
 ## Immediate objective
 Do not redesign the application. The first objective is to produce one installable arm64 APK for real-device testing on ATOTO CB6 (Android 13). Until an APK artifact exists, do not call the build complete. After APK generation it is only a real-device test build; final completion requires CB6 testing.
