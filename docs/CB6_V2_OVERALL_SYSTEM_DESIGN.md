@@ -1,9 +1,12 @@
-# CB6 Navi V2 — Overall System Design
+# CB6 Navi V2 — Overall System Design (RETIRED CANONICAL)
 
-Status: CANONICAL V2 DESIGN
+Status: RETIRED AS CANONICAL — REBUILD REQUIRED (2026-09-26)
 Baseline: `comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704`
 Target: ATOTO CB6 / Android 13 / arm64-v8a
 Design principle: preserve CoMaps, extend minimally, keep CB6 responsibilities isolated.
+
+> **DO NOT USE THIS FILE AS AN IMPLEMENTATION AUTHORITY.** On 2026-09-26 the user ordered the overall design to be rebuilt because the previously agreed development process was not executed consistently. This document is preserved only as historical input so useful prior work is not lost. New implementation decisions must come from the rebuilt design after re-verifying user decisions, pinned CoMaps source analysis, web/external-source findings, cross-project evidence, CB6 real-device evidence, known failures, and frozen/preserved behavior.
+
 
 ## 1. Product boundary
 
