@@ -32,7 +32,7 @@ jobs:
       - name: Enforce CB6 development gate
         run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=signals
 
-      - name: Preflight control repository
+      - name: Seal gated control state\n        run: |\n          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n\n      - name: Preflight control repository
         shell: bash
         run: |
           set -euxo pipefail
@@ -115,7 +115,7 @@ jobs:
           python3 v2/audits/audit_identity.py comaps
           python3 v2/audits/audit_signals.py comaps --atlases | tee out/GENERATED_AUDIT.txt
 
-      - name: Build CB6 Gate 1 arm64 release
+      - name: Reverify gated control state before build\n        run: python3 v2/gates/create_gate_stamp.py --verify\n\n      - name: Build CB6 Gate 1 arm64 release
         shell: bash
         run: |
           set -euxo pipefail
@@ -141,6 +141,19 @@ jobs:
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
           "$APKSIGNER" verify --verbose out/CB6-V2-Gate1-Signals-arm64.apk | tee out/SIGNATURE_VERIFY.txt
           sha256sum out/CB6-V2-Gate1-Signals-arm64.apk | tee out/SHA256SUMS.txt
+
+      - name: Create and verify APK evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          SHA="$(sha256sum out/CB6-V2-Gate1-Signals-arm64.apk | awk '{print $1}')"
+          python3 - "$SHA" <<'PY'
+          import json,os,sys
+          d={"schema":1,"feature_id":"signals","build_commit":os.environ["GITHUB_SHA"],"feature_gate":"v2/gates/features/signals.json","apk_path":"out/CB6-V2-Gate1-Signals-arm64.apk","apk_sha256":sys.argv[1],"apk_checks":[{"id":"apk-arm64","result":"PASS","evidence":"out/NATIVE_VERIFY.txt"},{"id":"apk-identity","result":"PASS","evidence":"out/APK_BADGING.txt"},{"id":"apk-signals","result":"PASS","evidence":"out/APK_SIGNAL_AUDIT.txt"},{"id":"apk-signature","result":"PASS","evidence":"out/SIGNATURE_VERIFY.txt"}],"status":"VERIFIED"}
+          open("v2/gates/apk_evidence/signals.json","w").write(json.dumps(d,indent=2)+"\\n")
+          PY
+          python3 v2/gates/verify_apk_evidence.py v2/gates/apk_evidence/signals.json
+          cp v2/gates/apk_evidence/signals.json out/APK_EVIDENCE.json
 
       - name: Upload verified Gate 1 APK and evidence
         uses: actions/upload-artifact@v4
