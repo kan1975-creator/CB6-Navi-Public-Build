@@ -28,7 +28,12 @@ def run_case(name, mutate, needle):
   impact=root/"v2/gates/impact_records/testfeature.json"; impact.parent.mkdir(exist_ok=True)
   impact.write_text(json.dumps({"schema":1,"feature_id":f["feature_id"],"requirements":f["requirements"],"affected_domains":f["affected_domains"],"reviewed_paths":["docs/CB6_CHANGE_IMPACT_MAP.md"]}))
   mutate(f); gate.write_text(json.dumps(f))
-  if name=="impact-record-requirements-mismatch":\n   x=json.loads(impact.read_text()); x["requirements"]=["DOES-NOT-EXIST"]; impact.write_text(json.dumps(x))\n  if name=="impact-record-domains-mismatch":\n   x=json.loads(impact.read_text()); x["affected_domains"]=["signals"]; impact.write_text(json.dumps(x))\n  if name=="impact-record-missing": impact.unlink()\n  env=os.environ.copy(); env.pop("GITHUB_SHA",None)
+  if name=="impact-record-requirements-mismatch":
+   x=json.loads(impact.read_text()); x["requirements"]=["DOES-NOT-EXIST"]; impact.write_text(json.dumps(x))
+  if name=="impact-record-domains-mismatch":
+   x=json.loads(impact.read_text()); x["affected_domains"]=["signals"]; impact.write_text(json.dumps(x))
+  if name=="impact-record-missing": impact.unlink()
+  env=os.environ.copy(); env.pop("GITHUB_SHA",None)
   cp=subprocess.run(["python3","v2/gates/verify_project_gate.py","--require-feature-build","--feature=testfeature"],cwd=root,text=True,capture_output=True,env=env)
   out=cp.stdout+cp.stderr
   if cp.returncode==0 or needle not in out: raise SystemExit(f"FEATURE CONTRACT TEST FAIL {name}: rc={cp.returncode}\n{out}")
