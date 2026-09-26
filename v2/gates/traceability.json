@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "stage": "OVERALL_DESIGN_REBUILD",
+  "traces": [
+    {
+      "decision_id": "PROC-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+      "verification": [
+        "v2/gates/verify_project_integrity.py"
+      ]
+    },
+    {
+      "decision_id": "PROC-002",
+      "state": "consumed",
+      "design_ref": "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+      "verification": [
+        "v2/gates/verify_project_integrity.py",
+        ".github/workflows/cb6_development_gate.yml"
+      ]
+    },
+    {
+      "decision_id": "SIG-200M-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "SIG-COVERAGE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "SIG-UPGRADE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    }
+  ]
+}
