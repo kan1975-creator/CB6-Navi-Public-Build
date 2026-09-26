@@ -79,6 +79,12 @@
       "type": "handover-history",
       "path": "CLAUDE_HANDOVER.md",
       "status": "historical"
+    },
+    {
+      "id": "EV-GATE-COVERAGE",
+      "type": "process-audit",
+      "path": "docs/CB6_GATE_COVERAGE_AUDIT.md",
+      "status": "active"
     }
   ]
 }
