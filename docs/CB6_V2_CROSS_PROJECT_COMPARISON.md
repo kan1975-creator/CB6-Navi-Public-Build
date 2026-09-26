@@ -1,6 +1,6 @@
 # CB6 V2 Cross-Project Comparison Matrix
 
-Status: MANDATORY ENGINEERING INPUT
+Status: ENGINEERING EVIDENCE INPUT — REVALIDATION REQUIRED DURING OVERALL DESIGN REBUILD
 Projects: CoMaps / OsmAnd / Vela / MapLibre Navigation / Valhalla
 
 ## Rule
@@ -15,7 +15,7 @@ Decision priority:
 | CB6 feature | CoMaps | OsmAnd | Vela | MapLibre Navigation | Valhalla | CB6 decision status |
 |---|---|---|---|---|---|---|
 | Native POI / convenience / GS / facilities | Analysis started: MWM FeatureType + metadata + styles | TODO source trace | TODO source trace | N/A unless renderer/location integration relevant | N/A for static POI rendering | Native MWM diagnostic required before renderer choice |
-| Traffic signals | Frozen CB6 migration on CoMaps UserMark path | Route data has explicit traffic-signal and directional signal rules | Regional on-device road-feature dataset with signal/stop kinds and road bearing; Overpass only fallback | Navigation symbols are separately owned; overlap/placement can be explicitly controlled | N/A for CB6 signal rendering; routing graph semantics only, so no engine dependency | DESIGN-COMPLETE for migration architecture; Run #65 visual/behavior remains frozen |
+| Traffic signals | Historical CB6 migration evidence on CoMaps UserMark path | Route data has explicit traffic-signal and directional signal rules | Regional on-device road-feature dataset with signal/stop kinds and road bearing; Overpass only fallback | Navigation symbols are separately owned; overlap/placement can be explicitly controlled | N/A for CB6 signal rendering; routing graph semantics only, so no engine dependency | PRIOR DESIGN EVIDENCE; later active Registry requirements supersede conflicting Run #65 presentation details |
 | Stop signs | Detailed source/design pending | TODO | TODO | TODO | TODO | Not selected |
 | Own position / camera / heading | Framework/location path mapped | TODO | TODO | TODO | N/A except map matching | Not selected |
 | Low-speed stability / map matching | Existing CoMaps location/routing path to trace deeper | TODO | TODO | TODO | TODO Meili/map matching | Not selected |
@@ -67,7 +67,7 @@ Real-device acceptance remains separate from design completion.
 
 ## Traffic signals — comparison evidence and V2 decision
 
-Status: DESIGN-COMPLETE for architecture. This comparison does **not** reopen the accepted Run #65 visual behavior.
+Status: PRIOR DESIGN EVIDENCE. Architecture lessons remain evidence; current behavior is owned by the active Requirement Registry/current spec, including later explicit changes.
 
 ### CoMaps / CB6 baseline
 - Base: pinned CoMaps `7113ccb5f086183f8884b2aa4e58c987466b6704`.
@@ -100,7 +100,7 @@ Status: DESIGN-COMPLETE for architecture. This comparison does **not** reopen th
 ### Selected CB6 V2 structure
 1. Keep Dynamic Road Marks as the sole owner of signal presentation state.
 2. Use typed immutable signal snapshots and a narrow acquisition-provider interface.
-3. Preserve Run #65 scale, forward-cone, distance, refresh and nearest-first behavior exactly for the first V2 migration.
+3. Use Run #65 scale/forward-cone/distance/refresh/nearest-first behavior as historical evidence, except where later active requirements/current spec explicitly supersede it.
 4. Keep rendering collision/placement policy explicit and independent from static POI rendering.
 5. Do not allow any publisher to clear another road-mark or POI family.
 6. After frozen behavior is reproduced on CB6, separately investigate native Hokkaido MWM/route-control availability.
