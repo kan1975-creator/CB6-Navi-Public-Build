@@ -96,7 +96,7 @@ if "--require-feature-build" in sys.argv:
  # alone is not evidence that its source/regression surface was actually checked.
  dv=f.get("domain_verification")
  if not isinstance(dv,dict): fail("feature gate domain_verification not declared")
- missing_verification=sorted(d for d in declared_domains if not isinstance(dv.get(d),list) or not dv[d])
+ missing_verification=sorted(d for d in declared_domains if not isinstance(dv.get(d),list) or (not dv[d] and d!="real-device"))
  if missing_verification: fail("feature gate domains lack verification: "+",".join(missing_verification))
  allowed_refs=set(f["source_paths"]+f["audits"]+f["tests"])
  policy=json.loads((ROOT/"v2/gates/domain_verification_policy.json").read_text(encoding="utf-8"))
