@@ -15,7 +15,7 @@ jobs:
         run: python3 v2/gates/verify_project_gate.py
       - name: Prove feature build is blocked during design rebuild
         run: |
-          if python3 v2/gates/verify_project_gate.py --require-feature-build; then
+          if python3 v2/gates/verify_project_gate.py --require-feature-build --feature=deliberately-missing; then
             echo 'ERROR: feature-build gate unexpectedly opened'
             exit 1
           fi
