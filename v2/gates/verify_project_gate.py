@@ -52,11 +52,19 @@ if "--require-feature-build" in sys.argv:
  fp=ROOT/"v2/gates/features"/(feature+".json")
  if not fp.is_file(): fail("missing per-feature gate record: "+feature)
  f=json.loads(fp.read_text(encoding="utf-8"))
- required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
+ required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
  missing=sorted(required-set(f))
  if missing: fail("feature gate fields missing: "+",".join(missing))
  if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
  if not f.get("impact_checked"): fail("feature impact check incomplete")
+ impact_rel=f.get("impact_record","")
+ impact_path=ROOT/impact_rel
+ if not impact_path.is_file(): fail("feature impact record missing")
+ impact=json.loads(impact_path.read_text(encoding="utf-8"))
+ if impact.get("schema")!=1 or impact.get("feature_id")!=f.get("feature_id"): fail("feature impact record identity mismatch")
+ if set(impact.get("requirements",[]))!=set(f.get("requirements",[])): fail("feature impact record requirements mismatch")
+ if set(impact.get("affected_domains",[]))!=set(f.get("affected_domains",[])): fail("feature impact record domains mismatch")
+ if not impact.get("reviewed_paths"): fail("feature impact record lacks reviewed paths")
  if f.get("repo_sweep_required") is not True: fail("feature repo-wide sweep not required")
  if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
  for key in ("requirements","source_paths","audits","tests","apk_checks","device_checks"):
