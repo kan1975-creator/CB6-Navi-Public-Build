@@ -121,7 +121,13 @@
       "acceptance": [
         "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement."
       ],
-      "spec_key": "product.base"
+      "spec_key": "product.base",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "MAP-CAMERA-001",
@@ -195,7 +201,13 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path."
       ],
-      "spec_key": "poi.convenience"
+      "spec_key": "poi.convenience",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "POI-FUEL-001",
@@ -432,7 +444,13 @@
       ],
       "status": "active",
       "kind": "product",
-      "spec_key": "camera.fixed"
+      "spec_key": "camera.fixed",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "OFFLINE-FREE-001",
@@ -452,7 +470,13 @@
       ],
       "status": "active",
       "kind": "product",
-      "spec_key": "offline.free"
+      "spec_key": "offline.free",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "SIGNAL-ZOOM-001",
@@ -470,7 +494,13 @@
       ],
       "status": "active",
       "kind": "product",
-      "spec_key": "signal.zoom"
+      "spec_key": "signal.zoom",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "CONVENIENCE-BRANDS-001",
@@ -488,7 +518,13 @@
       ],
       "status": "active",
       "kind": "product",
-      "spec_key": "convenience.brands"
+      "spec_key": "convenience.brands",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "TOLL-ROUTE-001",
@@ -582,7 +618,13 @@
       ],
       "acceptance": [
         "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
-      ]
+      ],
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
     },
     {
       "id": "VEHICLE-ICON-001",
