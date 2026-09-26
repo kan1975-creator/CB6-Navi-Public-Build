@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Destructive tests for CB6 gate invariants using isolated repository copies."""
-import json, shutil, subprocess, tempfile
+import json, shutil, subprocess, tempfile, os
 from pathlib import Path
 SRC=Path(__file__).resolve().parents[2]
 CASES=[]
