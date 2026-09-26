@@ -4,7 +4,8 @@
   "required_gate_scripts": [
     "v2/gates/verify_project_gate.py",
     "v2/gates/verify_project_integrity.py",
-    "v2/gates/verify_evidence_inventory_v2.py"
+    "v2/gates/verify_evidence_inventory_v2.py",
+    "v2/gates/verify_design_coverage.py"
   ],
   "required_regression_tests": [
     "v2/tests/test_gate_fail_closed.py",
