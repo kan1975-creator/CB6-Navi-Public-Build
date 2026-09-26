@@ -14,7 +14,7 @@ def run_case(name, mutate, needle):
   # per-feature contract under test rather than failing the global integrity lock.
   for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
    p=root/rel; x=json.loads(p.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(x))
-  trace=root/"v2/gates/traceability.json"; t=json.loads(trace.read_text())
+  trace=root/"v2/gates/traceability.json"; t=json.loads(trace.read_text()); t["stage"]="IMPLEMENTATION_ENABLED"
   for x in t["traces"]:
    if x["decision_id"]=="SIG-200M-001": x.update({"state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["fixture"]})
   # This test isolates feature-contract behavior: all active requirements must be consumed for implementation stage.
