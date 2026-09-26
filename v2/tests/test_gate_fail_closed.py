@@ -214,6 +214,12 @@ def mutate_post_gate_control_reset(r):
  p.write_text(s)
 CASES.append(("post-gate-control-reset", mutate_post_gate_control_reset, "control repo can change after feature gate"))
 
+def mutate_missing_stamp_in_implementation(r):
+ mutate_implementation_with_unverified_upload(r)
+ for wf in (r/".github/workflows").glob("*.yml"):
+  s=wf.read_text().replace("          python3 v2/gates/create_gate_stamp.py\n","").replace("          python3 v2/gates/create_gate_stamp.py --verify\n",""); wf.write_text(s)
+CASES.append(("implementation-missing-gate-stamp", mutate_missing_stamp_in_implementation, "build workflow lacks post-gate control stamp enforcement"))
+
 def test_ci_sha_mismatch():
  env=os.environ.copy(); env["GITHUB_SHA"]="0"*40
  cp=subprocess.run([sys.executable,str(ROOT/"v2/gates/verify_project_gate.py")],cwd=ROOT,text=True,capture_output=True,env=env)
