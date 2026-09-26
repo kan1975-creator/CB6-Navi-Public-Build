@@ -35,6 +35,10 @@ def run_case(name, mutate, needle):
    x=json.loads(impact.read_text()); x["requirements"]=["DOES-NOT-EXIST"]; impact.write_text(json.dumps(x))
   if name=="impact-record-domains-mismatch":
    x=json.loads(impact.read_text()); x["affected_domains"]=["signals"]; impact.write_text(json.dumps(x))
+  if name=="impact-record-reviewed-path-missing":
+   x=json.loads(impact.read_text()); x["reviewed_paths"]=["docs/DOES_NOT_EXIST.md"]; impact.write_text(json.dumps(x))
+  if name=="impact-record-field-drift":
+   x=json.loads(impact.read_text()); x["unreviewed_note"]="bypass"; impact.write_text(json.dumps(x))
   if name=="impact-record-missing": impact.unlink()
   env=os.environ.copy(); env.pop("GITHUB_SHA",None)
   cp=subprocess.run(["python3","v2/gates/verify_project_gate.py","--require-feature-build","--feature=testfeature"],cwd=root,text=True,capture_output=True,env=env)
@@ -53,6 +57,8 @@ cases=[
  ("impact-record-missing",lambda f:None,"feature impact record missing"),
  ("impact-record-requirements-mismatch",lambda f:None,"feature impact record requirements mismatch"),
  ("impact-record-domains-mismatch",lambda f:None,"feature impact record domains mismatch"),
+ ("impact-record-reviewed-path-missing",lambda f:None,"feature impact reviewed path missing"),
+ ("impact-record-field-drift",lambda f:None,"feature impact record fields drifted"),
  ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
  ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
