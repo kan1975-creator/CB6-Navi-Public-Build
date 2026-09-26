@@ -146,9 +146,8 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          SHA="$(sha256sum out/CB6-V2-Gate1-Signals-arm64.apk | awk '{print $1}')"
-          export SHA
-          python3 v2/gates/create_apk_evidence.py signals out/CB6-V2-Gate1-Signals-arm64.apk "$SHA"
+          sha256sum out/CB6-V2-Gate1-Signals-arm64.apk | cut -d ' ' -f1 > out/APK_SHA256.txt
+          python3 v2/gates/create_apk_evidence.py signals out/CB6-V2-Gate1-Signals-arm64.apk out/APK_SHA256.txt
           python3 v2/gates/verify_apk_evidence.py v2/gates/apk_evidence/signals.json
           cp v2/gates/apk_evidence/signals.json out/APK_EVIDENCE.json
 
