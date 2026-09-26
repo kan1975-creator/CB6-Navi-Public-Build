@@ -32,7 +32,12 @@ jobs:
       - name: Enforce CB6 development gate
         run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=signals
 
-      - name: Seal gated control state\n        run: |\n          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n\n      - name: Preflight control repository
+      - name: Seal gated control state
+        run: |
+          python3 v2/gates/create_gate_stamp.py
+          python3 v2/gates/create_gate_stamp.py --verify
+
+      - name: Preflight control repository
         shell: bash
         run: |
           set -euxo pipefail
@@ -115,7 +120,10 @@ jobs:
           python3 v2/audits/audit_identity.py comaps
           python3 v2/audits/audit_signals.py comaps --atlases | tee out/GENERATED_AUDIT.txt
 
-      - name: Reverify gated control state before build\n        run: python3 v2/gates/create_gate_stamp.py --verify\n\n      - name: Build CB6 Gate 1 arm64 release
+      - name: Reverify gated control state before build
+        run: python3 v2/gates/create_gate_stamp.py --verify
+
+      - name: Build CB6 Gate 1 arm64 release
         shell: bash
         run: |
           set -euxo pipefail
