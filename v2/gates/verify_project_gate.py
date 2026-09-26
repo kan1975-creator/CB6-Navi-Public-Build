@@ -38,7 +38,7 @@ if "--require-feature-build" in sys.argv:
  fp=ROOT/"v2/gates/features"/(feature+".json")
  if not fp.is_file(): fail("missing per-feature gate record: "+feature)
  f=json.loads(fp.read_text(encoding="utf-8"))
- required={"schema","feature_id","requirements","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
+ required={"schema","feature_id","requirements","affected_domains","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
  missing=sorted(required-set(f))
  if missing: fail("feature gate fields missing: "+",".join(missing))
  if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
@@ -49,8 +49,16 @@ if "--require-feature-build" in sys.argv:
   if not isinstance(f.get(key),list) or not f[key]: fail("feature gate "+key+" not declared")
  decisions=json.loads((ROOT/"v2/gates/active_decisions.json").read_text(encoding="utf-8")).get("decisions",[])
  active={d["id"] for d in decisions if d.get("status")=="active"}
+ active_by_id={d["id"]:d for d in decisions if d.get("status")=="active"}
  unknown=sorted(set(f["requirements"])-active)
  if unknown: fail("feature gate references non-active requirements: "+",".join(unknown))
+ # A feature contract must declare the affected domains of every requirement it owns.
+ # This prevents a narrow source list from silently ignoring renderer/cache/UI/etc impact.
+ declared_domains=set(f.get("affected_domains",[]))
+ if not declared_domains: fail("feature gate affected_domains not declared")
+ required_domains=set().union(*(set(active_by_id[r].get("affected",[])) for r in f["requirements"]))
+ missing_domains=sorted(required_domains-declared_domains)
+ if missing_domains: fail("feature gate omits affected domains: "+",".join(missing_domains))
  traces=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8")).get("traces",[])
  trace_by_id={t["decision_id"]:t for t in traces}
  for rid in f["requirements"]:
