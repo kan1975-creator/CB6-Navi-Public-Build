@@ -60,6 +60,9 @@ for d in decisions:
    if not (ROOT/ev).is_file(): fail(f"{d['id']} evidence path missing: {ev}")
    if ev not in inventory_paths: fail(f"{d['id']} evidence absent from inventory: {ev}")
    if d["status"]=="active" and evidence_by_path[ev]["status"]=="retired": fail(f"{d['id']} active decision relies directly on retired evidence: {ev}")
+   if d["status"]=="active" and evidence_by_path[ev]["status"]=="historical-mixed":
+    sc=d.get("evidence_scopes",{}).get(ev,{})
+    if not sc.get("scope") or not sc.get("supersession"): fail(f"{d['id']} historical-mixed evidence lacks requirement scope: {ev}")
 
 # One current owner per single-valued specification key; supersession must be reciprocal.
 active_by_key={}
