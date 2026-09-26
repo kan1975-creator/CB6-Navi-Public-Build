@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, pathlib, sys
+import json, pathlib, sys, os, subprocess
 ROOT=pathlib.Path(__file__).resolve().parents[2]
 STATE=ROOT/"v2/gates/project_state.json"
 EXEC=ROOT/"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
@@ -9,6 +9,14 @@ def fail(msg):
 for p in (STATE,EXEC,OLD):
  if not p.exists(): fail("required gate input missing: "+str(p.relative_to(ROOT)))
 s=json.loads(STATE.read_text(encoding="utf-8"))
+# In GitHub Actions the gated control repository must be exactly the workflow commit.
+# Local/offline verification remains supported when GITHUB_SHA is absent.
+ci_sha=os.environ.get("GITHUB_SHA","").strip()
+if ci_sha:
+ cp=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True)
+ if cp.returncode!=0: fail("cannot resolve control repo HEAD in CI")
+ head=cp.stdout.strip()
+ if head!=ci_sha: fail("CI control repo HEAD does not match GITHUB_SHA")
 if s.get("schema")!=1: fail("unsupported project_state schema")
 if s.get("branch")!="cb6-v2-clean": fail("wrong branch authority")
 stage=s.get("stage")
@@ -22,7 +30,7 @@ if stage=="OVERALL_DESIGN_REBUILD":
  raise SystemExit(0)
 # Implementation enablement must be independently proven by the repository-wide
 # integrity gate. Do not trust project_state booleans as sufficient authority.
-cp=__import__("subprocess").run([sys.executable, str(ROOT/"v2/gates/verify_project_integrity.py")], cwd=ROOT, text=True, capture_output=True)
+cp=subprocess.run([sys.executable, str(ROOT/"v2/gates/verify_project_integrity.py")], cwd=ROOT, text=True, capture_output=True)
 if cp.returncode != 0:
  fail("implementation enablement lacks integrity proof: "+(cp.stdout+cp.stderr).strip())
 canonical=ROOT/s.get("canonical_design","")
