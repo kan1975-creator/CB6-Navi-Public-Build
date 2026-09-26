@@ -39,7 +39,7 @@ cases=[
  ("missing-domain-verification",lambda f:f.__setitem__("domain_verification",{}),"domains lack verification"),
  ("unknown-domain-verification-path",lambda f:f["domain_verification"].__setitem__("renderer",["v2/not-declared"]),"domain verification uses undeclared paths"),
  ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
- ("missing-source",lambda f:f.__setitem__("source_paths",["v2/does-not-exist"]),"source_paths path missing"),
+ ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
  ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks not declared"),
 ]
