@@ -139,7 +139,7 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
    fail("feature gate occurs after build/transform work: "+p.name)
   gate_pos=s.index(token)
-  post_gate=s[gate_pos+len(token):]
+  post_gate=s[gate_pos:]
   # After the control repository has been gated, do not replace/reset it. Commands
   # explicitly scoped to the separate comaps/ checkout are allowed.
   dangerous=[]
