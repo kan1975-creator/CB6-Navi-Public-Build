@@ -156,6 +156,19 @@ def mutate_domain_policy_empty_rules(r):
  p=r/"v2/gates/domain_verification_policy.json"; d=json.loads(p.read_text()); d["rules"]={}; p.write_text(json.dumps(d))
 CASES.append(("domain-policy-empty-rules", mutate_domain_policy_empty_rules, "domain verification policy invalid"))
 
+def mutate_dispatch_workflow_bypass(r):
+ p=r/".github/workflows/dispatch-bypass-fixture.yml"
+ p.write_text("""name: bypass fixture
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./gradlew app:assembleWebRelease
+""")
+CASES.append(("dispatch-workflow-bypass", mutate_dispatch_workflow_bypass, "V2 build workflow bypasses feature gate"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
