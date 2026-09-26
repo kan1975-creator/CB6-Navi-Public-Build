@@ -1,6 +1,6 @@
 # CB6 Navi V2 Baseline
 
-Status: ACTIVE SECOND-GENERATION DEVELOPMENT
+Status: BASELINE EVIDENCE — OVERALL DESIGN REBUILD ACTIVE\n\nThe build evidence in this document remains valid evidence. Its old gate ordering and references to the retired overall design do not authorize implementation during `OVERALL_DESIGN_REBUILD`.
 Started: 2026-09-25
 Branch: `cb6-v2-clean`
 
