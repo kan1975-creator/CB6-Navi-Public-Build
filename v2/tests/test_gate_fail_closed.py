@@ -250,7 +250,11 @@ CASES.append(("unverified-apk-upload", mutate_implementation_with_unverified_upl
 
 def mutate_development_gate_omits_test(r):
  p=r/".github/workflows/cb6_development_gate.yml"; s=p.read_text(); s=s.replace("python3 v2/tests/test_final_acceptance_fail_closed.py","echo omitted"); p.write_text(s)
-CASES.append(("upstream-lock-drift", mutate_upstream_lock_commit, "build workflow does not use pinned CoMaps commit"))
+
+def mutate_upstream_head_assertion_removed(r):
+ p=r/".github/workflows/build_cb6_v2_signals.yml"; s=p.read_text(); s=s.replace('          test "$(git -C comaps rev-parse HEAD)" = "7113ccb5f086183f8884b2aa4e58c987466b6704"\n',''); p.write_text(s)
+CASES.append(("upstream-lock-drift", mutate_upstream_lock_commit, "build workflow does not enforce pinned CoMaps checkout"))
+CASES.append(("upstream-head-assertion-removed", mutate_upstream_head_assertion_removed, "build workflow does not enforce pinned CoMaps checkout"))
 CASES.append(("development-gate-omits-test", mutate_development_gate_omits_test, "development gate omits required regression test"))
 
 
