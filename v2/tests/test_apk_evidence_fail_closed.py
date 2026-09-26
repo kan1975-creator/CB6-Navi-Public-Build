@@ -7,7 +7,8 @@ def run_case(name,mutate,needle):
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"; shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
   rec=root/"v2/gates/apk_evidence/test.json"
-  d={"schema":1,"feature_id":"testfeature","build_commit":"a"*40,"apk_sha256":"b"*64,"apk_checks":["manifest/resources verified"],"status":"VERIFIED"}
+  head=subprocess.run(["git","rev-parse","HEAD"],cwd=root,text=True,capture_output=True,check=True).stdout.strip()
+  d={"schema":1,"feature_id":"testfeature","build_commit":head,"apk_sha256":"b"*64,"apk_checks":["manifest/resources verified"],"status":"VERIFIED"}
   mutate(d); rec.write_text(json.dumps(d))
   cp=subprocess.run(["python3","v2/gates/verify_apk_evidence.py","v2/gates/apk_evidence/test.json"],cwd=root,text=True,capture_output=True)
   out=cp.stdout+cp.stderr
@@ -17,6 +18,7 @@ def run_case(name,mutate,needle):
 cases=[
  ("pending",lambda d:d.__setitem__("status","PENDING"),"APK evidence not verified"),
  ("bad-build-commit",lambda d:d.__setitem__("build_commit","not-a-commit"),"build commit invalid"),
+ ("wrong-build-commit",lambda d:d.__setitem__("build_commit","a"*40),"build commit does not match repository HEAD"),
  ("bad-apk-sha",lambda d:d.__setitem__("apk_sha256","1234"),"APK SHA256 invalid"),
  ("empty-checks",lambda d:d.__setitem__("apk_checks",[]),"APK checks absent"),
 ]
