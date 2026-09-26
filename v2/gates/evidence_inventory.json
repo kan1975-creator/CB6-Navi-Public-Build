@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "stage": "OVERALL_DESIGN_REBUILD",
+  "evidence": [
+    {
+      "id": "EV-PROCESS",
+      "type": "process",
+      "path": "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+      "status": "active"
+    },
+    {
+      "id": "EV-IMPACT",
+      "type": "architecture",
+      "path": "docs/CB6_CHANGE_IMPACT_MAP.md",
+      "status": "active"
+    },
+    {
+      "id": "EV-KNOWN-FAILURES",
+      "type": "regression",
+      "path": "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+      "status": "active"
+    },
+    {
+      "id": "EV-COMAPS-ARCH",
+      "type": "architecture",
+      "path": "docs/CB6_COMAPS_ARCHITECTURE.md",
+      "status": "active"
+    },
+    {
+      "id": "EV-COMAPS-PINNED",
+      "type": "source-analysis",
+      "path": "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md",
+      "status": "active"
+    },
+    {
+      "id": "EV-FROZEN",
+      "type": "device-history",
+      "path": "docs/CB6_FROZEN_FEATURES.md",
+      "status": "historical-mixed"
+    },
+    {
+      "id": "EV-CROSS-PROJECT",
+      "type": "external-comparison",
+      "path": "docs/CB6_V2_CROSS_PROJECT_COMPARISON.md",
+      "status": "revalidation-required"
+    },
+    {
+      "id": "EV-BASELINE",
+      "type": "build-history",
+      "path": "docs/CB6_V2_BASELINE.md",
+      "status": "historical"
+    },
+    {
+      "id": "EV-OLD-DESIGN",
+      "type": "design-history",
+      "path": "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md",
+      "status": "retired"
+    },
+    {
+      "id": "EV-OLD-MODULES",
+      "type": "design-history",
+      "path": "docs/CB6_V2_MODULE_CONTRACTS.md",
+      "status": "retired"
+    },
+    {
+      "id": "EV-OLD-POI",
+      "type": "design-history",
+      "path": "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+      "status": "retired"
+    },
+    {
+      "id": "EV-OLD-SIGNAL",
+      "type": "device/design-history",
+      "path": "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md",
+      "status": "historical"
+    },
+    {
+      "id": "EV-HANDOVER",
+      "type": "handover-history",
+      "path": "CLAUDE_HANDOVER.md",
+      "status": "historical"
+    }
+  ]
+}
