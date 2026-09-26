@@ -93,6 +93,222 @@
       "acceptance": [
         "Acceptance route contains both update-install and clean-install checks."
       ]
+    },
+    {
+      "id": "PRODUCT-BASE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "CoMaps standard functionality is preserved unless a CB6 requirement explicitly extends it.",
+      "affected": [
+        "baseline",
+        "routing",
+        "search",
+        "favorites",
+        "offline-maps",
+        "poi"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement."
+      ]
+    },
+    {
+      "id": "MAP-CAMERA-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Map follows driving direction by default, supports north-lock toggle, and own-position presentation is lowered on screen without altering geographic GPS coordinates.",
+      "affected": [
+        "location",
+        "camera",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_MODULE_CONTRACTS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines follow/north-lock/offset ownership and regression route."
+      ]
+    },
+    {
+      "id": "MAP-SCALE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Initial map scale is 200 m; no automatic scale is required and the previous user scale is remembered.",
+      "affected": [
+        "camera",
+        "settings",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines scale persistence and excludes unintended auto-scale behavior."
+      ]
+    },
+    {
+      "id": "HUD-ROAD-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "A NAVITIME-like current-road-name bar is presented near the bottom with orientation behavior controlled by CB6 UI settings.",
+      "affected": [
+        "road-hud",
+        "ui",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design uses existing routing/address state and defines lifecycle/fallback."
+      ]
+    },
+    {
+      "id": "POI-CONVENIENCE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Convenience stores are always available as brand-specific icons without cluttering convenience-store text; static POI data should prefer native MWM when proven sufficient.",
+      "affected": [
+        "poi",
+        "classifier",
+        "presentation",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design resolves native MWM evidence before any network duplicate path."
+      ]
+    },
+    {
+      "id": "POI-FUEL-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Fuel stations and required major facilities are presented through the CB6 POI strategy with scale-aware visibility and without unnecessary duplicate network POIs.",
+      "affected": [
+        "poi",
+        "presentation",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design assigns authoritative data source, presentation and regression checks."
+      ]
+    },
+    {
+      "id": "STOP-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Stop signs are a dynamic road-control feature and should be shown only when relevant ahead of the vehicle.",
+      "affected": [
+        "road-controls",
+        "location",
+        "renderer"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_MODULE_CONTRACTS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
+      ]
+    },
+    {
+      "id": "SEARCH-VOICE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Japanese voice search feeds the stock CoMaps SearchEngine, with on-device recognition where available and a safe fallback; no parallel search database.",
+      "affected": [
+        "search",
+        "voice",
+        "android"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines speech lifecycle, normalization, fallback and stock-result preservation."
+      ]
+    },
+    {
+      "id": "ROUTING-FREE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "CB6 routing may support a free-expressway-only policy inside native route calculation semantics; it must not post-filter an already calculated route.",
+      "affected": [
+        "routing",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_MODULE_CONTRACTS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design proves native toll/access semantics before implementation."
+      ]
+    },
+    {
+      "id": "TOLL-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Toll-fee display must use a traceable authoritative fee source/model and must not fabricate an exact fee from road class.",
+      "affected": [
+        "routing",
+        "toll",
+        "ui",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_MODULE_CONTRACTS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design records source/version/update/offline policy before implementation."
+      ]
+    },
+    {
+      "id": "FAVORITES-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Favorites synchronization, if implemented, preserves BookmarkManager as authority and uses item-level identity/conflict handling rather than destructive collection replacement.",
+      "affected": [
+        "favorites",
+        "sync"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_MODULE_CONTRACTS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines identity, conflict and transport boundaries."
+      ]
+    },
+    {
+      "id": "LIFECYCLE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "App startup and navigation lifecycle must restore correct current-location/follow presentation and preserve CB6 behavior across restart/return flows.",
+      "affected": [
+        "lifecycle",
+        "location",
+        "navigation",
+        "android"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
+      ]
     }
   ]
 }
