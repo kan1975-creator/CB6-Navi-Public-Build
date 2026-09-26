@@ -17,7 +17,10 @@
     "REPLACE_WITH_EXISTING_TEST_PATH"
   ],
   "apk_checks": [
-    "REPLACE_WITH_EXPLICIT_APK_VERIFICATION"
+    {
+      "id": "REPLACE_WITH_APK_CHECK_ID",
+      "description": "REPLACE_WITH_EXPLICIT_APK_VERIFICATION"
+    }
   ],
   "device_checks": [
     {
