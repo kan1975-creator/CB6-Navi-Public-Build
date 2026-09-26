@@ -177,7 +177,7 @@ if not isinstance(dtc,list) or len(dtc)!=1 or not isinstance(dtc[0],dict) or set
 
 # APK artifacts may never be published before APK evidence verification once implementation is enabled.
 if state.get("stage")=="IMPLEMENTATION_ENABLED":
- for p in workflows:
+ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   s=p.read_text(encoding="utf-8")
   upload=s.find("actions/upload-artifact@")
   if upload<0: continue
@@ -189,7 +189,7 @@ upstream=load("v2/gates/upstream_lock.json")
 if set(upstream)!={"schema","upstream","repository","commit","policy"} or upstream.get("schema")!=1 or upstream.get("upstream")!="CoMaps" or upstream.get("policy")!="exact": fail("upstream lock invalid")
 pinned=upstream.get("commit","")
 if len(pinned)!=40 or any(ch not in "0123456789abcdef" for ch in pinned): fail("upstream lock commit invalid")
-for p in workflows:
+for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
  s=p.read_text(encoding="utf-8")
  if "git -C comaps fetch" in s and pinned not in s: fail("build workflow does not use pinned CoMaps commit: "+p.name)
 
