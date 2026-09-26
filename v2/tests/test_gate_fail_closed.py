@@ -69,6 +69,13 @@ def mutate_retired_direct_evidence(r):
  p.write_text(json.dumps(d))
 CASES.append(("retired-direct-requirement-evidence", mutate_retired_direct_evidence, "active decision relies directly on retired evidence"))
 
+def mutate_fake_evidence_revalidation(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text())
+ x=next(x for x in d["evidence"] if x["status"]=="revalidation-required")
+ x["revalidation"]={"state":"validated","record":"","verification":[]}
+ p.write_text(json.dumps(d))
+CASES.append(("fake-evidence-revalidation", mutate_fake_evidence_revalidation, "validated evidence lacks revalidation record/verification"))
+
 def mutate_duplicate_owner(r):
  p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
  x=next(x for x in d["decisions"] if x["id"]=="SIG-COVERAGE-001"); x["spec_key"]="signal.display.200m"
