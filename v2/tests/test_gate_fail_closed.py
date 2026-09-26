@@ -231,7 +231,11 @@ def mutate_traceability_stage_mismatch(r):
  p=r/"v2/gates/traceability.json"; d=json.loads(p.read_text())
  d["stage"]="IMPLEMENTATION_ENABLED" if d.get("stage")!="IMPLEMENTATION_ENABLED" else "OVERALL_DESIGN_REBUILD"
  p.write_text(json.dumps(d))
+
+def mutate_implementation_with_unverified_upload(r):
+ p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(d))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
+CASES.append(("unverified-apk-upload", mutate_implementation_with_unverified_upload, "APK artifact upload is not preceded by APK evidence verification"))
 
 
 for name,mutate,needle in CASES:
