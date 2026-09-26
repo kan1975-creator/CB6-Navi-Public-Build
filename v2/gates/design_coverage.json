@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "stage": "OVERALL_DESIGN_REBUILD",
+  "canonical_design_target": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+  "required_sections": [
+    {
+      "section": "PROCESS",
+      "requirements": [
+        "PROC-001",
+        "PROC-002"
+      ]
+    },
+    {
+      "section": "SIGNAL",
+      "requirements": [
+        "SIG-200M-001",
+        "SIGNAL-ZOOM-001"
+      ]
+    },
+    {
+      "section": "SIG",
+      "requirements": [
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001"
+      ]
+    },
+    {
+      "section": "PRODUCT",
+      "requirements": [
+        "PRODUCT-BASE-001",
+        "SCOPE-HOKKAIDO-001"
+      ]
+    },
+    {
+      "section": "MAP",
+      "requirements": [
+        "MAP-CAMERA-001",
+        "MAP-SCALE-001",
+        "MAP-LABEL-001",
+        "VEHICLE-ICON-001"
+      ]
+    },
+    {
+      "section": "HUD",
+      "requirements": [
+        "HUD-ROAD-001"
+      ]
+    },
+    {
+      "section": "POI",
+      "requirements": [
+        "POI-CONVENIENCE-001",
+        "POI-FUEL-001",
+        "POI-MAJOR-001"
+      ]
+    },
+    {
+      "section": "STOP",
+      "requirements": [
+        "STOP-001"
+      ]
+    },
+    {
+      "section": "SEARCH",
+      "requirements": [
+        "SEARCH-VOICE-001",
+        "SEARCH-FUZZY-001",
+        "SEARCH-HISTORY-001"
+      ]
+    },
+    {
+      "section": "ROUTING",
+      "requirements": [
+        "ROUTING-FREE-001"
+      ]
+    },
+    {
+      "section": "TOLL",
+      "requirements": [
+        "TOLL-001",
+        "TOLL-ROUTE-001"
+      ]
+    },
+    {
+      "section": "FAVORITES",
+      "requirements": [
+        "FAVORITES-001"
+      ]
+    },
+    {
+      "section": "LIFECYCLE",
+      "requirements": [
+        "LIFECYCLE-001"
+      ]
+    },
+    {
+      "section": "UI",
+      "requirements": [
+        "UI-LAYOUT-001",
+        "ORIENTATION-001"
+      ]
+    },
+    {
+      "section": "LOCATION",
+      "requirements": [
+        "LOCATION-STABILITY-001"
+      ]
+    },
+    {
+      "section": "GOOGLE",
+      "requirements": [
+        "GOOGLE-MAPS-001"
+      ]
+    },
+    {
+      "section": "CAMERA",
+      "requirements": [
+        "CAMERA-FIXED-001"
+      ]
+    },
+    {
+      "section": "OFFLINE",
+      "requirements": [
+        "OFFLINE-FREE-001"
+      ]
+    },
+    {
+      "section": "CONVENIENCE",
+      "requirements": [
+        "CONVENIENCE-BRANDS-001"
+      ]
+    }
+  ]
+}
