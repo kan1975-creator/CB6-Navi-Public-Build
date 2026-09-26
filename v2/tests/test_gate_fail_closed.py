@@ -250,22 +250,12 @@ def mutate_traceability_stage_mismatch(r):
  p.write_text(json.dumps(d))
 
 def mutate_implementation_with_unverified_upload(r):
- p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(d))
- for rel in ("v2/gates/traceability.json","v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
-  q=r/rel; x=json.loads(q.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; q.write_text(json.dumps(x))
- m=r/"v2/gates/development_method_contract.json"; md=json.loads(m.read_text()); md["stage"]="IMPLEMENTATION_ENABLED"; m.write_text(json.dumps(md))
- t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text()); active=json.loads((r/"v2/gates/active_decisions.json").read_text())["decisions"]
- active_ids={x["id"] for x in active if x.get("status")=="active"}
- for x in td["traces"]:
-  if x["decision_id"] in active_ids: x.update({"state":"consumed","design_ref":"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md","verification":["v2/tests/test_gate_fail_closed.py"]})
- t.write_text(json.dumps(td))
- for wf in (r/".github/workflows").glob("*.yml"):
-  s=wf.read_text()
-  if "verify_project_gate.py --require-feature-build --feature=" in s:
-   token="verify_project_gate.py --require-feature-build --feature="
-   pos=s.find(token); end=s.find("\n",pos)
-   s=s[:end+1]+"          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n"+s[end+1:]
-   wf.write_text(s)
+ p=r/".github/workflows/build_cb6_v2_signals.yml"
+ s=p.read_text()
+ start=s.find("      - name: Create and verify APK evidence")
+ end=s.find("      - name: Upload verified Gate 1 APK and evidence",start)
+ if start>=0 and end>=0: s=s[:start]+s[end:]
+ p.write_text(s)
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
 def mutate_upstream_lock_commit(r):
