@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "feature_id": "REPLACE_ME",
+  "build_commit": "REPLACE_WITH_40_HEX_COMMIT",
+  "apk_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "apk_checks": [
+    "REPLACE_WITH_COMPLETED_APK_CHECK"
+  ],
+  "status": "PENDING"
+}
