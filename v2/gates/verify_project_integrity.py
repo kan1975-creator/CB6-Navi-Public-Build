@@ -9,6 +9,7 @@ def load(p): return json.loads((ROOT/p).read_text(encoding="utf-8"))
 state=load("v2/gates/project_state.json")
 reg=load("v2/gates/active_decisions.json")
 trace=load("v2/gates/traceability.json")
+spec=load("v2/gates/current_spec.json")
 if reg.get("schema")!=1 or trace.get("schema")!=1: fail("unsupported registry schema")
 decisions=reg.get("decisions",[])
 ids=[d.get("id") for d in decisions]
@@ -51,6 +52,22 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
   if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
    fail("feature gate occurs after build/transform work: "+p.name)
+
+# Machine-readable current specification must be internally complete.
+sig=spec.get("signal",{})
+disp=sig.get("display",{})
+acq=sig.get("acquisition",{})
+if not disp.get("symbols") or not disp.get("zoom_symbols"): fail("signal display spec incomplete")
+if set(disp.get("zoom_symbols",{})) & set(disp.get("forward_zoom_symbols",{})): fail("signal zoom ownership overlaps")
+used=set(disp.get("zoom_symbols",{}).values()) | set(disp.get("forward_zoom_symbols",{}).values())
+if not used <= set(disp["symbols"]): fail("signal zoom references undeclared symbol")
+for k in ("radius_m","max_points","refresh_ms","retry_ms","movement_m","forward_max_m","forward_cone_deg","cache_max_ms","osm_queries"):
+ if k not in acq: fail("signal acquisition spec missing "+k)
+# Audits must consume current_spec rather than hard-code current display mapping.
+audit=(ROOT/"v2/audits/audit_signals.py").read_text(encoding="utf-8")
+if "gates/current_spec.json" not in audit: fail("signal audit does not consume current_spec")
+for stale in ('[(14,\'xs\'), (15,\'xs\'), (17,\'m\'), (19,\'l\')]',):
+ if stale in audit: fail("signal audit duplicates current symbol mapping")
 
 # Retired overall design may not silently become canonical.
 ret=(ROOT/state["retired_design"]).read_text(encoding="utf-8")
