@@ -37,6 +37,12 @@ def mutate_retired(r):
  p=r/"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"; p.write_text(p.read_text().replace("RETIRED AS CANONICAL","CANONICAL AGAIN"))
 CASES.append(("retired-design-reactivated", mutate_retired, "retired design lost retirement marker"))
 
+def mutate_fake_implementation_enabled(r):
+ p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text())
+ d["stage"]="IMPLEMENTATION_ENABLED"; d["feature_builds_allowed"]=True; d["design_verified"]=True
+ d["canonical_design"]="docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"; p.write_text(json.dumps(d))
+CASES.append(("implementation-with-pending-decisions", mutate_fake_implementation_enabled, "implementation enabled with unconsumed active decisions"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
