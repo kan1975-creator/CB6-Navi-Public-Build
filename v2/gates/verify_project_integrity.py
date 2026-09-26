@@ -108,6 +108,13 @@ if state["stage"]=="IMPLEMENTATION_ENABLED":
  pending=[t["decision_id"] for t in traces if t["decision_id"] in active and t["state"]!="consumed"]
  if pending: fail("implementation enabled with unconsumed active decisions: "+",".join(sorted(pending)))
 
+domain_policy=load("v2/gates/domain_verification_policy.json")
+if domain_policy.get("schema")!=1 or not isinstance(domain_policy.get("rules"),dict) or not domain_policy["rules"] or not domain_policy.get("default_required_kinds"):
+ fail("domain verification policy invalid")
+valid_kinds={"source","audit","test","device"}
+for domain,kinds in domain_policy["rules"].items():
+ if not isinstance(kinds,list) or not kinds or set(kinds)-valid_kinds: fail("domain verification policy has invalid kinds: "+domain)
+
 # Feature-gate template is part of the development method and must remain fail-closed.
 template=load("v2/gates/features/TEMPLATE.json")
 required_feature_fields={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
