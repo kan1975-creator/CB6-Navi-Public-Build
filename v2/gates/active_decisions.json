@@ -19,7 +19,7 @@
         "No active decision can disappear from traceability.",
         "Superseded decisions cannot be authoritative."
       ],
-      "spec_key": "proc"
+      "spec_key": "process.traceability"
     },
     {
       "id": "PROC-002",
@@ -37,7 +37,7 @@
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
       ],
-      "spec_key": "proc"
+      "spec_key": "process.feature-build-gate"
     },
     {
       "id": "SIG-200M-001",
