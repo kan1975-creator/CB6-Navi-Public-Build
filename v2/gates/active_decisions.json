@@ -18,7 +18,8 @@
       "acceptance": [
         "No active decision can disappear from traceability.",
         "Superseded decisions cannot be authoritative."
-      ]
+      ],
+      "spec_key": "proc"
     },
     {
       "id": "PROC-002",
@@ -35,7 +36,8 @@
       "acceptance": [
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "spec_key": "proc"
     },
     {
       "id": "SIG-200M-001",
@@ -54,6 +56,10 @@
       ],
       "acceptance": [
         "Rebuilt design must consume this decision before signal implementation is enabled."
+      ],
+      "spec_key": "signal.display.200m",
+      "supersedes": [
+        "SIG-200M-LEGACY-001"
       ]
     },
     {
@@ -73,7 +79,8 @@
       ],
       "acceptance": [
         "Rebuilt design must address acquisition completeness and real-device verification."
-      ]
+      ],
+      "spec_key": "sig.coverage"
     },
     {
       "id": "SIG-UPGRADE-001",
@@ -92,7 +99,8 @@
       ],
       "acceptance": [
         "Acceptance route contains both update-install and clean-install checks."
-      ]
+      ],
+      "spec_key": "sig.upgrade"
     },
     {
       "id": "PRODUCT-BASE-001",
@@ -112,7 +120,8 @@
       ],
       "acceptance": [
         "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement."
-      ]
+      ],
+      "spec_key": "product.base"
     },
     {
       "id": "MAP-CAMERA-001",
@@ -130,7 +139,8 @@
       ],
       "acceptance": [
         "Rebuilt design defines follow/north-lock/offset ownership and regression route."
-      ]
+      ],
+      "spec_key": "map.camera"
     },
     {
       "id": "MAP-SCALE-001",
@@ -147,7 +157,8 @@
       ],
       "acceptance": [
         "Rebuilt design defines scale persistence and excludes unintended auto-scale behavior."
-      ]
+      ],
+      "spec_key": "map.scale"
     },
     {
       "id": "HUD-ROAD-001",
@@ -164,7 +175,8 @@
       ],
       "acceptance": [
         "Rebuilt design uses existing routing/address state and defines lifecycle/fallback."
-      ]
+      ],
+      "spec_key": "hud.road"
     },
     {
       "id": "POI-CONVENIENCE-001",
@@ -183,7 +195,8 @@
       ],
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path."
-      ]
+      ],
+      "spec_key": "poi.convenience"
     },
     {
       "id": "POI-FUEL-001",
@@ -200,7 +213,8 @@
       ],
       "acceptance": [
         "Rebuilt design assigns authoritative data source, presentation and regression checks."
-      ]
+      ],
+      "spec_key": "poi.fuel"
     },
     {
       "id": "STOP-001",
@@ -218,7 +232,8 @@
       ],
       "acceptance": [
         "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
-      ]
+      ],
+      "spec_key": "stop"
     },
     {
       "id": "SEARCH-VOICE-001",
@@ -236,7 +251,8 @@
       ],
       "acceptance": [
         "Rebuilt design defines speech lifecycle, normalization, fallback and stock-result preservation."
-      ]
+      ],
+      "spec_key": "search.voice"
     },
     {
       "id": "ROUTING-FREE-001",
@@ -253,7 +269,8 @@
       ],
       "acceptance": [
         "Rebuilt design proves native toll/access semantics before implementation."
-      ]
+      ],
+      "spec_key": "routing.free"
     },
     {
       "id": "TOLL-001",
@@ -272,7 +289,8 @@
       ],
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation."
-      ]
+      ],
+      "spec_key": "toll"
     },
     {
       "id": "FAVORITES-001",
@@ -289,7 +307,8 @@
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
-      ]
+      ],
+      "spec_key": "favorites"
     },
     {
       "id": "LIFECYCLE-001",
@@ -308,7 +327,8 @@
       ],
       "acceptance": [
         "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
-      ]
+      ],
+      "spec_key": "lifecycle"
     },
     {
       "id": "UI-LAYOUT-001",
@@ -325,7 +345,8 @@
         "Rebuilt design assigns ownership and preserves touch access to current-location control."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "ui.layout"
     },
     {
       "id": "MAP-LABEL-001",
@@ -342,7 +363,8 @@
         "Rebuilt design defines style/label ownership and zoom/collision verification."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "map.label"
     },
     {
       "id": "LOCATION-STABILITY-001",
@@ -359,7 +381,8 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "location.stability"
     },
     {
       "id": "GOOGLE-MAPS-001",
@@ -377,7 +400,8 @@
         "Rebuilt design separates supported Android lifecycle behavior from behavior that cannot be guaranteed and defines verification."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "google.maps"
     },
     {
       "id": "POI-MAJOR-001",
@@ -394,7 +418,8 @@
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "poi.major"
     },
     {
       "id": "CAMERA-FIXED-001",
@@ -411,7 +436,8 @@
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "camera.fixed"
     },
     {
       "id": "OFFLINE-FREE-001",
@@ -430,7 +456,8 @@
         "Rebuilt design documents offline/online ownership and no-paid-API dependency."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "offline.free"
     },
     {
       "id": "SIGNAL-ZOOM-001",
@@ -447,7 +474,8 @@
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "signal.zoom"
     },
     {
       "id": "CONVENIENCE-BRANDS-001",
@@ -464,7 +492,8 @@
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "convenience.brands"
     },
     {
       "id": "TOLL-ROUTE-001",
@@ -481,7 +510,27 @@
         "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
       ],
       "status": "active",
-      "kind": "product"
+      "kind": "product",
+      "spec_key": "toll.route"
+    },
+    {
+      "id": "SIG-200M-LEGACY-001",
+      "status": "superseded",
+      "kind": "product",
+      "spec_key": "signal.display.200m",
+      "requirement": "Historical accepted signal behavior used the established standard-size presentation at about 200 m.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Historical only; must not be consumed as current behavior after the later explicit 200 m slim-size decision."
+      ],
+      "superseded_by": "SIG-200M-001"
     }
   ]
 }
