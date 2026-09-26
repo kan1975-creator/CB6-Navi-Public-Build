@@ -192,12 +192,16 @@ if state.get("stage")=="IMPLEMENTATION_ENABLED":
 
 # All build workflows must consume the single pinned CoMaps authority.
 upstream=load("v2/gates/upstream_lock.json")
-if set(upstream)!={"schema","upstream","repository","commit","policy"} or upstream.get("schema")!=1 or upstream.get("upstream")!="CoMaps" or upstream.get("policy")!="exact": fail("upstream lock invalid")
+if set(upstream)!={"schema","upstream","repository","commit","policy","consumer_contract"} or upstream.get("schema")!=1 or upstream.get("upstream")!="CoMaps" or upstream.get("policy")!="exact": fail("upstream lock invalid")
 pinned=upstream.get("commit","")
 if len(pinned)!=40 or any(ch not in "0123456789abcdef" for ch in pinned): fail("upstream lock commit invalid")
+contract=upstream.get("consumer_contract",{})
+if set(contract)!={"fetch_command","head_assertion"}: fail("upstream consumer contract invalid")
+fetch_required=contract["fetch_command"].replace("{commit}",pinned)
+head_required=contract["head_assertion"].replace("{commit}",pinned)
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
  s=p.read_text(encoding="utf-8")
- if "git -C comaps fetch" in s and pinned not in s: fail("build workflow does not use pinned CoMaps commit: "+p.name)
+ if "git -C comaps fetch" in s and (fetch_required not in s or head_required not in s): fail("build workflow does not enforce pinned CoMaps checkout: "+p.name)
 
 # The development gate must continuously execute every required method regression test.
 method=load("v2/gates/development_method_contract.json")
