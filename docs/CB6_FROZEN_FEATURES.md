@@ -43,3 +43,7 @@ Specification:
 Run #91 built successfully but real-device test showed no CB6 convenience icon, including diagnostic probe. Stock CoMaps "セブン-イレブン" text remained visible. This proves build success was not feature success.
 
 Current root-cause correction under test: dedicated convenience UserMark must belong to `CB6_DRIVING`, not default `DEBUG_MARK`.
+
+## V2 Gate 1 migration — NOT YET FROZEN
+
+The Run #65 feature above remains the behavioral authority. `v2/signals` ports its constants/resources into isolated signal ownership. No V2 real-device acceptance has been claimed. Build evidence must come from `CB6 V2 Gate 1 Signals`, then the physical CB6 checklist in `v2/signals/README.md` must pass before changing this status.

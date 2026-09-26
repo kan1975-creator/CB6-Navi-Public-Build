@@ -162,3 +162,7 @@ This rule is especially important for convenience stores, fuel stations and majo
 ## 13. Pinned-source deep analysis
 
 Concrete internal findings for the exact pinned CoMaps commit are maintained in `docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md`. Consult it before selecting an implementation path.
+
+## V2 signal implementation (Gate 1)
+
+The historical shared supplemental path above is reference only for V2. Active V2 signal ownership is `SignalProvider -> immutable SignalSnapshot -> SignalController -> Framework.nativeSetCb6Signals -> CB6_SIGNAL/Cb6SignalMark`. The controller publishes on Android main and obtains network/cache data on a single worker. Group registration uses the pinned BookmarkManager's enum loop. The proven non-POI DebugMarkPoint drawing path directly batches symbols, avoiding ordinary POI/label collision without global renderer changes. One idempotent transform precedes configure; post-generation byte hashes and all atlas variants are audited. See `v2/signals/README.md`.

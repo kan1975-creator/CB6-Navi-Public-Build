@@ -129,3 +129,9 @@ The user expected the project to already operate as a GitHub-persistent developm
 14. Existing CB6 specifications, frozen behavior, architecture decisions, Hokkaido-only scope, proven-implementation adoption policy, and regression rules remain mandatory across every resumed cycle.
 
 This continuity rule is part of the permanent CB6 development policy and must be consulted together with the second-generation restart policy before implementation or automation changes.
+
+## Gate 1 preflight finding — 2026-09-26
+
+Full repository Python compilation found a literal `\\n` between the `mgr` and `fw` assignments in dormant `CB6_CONVENIENCE_AUDIT.py`. Converted only that separator to a real newline. This audit is not executed in V2 and its historical feature requirements are not imported. Gate 1 compiles all Python references to detect syntax contamination before any expensive build.
+
+The V2 signal gate additionally validates enum/constructor/publisher group identity, exact atlas names in every density/theme, template byte identity after configure, and the packaged JNI/arm64 ELF. A source SVG alone and a successful Gradle task are still insufficient evidence.

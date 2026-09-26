@@ -40,3 +40,7 @@ Every data-source change: offline availability, cache/update policy, duplicate f
 ## Architecture decision gate for native POIs
 
 Before adding/retaining an external POI source for data already present in MWM, inspect the actual existing-map FeatureID metadata (type/name/brand/operator). For convenience stores, this read-only diagnostic is required before choosing native style/render extension versus supplemental Overpass marks.
+
+## V2 Gate 1 implementation checkpoint — 2026-09-26
+
+Signal migration now has one responsibility-owned implementation in `v2/signals` and a dedicated `build_cb6_v2_signals.yml` workflow. See `v2/signals/README.md` for the exact upstream surface inventory. Clear/show/create/notify use the new `CB6_SIGNAL` enum exclusively; no static POI or future stop publisher can share this destructive operation. Generated-source hashes and every packaged day/night atlas are gate requirements. Acceptance remains pending actual APK verification and CB6 testing.
