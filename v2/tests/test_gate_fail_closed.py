@@ -43,6 +43,15 @@ def mutate_fake_implementation_enabled(r):
  a=r/"v2/gates/authority_policy.json"; ad=json.loads(a.read_text()); ad["stage"]="IMPLEMENTATION_ENABLED"; a.write_text(json.dumps(ad))
  e=r/"v2/gates/evidence_inventory.json"; ed=json.loads(e.read_text()); ed["stage"]="IMPLEMENTATION_ENABLED"; e.write_text(json.dumps(ed))
  t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text()); td["stage"]="IMPLEMENTATION_ENABLED"; t.write_text(json.dumps(td))
+ m=r/"v2/gates/development_method_contract.json"; md=json.loads(m.read_text()); md["stage"]="IMPLEMENTATION_ENABLED"; m.write_text(json.dumps(md))
+ # Force one active decision back to pending while satisfying later implementation-only workflow guards.
+ td=json.loads(t.read_text()); td["traces"][0].update({"state":"pending-redesign","design_ref":"","verification":[]}); t.write_text(json.dumps(td))
+ for wf in (r/".github/workflows").glob("*.yml"):
+  s=wf.read_text()
+  if "verify_project_gate.py --require-feature-build --feature=" in s and "create_gate_stamp.py" not in s:
+   token="verify_project_gate.py --require-feature-build --feature="; pos=s.find(token); end=s.find("\n",pos); s=s[:end+1]+"          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n"+s[end+1:]
+  if "actions/upload-artifact@" in s and "verify_apk_evidence.py" not in s: s=s.replace("actions/upload-artifact@","verify_apk_evidence.py # fixture ordering proof\n      - uses: actions/upload-artifact@",1)
+  wf.write_text(s)
 CASES.append(("implementation-with-pending-decisions", mutate_fake_implementation_enabled, "implementation enabled with unconsumed active decisions"))
 
 def mutate_historical_resource_inventory(r):
