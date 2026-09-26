@@ -140,6 +140,14 @@ def mutate_active_uses_stale_evidence(r):
  p.write_text(json.dumps(d))
 CASES.append(("active-uses-revalidation-required", mutate_active_uses_stale_evidence, "active decision relies on revalidation-required evidence"))
 
+def mutate_feature_template_opens_early(r):
+ p=r/"v2/gates/features/TEMPLATE.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; d["impact_checked"]=True; p.write_text(json.dumps(d))
+CASES.append(("feature-template-opens-early", mutate_feature_template_opens_early, "feature gate template is not fail-closed"))
+
+def mutate_feature_template_field_drift(r):
+ p=r/"v2/gates/features/TEMPLATE.json"; d=json.loads(p.read_text()); d.pop("device_checks"); p.write_text(json.dumps(d))
+CASES.append(("feature-template-field-drift", mutate_feature_template_field_drift, "feature gate template fields drifted"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
