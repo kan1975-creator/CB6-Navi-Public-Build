@@ -24,4 +24,19 @@ canonical=ROOT/s.get("canonical_design","")
 if not canonical.is_file(): fail("canonical rebuilt design missing")
 if not s.get("design_verified"): fail("rebuilt design not verified")
 if s.get("feature_builds_allowed") is not True: fail("feature builds not authorized")
+# Feature builds additionally require a per-feature gate record.
+if "--require-feature-build" in sys.argv:
+ feature=None
+ for arg in sys.argv:
+  if arg.startswith("--feature="): feature=arg.split("=",1)[1]
+ if not feature: fail("feature build requires --feature=<gate-id>")
+ fp=ROOT/"v2/gates/features"/(feature+".json")
+ if not fp.is_file(): fail("missing per-feature gate record: "+feature)
+ f=json.loads(fp.read_text(encoding="utf-8"))
+ required={"design_section","impact_checked","repo_sweep_required","audits","tests","stage"}
+ missing=sorted(required-set(f))
+ if missing: fail("feature gate fields missing: "+",".join(missing))
+ if not f.get("impact_checked"): fail("feature impact check incomplete")
+ if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
+ if not f.get("audits") or not f.get("tests"): fail("feature audits/tests not declared")
 print("CB6 DEVELOPMENT GATE PASS: implementation enabled")
