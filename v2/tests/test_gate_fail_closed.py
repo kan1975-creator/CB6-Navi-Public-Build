@@ -235,7 +235,11 @@ def mutate_traceability_stage_mismatch(r):
 def mutate_implementation_with_unverified_upload(r):
  p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(d))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
+
+def mutate_upstream_lock_commit(r):
+ p=r/"v2/gates/upstream_lock.json"; d=json.loads(p.read_text()); d["commit"]="a"*40; p.write_text(json.dumps(d))
 CASES.append(("unverified-apk-upload", mutate_implementation_with_unverified_upload, "APK artifact upload is not preceded by APK evidence verification"))
+CASES.append(("upstream-lock-drift", mutate_upstream_lock_commit, "build workflow does not use pinned CoMaps commit"))
 
 
 for name,mutate,needle in CASES:
