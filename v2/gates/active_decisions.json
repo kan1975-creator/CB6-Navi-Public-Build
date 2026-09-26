@@ -134,8 +134,7 @@
         "ui"
       ],
       "evidence": [
-        "docs/CB6_CHANGE_IMPACT_MAP.md",
-        "docs/CB6_V2_MODULE_CONTRACTS.md"
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
       ],
       "acceptance": [
         "Rebuilt design defines follow/north-lock/offset ownership and regression route."
@@ -227,8 +226,7 @@
         "renderer"
       ],
       "evidence": [
-        "docs/CB6_CHANGE_IMPACT_MAP.md",
-        "docs/CB6_V2_MODULE_CONTRACTS.md"
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
       ],
       "acceptance": [
         "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
@@ -264,8 +262,7 @@
         "settings"
       ],
       "evidence": [
-        "docs/CB6_CHANGE_IMPACT_MAP.md",
-        "docs/CB6_V2_MODULE_CONTRACTS.md"
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
       ],
       "acceptance": [
         "Rebuilt design proves native toll/access semantics before implementation."
@@ -284,8 +281,7 @@
         "offline"
       ],
       "evidence": [
-        "docs/CB6_CHANGE_IMPACT_MAP.md",
-        "docs/CB6_V2_MODULE_CONTRACTS.md"
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
       ],
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation."
@@ -302,8 +298,7 @@
         "sync"
       ],
       "evidence": [
-        "docs/CB6_CHANGE_IMPACT_MAP.md",
-        "docs/CB6_V2_MODULE_CONTRACTS.md"
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
