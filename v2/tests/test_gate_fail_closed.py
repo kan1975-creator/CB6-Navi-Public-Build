@@ -196,6 +196,12 @@ def mutate_workflow_sha_override(r):
  p.write_text(s)
 CASES.append(("workflow-sha-override", mutate_workflow_sha_override, "build workflow overrides GITHUB_SHA"))
 
+def mutate_traceability_stage_mismatch(r):
+ p=r/"v2/gates/traceability.json"; d=json.loads(p.read_text())
+ d["stage"]="IMPLEMENTATION_ENABLED" if d.get("stage")!="IMPLEMENTATION_ENABLED" else "OVERALL_DESIGN_REBUILD"
+ p.write_text(json.dumps(d))
+CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
