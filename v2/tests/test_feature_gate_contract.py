@@ -26,8 +26,11 @@ def run_case(name, mutate, needle):
   trace.write_text(json.dumps(t))
   for wf in (root/".github/workflows").glob("*.yml"):
    s=wf.read_text()
+   if "verify_project_gate.py --require-feature-build --feature=" in s and "create_gate_stamp.py" not in s:
+    token="verify_project_gate.py --require-feature-build --feature="; pos=s.find(token); end=s.find("\n",pos); s=s[:end+1]+"          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n"+s[end+1:]
    if "actions/upload-artifact@" in s and "verify_apk_evidence.py" not in s:
-    s=s.replace("actions/upload-artifact@","verify_apk_evidence.py # fixture ordering proof\n      - uses: actions/upload-artifact@",1); wf.write_text(s)
+    s=s.replace("actions/upload-artifact@","verify_apk_evidence.py # fixture ordering proof\n      - uses: actions/upload-artifact@",1)
+   wf.write_text(s)
   gate=root/"v2/gates/features/testfeature.json"; gate.parent.mkdir(exist_ok=True)
   f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"impact_record":"v2/gates/impact_records/testfeature.json","repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":[{"id":"apk-integrity","description":"verify active resources from current_spec"}],"device_checks":[{"id":"cb6-acceptance","description":"CB6 real-device acceptance required"}],"device_evidence":"PENDING","stage":"IMPLEMENTATION_ENABLED"}
   impact=root/"v2/gates/impact_records/testfeature.json"; impact.parent.mkdir(exist_ok=True)
