@@ -11,6 +11,7 @@ on:
       - 'v2/audits/**'
       - 'v2/signals/**'
       - 'v2/tests/**'
+      - 'v2/gates/**'
 
 permissions:
   contents: read
