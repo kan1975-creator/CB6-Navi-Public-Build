@@ -13,6 +13,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify persistent CB6 project gate
         run: python3 v2/gates/verify_project_gate.py
+      - name: Verify decision traceability and workflow coverage
+        run: python3 v2/gates/verify_project_integrity.py
       - name: Prove feature build is blocked during design rebuild
         run: |
           if python3 v2/gates/verify_project_gate.py --require-feature-build --feature=deliberately-missing; then
