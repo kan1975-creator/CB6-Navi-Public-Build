@@ -1,6 +1,6 @@
 # Gate 1 — frozen traffic-signal migration
 
-Owner: Dynamic Road Marks. Status: implementation / build verification pending; **not device-accepted**.
+Owner: Dynamic Road Marks. Status: HISTORICAL V2 IMPLEMENTATION EVIDENCE — **not current implementation authority; not device-accepted**.\n\nDuring `OVERALL_DESIGN_REBUILD`, this file records what was implemented/tested only. Current requirements come from the active Registry/current spec and the future rebuilt design.
 
 Upstream: CoMaps `7113ccb5f086183f8884b2aa4e58c987466b6704`.
 Policy authority: `docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md`, accepted V1 Run #65.
