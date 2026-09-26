@@ -22,6 +22,11 @@ for x in items:
   if not x.get(k): fail(f"evidence item missing {k}: {x.get('id')}")
  if x["status"] not in valid_evidence_status: fail("invalid evidence status: "+x["id"])
  if not (ROOT/x["path"]).is_file(): fail("evidence inventory path missing: "+x["path"])
+ if x["status"]=="revalidation-required":
+  rv=x.get("revalidation",{})
+  if rv.get("state") not in {"required","validated"}: fail("invalid evidence revalidation state: "+x["id"])
+  if rv["state"]=="validated":
+   if not rv.get("record") or not (ROOT/rv["record"]).is_file() or not rv.get("verification"): fail("validated evidence lacks revalidation record/verification: "+x["id"])
 active_evidence_paths={x["path"] for x in items if x["status"]=="active"}
 restricted_evidence_paths={x["path"] for x in items if x["status"]!="active"}
 evidence_by_path={x["path"]:x for x in items}
