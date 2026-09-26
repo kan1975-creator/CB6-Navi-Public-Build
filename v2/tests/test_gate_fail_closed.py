@@ -122,6 +122,24 @@ def mutate_evidence_duplicate_id(r):
  p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"][1]["id"]=d["evidence"][0]["id"]; p.write_text(json.dumps(d))
 CASES.append(("evidence-inventory-duplicate-id", mutate_evidence_duplicate_id, "evidence IDs missing/duplicated"))
 
+def mutate_evidence_stage_mismatch(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["stage"]="WRONG_STAGE"; p.write_text(json.dumps(d))
+CASES.append(("evidence-inventory-stage-mismatch", mutate_evidence_stage_mismatch, "evidence inventory stage/schema mismatch"))
+
+def mutate_evidence_empty(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"]=[]; p.write_text(json.dumps(d))
+CASES.append(("evidence-inventory-empty", mutate_evidence_empty, "evidence IDs missing/duplicated"))
+
+def mutate_evidence_duplicate_path(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"][1]["path"]=d["evidence"][0]["path"]; p.write_text(json.dumps(d))
+CASES.append(("evidence-inventory-duplicate-path", mutate_evidence_duplicate_path, "evidence paths missing/duplicated"))
+
+def mutate_active_uses_stale_evidence(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ next(x for x in d["decisions"] if x["id"]=="PROC-001")["evidence"]=["docs/CB6_V2_CROSS_PROJECT_COMPARISON.md"]
+ p.write_text(json.dumps(d))
+CASES.append(("active-uses-revalidation-required", mutate_active_uses_stale_evidence, "active decision relies on revalidation-required evidence"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
