@@ -31,7 +31,7 @@ CASES.append(("superseded-consumed", mutate_superseded, "superseded decision con
 
 def mutate_bad_spec(r):
  p=r/"v2/gates/current_spec.json"; d=json.loads(p.read_text()); d["signal"]["display"]["zoom_symbols"]["15"]="ghost"; p.write_text(json.dumps(d))
-CASES.append(("invalid-current-spec", mutate_bad_spec, "undeclared symbol"))
+CASES.append(("invalid-current-spec", mutate_bad_spec, "symbol without dimensions"))
 
 def mutate_retired(r):
  p=r/"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"; p.write_text(p.read_text().replace("RETIRED AS CANONICAL","CANONICAL AGAIN"))
@@ -42,6 +42,12 @@ def mutate_fake_implementation_enabled(r):
  d["stage"]="IMPLEMENTATION_ENABLED"; d["feature_builds_allowed"]=True; d["design_verified"]=True
  d["canonical_design"]="docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"; p.write_text(json.dumps(d))
 CASES.append(("implementation-with-pending-decisions", mutate_fake_implementation_enabled, "implementation enabled with unconsumed active decisions"))
+
+def mutate_historical_resource_inventory(r):
+ p=r/"v2/audits/audit_signals.py"; s=p.read_text()
+ s=s.replace("symbols = ['cb6-signal-'+s for s in sorted(set(spec['display']['zoom_symbols'].values()) | set(spec['display']['forward_zoom_symbols'].values()))]", "symbols = ['cb6-signal-'+s for s in spec['display']['symbols']]")
+ p.write_text(s)
+CASES.append(("historical-resource-inventory", mutate_historical_resource_inventory, "historical resource inventory"))
 
 def mutate_missing_evidence(r):
  p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
