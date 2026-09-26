@@ -36,6 +36,78 @@
       "state": "pending-redesign",
       "design_ref": "",
       "verification": []
+    },
+    {
+      "decision_id": "PRODUCT-BASE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "MAP-CAMERA-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "MAP-SCALE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "HUD-ROAD-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "POI-CONVENIENCE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "POI-FUEL-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "STOP-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "SEARCH-VOICE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "ROUTING-FREE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "TOLL-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "FAVORITES-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "LIFECYCLE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
     }
   ]
 }
