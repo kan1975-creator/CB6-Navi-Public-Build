@@ -66,7 +66,7 @@ if "--require-feature-build" in sys.argv:
  missing_verification=sorted(d for d in declared_domains if not isinstance(dv.get(d),list) or not dv[d])
  if missing_verification: fail("feature gate domains lack verification: "+",".join(missing_verification))
  allowed_refs=set(f["source_paths"]+f["audits"]+f["tests"])
-policy=json.loads((ROOT/"v2/gates/domain_verification_policy.json").read_text(encoding="utf-8"))
+ policy=json.loads((ROOT/"v2/gates/domain_verification_policy.json").read_text(encoding="utf-8"))
  kind_paths={"source":set(f["source_paths"]),"audit":set(f["audits"]),"test":set(f["tests"]),"device":set(f["device_checks"])}
  for domain,refs in dv.items():
   if domain not in declared_domains: fail("feature gate verification references undeclared domain: "+domain)
