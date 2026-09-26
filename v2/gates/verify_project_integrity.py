@@ -150,7 +150,7 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   # A successful feature gate must be sealed immediately and rechecked before build/transform.
   stamp_create=post_gate.find("create_gate_stamp.py")
   stamp_verify=post_gate.find("create_gate_stamp.py --verify")
-  work_positions=[i-gate_pos for i in [s.find("gradlew",gate_pos),s.find("apply_identity.py",gate_pos),s.find("apply_signals.py",gate_pos)] if i>=0]
+  work_positions=[i-gate_pos for i in [s.find("apply_identity.py",gate_pos),s.find("apply_signals.py",gate_pos)] if i>=0]
   first_work=min(work_positions) if work_positions else -1
   if state.get("stage")=="IMPLEMENTATION_ENABLED" and first_work>=0 and (stamp_create<0 or stamp_verify<0 or stamp_create>first_work or stamp_verify>first_work): fail("build workflow lacks post-gate control stamp enforcement: "+p.name)
   # After the control repository has been gated, do not replace/reset it. Commands
