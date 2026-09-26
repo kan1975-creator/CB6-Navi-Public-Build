@@ -10,6 +10,16 @@ state=load("v2/gates/project_state.json")
 reg=load("v2/gates/active_decisions.json")
 trace=load("v2/gates/traceability.json")
 spec=load("v2/gates/current_spec.json")
+authority=load("v2/gates/authority_policy.json")
+if authority.get("schema")!=1 or authority.get("stage")!=state.get("stage"): fail("authority policy stage/schema mismatch")
+for rel in authority.get("current_authorities",[]):
+ if not (ROOT/rel).is_file(): fail("current authority missing: "+rel)
+for rel in authority.get("historical_docs",[]):
+ p=ROOT/rel
+ if not p.is_file(): fail("historical authority document missing: "+rel)
+ txt=p.read_text(encoding="utf-8")
+ for phrase in authority.get("forbidden_historical_authority_phrases",[]):
+  if phrase in txt: fail("historical document regained authority: "+rel+" -> "+phrase)
 if reg.get("schema")!=1 or trace.get("schema")!=1: fail("unsupported registry schema")
 decisions=reg.get("decisions",[])
 ids=[d.get("id") for d in decisions]
