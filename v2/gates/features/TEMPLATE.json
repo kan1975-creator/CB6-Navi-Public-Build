@@ -1,14 +1,29 @@
 {
   "schema": 1,
   "feature_id": "REPLACE_ME",
-  "requirements": ["REPLACE_WITH_ACTIVE_DECISION_ID"],
+  "requirements": [
+    "REPLACE_WITH_ACTIVE_DECISION_ID"
+  ],
   "design_section": "REPLACE_WITH_CANONICAL_DESIGN_SECTION",
   "impact_checked": false,
   "repo_sweep_required": true,
-  "source_paths": ["REPLACE_WITH_EXISTING_SOURCE_PATH"],
-  "audits": ["REPLACE_WITH_EXISTING_AUDIT_PATH"],
-  "tests": ["REPLACE_WITH_EXISTING_TEST_PATH"],
-  "apk_checks": ["REPLACE_WITH_EXPLICIT_APK_VERIFICATION"],
-  "device_checks": ["REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE"],
-  "stage": "DESIGN"
+  "source_paths": [
+    "REPLACE_WITH_EXISTING_SOURCE_PATH"
+  ],
+  "audits": [
+    "REPLACE_WITH_EXISTING_AUDIT_PATH"
+  ],
+  "tests": [
+    "REPLACE_WITH_EXISTING_TEST_PATH"
+  ],
+  "apk_checks": [
+    "REPLACE_WITH_EXPLICIT_APK_VERIFICATION"
+  ],
+  "device_checks": [
+    "REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE"
+  ],
+  "stage": "DESIGN",
+  "affected_domains": [
+    "REPLACE_WITH_ALL_REQUIREMENT_AFFECTED_DOMAINS"
+  ]
 }
