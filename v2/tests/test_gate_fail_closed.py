@@ -169,6 +169,20 @@ jobs:
 """)
 CASES.append(("dispatch-workflow-bypass", mutate_dispatch_workflow_bypass, "V2 build workflow bypasses feature gate"))
 
+def mutate_post_gate_control_checkout(r):
+ p=r/".github/workflows/build_cb6_v2_signals.yml"; s=p.read_text()
+ token="python3 v2/gates/verify_project_gate.py --require-feature-build --feature=signals"
+ s=s.replace(token,token+"\n      - name: Replace gated control repo\n        uses: actions/checkout@v4")
+ p.write_text(s)
+CASES.append(("post-gate-control-checkout", mutate_post_gate_control_checkout, "control repo can change after feature gate"))
+
+def mutate_post_gate_control_reset(r):
+ p=r/".github/workflows/build_cb6_v2_signals.yml"; s=p.read_text()
+ token="python3 v2/gates/verify_project_gate.py --require-feature-build --feature=signals"
+ s=s.replace(token,token+"\n          git reset --hard HEAD~1")
+ p.write_text(s)
+CASES.append(("post-gate-control-reset", mutate_post_gate_control_reset, "control repo can change after feature gate"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
