@@ -24,7 +24,7 @@ def run_case(name, mutate, needle):
     x.update({"state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["fixture"]})
   trace.write_text(json.dumps(t))
   gate=root/"v2/gates/features/testfeature.json"; gate.parent.mkdir(exist_ok=True)
-  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals"],"symbols":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":["verify active resources from current_spec"],"device_checks":["CB6 real-device acceptance required"],"stage":"IMPLEMENTATION_ENABLED"}
+  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":["verify active resources from current_spec"],"device_checks":["CB6 real-device acceptance required"],"stage":"IMPLEMENTATION_ENABLED"}
   mutate(f); gate.write_text(json.dumps(f))
   cp=subprocess.run(["python3","v2/gates/verify_project_gate.py","--require-feature-build","--feature=testfeature"],cwd=root,text=True,capture_output=True)
   out=cp.stdout+cp.stderr
@@ -38,8 +38,9 @@ cases=[
  ("incomplete-affected-domains",lambda f:f.__setitem__("affected_domains",["signals"]),"omits affected domains"),
  ("missing-domain-verification",lambda f:f.__setitem__("domain_verification",{}),"domains lack verification"),
  ("unknown-domain-verification-path",lambda f:f["domain_verification"].__setitem__("renderer",["v2/not-declared"]),"domain verification uses undeclared paths"),
+ ("renderer-source-only",lambda f:f["domain_verification"].__setitem__("renderer",["v2/signals"]),"domain lacks required verification kind"),
  ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
- ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
+ ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
  ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks not declared"),
 ]
