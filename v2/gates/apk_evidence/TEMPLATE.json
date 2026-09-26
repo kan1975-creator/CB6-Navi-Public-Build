@@ -4,8 +4,13 @@
   "build_commit": "REPLACE_WITH_40_HEX_COMMIT",
   "apk_sha256": "REPLACE_WITH_64_HEX_SHA256",
   "apk_checks": [
-    "REPLACE_WITH_COMPLETED_APK_CHECK"
+    {
+      "id": "REPLACE_WITH_APK_CHECK_ID",
+      "result": "PENDING",
+      "evidence": "REPLACE_ME"
+    }
   ],
   "status": "PENDING",
-  "apk_path": "REPLACE_WITH_APK_PATH"
+  "apk_path": "REPLACE_WITH_APK_PATH",
+  "feature_gate": "v2/gates/features/REPLACE_ME.json"
 }
