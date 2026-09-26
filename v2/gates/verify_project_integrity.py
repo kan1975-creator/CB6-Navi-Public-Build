@@ -134,6 +134,9 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
  if not targets_v2: continue
  buildish=bool(re.search(r"(gradlew|assemble|apply_identity\.py|apply_signals\.py)",s))
  if buildish:
+  # GitHub owns GITHUB_SHA. Build workflows must not shadow, clear or rewrite it.
+  if re.search(r"(?m)^\\s*GITHUB_SHA\\s*:",s) or re.search(r"(?m)GITHUB_SHA\\s*=",s) or "unset GITHUB_SHA" in s:
+   fail("build workflow overrides GITHUB_SHA: "+p.name)
   token="verify_project_gate.py --require-feature-build --feature="
   if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
   if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
