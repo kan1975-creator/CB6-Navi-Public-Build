@@ -238,4 +238,5 @@ def test_canonical_retired_project_gate():
   if cp.returncode==0 or "canonical design" not in out: raise SystemExit("DESTRUCTIVE TEST FAIL canonical-retired-design: "+out)
   print("PASS expected rejection: canonical-retired-design -> canonical design")
 
-test_canonical_retired_project_gate()\nprint("PASS all destructive integrity cases rejected")
+test_canonical_retired_project_gate()
+print("PASS all destructive integrity cases rejected")
