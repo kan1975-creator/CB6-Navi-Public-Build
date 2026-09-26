@@ -147,7 +147,12 @@ CASES.append(("feature-template-opens-early", mutate_feature_template_opens_earl
 
 def mutate_feature_template_field_drift(r):
  p=r/"v2/gates/features/TEMPLATE.json"; d=json.loads(p.read_text()); d.pop("device_checks"); p.write_text(json.dumps(d))
+
+def mutate_feature_template_device_check_drift(root):
+ p=root/"v2/gates/features/TEMPLATE.json"
+ d=json.loads(p.read_text()); d["device_checks"]=["legacy free text"]; p.write_text(json.dumps(d))
 CASES.append(("feature-template-field-drift", mutate_feature_template_field_drift, "feature gate template fields drifted"))
+CASES.append(("feature-template-device-check-drift", mutate_feature_template_device_check_drift, "feature gate template device check contract drifted"))
 
 def mutate_domain_policy_invalid_kind(r):
  p=r/"v2/gates/domain_verification_policy.json"; d=json.loads(p.read_text()); d["rules"]["renderer"]=["source","wishful-check"]; p.write_text(json.dumps(d))
