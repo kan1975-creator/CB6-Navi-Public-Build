@@ -33,8 +33,14 @@ if stage=="OVERALL_DESIGN_REBUILD":
 cp=subprocess.run([sys.executable, str(ROOT/"v2/gates/verify_project_integrity.py")], cwd=ROOT, text=True, capture_output=True)
 if cp.returncode != 0:
  fail("implementation enablement lacks integrity proof: "+(cp.stdout+cp.stderr).strip())
-canonical=ROOT/s.get("canonical_design","")
+canonical_rel=s.get("canonical_design","")
+canonical=ROOT/canonical_rel
 if not canonical.is_file(): fail("canonical rebuilt design missing")
+authority=json.loads((ROOT/"v2/gates/authority_policy.json").read_text(encoding="utf-8"))
+evidence=json.loads((ROOT/"v2/gates/evidence_inventory.json").read_text(encoding="utf-8"))
+if canonical_rel not in authority.get("current_authorities",[]): fail("canonical design is not a current authority")
+active_evidence={x.get("path") for x in evidence.get("evidence",[]) if x.get("status")=="active"}
+if canonical_rel not in active_evidence: fail("canonical design is not active evidence")
 if not s.get("design_verified"): fail("rebuilt design not verified")
 if s.get("feature_builds_allowed") is not True: fail("feature builds not authorized")
 # Feature builds additionally require a per-feature gate record.
