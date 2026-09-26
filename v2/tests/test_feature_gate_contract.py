@@ -10,6 +10,10 @@ def run_case(name, mutate, needle):
   state=root/"v2/gates/project_state.json"; d=json.loads(state.read_text())
   d.update({"stage":"IMPLEMENTATION_ENABLED","feature_builds_allowed":True,"design_verified":True,"canonical_design":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"})
   state.write_text(json.dumps(d))
+  # Keep all stage-coupled gate inputs coherent so each case reaches the
+  # per-feature contract under test rather than failing the global integrity lock.
+  for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
+   p=root/rel; x=json.loads(p.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(x))
   trace=root/"v2/gates/traceability.json"; t=json.loads(trace.read_text())
   for x in t["traces"]:
    if x["decision_id"]=="SIG-200M-001": x.update({"state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["fixture"]})
