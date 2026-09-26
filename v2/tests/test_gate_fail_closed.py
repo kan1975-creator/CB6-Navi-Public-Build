@@ -271,6 +271,11 @@ def mutate_canonical_to_retired_design(r):
   if any(a["id"]==x["decision_id"] and a["status"]=="active" for a in active):
    x.update({"state":"consumed","design_ref":"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md","verification":["fixture"]})
  t.write_text(json.dumps(td))
+ for wf in (r/".github/workflows").glob("*.yml"):
+  s=wf.read_text()
+  if "actions/upload-artifact@" in s and "verify_apk_evidence.py" not in s:
+   s=s.replace("actions/upload-artifact@","verify_apk_evidence.py # fixture ordering proof\n      - uses: actions/upload-artifact@",1)
+   wf.write_text(s)
 
 
 def test_canonical_retired_project_gate():
