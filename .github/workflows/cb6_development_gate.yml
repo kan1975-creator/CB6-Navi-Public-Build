@@ -17,6 +17,8 @@ jobs:
         run: python3 v2/gates/verify_project_integrity.py
       - name: Destructive fail-closed regression tests
         run: python3 v2/tests/test_gate_fail_closed.py
+      - name: Generic feature-contract destructive tests
+        run: python3 v2/tests/test_feature_gate_contract.py
       - name: Prove feature build is blocked during design rebuild
         run: |
           if python3 v2/gates/verify_project_gate.py --require-feature-build --feature=deliberately-missing; then
