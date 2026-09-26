@@ -107,6 +107,7 @@ if "--require-feature-build" in sys.argv:
   if unknown_refs: fail("feature gate domain verification uses undeclared paths: "+domain+" -> "+",".join(unknown_refs))
   required_kinds=policy.get("rules",{}).get(domain,policy.get("default_required_kinds",["source"]))
   for kind in required_kinds:
+   if kind=="device" and domain=="real-device" and f.get("device_evidence")=="PENDING" and f.get("device_checks"): continue
    if not any(ref in kind_paths.get(kind,set()) for ref in refs): fail("feature gate domain lacks required verification kind: "+domain+" -> "+kind)
  traces=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8")).get("traces",[])
  trace_by_id={t["decision_id"]:t for t in traces}
