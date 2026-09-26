@@ -52,7 +52,7 @@ if "--require-feature-build" in sys.argv:
  fp=ROOT/"v2/gates/features"/(feature+".json")
  if not fp.is_file(): fail("missing per-feature gate record: "+feature)
  f=json.loads(fp.read_text(encoding="utf-8"))
- required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
+ required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage"}
  missing=sorted(required-set(f))
  if missing: fail("feature gate fields missing: "+",".join(missing))
  if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
@@ -71,6 +71,7 @@ if "--require-feature-build" in sys.argv:
   if not isinstance(rel,str) or not rel or not (ROOT/rel).exists(): fail("feature impact reviewed path missing")
  if f.get("repo_sweep_required") is not True: fail("feature repo-wide sweep not required")
  if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
+ if f.get("device_evidence")!="PENDING": fail("device evidence must remain pending before build")
  for key in ("requirements","source_paths","audits","tests","apk_checks","device_checks"):
   if not isinstance(f.get(key),list) or not f[key]: fail("feature gate "+key+" not declared")
  decisions=json.loads((ROOT/"v2/gates/active_decisions.json").read_text(encoding="utf-8")).get("decisions",[])
