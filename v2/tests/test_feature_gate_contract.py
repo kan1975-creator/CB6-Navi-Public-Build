@@ -62,7 +62,7 @@ cases=[
  ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
  ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
- ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks not declared"),
+ ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks must use id/description records"),
  ("premature-device-evidence",lambda f:f.__setitem__("device_evidence","VERIFIED"),"device evidence must remain pending before build"),
 ]
 for c in cases: run_case(*c)
