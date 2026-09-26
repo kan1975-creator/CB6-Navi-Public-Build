@@ -6,5 +6,6 @@
   "apk_checks": [
     "REPLACE_WITH_COMPLETED_APK_CHECK"
   ],
-  "status": "PENDING"
+  "status": "PENDING",
+  "apk_path": "REPLACE_WITH_APK_PATH"
 }
