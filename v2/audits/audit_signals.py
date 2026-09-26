@@ -88,7 +88,7 @@ for path in ['data/styles/default/include/Icons.mapcss', 'data/styles/vehicle/in
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+path])
     require(original == (root/path).read_bytes(), 'stock subsystem modified: ' + path)
 
-symbols = ['cb6-signal-'+s for s in spec['display']['symbols']]
+symbols = ['cb6-signal-'+s for s in sorted(set(spec['display']['zoom_symbols'].values()) | set(spec['display']['forward_zoom_symbols'].values()))]
 def check_atlas(data, name):
     doc = ET.fromstring(data)
     names = {e.get('name') for e in doc.iter() if e.get('name')}
@@ -106,7 +106,7 @@ def check_atlas_set(entries):
 if args.atlases:
     entries = {p.relative_to(root).as_posix():p.read_bytes() for p in (root/'data/symbols').glob('*/*/symbols.sdf')}
     check_atlas_set(entries)
-    print('PASS all 12 light/dark density atlases contain all 4 exact signal symbols')
+    print('PASS all 12 light/dark density atlases contain every signal symbol referenced by current_spec')
 if args.apk:
     with zipfile.ZipFile(args.apk) as z:
         require(z.testzip() is None, 'APK ZIP integrity')
