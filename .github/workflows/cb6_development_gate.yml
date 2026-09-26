@@ -1,0 +1,22 @@
+name: CB6 Development Gate
+on:
+  push:
+    branches: [cb6-v2-clean]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify persistent CB6 project gate
+        run: python3 v2/gates/verify_project_gate.py
+      - name: Prove feature build is blocked during design rebuild
+        run: |
+          if python3 v2/gates/verify_project_gate.py --require-feature-build; then
+            echo 'ERROR: feature-build gate unexpectedly opened'
+            exit 1
+          fi
+          echo 'Expected fail-closed behavior confirmed'
