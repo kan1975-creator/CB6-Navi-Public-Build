@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "feature_id": "REPLACE_ME",
+  "build_commit": "REPLACE_WITH_40_HEX_COMMIT",
+  "apk_evidence": "v2/gates/apk_evidence/REPLACE_ME.json",
+  "apk_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "device": "CB6",
+  "android_version": "13",
+  "checks": [
+    {
+      "id": "REPLACE_ME",
+      "result": "PENDING",
+      "evidence": "REPLACE_ME"
+    }
+  ],
+  "status": "PENDING"
+}
