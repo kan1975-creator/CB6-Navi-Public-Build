@@ -58,7 +58,8 @@ CASES.append(("missing-evidence", mutate_missing_evidence, "evidence path missin
 
 def mutate_uninventoried_evidence(r):
  p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
- next(x for x in d["decisions"] if x["id"]=="PROC-001")["evidence"]=["PUBLIC_BUILD_NOTICE.md"]
+ marker=r/"docs/UNINVENTORIED_EVIDENCE_FIXTURE.md"; marker.write_text("destructive fixture only")
+ next(x for x in d["decisions"] if x["id"]=="PROC-001")["evidence"]=["docs/UNINVENTORIED_EVIDENCE_FIXTURE.md"]
  p.write_text(json.dumps(d))
 CASES.append(("uninventoried-decision-evidence", mutate_uninventoried_evidence, "evidence absent from inventory"))
 
