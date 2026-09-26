@@ -135,3 +135,42 @@ This continuity rule is part of the permanent CB6 development policy and must be
 Full repository Python compilation found a literal `\\n` between the `mgr` and `fw` assignments in dormant `CB6_CONVENIENCE_AUDIT.py`. Converted only that separator to a real newline. This audit is not executed in V2 and its historical feature requirements are not imported. Gate 1 compiles all Python references to detect syntax contamination before any expensive build.
 
 The V2 signal gate additionally validates enum/constructor/publisher group identity, exact atlas names in every density/theme, template byte identity after configure, and the packaged JNI/arm64 ELF. A source SVG alone and a successful Gradle task are still insufficient evidence.
+
+
+## Repeated stale-audit regression — root cause and structural fix — 2026-09-26 — MANDATORY
+
+This is a recurrence of a failure the user had already identified: an implementation/specification change is made, but an audit, APK verifier, test, workflow grep, generated-resource check, or historical invariant still encodes the previous implementation. The existing rule to "search the entire repository" was necessary but not sufficient because it was a **process instruction only**; nothing mechanically prevented a commit/build when that instruction was incompletely executed.
+
+### Why the previous rule did not eliminate the problem
+
+1. **Specification values were duplicated.** The same behavior was encoded independently in implementation code, audit literals, tests, workflow checks, resource lists, and documentation. A correct implementation edit could therefore leave a stale validator behind.
+2. **The preflight checked many files but did not test validator/spec consistency itself.** Gate 1 could prove source/generated-tree consistency and still allow an APK-only assertion to retain a historical symbol requirement.
+3. **Source audit and packaged-APK audit had different assumptions.** In the 2026-09-26 recurrence, z15/200m changed from `cb6-signal-s` to the same thin `cb6-signal-xs` used at z14/500m. The source audit was updated, but the APK audit still iterated a hard-coded `xs/s/m/l` list and required `cb6-signal-s` in `liborganicmaps.so`. Gradle therefore built a valid APK and only the final verifier failed.
+4. **Historical "frozen" assertions were treated as implementation details rather than behavioral requirements.** A frozen feature must preserve user-accepted behavior unless the user explicitly changes it. Once the user explicitly changes 200m size, the old symbol name is no longer a frozen requirement.
+5. **Repository-wide search was not a hard gate tied to the changed concept.** The rule existed in documentation, but a developer/automation run could still miss a second representation of the concept and proceed to an expensive build.
+
+### Structural correction
+
+For every feature change, the change unit is now:
+`formal/current spec -> single feature policy/manifest -> implementation -> source audit -> tests -> generated-resource audit -> APK audit -> workflow`.
+
+Mandatory rules:
+
+1. **Single-source feature expectations.** Where practical, zoom/symbol/category/resource expectations are declared once in a machine-readable or importable feature policy/manifest and consumed by audits/tests. Do not maintain independent hard-coded copies merely for verification.
+2. **No unconditional historical resource lists.** APK/resource audits derive required artifacts from the current active mapping. Unreferenced legacy resources may exist, but their presence must not be required unless another active path uses them.
+3. **Behavioral freeze, not symbol-name freeze.** Frozen records describe accepted user behavior. Internal symbol/function names are implementation details unless technically required. An explicit user-approved behavior change updates the active expectation before build.
+4. **Validator-consistency preflight is mandatory before Gradle.** The cheap preflight must execute every audit mode that can be evaluated without an APK and must additionally verify that packaged-APK expectations are derivable from the same current policy. A known stale validator blocks the build.
+5. **Changed-concept sweep is a hard checklist.** For each changed concept/name/value, search implementation modules, apply scripts, tests, audits, workflow YAML, generated-resource expectations, formal/frozen docs, and obsolete legacy references before commit. Record or encode the result where practical.
+6. **APK-only assertions must be minimal.** APK verification checks facts that truly require the package (ABI, package/label, signature, JNI/resource presence actually referenced by current policy). It must not introduce a second independent specification.
+7. **Failure classification.** If build succeeds but validation fails, first classify whether the product is wrong or the validator is stale. Never change correct product behavior merely to satisfy a stale validator.
+8. **Recurrence is a process defect.** Another stale-audit failure after this rule requires fixing the shared policy/preflight mechanism, not merely editing the newly failing line.
+
+### Gate 1 concrete recurrence
+
+Run `36234235991`, head `d2de8eec9f0eaa5dd754f8b0ef33945565f03d11`:
+- Gradle build succeeded.
+- arm64/AArch64, package `jp.cb6.navi`, and label `CB6 Navi` passed.
+- final APK audit failed only with `native symbol mapping absent: cb6-signal-s`.
+- Root cause: the user-approved 200m change made z15 use `cb6-signal-xs`, but APK verification still required the old unconditional `xs/s/m/l` native symbol set.
+
+The correction for Gate 1 must remove the duplicated historical requirement and make the APK audit derive the required native symbols from the active zoom/symbol mapping. Do not restore the larger 200m symbol merely to satisfy the old audit.
