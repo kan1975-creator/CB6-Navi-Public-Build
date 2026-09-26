@@ -152,7 +152,17 @@ def mutate_feature_template_device_check_drift(root):
  p=root/"v2/gates/features/TEMPLATE.json"
  d=json.loads(p.read_text()); d["device_checks"]=["legacy free text"]; p.write_text(json.dumps(d))
 CASES.append(("feature-template-field-drift", mutate_feature_template_field_drift, "feature gate template fields drifted"))
+
+def mutate_apk_template_opens_early(root):
+ p=root/"v2/gates/apk_evidence/TEMPLATE.json"
+ d=json.loads(p.read_text()); d["status"]="VERIFIED"; p.write_text(json.dumps(d))
+
+def mutate_apk_template_check_drift(root):
+ p=root/"v2/gates/apk_evidence/TEMPLATE.json"
+ d=json.loads(p.read_text()); d["apk_checks"]=["legacy free text"]; p.write_text(json.dumps(d))
 CASES.append(("feature-template-device-check-drift", mutate_feature_template_device_check_drift, "feature gate template device check contract drifted"))
+CASES.append(("apk-template-opens-early", mutate_apk_template_opens_early, "APK evidence template is not fail-closed"))
+CASES.append(("apk-template-check-drift", mutate_apk_template_check_drift, "APK evidence template check contract drifted"))
 
 def mutate_domain_policy_invalid_kind(r):
  p=r/"v2/gates/domain_verification_policy.json"; d=json.loads(p.read_text()); d["rules"]["renderer"]=["source","wishful-check"]; p.write_text(json.dumps(d))
