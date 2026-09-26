@@ -138,6 +138,16 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
   if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
    fail("feature gate occurs after build/transform work: "+p.name)
+  gate_pos=s.index(token)
+  post_gate=s[gate_pos+len(token):]
+  # After the control repository has been gated, do not replace/reset it. Commands
+  # explicitly scoped to the separate comaps/ checkout are allowed.
+  dangerous=[]
+  for line in post_gate.splitlines():
+   stripped=line.strip()
+   if re.search(r"uses:\\s*actions/checkout@",stripped): dangerous.append(stripped)
+   if re.search(r"^git\\s+(checkout|reset|switch|pull|fetch)\\b",stripped) and not stripped.startswith("git -C comaps "): dangerous.append(stripped)
+  if dangerous: fail("control repo can change after feature gate: "+p.name+" -> "+" | ".join(dangerous))
 
 # Machine-readable current specification must be internally complete.
 sig=spec.get("signal",{})
