@@ -5,7 +5,7 @@ SRC=Path(__file__).resolve().parents[2]
 
 def run_case(name,mutate,needle):
  with tempfile.TemporaryDirectory() as td:
-  root=Path(td)/"repo"; shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  root=Path(td)/"repo"; shutil.copytree(SRC,root,ignore=shutil.ignore_patterns("out","comaps"))
   rec=root/"v2/gates/apk_evidence/test.json"
   head=subprocess.run(["git","rev-parse","HEAD"],cwd=root,text=True,capture_output=True,check=True).stdout.strip()
   d={"schema":1,"feature_id":"testfeature","build_commit":head,"apk_sha256":"b"*64,"apk_checks":["manifest/resources verified"],"status":"VERIFIED"}
