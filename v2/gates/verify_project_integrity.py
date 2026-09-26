@@ -166,6 +166,15 @@ atc=apk_template.get("apk_checks")
 if not isinstance(atc,list) or len(atc)!=1 or not isinstance(atc[0],dict) or set(atc[0])!={"id","result","evidence"} or atc[0].get("id")!="REPLACE_WITH_APK_CHECK_ID" or atc[0].get("result")!="PENDING" or atc[0].get("evidence")!="REPLACE_ME":
  fail("APK evidence template check contract drifted")
 
+# Device-evidence template is part of the development method and must remain fail-closed.
+device_template=load("v2/gates/device_evidence/TEMPLATE.json")
+required_device_template_fields={"schema","feature_id","build_commit","feature_gate","apk_evidence","apk_sha256","device","android_version","checks","status"}
+if set(device_template)!=required_device_template_fields: fail("device evidence template fields drifted")
+if device_template.get("schema")!=1 or device_template.get("status")!="PENDING" or device_template.get("device")!="CB6" or device_template.get("android_version")!="13": fail("device evidence template is not fail-closed")
+dtc=device_template.get("checks")
+if not isinstance(dtc,list) or len(dtc)!=1 or not isinstance(dtc[0],dict) or set(dtc[0])!={"id","result","evidence"} or dtc[0].get("id")!="REPLACE_ME" or dtc[0].get("result")!="PENDING" or dtc[0].get("evidence")!="REPLACE_ME":
+ fail("device evidence template check contract drifted")
+
 # Machine-readable current specification must be internally complete.
 sig=spec.get("signal",{})
 disp=sig.get("display",{})
