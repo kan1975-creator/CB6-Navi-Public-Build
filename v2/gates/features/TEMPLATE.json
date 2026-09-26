@@ -20,7 +20,10 @@
     "REPLACE_WITH_EXPLICIT_APK_VERIFICATION"
   ],
   "device_checks": [
-    "REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE"
+    {
+      "id": "REPLACE_WITH_CHECK_ID",
+      "description": "REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE"
+    }
   ],
   "stage": "DESIGN",
   "affected_domains": [
