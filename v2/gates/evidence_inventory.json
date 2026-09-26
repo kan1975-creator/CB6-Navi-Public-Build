@@ -36,7 +36,11 @@
       "id": "EV-FROZEN",
       "type": "device-history",
       "path": "docs/CB6_FROZEN_FEATURES.md",
-      "status": "historical-mixed"
+      "status": "historical-mixed",
+      "clause_policy": {
+        "state": "requires-explicit-decision-link",
+        "note": "Historical accepted behavior may support an active requirement only through an explicit decision evidence link; later active requirements and supersession own current behavior."
+      }
     },
     {
       "id": "EV-CROSS-PROJECT",
