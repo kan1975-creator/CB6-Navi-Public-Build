@@ -94,6 +94,12 @@
       "type": "process-audit",
       "path": "docs/CB6_GATE_COVERAGE_AUDIT.md",
       "status": "active"
+    },
+    {
+      "id": "EV-REBUILT-DESIGN",
+      "type": "design",
+      "path": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "status": "active"
     }
   ]
 }
