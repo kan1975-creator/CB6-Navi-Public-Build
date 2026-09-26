@@ -11,12 +11,12 @@ def run_case(name,mutate,needle):
   sha=hashlib.sha256(apk_file.read_bytes()).hexdigest()
   apk_rel="v2/gates/apk_evidence/device-test.json"
   apk_path=root/apk_rel
-  apk={"schema":1,"feature_id":"testfeature","build_commit":head,"apk_path":"out/test.apk","apk_sha256":sha,"apk_checks":["manifest/resources verified"],"status":"VERIFIED"}
-  apk_path.write_text(json.dumps(apk))
   feature_rel="v2/gates/features/device-test.json"
   feature_path=root/feature_rel
-  feature={"feature_id":"testfeature","device_checks":[{"id":"signal-render","description":"signal renders on CB6"}]}
+  feature={"feature_id":"testfeature","apk_checks":[{"id":"apk-integrity","description":"verify APK integrity"}],"device_checks":[{"id":"signal-render","description":"signal renders on CB6"}]}
   feature_path.write_text(json.dumps(feature))
+  apk={"schema":1,"feature_id":"testfeature","build_commit":head,"feature_gate":feature_rel,"apk_path":"out/test.apk","apk_sha256":sha,"apk_checks":[{"id":"apk-integrity","result":"PASS","evidence":"manifest/resources verified"}],"status":"VERIFIED"}
+  apk_path.write_text(json.dumps(apk))
   dev_rel="v2/gates/device_evidence/device-test.json"
   dev_path=root/dev_rel
   dev={"schema":1,"feature_id":"testfeature","build_commit":head,"feature_gate":feature_rel,"apk_evidence":apk_rel,"apk_sha256":sha,"device":"CB6","android_version":"13","checks":[{"id":"signal-render","result":"PASS","evidence":"observed on CB6"}],"status":"ACCEPTED"}
