@@ -234,6 +234,8 @@ def mutate_traceability_stage_mismatch(r):
 
 def mutate_implementation_with_unverified_upload(r):
  p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(d))
+ for rel in ("v2/gates/traceability.json","v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
+  q=r/rel; x=json.loads(q.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; q.write_text(json.dumps(x))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
 def mutate_upstream_lock_commit(r):
