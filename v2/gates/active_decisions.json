@@ -531,6 +531,98 @@
         "Historical only; must not be consumed as current behavior after the later explicit 200 m slim-size decision."
       ],
       "superseded_by": "SIG-200M-001"
+    },
+    {
+      "id": "SEARCH-FUZZY-001",
+      "kind": "product",
+      "spec_key": "search.fuzzy",
+      "status": "active",
+      "requirement": "CB6 query normalization/aliases must feed the stock CoMaps SearchEngine consistently for keyboard, voice and show-on-map flows; do not create a parallel search behavior.",
+      "affected": [
+        "search/voice",
+        "normalization",
+        "history",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_COMAPS_ARCHITECTURE.md"
+      ],
+      "acceptance": [
+        "Alias/fuzzy input reaches normal CoMaps results and preserves stock history/result selection/routing behavior."
+      ]
+    },
+    {
+      "id": "ORIENTATION-001",
+      "kind": "product",
+      "spec_key": "ui.orientation",
+      "status": "active",
+      "requirement": "CB6 UI supports auto, portrait and landscape orientation modes without breaking the navigation HUD/control layout.",
+      "affected": [
+        "Android UI",
+        "layout",
+        "lifecycle"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md"
+      ],
+      "acceptance": [
+        "Auto/portrait/landscape modes preserve usable CB6 controls and road-name HUD."
+      ]
+    },
+    {
+      "id": "SEARCH-HISTORY-001",
+      "kind": "product",
+      "spec_key": "search.history-delete",
+      "status": "active",
+      "requirement": "Preserve stock search/history behavior and provide the required ability to delete search history/registered entries through the intended CoMaps-owned data path.",
+      "affected": [
+        "search",
+        "history",
+        "favorites UI"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md",
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
+      ]
+    },
+    {
+      "id": "VEHICLE-ICON-001",
+      "kind": "product",
+      "spec_key": "map.vehicle-icon",
+      "status": "active",
+      "requirement": "Do not change the accepted/original vehicle icon unless the user explicitly requests a new vehicle-icon change.",
+      "affected": [
+        "rendering",
+        "own-position"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md"
+      ],
+      "acceptance": [
+        "Unrelated feature work leaves the vehicle icon unchanged."
+      ]
+    },
+    {
+      "id": "SCOPE-HOKKAIDO-001",
+      "kind": "product",
+      "spec_key": "product.region-scope",
+      "status": "active",
+      "requirement": "Preserve the established Hokkaido-focused CB6 operating scope when making data-source, coverage and validation decisions; do not silently broaden or narrow it.",
+      "affected": [
+        "data coverage",
+        "validation",
+        "offline/network policy"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design states the Hokkaido operating/validation scope and any wider behavior is treated as compatible extension rather than an unreviewed scope change."
+      ]
     }
   ]
 }
