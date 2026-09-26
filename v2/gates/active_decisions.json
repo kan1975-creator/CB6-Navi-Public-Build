@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "decisions": [
+    {
+      "id": "PROC-001",
+      "status": "active",
+      "kind": "process",
+      "requirement": "Every active user decision must be consumed by the current design or explicitly remain pending during design rebuild.",
+      "affected": [
+        "design",
+        "gates",
+        "audits",
+        "workflows"
+      ],
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
+      ],
+      "acceptance": [
+        "No active decision can disappear from traceability.",
+        "Superseded decisions cannot be authoritative."
+      ]
+    },
+    {
+      "id": "PROC-002",
+      "status": "active",
+      "kind": "process",
+      "requirement": "A V2 feature build must fail closed unless project and feature gates explicitly permit it.",
+      "affected": [
+        "gates",
+        "workflows"
+      ],
+      "evidence": [
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
+        "Design-rebuild state rejects feature builds."
+      ]
+    },
+    {
+      "id": "SIG-200M-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "At 200 m, traffic-signal marks should be slim, approximately the same visual size as at 500 m.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols",
+        "audits",
+        "tests"
+      ],
+      "evidence": [
+        "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md"
+      ],
+      "acceptance": [
+        "Rebuilt design must consume this decision before signal implementation is enabled."
+      ]
+    },
+    {
+      "id": "SIG-COVERAGE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Traffic-signal coverage must include signals outside intersections and signals currently missing at some intersections.",
+      "affected": [
+        "signals",
+        "data-source",
+        "cache",
+        "audits",
+        "tests"
+      ],
+      "evidence": [
+        "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md"
+      ],
+      "acceptance": [
+        "Rebuilt design must address acquisition completeness and real-device verification."
+      ]
+    },
+    {
+      "id": "SIG-UPGRADE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Signal behavior must be verified for update install as well as clean install; clean-install-only success is insufficient.",
+      "affected": [
+        "signals",
+        "cache",
+        "lifecycle",
+        "tests",
+        "real-device"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "acceptance": [
+        "Acceptance route contains both update-install and clean-install checks."
+      ]
+    }
+  ]
+}
