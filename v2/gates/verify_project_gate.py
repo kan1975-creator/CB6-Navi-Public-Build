@@ -72,6 +72,9 @@ if "--require-feature-build" in sys.argv:
  if f.get("repo_sweep_required") is not True: fail("feature repo-wide sweep not required")
  if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
  if f.get("device_evidence")!="PENDING": fail("device evidence must remain pending before build")
+ dc=f.get("device_checks")
+ if not isinstance(dc,list) or not dc or any(not isinstance(x,dict) or set(x)!={"id","description"} or not x.get("id") or not x.get("description") for x in dc): fail("device_checks must use id/description records")
+ if len({x["id"] for x in dc})!=len(dc): fail("device_checks contain duplicate ids")
  for key in ("requirements","source_paths","audits","tests","apk_checks","device_checks"):
   if not isinstance(f.get(key),list) or not f[key]: fail("feature gate "+key+" not declared")
  decisions=json.loads((ROOT/"v2/gates/active_decisions.json").read_text(encoding="utf-8")).get("decisions",[])
@@ -94,7 +97,7 @@ if "--require-feature-build" in sys.argv:
  if missing_verification: fail("feature gate domains lack verification: "+",".join(missing_verification))
  allowed_refs=set(f["source_paths"]+f["audits"]+f["tests"])
  policy=json.loads((ROOT/"v2/gates/domain_verification_policy.json").read_text(encoding="utf-8"))
- kind_paths={"source":set(f["source_paths"]),"audit":set(f["audits"]),"test":set(f["tests"]),"device":set(f["device_checks"])}
+ kind_paths={"source":set(f["source_paths"]),"audit":set(f["audits"]),"test":set(f["tests"]),"device":set()}
  for domain,refs in dv.items():
   if domain not in declared_domains: fail("feature gate verification references undeclared domain: "+domain)
   unknown_refs=sorted(set(refs)-allowed_refs)
