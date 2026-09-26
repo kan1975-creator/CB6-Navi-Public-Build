@@ -38,7 +38,7 @@ if "--require-feature-build" in sys.argv:
  fp=ROOT/"v2/gates/features"/(feature+".json")
  if not fp.is_file(): fail("missing per-feature gate record: "+feature)
  f=json.loads(fp.read_text(encoding="utf-8"))
- required={"schema","feature_id","requirements","affected_domains","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
+ required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
  missing=sorted(required-set(f))
  if missing: fail("feature gate fields missing: "+",".join(missing))
  if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
@@ -59,6 +59,17 @@ if "--require-feature-build" in sys.argv:
  required_domains=set().union(*(set(active_by_id[r].get("affected",[])) for r in f["requirements"]))
  missing_domains=sorted(required_domains-declared_domains)
  if missing_domains: fail("feature gate omits affected domains: "+",".join(missing_domains))
+ # Every declared impact domain needs an explicit verification route. A domain name
+ # alone is not evidence that its source/regression surface was actually checked.
+ dv=f.get("domain_verification")
+ if not isinstance(dv,dict): fail("feature gate domain_verification not declared")
+ missing_verification=sorted(d for d in declared_domains if not isinstance(dv.get(d),list) or not dv[d])
+ if missing_verification: fail("feature gate domains lack verification: "+",".join(missing_verification))
+ allowed_refs=set(f["source_paths"]+f["audits"]+f["tests"])
+ for domain,refs in dv.items():
+  if domain not in declared_domains: fail("feature gate verification references undeclared domain: "+domain)
+  unknown_refs=sorted(set(refs)-allowed_refs)
+  if unknown_refs: fail("feature gate domain verification uses undeclared paths: "+domain+" -> "+",".join(unknown_refs))
  traces=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8")).get("traces",[])
  trace_by_id={t["decision_id"]:t for t in traces}
  for rid in f["requirements"]:
