@@ -26,8 +26,10 @@ public final class OverpassSignalProvider implements SignalProvider
   public SignalSnapshot load(double lat, double lon) throws Exception
   {
     String ll = String.format(Locale.US, "%.6f,%.6f", lat, lon);
-    String query = "[out:json][timeout:8];(node(around:" + SignalPolicy.RADIUS_M
-        + "," + ll + ")[highway=traffic_signals];);out body;";
+    String query = "[out:json][timeout:8];("
+        + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
+        + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
+        + ");out body;";
     Exception last = null;
     for (String endpoint : ENDPOINTS)
     {
@@ -56,7 +58,10 @@ public final class OverpassSignalProvider implements SignalProvider
       JSONObject e = elements.optJSONObject(i);
       if (e == null || !"node".equals(e.optString("type"))) continue;
       JSONObject tags = e.optJSONObject("tags");
-      if (tags == null || !"traffic_signals".equals(tags.optString("highway"))) continue;
+      if (tags == null) continue;
+      boolean roadSignal = "traffic_signals".equals(tags.optString("highway"));
+      boolean crossingSignal = "traffic_signals".equals(tags.optString("crossing"));
+      if (!roadSignal && !crossingSignal) continue;
       double y = e.optDouble("lat", Double.NaN), x = e.optDouble("lon", Double.NaN);
       if (!SignalPolicy.validCoordinate(y, x)) continue;
       Location.distanceBetween(lat, lon, y, x, distance);

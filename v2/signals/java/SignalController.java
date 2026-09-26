@@ -35,6 +35,7 @@ public final class SignalController
     active = true;
     renderingReady = ready;
     published = null;
+    publishedForward = null;
     attempted = false;
     int token = ++generation;
     worker = Executors.newSingleThreadExecutor();
@@ -70,7 +71,9 @@ public final class SignalController
   {
     renderingReady = true;
     published = null;
+    publishedForward = null;
     publish();
+    requestIfNeeded();
   }
 
   public void onLocation(Location update)

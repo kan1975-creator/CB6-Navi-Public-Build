@@ -45,7 +45,7 @@ require('SetIsVisible(UserMark::Type::CB6_SIGNAL, true)' in jni and 'session.Not
 require('GetMarkType() const override' not in mark, 'invalid nonvirtual override')
 require('SymbolIsPOI()' not in mark and 'GetDepthTestEnabled()' not in mark, 'proven direct-symbol rendering changed')
 require('return 14;' in mark, '1km hiding')
-for zoom, symbol in [(14,'xs'), (15,'s'), (17,'m'), (19,'l')]:
+for zoom, symbol in [(14,'xs'), (15,'xs'), (17,'m'), (19,'l')]:
     require(f'{{{zoom}, "cb6-signal-{symbol}"}}' in mark, f'frozen z{zoom} symbol')
 require(mark.index('if (m_forward)') < mark.index('{17,'), 'unconditional enlargement')
 for token in ('RADIUS_M = 3000', 'MAX_POINTS = 1400', 'REFRESH_MS = 45 * 1000L',
@@ -54,7 +54,8 @@ for token in ('RADIUS_M = 3000', 'MAX_POINTS = 1400', 'REFRESH_MS = 45 * 1000L',
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
 require('main.post(() ->' in controller, 'main-thread publication')
-require('[highway=traffic_signals]' in provider and 'tags.optString("highway")' in provider, 'real signal query/parser')
+require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')
+require('tags.optString("highway")' in provider and 'tags.optString("crossing")' in provider, 'road/crossing signal parser')
 require('getLatitude()' not in jni, 'invalid JNI source')
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):

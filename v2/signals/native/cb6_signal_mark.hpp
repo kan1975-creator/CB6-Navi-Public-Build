@@ -14,7 +14,7 @@ public:
   {
     auto symbols = make_unique_dp<SymbolNameZoomInfo>();
     symbols->insert({14, "cb6-signal-xs"});
-    symbols->insert({15, "cb6-signal-s"});
+    symbols->insert({15, "cb6-signal-xs"});
     if (m_forward)
     {
       symbols->insert({17, "cb6-signal-m"});

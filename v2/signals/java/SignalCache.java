@@ -12,14 +12,14 @@ final class SignalCache
   private final SharedPreferences preferences;
   SignalCache(Context context)
   {
-    preferences = context.getSharedPreferences("cb6_v2_signals_v1", Context.MODE_PRIVATE);
+    preferences = context.getSharedPreferences("cb6_v2_signals_v2", Context.MODE_PRIVATE);
   }
 
   SignalSnapshot read() throws Exception
   {
     JSONObject root = new JSONObject(preferences.getString("snapshot", "{}"));
     long age = System.currentTimeMillis() - root.optLong("time", 0);
-    if (root.optInt("schema") != 1 || age < 0 || age > SignalPolicy.CACHE_MAX_MS)
+    if (root.optInt("schema") != 2 || age < 0 || age > SignalPolicy.CACHE_MAX_MS)
       return SignalSnapshot.EMPTY;
     JSONArray rows = root.getJSONArray("points");
     ArrayList<SignalSnapshot.Point> points = new ArrayList<>();
@@ -36,7 +36,7 @@ final class SignalCache
     JSONArray rows = new JSONArray();
     for (SignalSnapshot.Point p : snapshot.points)
       rows.put(new JSONArray().put(p.id).put(p.lat).put(p.lon).put(p.distance));
-    JSONObject root = new JSONObject().put("schema", 1).put("time", System.currentTimeMillis()).put("points", rows);
+    JSONObject root = new JSONObject().put("schema", 2).put("time", System.currentTimeMillis()).put("points", rows);
     preferences.edit().putString("snapshot", root.toString()).commit();
   }
 }
