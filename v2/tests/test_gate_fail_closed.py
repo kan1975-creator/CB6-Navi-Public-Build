@@ -43,6 +43,24 @@ def mutate_fake_implementation_enabled(r):
  d["canonical_design"]="docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"; p.write_text(json.dumps(d))
 CASES.append(("implementation-with-pending-decisions", mutate_fake_implementation_enabled, "implementation enabled with unconsumed active decisions"))
 
+def mutate_missing_evidence(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ next(x for x in d["decisions"] if x["id"]=="PROC-001")["evidence"]=["docs/DOES_NOT_EXIST.md"]
+ p.write_text(json.dumps(d))
+CASES.append(("missing-evidence", mutate_missing_evidence, "evidence path missing"))
+
+def mutate_duplicate_owner(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ x=next(x for x in d["decisions"] if x["id"]=="SIG-COVERAGE-001"); x["spec_key"]="signal.display.200m"
+ p.write_text(json.dumps(d))
+CASES.append(("duplicate-active-spec-owner", mutate_duplicate_owner, "multiple active owners for spec_key"))
+
+def mutate_broken_supersession(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ next(x for x in d["decisions"] if x["id"]=="SIG-200M-LEGACY-001")["superseded_by"]="SIG-COVERAGE-001"
+ p.write_text(json.dumps(d))
+CASES.append(("broken-supersession", mutate_broken_supersession, "non-reciprocal supersession"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
