@@ -56,6 +56,12 @@ def mutate_missing_evidence(r):
  p.write_text(json.dumps(d))
 CASES.append(("missing-evidence", mutate_missing_evidence, "evidence path missing"))
 
+def mutate_uninventoried_evidence(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ next(x for x in d["decisions"] if x["id"]=="PROC-001")["evidence"]=["docs/CB6_GATE_COVERAGE_AUDIT.md"]
+ p.write_text(json.dumps(d))
+CASES.append(("uninventoried-decision-evidence", mutate_uninventoried_evidence, "evidence absent from inventory"))
+
 def mutate_duplicate_owner(r):
  p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
  x=next(x for x in d["decisions"] if x["id"]=="SIG-COVERAGE-001"); x["spec_key"]="signal.display.200m"
