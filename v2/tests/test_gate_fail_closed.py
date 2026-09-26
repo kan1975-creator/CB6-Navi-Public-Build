@@ -63,6 +63,12 @@ def mutate_uninventoried_evidence(r):
  p.write_text(json.dumps(d))
 CASES.append(("uninventoried-decision-evidence", mutate_uninventoried_evidence, "evidence absent from inventory"))
 
+def mutate_retired_direct_evidence(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ next(x for x in d["decisions"] if x["id"]=="PROC-001")["evidence"]=["docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"]
+ p.write_text(json.dumps(d))
+CASES.append(("retired-direct-requirement-evidence", mutate_retired_direct_evidence, "active decision relies directly on retired evidence"))
+
 def mutate_duplicate_owner(r):
  p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
  x=next(x for x in d["decisions"] if x["id"]=="SIG-COVERAGE-001"); x["spec_key"]="signal.display.200m"
