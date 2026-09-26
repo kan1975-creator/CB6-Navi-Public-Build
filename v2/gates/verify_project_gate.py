@@ -65,6 +65,10 @@ if "--require-feature-build" in sys.argv:
  if set(impact.get("requirements",[]))!=set(f.get("requirements",[])): fail("feature impact record requirements mismatch")
  if set(impact.get("affected_domains",[]))!=set(f.get("affected_domains",[])): fail("feature impact record domains mismatch")
  if not impact.get("reviewed_paths"): fail("feature impact record lacks reviewed paths")
+ expected_impact_fields={"schema","feature_id","requirements","affected_domains","reviewed_paths"}
+ if set(impact)!=expected_impact_fields: fail("feature impact record fields drifted")
+ for rel in impact["reviewed_paths"]:
+  if not isinstance(rel,str) or not rel or not (ROOT/rel).exists(): fail("feature impact reviewed path missing")
  if f.get("repo_sweep_required") is not True: fail("feature repo-wide sweep not required")
  if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
  for key in ("requirements","source_paths","audits","tests","apk_checks","device_checks"):
