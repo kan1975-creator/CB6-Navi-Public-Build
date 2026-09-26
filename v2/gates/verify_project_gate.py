@@ -33,10 +33,26 @@ if "--require-feature-build" in sys.argv:
  fp=ROOT/"v2/gates/features"/(feature+".json")
  if not fp.is_file(): fail("missing per-feature gate record: "+feature)
  f=json.loads(fp.read_text(encoding="utf-8"))
- required={"design_section","impact_checked","repo_sweep_required","audits","tests","stage"}
+ required={"schema","feature_id","requirements","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
  missing=sorted(required-set(f))
  if missing: fail("feature gate fields missing: "+",".join(missing))
+ if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
  if not f.get("impact_checked"): fail("feature impact check incomplete")
+ if f.get("repo_sweep_required") is not True: fail("feature repo-wide sweep not required")
  if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
- if not f.get("audits") or not f.get("tests"): fail("feature audits/tests not declared")
+ for key in ("requirements","source_paths","audits","tests","apk_checks","device_checks"):
+  if not isinstance(f.get(key),list) or not f[key]: fail("feature gate "+key+" not declared")
+ decisions=json.loads((ROOT/"v2/gates/active_decisions.json").read_text(encoding="utf-8")).get("decisions",[])
+ active={d["id"] for d in decisions if d.get("status")=="active"}
+ unknown=sorted(set(f["requirements"])-active)
+ if unknown: fail("feature gate references non-active requirements: "+",".join(unknown))
+ traces=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8")).get("traces",[])
+ trace_by_id={t["decision_id"]:t for t in traces}
+ for rid in f["requirements"]:
+  t=trace_by_id.get(rid)
+  if not t or t.get("state")!="consumed": fail("feature requirement not consumed by rebuilt design: "+rid)
+  if not t.get("design_ref") or not t.get("verification"): fail("feature requirement lacks design/verification trace: "+rid)
+ for key in ("source_paths","audits","tests"):
+  for rel in f[key]:
+   if not (ROOT/rel).exists(): fail("feature gate "+key+" path missing: "+rel)
 print("CB6 DEVELOPMENT GATE PASS: implementation enabled")
