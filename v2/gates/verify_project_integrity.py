@@ -175,6 +175,15 @@ dtc=device_template.get("checks")
 if not isinstance(dtc,list) or len(dtc)!=1 or not isinstance(dtc[0],dict) or set(dtc[0])!={"id","result","evidence"} or dtc[0].get("id")!="REPLACE_ME" or dtc[0].get("result")!="PENDING" or dtc[0].get("evidence")!="REPLACE_ME":
  fail("device evidence template check contract drifted")
 
+# APK artifacts may never be published before APK evidence verification once implementation is enabled.
+if state.get("stage")=="IMPLEMENTATION_ENABLED":
+ for p in workflows:
+  s=p.read_text(encoding="utf-8")
+  upload=s.find("actions/upload-artifact@")
+  if upload<0: continue
+  verify=s.find("verify_apk_evidence.py")
+  if verify<0 or verify>upload: fail("APK artifact upload is not preceded by APK evidence verification: "+p.name)
+
 # Machine-readable current specification must be internally complete.
 sig=spec.get("signal",{})
 disp=sig.get("display",{})
