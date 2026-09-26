@@ -31,5 +31,6 @@
       "REPLACE_WITH_DECLARED_SOURCE_AUDIT_OR_TEST_PATH"
     ]
   },
-  "impact_record": "v2/gates/impact_records/REPLACE_ME.json"
+  "impact_record": "v2/gates/impact_records/REPLACE_ME.json",
+  "device_evidence": "PENDING"
 }
