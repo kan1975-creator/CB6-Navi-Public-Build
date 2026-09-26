@@ -127,7 +127,11 @@ wfdir=ROOT/".github/workflows"
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
  s=p.read_text(encoding="utf-8")
  if p.name=="cb6_development_gate.yml": continue
- if "cb6-v2-clean" not in s: continue
+ # Branch-name matching is not sufficient: a workflow_dispatch build can be
+ # manually run from cb6-v2-clean even when its push branches are legacy-only.
+ dispatchable=bool(re.search(r"(?m)^\s*workflow_dispatch\s*:",s))
+ targets_v2="cb6-v2-clean" in s or dispatchable
+ if not targets_v2: continue
  buildish=bool(re.search(r"(gradlew|assemble|apply_identity\.py|apply_signals\.py)",s))
  if buildish:
   token="verify_project_gate.py --require-feature-build --feature="
