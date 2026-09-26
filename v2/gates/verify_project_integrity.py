@@ -184,6 +184,15 @@ if state.get("stage")=="IMPLEMENTATION_ENABLED":
   verify=s.find("verify_apk_evidence.py")
   if verify<0 or verify>upload: fail("APK artifact upload is not preceded by APK evidence verification: "+p.name)
 
+# All build workflows must consume the single pinned CoMaps authority.
+upstream=load("v2/gates/upstream_lock.json")
+if set(upstream)!={"schema","upstream","repository","commit","policy"} or upstream.get("schema")!=1 or upstream.get("upstream")!="CoMaps" or upstream.get("policy")!="exact": fail("upstream lock invalid")
+pinned=upstream.get("commit","")
+if len(pinned)!=40 or any(ch not in "0123456789abcdef" for ch in pinned): fail("upstream lock commit invalid")
+for p in workflows:
+ s=p.read_text(encoding="utf-8")
+ if "git -C comaps fetch" in s and pinned not in s: fail("build workflow does not use pinned CoMaps commit: "+p.name)
+
 # Machine-readable current specification must be internally complete.
 sig=spec.get("signal",{})
 disp=sig.get("display",{})
