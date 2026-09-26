@@ -12,6 +12,7 @@ trace=load("v2/gates/traceability.json")
 spec=load("v2/gates/current_spec.json")
 authority=load("v2/gates/authority_policy.json")
 evidence=load("v2/gates/evidence_inventory.json")
+if trace.get("schema")!=1 or trace.get("stage")!=state.get("stage"): fail("traceability stage/schema mismatch")
 if evidence.get("schema")!=1 or evidence.get("stage")!=state.get("stage"): fail("evidence inventory stage/schema mismatch")
 items=evidence.get("evidence",[])
 eids=[x.get("id") for x in items]
