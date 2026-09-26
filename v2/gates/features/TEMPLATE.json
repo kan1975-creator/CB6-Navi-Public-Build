@@ -25,5 +25,10 @@
   "stage": "DESIGN",
   "affected_domains": [
     "REPLACE_WITH_ALL_REQUIREMENT_AFFECTED_DOMAINS"
-  ]
+  ],
+  "domain_verification": {
+    "REPLACE_WITH_AFFECTED_DOMAIN": [
+      "REPLACE_WITH_DECLARED_SOURCE_AUDIT_OR_TEST_PATH"
+    ]
+  }
 }
