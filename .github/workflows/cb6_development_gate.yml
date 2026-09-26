@@ -15,6 +15,9 @@ jobs:
         run: python3 v2/gates/verify_project_gate.py
       - name: Verify decision traceability and workflow coverage
         run: python3 v2/gates/verify_project_integrity.py
+      - name: Verify rebuilt design coverage map
+        run: python3 v2/gates/verify_design_coverage.py
+
       - name: Verify evidence inventory integrity
         run: python3 v2/gates/verify_evidence_inventory_v2.py
       - name: Destructive fail-closed regression tests
