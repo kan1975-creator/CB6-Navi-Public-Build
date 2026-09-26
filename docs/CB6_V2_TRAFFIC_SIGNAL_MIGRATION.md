@@ -1,6 +1,6 @@
 # CB6 V2 Traffic Signal Migration Design
 
-Status: FROZEN-BEHAVIOR MIGRATION DESIGN
+Status: PRIOR MIGRATION DESIGN — HISTORICAL INPUT, NOT CURRENT IMPLEMENTATION AUTHORITY\n\nRun #65 remains historical real-device evidence, but later explicit CB6 requirements supersede conflicting presentation details, notably the 200 m slim-size change and V2 coverage/update-install findings.
 Authority: CB6 real-device accepted Run #65 behavior
 
 ## Purpose
