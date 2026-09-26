@@ -103,3 +103,29 @@ The user explicitly approved a development restart whose purpose is to reset tec
 14. The restart must improve maintainability without changing user-requested behavior outside the feature being worked on.
 
 This section is an absolute project rule. Do not revert to incremental one-error-at-a-time patch accumulation after a time gap or new chat.
+
+
+## Persistent development continuity and progress-proof rule — MANDATORY
+
+The user expected the project to already operate as a GitHub-persistent development loop. Repeated cases where an automation run occurred but no implementation commit, build run, or artifact advanced the project are a process failure. Future CB6 work must not treat automation execution itself as development progress.
+
+1. GitHub is the persistent source of truth for development state. Chat titles, automation summaries, and conversational claims are not authoritative.
+2. Every development stage must leave a durable GitHub checkpoint that a later run/chat can resume without reconstructing intent from conversation history.
+3. The current stage and next executable action must be derivable from repository state, workflow state, and formal docs. Do not depend on the user repeating "continue".
+4. Automation is a supervisor/resumer, not proof of work. A successful automation invocation with no repository/workflow advancement is **NO DEVELOPMENT PROGRESS**.
+5. Progress may be claimed only from objective evidence:
+   - implementation progress: a relevant Git commit exists;
+   - build progress: a new relevant GitHub Actions run exists;
+   - APK progress: a verified artifact exists;
+   - feature completion: required CB6 real-device acceptance exists.
+6. If an automated cycle cannot advance the current implementation stage, it must identify the blocking/root cause from actual GitHub state. It must not silently substitute more planning/documentation for the required implementation unless that documentation is an explicit gate prerequisite.
+7. When the next gate is implementation, prioritize source implementation and build initiation over additional non-blocking design work.
+8. Build/fix loops must persist through GitHub: commit the coherent fix, run the workflow, inspect logs, perform the repo-wide root-cause sweep required by this document, and continue from the resulting state on the next execution.
+9. Do not report "device-test waiting" until the exact feature APK has been built, artifact-verified, and is genuinely ready for the user to install.
+10. Separate/new automation chats must never create an alternative project state. The canonical project state is GitHub plus these formal project documents.
+11. Time gaps, model/chat changes, or automation restarts must not reset these rules or the second-generation policy above.
+12. For status reports use the strict interpretation: **no relevant commit = implementation not advanced; no relevant Actions run = build not started; no artifact = APK not produced; no real-device confirmation = feature not complete.**
+13. The intended operating loop is: read durable GitHub state -> determine current gate -> execute the next concrete action -> persist result in GitHub -> build/verify when applicable -> record blocker or advance gate. Merely re-reading state is not a completed development cycle.
+14. Existing CB6 specifications, frozen behavior, architecture decisions, Hokkaido-only scope, proven-implementation adoption policy, and regression rules remain mandatory across every resumed cycle.
+
+This continuity rule is part of the permanent CB6 development policy and must be consulted together with the second-generation restart policy before implementation or automation changes.
