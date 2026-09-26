@@ -2,7 +2,7 @@
 
 "Frozen" means real-device accepted. Do not change implementation/behavior as collateral damage. If a future requirement genuinely needs interaction with a frozen feature, prove regression safety first.
 
-## Traffic signals — FROZEN
+## Traffic signals — HISTORICAL ACCEPTANCE EVIDENCE; LATER REQUIREMENTS MAY SUPERSEDE
 
 User accepted: "信号機はこれでok".
 
@@ -16,7 +16,7 @@ Behavior baseline:
 - renderer behavior proven on CB6 real device.
 
 Historical reference:
-- Run #65 established accepted scale policy.
+- Run #65 established the historical accepted scale policy. It is evidence, not current authority where the active Requirement Registry or `v2/gates/current_spec.json` records a later user-approved change. In particular, `SIG-200M-001` supersedes the old 200m size expectation.
 - Later real-device checks continued to show signals correctly.
 
 Regression rule:
@@ -46,4 +46,4 @@ Current root-cause correction under test: dedicated convenience UserMark must be
 
 ## V2 Gate 1 migration — NOT YET FROZEN
 
-The Run #65 feature above remains the behavioral authority. `v2/signals` ports its constants/resources into isolated signal ownership. No V2 real-device acceptance has been claimed. Build evidence must come from `CB6 V2 Gate 1 Signals`, then the physical CB6 checklist in `v2/signals/README.md` must pass before changing this status.
+The Run #65 feature above remains historical real-device evidence, not current behavioral authority for clauses superseded by active requirements. `active_decisions.json` plus `current_spec.json` own the current signal expectation. `v2/signals` ports its constants/resources into isolated signal ownership. No V2 real-device acceptance has been claimed. Build evidence must come from `CB6 V2 Gate 1 Signals`, then the physical CB6 checklist in `v2/signals/README.md` must pass before changing this status.
