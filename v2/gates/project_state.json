@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "branch": "cb6-v2-clean",
+  "stage": "OVERALL_DESIGN_REBUILD",
+  "feature_builds_allowed": false,
+  "design_verified": false,
+  "canonical_design": "",
+  "retired_design": "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md",
+  "entrypoint": "v2/gates/verify_project_gate.py"
+}
