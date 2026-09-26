@@ -108,6 +108,66 @@
       "state": "pending-redesign",
       "design_ref": "",
       "verification": []
+    },
+    {
+      "decision_id": "UI-LAYOUT-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "MAP-LABEL-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "LOCATION-STABILITY-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "GOOGLE-MAPS-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "POI-MAJOR-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "CAMERA-FIXED-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "OFFLINE-FREE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "SIGNAL-ZOOM-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "CONVENIENCE-BRANDS-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "TOLL-ROUTE-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
     }
   ]
 }
