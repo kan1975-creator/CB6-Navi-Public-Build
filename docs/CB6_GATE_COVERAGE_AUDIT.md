@@ -42,11 +42,11 @@ There are currently no feature gate records and `feature_builds_allowed=false`. 
 ## Remaining classes that cannot be honestly called closed yet
 
 These are not permission bypasses in the current V2 build path; they are completion work for the design rebuild:
-- evidence inventory must be completed and reconciled;
+- evidence inventory is now machine-readable and integrity-gated for schema/stage/ID/status/path validity; completeness against every design input still requires reconciliation;
 - web/external evidence gaps must be refreshed;
 - rebuilt overall design needs a canonical machine-readable trace;
 - feature gate records must be generated from that verified design;
 - validator expectations should be derived from shared current specification data where feasible, eliminating duplicated hard-coded values such as the stale signal-symbol failure;
-- all future V2 workflows must be covered automatically, so adding a new workflow without the gate becomes a failing repository check.
+- all future V2 build workflows on `cb6-v2-clean` are automatically scanned for a pre-build feature gate; destructive tests prove a newly added gate-less build workflow is rejected.
 
 Until those are implemented and negative-tested, project state stays `OVERALL_DESIGN_REBUILD` and V2 feature builds remain blocked.
