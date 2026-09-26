@@ -4,7 +4,7 @@ Use this before editing. "Primary" means expected implementation area; "must ins
 
 | Feature | Primary path | Must inspect before build | Real-device acceptance |
 |---|---|---|---|
-| Traffic signals | Supplement acquisition + JNI/UserMark | Java scheduler/parser, retained dataset, JNI, UserMark group, symbols, zoom, final workflow ordering, signal audits | Existing frozen 200m/500m behavior unchanged |
+| Traffic signals | Supplement acquisition + JNI/UserMark | Java scheduler/parser, retained dataset, JNI, UserMark group, symbols, zoom, final workflow ordering, signal audits | Preserve non-superseded accepted behavior; current 200m/500m expectations come from active Requirement Registry + current_spec, with later requirements overriding historical frozen values |
 | Convenience stores | Prefer MWM/style if feasible; current supplemental path | OSM/MWM type/brand availability, Java acquisition/parser, JNI, CB6_DRIVING group, symbol atlas, zoom, label suppression, stock duplicate POI, final generated tree | Brand icon visible; no convenience text; correct zoom scaling |
 | Fuel stations | Prefer stock MWM/style | mapping/classificator, vehicle Icons.mapcss, symbols, priority/collision, labels | Visible at specified scales without duplicate network POIs |
 | Major facilities | Stock MWM/style | classificator, vehicle/default style, priorities, labels, scale visibility | Required facilities visible/readable without overlap regression |
