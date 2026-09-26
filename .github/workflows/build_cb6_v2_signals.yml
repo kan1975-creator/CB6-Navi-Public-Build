@@ -148,7 +148,7 @@ jobs:
           set -euxo pipefail
           SHA="$(sha256sum out/CB6-V2-Gate1-Signals-arm64.apk | awk '{print $1}')"
           export SHA
-          python3 -c 'import json,os; d={"schema":1,"feature_id":"signals","build_commit":os.environ["GITHUB_SHA"],"feature_gate":"v2/gates/features/signals.json","apk_path":"out/CB6-V2-Gate1-Signals-arm64.apk","apk_sha256":os.environ["SHA"],"apk_checks":[{"id":"apk-arm64","result":"PASS","evidence":"out/NATIVE_VERIFY.txt"},{"id":"apk-identity","result":"PASS","evidence":"out/APK_BADGING.txt"},{"id":"apk-signals","result":"PASS","evidence":"out/APK_SIGNAL_AUDIT.txt"},{"id":"apk-signature","result":"PASS","evidence":"out/SIGNATURE_VERIFY.txt"}],"status":"VERIFIED"}; open("v2/gates/apk_evidence/signals.json","w").write(json.dumps(d,indent=2)+"\\n")'
+          python3 v2/gates/create_apk_evidence.py signals out/CB6-V2-Gate1-Signals-arm64.apk "$SHA"
           python3 v2/gates/verify_apk_evidence.py v2/gates/apk_evidence/signals.json
           cp v2/gates/apk_evidence/signals.json out/APK_EVIDENCE.json
 
