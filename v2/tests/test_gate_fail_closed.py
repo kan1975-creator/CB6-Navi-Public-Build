@@ -242,6 +242,13 @@ def mutate_implementation_with_unverified_upload(r):
  for x in td["traces"]:
   if x["decision_id"] in active_ids: x.update({"state":"consumed","design_ref":"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md","verification":["v2/tests/test_gate_fail_closed.py"]})
  t.write_text(json.dumps(td))
+ for wf in (r/".github/workflows").glob("*.yml"):
+  s=wf.read_text()
+  if "verify_project_gate.py --require-feature-build --feature=" in s:
+   token="verify_project_gate.py --require-feature-build --feature="
+   pos=s.find(token); end=s.find("\n",pos)
+   s=s[:end+1]+"          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n"+s[end+1:]
+   wf.write_text(s)
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
 def mutate_upstream_lock_commit(r):
