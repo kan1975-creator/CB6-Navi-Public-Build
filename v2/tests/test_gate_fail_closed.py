@@ -66,6 +66,10 @@ def mutate_broken_supersession(r):
  p.write_text(json.dumps(d))
 CASES.append(("broken-supersession", mutate_broken_supersession, "non-reciprocal supersession"))
 
+def mutate_historical_authority(r):
+ p=r/"docs/CB6_V2_MODULE_CONTRACTS.md"; p.write_text(p.read_text()+"\nStatus: CANONICAL IMPLEMENTATION BOUNDARIES\n")
+CASES.append(("historical-authority-regained", mutate_historical_authority, "historical document regained authority"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
