@@ -407,3 +407,127 @@ Consequences:
 Before expanding static POI presentation, perform an evidence-based inventory of what the pinned/current Hokkaido MWM already contains for the CB6-relevant categories. Record actual type, brand, operator, name and other usable metadata from representative Hokkaido features. Use this inventory to decide what can be rendered offline, what needs classification improvements, and what truly requires supplemental data.
 
 The product goal is therefore not minimum map information. It is **high Hokkaido driving information value with controlled visual density and reliable offline behavior**.
+
+
+## 24. System-wide runtime data plane
+
+V2 uses four distinct data planes. Feature code must declare which plane it belongs to.
+
+1. **Authoritative offline map plane** — installed CoMaps MWM, classificator, routing graph, search index and bookmarks. This is the default source for static map/navigation facts.
+2. **Driving-state plane** — stock location, heading, routing progress, current road and camera state. CB6 may derive presentation state but must not rewrite source location.
+3. **CB6 presentation plane** — immutable POI and Dynamic Road Mark snapshots, zoom policy, HUD state and UI preferences. It may disappear/rebuild without corrupting authoritative data.
+4. **Supplement plane** — optional external or separately packaged Hokkaido data used only for a documented native gap. Loss of this plane must not break base map/search/routing.
+
+No module may silently promote supplement data to authoritative CoMaps state.
+
+## 25. Hokkaido data architecture
+
+Hokkaido is the authoritative CB6 optimization/acceptance region while the upstream CoMaps world-capable core remains intact.
+
+Static information follows:
+`Hokkaido MWM evidence -> native classification -> CB6 presentation -> documented-gap supplement only if required`.
+
+Road-control information follows:
+`native MWM/routing evidence -> Dynamic Road Marks provider -> optional compact Hokkaido offline road-control dataset -> network fallback only where justified`.
+
+A Hokkaido information inventory is mandatory before expanding each category. The inventory records actual type, brand, operator, name and usable routing metadata for representative Hokkaido features. Candidate inventory groups include convenience stores (especially Seicomart), fuel, roadside stations, parking, toilets, hospitals, drugstores, supermarkets, home centers, airports, ferry terminals and other major driving landmarks.
+
+Current/seasonal facts such as active closures are not inferred from static MWM. A future live-status feature requires a separately proven authoritative source, freshness model and offline fallback.
+
+## 26. Presentation-density architecture
+
+More Hokkaido information does not mean rendering everything simultaneously.
+
+Presentation policy is category + zoom + driving-context based:
+- long range: only high-value orientation/major-facility information;
+- medium range: convenience, fuel and useful driving facilities with controlled collision;
+- close range: signals, directional stops and finer road information;
+- navigation-critical dynamic marks have separate collision ownership from static POIs.
+
+Each category owns a visibility ladder. A category may reduce labels/icons at distance, but it must not globally change another category's collision policy.
+
+## 27. Navigation state machine
+
+CB6 UI must consume a single navigation-session state derived from CoMaps rather than independent booleans spread across screens.
+
+Conceptual states:
+`Idle -> RoutePlanning -> RouteReady -> Navigating -> Rerouting -> Arrived`, with recoverable external-handoff/process-restart transitions.
+
+The state machine does not replace CoMaps RoutingManager. It is a narrow CB6 presentation/orchestration view of authoritative routing state. Search, HUD, camera, Google Maps handoff/recovery and route-option UI consume this view so lifecycle restoration cannot leave mutually inconsistent controls.
+
+## 28. Location/heading confidence model
+
+Location coordinate, movement bearing, sensor heading and camera mode are separate concepts.
+
+The Location/Camera module will expose a derived heading state such as:
+- unavailable;
+- sensor-supported stationary/low-speed;
+- movement-supported;
+- stable fused/presentation heading.
+
+Exact speed/accuracy/hysteresis thresholds remain evidence-gated by CB6 measurements. Camera rotation consumes the derived state; routing still consumes stock location. Screen-space own-position offset is applied only after geographic/routing position is established.
+
+This separation is required to prevent stopped-map spin, false speed-driven heading changes and rotation-pivot drift.
+
+## 29. Offline/update/version compatibility
+
+Every CB6-derived cache or supplemental Hokkaido dataset must carry enough version identity to determine whether it matches the installed map/data generation.
+
+Rules:
+- never keep a derived FeatureID cache across incompatible MWM replacement;
+- map registration/update invalidates affected native POI query caches;
+- supplemental regional data has an explicit schema/version and atomic replacement;
+- last known valid offline data may remain usable when an update check fails;
+- update failure never deletes the only usable offline copy first.
+
+## 30. Failure containment
+
+Feature degradation is local:
+- POI classifier failure -> generic/stock presentation, not map failure;
+- optional road-control supplement failure -> retain proven/native/frozen path;
+- voice recognizer failure -> typed search;
+- toll-fee source unavailable -> route still works, fee omitted/unknown rather than guessed;
+- favorites sync unavailable -> local BookmarkManager remains usable;
+- Google Maps unavailable -> CB6 navigation remains usable.
+
+A feature module must not make app startup dependent on optional network or supplemental data.
+
+## 31. Performance budgets and scheduling policy
+
+V2 avoids per-location-tick heavy work.
+
+- static MWM queries use movement/region invalidation and reuse;
+- dynamic road marks use feature-specific refresh/movement triggers;
+- classification is type-first before expensive metadata/name extraction;
+- rendering receives bounded nearest-first snapshots;
+- UI thread performs no large MWM scan/network parsing;
+- expensive work is observable during development with counts and elapsed time.
+
+Exact millisecond budgets are measured on CB6 before freezing rather than guessed on desktop CI.
+
+## 32. Compatibility and attribution gate
+
+Before adopting external implementation code or packaged data:
+- record source project/version/commit;
+- record license and required attribution;
+- distinguish architectural inspiration from copied/adapted code;
+- prove compatibility with CoMaps/Organic Maps source and data obligations;
+- preserve required user-visible attribution.
+
+No external code/data is imported merely because its architecture is useful.
+
+## 33. Remaining design-completion program
+
+Overall architecture is now sufficiently fixed for implementation, but feature rows remain evidence gates. Complete them in dependency order while implementation proceeds:
+1. Native POI / convenience / fuel / facilities, including Hokkaido MWM inventory.
+2. Stop signs and offline Hokkaido road-control evidence.
+3. Own position / camera / heading and low-speed stability.
+4. Road-name/navigation HUD.
+5. Search/fuzzy/voice.
+6. Navigation session/reroute.
+7. Free-expressway/toll avoidance.
+8. Toll-fee source/model.
+9. Offline/update compatibility.
+10. Favorites/phone sync last.
+
+A row may be marked DESIGN-COMPLETE only when source-backed comparison, selected CB6 structure, rejected alternatives, impact map and module-contract consequences are recorded. This prevents implementation from outrunning system design.
