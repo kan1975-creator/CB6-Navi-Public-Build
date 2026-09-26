@@ -190,6 +190,12 @@ def test_ci_sha_mismatch():
   raise SystemExit("DESTRUCTIVE TEST FAIL ci-sha-mismatch: "+cp.stdout+cp.stderr)
  print("PASS expected rejection: ci-sha-mismatch -> CI control repo HEAD does not match GITHUB_SHA")
 
+def mutate_workflow_sha_override(r):
+ p=r/".github/workflows/build_cb6_v2_signals.yml"; s=p.read_text()
+ s=s.replace('SKIP_MAP_DOWNLOAD: "true"','SKIP_MAP_DOWNLOAD: "true"\n      GITHUB_SHA: "0000000000000000000000000000000000000000"',1)
+ p.write_text(s)
+CASES.append(("workflow-sha-override", mutate_workflow_sha_override, "build workflow overrides GITHUB_SHA"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
