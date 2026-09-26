@@ -145,8 +145,9 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   dangerous=[]
   for line in post_gate.splitlines():
    stripped=line.strip()
-   if re.search(r"uses:\\s*actions/checkout@",stripped): dangerous.append(stripped)
-   if re.search(r"^git\\s+(checkout|reset|switch|pull|fetch)\\b",stripped) and not stripped.startswith("git -C comaps "): dangerous.append(stripped)
+   if "uses:" in stripped and "actions/checkout@" in stripped: dangerous.append(stripped)
+   parts=stripped.split()
+   if len(parts)>=2 and parts[0]=="git" and parts[1] in {"checkout","reset","switch","pull","fetch"}: dangerous.append(stripped)
   if dangerous: fail("control repo can change after feature gate: "+p.name+" -> "+" | ".join(dangerous))
 
 # Machine-readable current specification must be internally complete.
