@@ -25,6 +25,9 @@ jobs:
         run: python3 v2/tests/test_apk_evidence_fail_closed.py
       - name: Device evidence destructive tests
         run: python3 v2/tests/test_device_evidence_fail_closed.py
+      - name: Post-gate control stamp destructive tests
+        run: python3 v2/tests/test_gate_stamp_fail_closed.py
+
       - name: Prove feature build is blocked during design rebuild
         run: |
           if python3 v2/gates/verify_project_gate.py --require-feature-build --feature=deliberately-missing; then
