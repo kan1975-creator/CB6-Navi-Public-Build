@@ -24,6 +24,7 @@ for x in items:
  if not (ROOT/x["path"]).is_file(): fail("evidence inventory path missing: "+x["path"])
 active_evidence_paths={x["path"] for x in items if x["status"]=="active"}
 restricted_evidence_paths={x["path"] for x in items if x["status"]!="active"}
+evidence_by_path={x["path"]:x for x in items}
 if authority.get("schema")!=1 or authority.get("stage")!=state.get("stage"): fail("authority policy stage/schema mismatch")
 for rel in authority.get("current_authorities",[]):
  if not (ROOT/rel).is_file(): fail("current authority missing: "+rel)
@@ -50,6 +51,7 @@ for d in decisions:
   if ev.startswith(("docs/","v2/","AGENTS.md")):
    if not (ROOT/ev).is_file(): fail(f"{d['id']} evidence path missing: {ev}")
    if ev not in inventory_paths: fail(f"{d['id']} evidence absent from inventory: {ev}")
+   if d["status"]=="active" and evidence_by_path[ev]["status"]=="retired": fail(f"{d['id']} active decision relies directly on retired evidence: {ev}")
 
 # One current owner per single-valued specification key; supersession must be reciprocal.
 active_by_key={}
