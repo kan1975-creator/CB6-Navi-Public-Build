@@ -191,7 +191,7 @@ if state.get("stage")=="IMPLEMENTATION_ENABLED":
   upload=s.find("actions/upload-artifact@")
   if upload<0: continue
   # Only workflows publishing a CB6 feature APK are subject to APK Evidence. Historical baseline/identity evidence workflows are not implementation release paths.
-  publishes_apk=".apk" in s[s.rfind("path:",0,upload):] or "out/*" in s[s.rfind("path:",0,upload):]
+  publishes_apk=".apk" in s or "out/*" in s
   feature_gate="--require-feature-build --feature=" in s
   if not (publishes_apk and feature_gate): continue
   verify=s.find("verify_apk_evidence.py")
