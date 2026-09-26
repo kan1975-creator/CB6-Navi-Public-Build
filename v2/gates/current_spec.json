@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "signal": {
+    "display": {
+      "min_zoom": 14,
+      "zoom_symbols": {
+        "14": "xs",
+        "15": "xs"
+      },
+      "forward_zoom_symbols": {
+        "17": "m",
+        "19": "l"
+      },
+      "symbols": [
+        "xs",
+        "s",
+        "m",
+        "l"
+      ],
+      "svg_dimensions": {
+        "xs": [
+          8,
+          14
+        ],
+        "s": [
+          12,
+          18
+        ],
+        "m": [
+          16,
+          31
+        ],
+        "l": [
+          18,
+          34
+        ]
+      }
+    },
+    "acquisition": {
+      "radius_m": 3000,
+      "max_points": 1400,
+      "refresh_ms": 45000,
+      "retry_ms": 12000,
+      "movement_m": 250,
+      "forward_max_m": 450,
+      "forward_cone_deg": 45,
+      "cache_max_ms": 86400000,
+      "osm_queries": [
+        "highway=traffic_signals",
+        "crossing=traffic_signals"
+      ]
+    }
+  }
+}
