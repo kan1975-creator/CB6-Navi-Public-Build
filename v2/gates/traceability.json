@@ -168,6 +168,36 @@
       "state": "pending-redesign",
       "design_ref": "",
       "verification": []
+    },
+    {
+      "decision_id": "SEARCH-FUZZY-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "ORIENTATION-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "SEARCH-HISTORY-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "VEHICLE-ICON-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
+    },
+    {
+      "decision_id": "SCOPE-HOKKAIDO-001",
+      "state": "pending-redesign",
+      "design_ref": "",
+      "verification": []
     }
   ]
 }
