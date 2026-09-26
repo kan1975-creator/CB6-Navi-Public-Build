@@ -24,7 +24,7 @@ def run_case(name, mutate, needle):
     x.update({"state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["fixture"]})
   trace.write_text(json.dumps(t))
   gate=root/"v2/gates/features/testfeature.json"; gate.parent.mkdir(exist_ok=True)
-  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"impact_record":"v2/gates/impact_records/testfeature.json","repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":["verify active resources from current_spec"],"device_checks":["CB6 real-device acceptance required"],"stage":"IMPLEMENTATION_ENABLED"}
+  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"impact_record":"v2/gates/impact_records/testfeature.json","repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":["verify active resources from current_spec"],"device_checks":["CB6 real-device acceptance required"],"device_evidence":"PENDING","stage":"IMPLEMENTATION_ENABLED"}
   impact=root/"v2/gates/impact_records/testfeature.json"; impact.parent.mkdir(exist_ok=True)
   impact.write_text(json.dumps({"schema":1,"feature_id":f["feature_id"],"requirements":f["requirements"],"affected_domains":f["affected_domains"],"reviewed_paths":["docs/CB6_CHANGE_IMPACT_MAP.md"]}))
   mutate(f)
@@ -63,6 +63,7 @@ cases=[
  ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
  ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks not declared"),
+ ("premature-device-evidence",lambda f:f.__setitem__("device_evidence","VERIFIED"),"device evidence must remain pending before build"),
 ]
 for c in cases: run_case(*c)
 print("PASS generic feature contract destructive cases rejected")
