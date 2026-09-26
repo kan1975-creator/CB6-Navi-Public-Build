@@ -71,6 +71,18 @@ def mutate_historical_authority(r):
  p=r/"docs/CB6_V2_MODULE_CONTRACTS.md"; p.write_text(p.read_text()+"\nStatus: CANONICAL IMPLEMENTATION BOUNDARIES\n")
 CASES.append(("historical-authority-regained", mutate_historical_authority, "historical document regained authority"))
 
+def mutate_evidence_missing_path(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"][0]["path"]="docs/DOES_NOT_EXIST_EVIDENCE.md"; p.write_text(json.dumps(d))
+CASES.append(("evidence-inventory-missing-path", mutate_evidence_missing_path, "evidence inventory path missing"))
+
+def mutate_evidence_bad_status(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"][0]["status"]="trusted-because-old"; p.write_text(json.dumps(d))
+CASES.append(("evidence-inventory-bad-status", mutate_evidence_bad_status, "invalid evidence status"))
+
+def mutate_evidence_duplicate_id(r):
+ p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"][1]["id"]=d["evidence"][0]["id"]; p.write_text(json.dumps(d))
+CASES.append(("evidence-inventory-duplicate-id", mutate_evidence_duplicate_id, "evidence IDs missing/duplicated"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
