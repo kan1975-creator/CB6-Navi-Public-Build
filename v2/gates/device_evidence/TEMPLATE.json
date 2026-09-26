@@ -13,5 +13,6 @@
       "evidence": "REPLACE_ME"
     }
   ],
-  "status": "PENDING"
+  "status": "PENDING",
+  "feature_gate": "v2/gates/features/REPLACE_ME.json"
 }
