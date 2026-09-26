@@ -43,11 +43,13 @@ for d in decisions:
  for k in ("kind","spec_key","requirement","affected","evidence","acceptance"):
   if not d.get(k): fail(f"{d.get('id')} missing {k}")
 # Evidence references are executable integrity inputs, not unchecked prose.
-# Active decisions may cite historical evidence, but implementation-ready consumption cannot treat restricted evidence as current authority.
+# Every repository evidence path used by a decision must be inventoried, so evidence authority/status cannot bypass the inventory.
+inventory_paths={x["path"] for x in items}
 for d in decisions:
  for ev in d["evidence"]:
-  if ev.startswith(("docs/","v2/","AGENTS.md")) and not (ROOT/ev).is_file():
-   fail(f"{d['id']} evidence path missing: {ev}")
+  if ev.startswith(("docs/","v2/","AGENTS.md")):
+   if not (ROOT/ev).is_file(): fail(f"{d['id']} evidence path missing: {ev}")
+   if ev not in inventory_paths: fail(f"{d['id']} evidence absent from inventory: {ev}")
 
 # One current owner per single-valued specification key; supersession must be reciprocal.
 active_by_key={}
