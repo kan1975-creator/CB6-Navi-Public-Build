@@ -226,8 +226,8 @@ CASES.append(("post-gate-control-reset", mutate_post_gate_control_reset, "contro
 def mutate_missing_stamp_in_implementation(r):
  p=r/".github/workflows/build_cb6_v2_signals.yml"
  s=p.read_text()
- s=s.replace("      - name: Seal gated control state\\n        run: |\\n          python3 v2/gates/create_gate_stamp.py\\n          python3 v2/gates/create_gate_stamp.py --verify\\n\\n","")
- s=s.replace("      - name: Reverify gated control state before build\\n        run: python3 v2/gates/create_gate_stamp.py --verify\\n\\n","")
+ s=s.replace("      - name: Seal gated control state\n        run: |\n          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n\n","")
+ s=s.replace("      - name: Reverify gated control state before build\n        run: python3 v2/gates/create_gate_stamp.py --verify\n\n","")
  p.write_text(s)
 CASES.append(("implementation-missing-gate-stamp", mutate_missing_stamp_in_implementation, "build workflow lacks post-gate control stamp enforcement"))
 
