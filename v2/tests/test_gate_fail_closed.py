@@ -239,7 +239,7 @@ def mutate_implementation_with_unverified_upload(r):
  t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text()); active=json.loads((r/"v2/gates/active_decisions.json").read_text())["decisions"]
  active_ids={x["id"] for x in active if x.get("status")=="active"}
  for x in td["traces"]:
-  if x["decision_id"] in active_ids: x.update({"state":"consumed","design_ref":"fixture","verification":["fixture"]})
+  if x["decision_id"] in active_ids: x.update({"state":"consumed","design_ref":"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md","verification":["v2/tests/test_gate_fail_closed.py"]})
  t.write_text(json.dumps(td))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
