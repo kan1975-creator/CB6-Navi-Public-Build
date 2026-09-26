@@ -66,10 +66,15 @@ if "--require-feature-build" in sys.argv:
  missing_verification=sorted(d for d in declared_domains if not isinstance(dv.get(d),list) or not dv[d])
  if missing_verification: fail("feature gate domains lack verification: "+",".join(missing_verification))
  allowed_refs=set(f["source_paths"]+f["audits"]+f["tests"])
+policy=json.loads((ROOT/"v2/gates/domain_verification_policy.json").read_text(encoding="utf-8"))
+ kind_paths={"source":set(f["source_paths"]),"audit":set(f["audits"]),"test":set(f["tests"]),"device":set(f["device_checks"])}
  for domain,refs in dv.items():
   if domain not in declared_domains: fail("feature gate verification references undeclared domain: "+domain)
   unknown_refs=sorted(set(refs)-allowed_refs)
   if unknown_refs: fail("feature gate domain verification uses undeclared paths: "+domain+" -> "+",".join(unknown_refs))
+  required_kinds=policy.get("rules",{}).get(domain,policy.get("default_required_kinds",["source"]))
+  for kind in required_kinds:
+   if not any(ref in kind_paths.get(kind,set()) for ref in refs): fail("feature gate domain lacks required verification kind: "+domain+" -> "+kind)
  traces=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8")).get("traces",[])
  trace_by_id={t["decision_id"]:t for t in traces}
  for rid in f["requirements"]:
