@@ -28,7 +28,7 @@ def run_case(name, mutate, needle):
   impact=root/"v2/gates/impact_records/testfeature.json"; impact.parent.mkdir(exist_ok=True)
   impact.write_text(json.dumps({"schema":1,"feature_id":f["feature_id"],"requirements":f["requirements"],"affected_domains":f["affected_domains"],"reviewed_paths":["docs/CB6_CHANGE_IMPACT_MAP.md"]}))
   mutate(f); gate.write_text(json.dumps(f))
-  env=os.environ.copy(); env.pop("GITHUB_SHA",None)
+  if name=="impact-record-requirements-mismatch":\n   x=json.loads(impact.read_text()); x["requirements"]=["DOES-NOT-EXIST"]; impact.write_text(json.dumps(x))\n  if name=="impact-record-domains-mismatch":\n   x=json.loads(impact.read_text()); x["affected_domains"]=["signals"]; impact.write_text(json.dumps(x))\n  if name=="impact-record-missing": impact.unlink()\n  env=os.environ.copy(); env.pop("GITHUB_SHA",None)
   cp=subprocess.run(["python3","v2/gates/verify_project_gate.py","--require-feature-build","--feature=testfeature"],cwd=root,text=True,capture_output=True,env=env)
   out=cp.stdout+cp.stderr
   if cp.returncode==0 or needle not in out: raise SystemExit(f"FEATURE CONTRACT TEST FAIL {name}: rc={cp.returncode}\n{out}")
@@ -42,7 +42,7 @@ cases=[
  ("missing-domain-verification",lambda f:f.__setitem__("domain_verification",{}),"domains lack verification"),
  ("unknown-domain-verification-path",lambda f:f["domain_verification"].__setitem__("renderer",["v2/not-declared"]),"domain verification uses undeclared paths"),
  ("renderer-source-only",lambda f:f["domain_verification"].__setitem__("renderer",["v2/signals"]),"domain lacks required verification kind"),
- ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
+ ("impact-record-missing",lambda f:None,"feature impact record missing"),\n ("impact-record-requirements-mismatch",lambda f:None,"feature impact record requirements mismatch"),\n ("impact-record-domains-mismatch",lambda f:None,"feature impact record domains mismatch"),\n ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
  ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
  ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks not declared"),
