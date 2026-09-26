@@ -11,6 +11,19 @@ reg=load("v2/gates/active_decisions.json")
 trace=load("v2/gates/traceability.json")
 spec=load("v2/gates/current_spec.json")
 authority=load("v2/gates/authority_policy.json")
+evidence=load("v2/gates/evidence_inventory.json")
+if evidence.get("schema")!=1 or evidence.get("stage")!=state.get("stage"): fail("evidence inventory stage/schema mismatch")
+items=evidence.get("evidence",[])
+eids=[x.get("id") for x in items]
+if not items or None in eids or len(eids)!=len(set(eids)): fail("evidence IDs missing/duplicated")
+valid_evidence_status={"active","historical","historical-mixed","retired","revalidation-required"}
+for x in items:
+ for k in ("id","type","path","status"):
+  if not x.get(k): fail(f"evidence item missing {k}: {x.get('id')}")
+ if x["status"] not in valid_evidence_status: fail("invalid evidence status: "+x["id"])
+ if not (ROOT/x["path"]).is_file(): fail("evidence inventory path missing: "+x["path"])
+active_evidence_paths={x["path"] for x in items if x["status"]=="active"}
+restricted_evidence_paths={x["path"] for x in items if x["status"]!="active"}
 if authority.get("schema")!=1 or authority.get("stage")!=state.get("stage"): fail("authority policy stage/schema mismatch")
 for rel in authority.get("current_authorities",[]):
  if not (ROOT/rel).is_file(): fail("current authority missing: "+rel)
@@ -30,6 +43,7 @@ for d in decisions:
  for k in ("kind","spec_key","requirement","affected","evidence","acceptance"):
   if not d.get(k): fail(f"{d.get('id')} missing {k}")
 # Evidence references are executable integrity inputs, not unchecked prose.
+# Active decisions may cite historical evidence, but implementation-ready consumption cannot treat restricted evidence as current authority.
 for d in decisions:
  for ev in d["evidence"]:
   if ev.startswith(("docs/","v2/","AGENTS.md")) and not (ROOT/ev).is_file():
@@ -66,6 +80,9 @@ for t in traces:
  d=next(d for d in decisions if d["id"]==t["decision_id"])
  if d["status"]=="superseded" and t["state"]=="consumed": fail("superseded decision consumed: "+d["id"])
  if t["state"]=="consumed":
+  for ev in d["evidence"]:
+   if ev in restricted_evidence_paths and not t.get("verification"):
+    fail("consumed decision relies on restricted evidence without verification: "+d["id"])
   ref=t.get("design_ref","")
   if not ref or not (ROOT/ref).is_file(): fail("consumed decision lacks valid design ref: "+d["id"])
   if not t.get("verification"): fail("consumed decision lacks verification: "+d["id"])
