@@ -90,7 +90,7 @@ The user explicitly approved a development restart whose purpose is to reset tec
 1. Preserve the current `clean-import` history and successful APK/runs as reference; never destroy the comparison baseline.
 2. Start second-generation implementation from the pinned clean CoMaps baseline, not by blindly copying the accumulated patch stack.
 3. Carry forward all formal CB6 specifications, architecture/internal-analysis records, known-failure records and regression knowledge.
-4. Carry forward real-device accepted/frozen features (especially the Run #65 traffic-signal behavior) without redesigning them. Port only the minimum proven implementation needed and regression-test it.
+4. Carry forward real-device accepted/frozen behavior as evidence and preserve every non-superseded clause. Run #65 signal behavior is historical evidence; where a later active Requirement Registry entry explicitly changes it (for example `SIG-200M-001`), the active requirement and current spec take precedence. Port only proven implementation that remains compatible and regression-test it.
 5. Do not carry forward obsolete experiments, stale validators, redundant patch layers, temporary probes or accidental implementation constraints merely because they exist in the old branch.
 6. Prefer CoMaps' native architecture/data path first: native MWM/core capability > minimal native extension > isolated CB6 custom implementation > external network supplementation.
 7. Organize CB6 additions by responsibility (map data/POI, rendering, location/camera, navigation/routing, search/voice, UI/settings) instead of a long chronological stack of patches.
@@ -126,7 +126,7 @@ The user expected the project to already operate as a GitHub-persistent developm
 11. Time gaps, model/chat changes, or automation restarts must not reset these rules or the second-generation policy above.
 12. For status reports use the strict interpretation: **no relevant commit = implementation not advanced; no relevant Actions run = build not started; no artifact = APK not produced; no real-device confirmation = feature not complete.**
 13. The intended operating loop is: read durable GitHub state -> determine current gate -> execute the next concrete action -> persist result in GitHub -> build/verify when applicable -> record blocker or advance gate. Merely re-reading state is not a completed development cycle.
-14. Existing CB6 specifications, frozen behavior, architecture decisions, Hokkaido-only scope, proven-implementation adoption policy, and regression rules remain mandatory across every resumed cycle.
+14. Active CB6 requirements, non-superseded accepted behavior, Hokkaido-only scope, current architecture authority, proven-implementation evidence, and regression rules remain mandatory across every resumed cycle. Historical/frozen records cannot override an explicit later active requirement.
 
 This continuity rule is part of the permanent CB6 development policy and must be consulted together with the second-generation restart policy before implementation or automation changes.
 
