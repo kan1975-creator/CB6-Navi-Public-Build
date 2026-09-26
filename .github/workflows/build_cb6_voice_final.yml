@@ -48,6 +48,7 @@ jobs:
           git -C comaps remote add origin https://github.com/comaps/comaps.git
           git -C comaps fetch --depth=1 origin 7113ccb5f086183f8884b2aa4e58c987466b6704
           git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "7113ccb5f086183f8884b2aa4e58c987466b6704"
           git -C comaps submodule sync --recursive
           git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
           git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
