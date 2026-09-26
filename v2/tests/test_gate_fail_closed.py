@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Destructive tests for CB6 gate invariants using isolated repository copies."""
+import json, shutil, subprocess, tempfile
+from pathlib import Path
+SRC=Path(__file__).resolve().parents[2]
+CASES=[]
+
+def mutate_missing_trace(r):
+ p=r/"v2/gates/traceability.json"; d=json.loads(p.read_text()); d["traces"]=[x for x in d["traces"] if x["decision_id"]!="SIG-200M-001"]; p.write_text(json.dumps(d))
+CASES.append(("missing-active-decision", mutate_missing_trace, "active decisions absent from traceability"))
+
+def mutate_bypass(r):
+ p=r/".github/workflows/test_bypass.yml"; p.write_text("""name: bypass
+on:
+  push:
+    branches: [cb6-v2-clean]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./gradlew assemble
+""")
+CASES.append(("gate-less-workflow", mutate_bypass, "workflow bypasses feature gate"))
+
+def mutate_superseded(r):
+ p=r/"v2/gates/active_decisions.json"; d=json.loads(p.read_text())
+ for x in d["decisions"]:
+  if x["id"]=="PROC-001": x["status"]="superseded"
+ p.write_text(json.dumps(d))
+CASES.append(("superseded-consumed", mutate_superseded, "superseded decision consumed"))
+
+def mutate_bad_spec(r):
+ p=r/"v2/gates/current_spec.json"; d=json.loads(p.read_text()); d["signal"]["display"]["zoom_symbols"]["15"]="ghost"; p.write_text(json.dumps(d))
+CASES.append(("invalid-current-spec", mutate_bad_spec, "undeclared symbol"))
+
+def mutate_retired(r):
+ p=r/"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"; p.write_text(p.read_text().replace("RETIRED AS CANONICAL","CANONICAL AGAIN"))
+CASES.append(("retired-design-reactivated", mutate_retired, "retired design lost retirement marker"))
+
+for name,mutate,needle in CASES:
+ with tempfile.TemporaryDirectory() as td:
+  root=Path(td)/"repo"
+  shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  mutate(root)
+  cp=subprocess.run(["python3","v2/gates/verify_project_integrity.py"],cwd=root,text=True,capture_output=True)
+  output=cp.stdout+cp.stderr
+  if cp.returncode==0 or needle not in output:
+   raise SystemExit(f"DESTRUCTIVE TEST FAIL {name}: rc={cp.returncode}\n{output}")
+  print("PASS expected rejection:",name,"->",needle)
+print("PASS all destructive integrity cases rejected")
