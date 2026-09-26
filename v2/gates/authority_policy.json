@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "stage": "OVERALL_DESIGN_REBUILD",
+  "current_authorities": [
+    "AGENTS.md",
+    "v2/gates/project_state.json",
+    "v2/gates/active_decisions.json",
+    "v2/gates/traceability.json",
+    "v2/gates/current_spec.json",
+    "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
+  ],
+  "historical_docs": [
+    "CLAUDE_HANDOVER.md",
+    "docs/CB6_V2_BASELINE.md",
+    "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md",
+    "docs/CB6_V2_MODULE_CONTRACTS.md",
+    "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+    "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md",
+    "v2/signals/README.md"
+  ],
+  "forbidden_historical_authority_phrases": [
+    "Status: CANONICAL IMPLEMENTATION BOUNDARIES",
+    "Status: DETAILED DESIGN — implementation-ready",
+    "Status: FROZEN-BEHAVIOR MIGRATION DESIGN",
+    "Status: ACTIVE SECOND-GENERATION DEVELOPMENT"
+  ]
+}
