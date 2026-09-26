@@ -7,7 +7,8 @@
     "v2/gates/active_decisions.json",
     "v2/gates/traceability.json",
     "v2/gates/current_spec.json",
-    "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
+    "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
   ],
   "historical_docs": [
     "CLAUDE_HANDOVER.md",
