@@ -72,6 +72,10 @@ def mutate_historical_authority(r):
  p=r/"docs/CB6_V2_MODULE_CONTRACTS.md"; p.write_text(p.read_text()+"\nStatus: CANONICAL IMPLEMENTATION BOUNDARIES\n")
 CASES.append(("historical-authority-regained", mutate_historical_authority, "historical document regained authority"))
 
+def mutate_stale_signal_authority(r):
+ p=r/"docs/CB6_FROZEN_FEATURES.md"; p.write_text(p.read_text()+"\nThe Run #65 feature above remains the behavioral authority.\n")
+CASES.append(("stale-signal-authority-regained", mutate_stale_signal_authority, "historical document regained authority"))
+
 def mutate_evidence_missing_path(r):
  p=r/"v2/gates/evidence_inventory.json"; d=json.loads(p.read_text()); d["evidence"][0]["path"]="docs/DOES_NOT_EXIST_EVIDENCE.md"; p.write_text(json.dumps(d))
 CASES.append(("evidence-inventory-missing-path", mutate_evidence_missing_path, "evidence inventory path missing"))
