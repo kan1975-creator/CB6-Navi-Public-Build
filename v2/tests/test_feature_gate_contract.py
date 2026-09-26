@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Destructive tests for the generic per-feature implementation contract."""
+import json, shutil, subprocess, tempfile
+from pathlib import Path
+SRC=Path(__file__).resolve().parents[2]
+
+def run_case(name, mutate, needle):
+ with tempfile.TemporaryDirectory() as td:
+  root=Path(td)/"repo"; shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  state=root/"v2/gates/project_state.json"; d=json.loads(state.read_text())
+  d.update({"stage":"IMPLEMENTATION_ENABLED","feature_builds_allowed":True,"design_verified":True,"canonical_design":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"})
+  state.write_text(json.dumps(d))
+  trace=root/"v2/gates/traceability.json"; t=json.loads(trace.read_text())
+  for x in t["traces"]:
+   if x["decision_id"]=="SIG-200M-001": x.update({"state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["fixture"]})
+  # This test isolates feature-contract behavior: all active requirements must be consumed for implementation stage.
+  active=json.loads((root/"v2/gates/active_decisions.json").read_text())["decisions"]
+  for x in t["traces"]:
+   if any(a["id"]==x["decision_id"] and a["status"]=="active" for a in active):
+    x.update({"state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["fixture"]})
+  trace.write_text(json.dumps(t))
+  gate=root/"v2/gates/features/testfeature.json"; gate.parent.mkdir(exist_ok=True)
+  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"design_section":"signals/display","impact_checked":True,"repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":["verify active resources from current_spec"],"device_checks":["CB6 real-device acceptance required"],"stage":"IMPLEMENTATION_ENABLED"}
+  mutate(f); gate.write_text(json.dumps(f))
+  cp=subprocess.run(["python3","v2/gates/verify_project_gate.py","--require-feature-build","--feature=testfeature"],cwd=root,text=True,capture_output=True)
+  out=cp.stdout+cp.stderr
+  if cp.returncode==0 or needle not in out: raise SystemExit(f"FEATURE CONTRACT TEST FAIL {name}: rc={cp.returncode}\n{out}")
+  print("PASS expected feature rejection:",name,"->",needle)
+
+cases=[
+ ("missing-requirements",lambda f:f.pop("requirements"),"feature gate fields missing"),
+ ("unknown-requirement",lambda f:f.__setitem__("requirements",["DOES-NOT-EXIST"]),"non-active requirements"),
+ ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
+ ("missing-source",lambda f:f.__setitem__("source_paths",["v2/does-not-exist"]),"source_paths path missing"),
+ ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks not declared"),
+ ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks not declared"),
+]
+for c in cases: run_case(*c)
+print("PASS generic feature contract destructive cases rejected")
