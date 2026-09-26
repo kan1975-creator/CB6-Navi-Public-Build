@@ -15,7 +15,9 @@ evidence=load("v2/gates/evidence_inventory.json")
 if evidence.get("schema")!=1 or evidence.get("stage")!=state.get("stage"): fail("evidence inventory stage/schema mismatch")
 items=evidence.get("evidence",[])
 eids=[x.get("id") for x in items]
+epaths=[x.get("path") for x in items]
 if not items or None in eids or len(eids)!=len(set(eids)): fail("evidence IDs missing/duplicated")
+if None in epaths or len(epaths)!=len(set(epaths)): fail("evidence paths missing/duplicated")
 valid_evidence_status={"active","historical","historical-mixed","retired","revalidation-required"}
 for x in items:
  for k in ("id","type","path","status"):
@@ -60,6 +62,7 @@ for d in decisions:
    if not (ROOT/ev).is_file(): fail(f"{d['id']} evidence path missing: {ev}")
    if ev not in inventory_paths: fail(f"{d['id']} evidence absent from inventory: {ev}")
    if d["status"]=="active" and evidence_by_path[ev]["status"]=="retired": fail(f"{d['id']} active decision relies directly on retired evidence: {ev}")
+   if d["status"]=="active" and evidence_by_path[ev]["status"]=="revalidation-required": fail(f"{d['id']} active decision relies on revalidation-required evidence: {ev}")
    if d["status"]=="active" and evidence_by_path[ev]["status"]=="historical-mixed":
     sc=d.get("evidence_scopes",{}).get(ev,{})
     if not sc.get("scope") or not sc.get("supersession"): fail(f"{d['id']} historical-mixed evidence lacks requirement scope: {ev}")
