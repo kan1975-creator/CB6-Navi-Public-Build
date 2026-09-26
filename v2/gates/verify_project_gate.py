@@ -20,6 +20,11 @@ if stage=="OVERALL_DESIGN_REBUILD":
  print("CB6 DEVELOPMENT GATE PASS: overall-design rebuild; feature builds BLOCKED")
  if "--require-feature-build" in sys.argv: fail("feature build requested while overall design rebuild is active")
  raise SystemExit(0)
+# Implementation enablement must be independently proven by the repository-wide
+# integrity gate. Do not trust project_state booleans as sufficient authority.
+cp=__import__("subprocess").run([sys.executable, str(ROOT/"v2/gates/verify_project_integrity.py")], cwd=ROOT, text=True, capture_output=True)
+if cp.returncode != 0:
+ fail("implementation enablement lacks integrity proof: "+(cp.stdout+cp.stderr).strip())
 canonical=ROOT/s.get("canonical_design","")
 if not canonical.is_file(): fail("canonical rebuilt design missing")
 if not s.get("design_verified"): fail("rebuilt design not verified")
