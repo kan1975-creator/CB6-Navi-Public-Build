@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "feature_id": "signals",
+  "requirements": [
+    "SIG-200M-001",
+    "SIG-COVERAGE-001",
+    "SIG-UPGRADE-001",
+    "SIGNAL-ZOOM-001"
+  ],
+  "affected_domains": [
+    "signals",
+    "renderer",
+    "symbols",
+    "audits",
+    "tests",
+    "data-source",
+    "cache",
+    "lifecycle",
+    "real-device"
+  ],
+  "reviewed_paths": [
+    "v2/signals",
+    "v2/audits/audit_signals.py",
+    "v2/audits/preflight_gate1.py",
+    "v2/tests/SignalPolicyTest.java",
+    ".github/workflows/build_cb6_v2_signals.yml",
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+  ]
+}
