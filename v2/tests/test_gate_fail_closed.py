@@ -40,6 +40,7 @@ def mutate_fake_implementation_enabled(r):
  p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text())
  d["stage"]="IMPLEMENTATION_ENABLED"; d["feature_builds_allowed"]=True; d["design_verified"]=True
  d["canonical_design"]="docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"; p.write_text(json.dumps(d))
+ a=r/"v2/gates/authority_policy.json"; ad=json.loads(a.read_text()); ad["stage"]="IMPLEMENTATION_ENABLED"; a.write_text(json.dumps(ad))
 CASES.append(("implementation-with-pending-decisions", mutate_fake_implementation_enabled, "implementation enabled with unconsumed active decisions"))
 
 def mutate_historical_resource_inventory(r):
