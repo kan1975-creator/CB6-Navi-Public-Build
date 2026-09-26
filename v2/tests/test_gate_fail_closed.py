@@ -203,6 +203,20 @@ def mutate_traceability_stage_mismatch(r):
  p.write_text(json.dumps(d))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
+def mutate_canonical_to_retired_design(r):
+ p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text())
+ d["stage"]="IMPLEMENTATION_ENABLED"; d["feature_builds_allowed"]=True; d["design_verified"]=True
+ d["canonical_design"]="docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"; p.write_text(json.dumps(d))
+ for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json","v2/gates/traceability.json"):
+  q=r/rel; x=json.loads(q.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; q.write_text(json.dumps(x))
+ t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text())
+ active=json.loads((r/"v2/gates/active_decisions.json").read_text())["decisions"]
+ for x in td["traces"]:
+  if any(a["id"]==x["decision_id"] and a["status"]=="active" for a in active):
+   x.update({"state":"consumed","design_ref":"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md","verification":["fixture"]})
+ t.write_text(json.dumps(td))
+CASES.append(("canonical-retired-design", mutate_canonical_to_retired_design, "historical document regained authority"))
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
