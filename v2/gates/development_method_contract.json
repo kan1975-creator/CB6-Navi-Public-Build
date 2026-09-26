@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "stage": "OVERALL_DESIGN_REBUILD",
+  "stage": "IMPLEMENTATION_ENABLED",
   "required_gate_scripts": [
     "v2/gates/verify_project_gate.py",
     "v2/gates/verify_project_integrity.py",
