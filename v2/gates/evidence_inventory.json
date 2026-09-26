@@ -42,7 +42,12 @@
       "id": "EV-CROSS-PROJECT",
       "type": "external-comparison",
       "path": "docs/CB6_V2_CROSS_PROJECT_COMPARISON.md",
-      "status": "revalidation-required"
+      "status": "revalidation-required",
+      "revalidation": {
+        "state": "required",
+        "record": "",
+        "verification": []
+      }
     },
     {
       "id": "EV-BASELINE",
