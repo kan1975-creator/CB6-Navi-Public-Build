@@ -203,6 +203,17 @@ def mutate_traceability_stage_mismatch(r):
  p.write_text(json.dumps(d))
 CASES.append(("traceability-stage-mismatch", mutate_traceability_stage_mismatch, "traceability stage/schema mismatch"))
 
+
+for name,mutate,needle in CASES:
+ with tempfile.TemporaryDirectory() as td:
+  root=Path(td)/"repo"
+  shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  mutate(root)
+  cp=subprocess.run(["python3","v2/gates/verify_project_integrity.py"],cwd=root,text=True,capture_output=True)
+  output=cp.stdout+cp.stderr
+  if cp.returncode==0 or needle not in output:
+   raise SystemExit(f"DESTRUCTIVE TEST FAIL {name}: rc={cp.returncode}\n{output}")
+  print("PASS expected rejection:",name,"->",needle)
 def mutate_canonical_to_retired_design(r):
  p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text())
  d["stage"]="IMPLEMENTATION_ENABLED"; d["feature_builds_allowed"]=True; d["design_verified"]=True
@@ -215,16 +226,16 @@ def mutate_canonical_to_retired_design(r):
   if any(a["id"]==x["decision_id"] and a["status"]=="active" for a in active):
    x.update({"state":"consumed","design_ref":"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md","verification":["fixture"]})
  t.write_text(json.dumps(td))
-CASES.append(("canonical-retired-design", mutate_canonical_to_retired_design, "canonical design"))
 
-for name,mutate,needle in CASES:
+
+def test_canonical_retired_project_gate():
  with tempfile.TemporaryDirectory() as td:
-  root=Path(td)/"repo"
-  shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
-  mutate(root)
-  cp=subprocess.run(["python3","v2/gates/verify_project_integrity.py"],cwd=root,text=True,capture_output=True)
-  output=cp.stdout+cp.stderr
-  if cp.returncode==0 or needle not in output:
-   raise SystemExit(f"DESTRUCTIVE TEST FAIL {name}: rc={cp.returncode}\n{output}")
-  print("PASS expected rejection:",name,"->",needle)
-print("PASS all destructive integrity cases rejected")
+  root=Path(td)/"repo"; shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  mutate_canonical_to_retired_design(root)
+  env=os.environ.copy(); env.pop("GITHUB_SHA",None)
+  cp=subprocess.run(["python3","v2/gates/verify_project_gate.py"],cwd=root,text=True,capture_output=True,env=env)
+  out=cp.stdout+cp.stderr
+  if cp.returncode==0 or "canonical design" not in out: raise SystemExit("DESTRUCTIVE TEST FAIL canonical-retired-design: "+out)
+  print("PASS expected rejection: canonical-retired-design -> canonical design")
+
+test_canonical_retired_project_gate()\nprint("PASS all destructive integrity cases rejected")
