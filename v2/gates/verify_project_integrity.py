@@ -108,6 +108,13 @@ if state["stage"]=="IMPLEMENTATION_ENABLED":
  pending=[t["decision_id"] for t in traces if t["decision_id"] in active and t["state"]!="consumed"]
  if pending: fail("implementation enabled with unconsumed active decisions: "+",".join(sorted(pending)))
 
+# Feature-gate template is part of the development method and must remain fail-closed.
+template=load("v2/gates/features/TEMPLATE.json")
+required_feature_fields={"schema","feature_id","requirements","design_section","impact_checked","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","stage"}
+if set(template) != required_feature_fields: fail("feature gate template fields drifted")
+if template.get("schema")!=1 or template.get("impact_checked") is not False or template.get("repo_sweep_required") is not True or template.get("stage")!="DESIGN":
+ fail("feature gate template is not fail-closed")
+
 # Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
 wfdir=ROOT/".github/workflows"
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
