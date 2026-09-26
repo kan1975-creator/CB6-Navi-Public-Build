@@ -27,7 +27,10 @@ def run_case(name, mutate, needle):
   f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"impact_record":"v2/gates/impact_records/testfeature.json","repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":["verify active resources from current_spec"],"device_checks":["CB6 real-device acceptance required"],"stage":"IMPLEMENTATION_ENABLED"}
   impact=root/"v2/gates/impact_records/testfeature.json"; impact.parent.mkdir(exist_ok=True)
   impact.write_text(json.dumps({"schema":1,"feature_id":f["feature_id"],"requirements":f["requirements"],"affected_domains":f["affected_domains"],"reviewed_paths":["docs/CB6_CHANGE_IMPACT_MAP.md"]}))
-  mutate(f); gate.write_text(json.dumps(f))
+  mutate(f)
+  if not name.startswith("impact-record-"):
+   impact.write_text(json.dumps({"schema":1,"feature_id":f.get("feature_id"),"requirements":f.get("requirements",[]),"affected_domains":f.get("affected_domains",[]),"reviewed_paths":["docs/CB6_CHANGE_IMPACT_MAP.md"]}))
+  gate.write_text(json.dumps(f))
   if name=="impact-record-requirements-mismatch":
    x=json.loads(impact.read_text()); x["requirements"]=["DOES-NOT-EXIST"]; impact.write_text(json.dumps(x))
   if name=="impact-record-domains-mismatch":
