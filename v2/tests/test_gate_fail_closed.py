@@ -236,6 +236,7 @@ def mutate_implementation_with_unverified_upload(r):
  p=r/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="IMPLEMENTATION_ENABLED"; p.write_text(json.dumps(d))
  for rel in ("v2/gates/traceability.json","v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
   q=r/rel; x=json.loads(q.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; q.write_text(json.dumps(x))
+ m=r/"v2/gates/development_method_contract.json"; md=json.loads(m.read_text()); md["stage"]="IMPLEMENTATION_ENABLED"; m.write_text(json.dumps(md))
  t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text()); active=json.loads((r/"v2/gates/active_decisions.json").read_text())["decisions"]
  active_ids={x["id"] for x in active if x.get("status")=="active"}
  for x in td["traces"]:
@@ -269,6 +270,7 @@ def mutate_canonical_to_retired_design(r):
  d["canonical_design"]="docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"; p.write_text(json.dumps(d))
  for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json","v2/gates/traceability.json"):
   q=r/rel; x=json.loads(q.read_text()); x["stage"]="IMPLEMENTATION_ENABLED"; q.write_text(json.dumps(x))
+ m=r/"v2/gates/development_method_contract.json"; md=json.loads(m.read_text()); md["stage"]="IMPLEMENTATION_ENABLED"; m.write_text(json.dumps(md))
  t=r/"v2/gates/traceability.json"; td=json.loads(t.read_text())
  active=json.loads((r/"v2/gates/active_decisions.json").read_text())["decisions"]
  for x in td["traces"]:
