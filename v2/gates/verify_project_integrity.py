@@ -22,6 +22,9 @@ for x in items:
   if not x.get(k): fail(f"evidence item missing {k}: {x.get('id')}")
  if x["status"] not in valid_evidence_status: fail("invalid evidence status: "+x["id"])
  if not (ROOT/x["path"]).is_file(): fail("evidence inventory path missing: "+x["path"])
+ if x["status"]=="historical-mixed":
+  cp=x.get("clause_policy",{})
+  if cp.get("state")!="requires-explicit-decision-link" or not cp.get("note"): fail("historical-mixed evidence lacks clause policy: "+x["id"])
  if x["status"]=="revalidation-required":
   rv=x.get("revalidation",{})
   if rv.get("state") not in {"required","validated"}: fail("invalid evidence revalidation state: "+x["id"])
