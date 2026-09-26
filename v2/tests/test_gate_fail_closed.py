@@ -26,7 +26,7 @@ def mutate_superseded(r):
  p=r/"v2/gates/traceability.json"; d=json.loads(p.read_text())
  d["traces"].append({"decision_id":"SIG-200M-LEGACY-001","state":"consumed","design_ref":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md","verification":["destructive fixture"]})
  p.write_text(json.dumps(d))
-CASES.append(("superseded-consumed", mutate_superseded, "superseded decision still consumed"))
+CASES.append(("superseded-consumed", mutate_superseded, "superseded decision consumed"))
 
 def mutate_bad_spec(r):
  p=r/"v2/gates/current_spec.json"; d=json.loads(p.read_text()); d["signal"]["display"]["zoom_symbols"]["15"]="ghost"; p.write_text(json.dumps(d))
