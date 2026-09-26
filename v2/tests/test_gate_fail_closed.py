@@ -183,6 +183,13 @@ def mutate_post_gate_control_reset(r):
  p.write_text(s)
 CASES.append(("post-gate-control-reset", mutate_post_gate_control_reset, "control repo can change after feature gate"))
 
+def test_ci_sha_mismatch():
+ env=os.environ.copy(); env["GITHUB_SHA"]="0"*40
+ cp=subprocess.run([sys.executable,str(ROOT/"v2/gates/verify_project_gate.py")],cwd=ROOT,text=True,capture_output=True,env=env)
+ if cp.returncode==0 or "CI control repo HEAD does not match GITHUB_SHA" not in cp.stdout+cp.stderr:
+  raise SystemExit("DESTRUCTIVE TEST FAIL ci-sha-mismatch: "+cp.stdout+cp.stderr)
+ print("PASS expected rejection: ci-sha-mismatch -> CI control repo HEAD does not match GITHUB_SHA")
+
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
