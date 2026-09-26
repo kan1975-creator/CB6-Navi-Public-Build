@@ -1,6 +1,6 @@
 # CB6 V2 Module Contracts
 
-Status: CANONICAL IMPLEMENTATION BOUNDARIES
+Status: RETIRED AS CANONICAL — PRIOR DESIGN INPUT PENDING REVALIDATION\n\nDuring `OVERALL_DESIGN_REBUILD`, this file is evidence only. It must not authorize implementation or override the active Requirement Registry / rebuilt overall design.
 Baseline: `comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704`
 
 This file converts the overall design into enforceable module contracts. V2 implementation must not bypass these boundaries.
