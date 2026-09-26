@@ -2,6 +2,7 @@
 """Gate 1 source/module/frozen-spec audit. Optional generated-atlas and APK checks."""
 import argparse
 import hashlib
+import json
 from pathlib import Path
 import re
 import subprocess
@@ -14,7 +15,9 @@ P.add_argument('--atlases', action='store_true')
 P.add_argument('--apk', type=Path)
 args = P.parse_args()
 root = args.root.resolve()
-module = Path(__file__).resolve().parents[1] / 'signals'
+v2 = Path(__file__).resolve().parents[1]
+module = v2 / 'signals'
+spec = json.loads((v2/'gates/current_spec.json').read_text())['signal']
 
 def require(ok, message):
     if not ok: raise SystemExit('SIGNAL AUDIT FAIL: ' + message)
@@ -44,13 +47,22 @@ require('DebugMarkPoint(pt, UserMark::Type::CB6_SIGNAL)' in mark, 'constructor/g
 require('SetIsVisible(UserMark::Type::CB6_SIGNAL, true)' in jni and 'session.NotifyChanges();' in jni, 'visibility/notification')
 require('GetMarkType() const override' not in mark, 'invalid nonvirtual override')
 require('SymbolIsPOI()' not in mark and 'GetDepthTestEnabled()' not in mark, 'proven direct-symbol rendering changed')
-require('return 14;' in mark, '1km hiding')
-for zoom, symbol in [(14,'xs'), (15,'xs'), (17,'m'), (19,'l')]:
-    require(f'{{{zoom}, "cb6-signal-{symbol}"}}' in mark, f'frozen z{zoom} symbol')
+require(f"return {spec['display']['min_zoom']};" in mark, 'minimum zoom mismatch')
+expected_zoom = {int(z):s for z,s in spec['display']['zoom_symbols'].items()}
+expected_zoom.update({int(z):s for z,s in spec['display']['forward_zoom_symbols'].items()})
+for zoom, symbol in sorted(expected_zoom.items()):
+    require(f'{{{zoom}, "cb6-signal-{symbol}"}}' in mark, f'current-spec z{zoom} symbol')
 require(mark.index('if (m_forward)') < mark.index('{17,'), 'unconditional enlargement')
-for token in ('RADIUS_M = 3000', 'MAX_POINTS = 1400', 'REFRESH_MS = 45 * 1000L',
-              'RETRY_MS = 12 * 1000L', 'MOVEMENT_M = 250.0f', 'FORWARD_MAX_M = 450.0f', 'FORWARD_CONE_DEG = 45.0f'):
-    require(token in policy, 'frozen constant ' + token)
+acq=spec['acquisition']
+policy_values={
+ 'RADIUS_M':str(acq['radius_m']), 'MAX_POINTS':str(acq['max_points']),
+ 'MOVEMENT_M':str(acq['movement_m'])+'f', 'FORWARD_MAX_M':str(acq['forward_max_m'])+'f',
+ 'FORWARD_CONE_DEG':str(acq['forward_cone_deg'])+'f'
+}
+for name,value in policy_values.items():
+    require(f'{name} = {value}' in policy, 'current-spec constant '+name)
+for token in acq['osm_queries']:
+    require('['+token+']' in provider, 'current-spec query '+token)
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
 require('main.post(() ->' in controller, 'main-thread publication')
@@ -76,7 +88,7 @@ for path in ['data/styles/default/include/Icons.mapcss', 'data/styles/vehicle/in
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+path])
     require(original == (root/path).read_bytes(), 'stock subsystem modified: ' + path)
 
-symbols = ['cb6-signal-'+s for s in ('xs','s','m','l')]
+symbols = ['cb6-signal-'+s for s in spec['display']['symbols']]
 def check_atlas(data, name):
     doc = ET.fromstring(data)
     names = {e.get('name') for e in doc.iter() if e.get('name')}
