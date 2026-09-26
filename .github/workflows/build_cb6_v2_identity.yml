@@ -24,7 +24,7 @@ jobs:
       - name: Checkout V2 control repo
         uses: actions/checkout@v4
       - name: Enforce CB6 development gate
-        run: python3 v2/gates/verify_project_gate.py --require-feature-build
+        run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=identity
 
       - name: Preflight V2 identity scope
         shell: bash
