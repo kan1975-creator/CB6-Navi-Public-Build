@@ -1,14 +1,16 @@
 {
-  "schema": 2,
+  "schema": 3,
   "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
   "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
   "status_vocabulary": [
-    "BLOCKED",
-    "PENDING",
+    "NOT_STARTED",
     "IN_PROGRESS",
+    "PARTIAL_ACCEPTED",
+    "DEFERRED_WITH_EVIDENCE",
+    "BLOCKED",
+    "PENDING_RECERTIFICATION",
     "PROVEN",
-    "ACCEPTED",
-    "PENDING_RECERTIFICATION"
+    "DEVICE_ACCEPTED"
   ],
   "authority_rule": "This ledger is an index. Requirements originate in active_decisions/current_spec; technical truth and completion are established only by referenced evidence and executable verification.",
   "root": {
@@ -634,5 +636,158 @@
     "v2/gates/current_spec.json",
     "v2/gates/active_decisions.json",
     "v2/gates/traceability.json"
-  ]
+  ],
+  "status_semantics": {
+    "PENDING_RECERTIFICATION": "Existing work is preserved. Revalidate it under the certified Root/Method; do not restart implementation unless evidence proves it invalid.",
+    "PARTIAL_ACCEPTED": "A bounded part has been demonstrated/accepted, but unresolved work remains.",
+    "DEFERRED_WITH_EVIDENCE": "Unresolved work was intentionally deferred and must retain achieved state, reason, restart point and completion condition."
+  },
+  "development_order": [
+    {
+      "order": 0,
+      "id": "ROOT",
+      "state": "IN_PROGRESS",
+      "resume_from": "Executable Root Certification",
+      "restart_from_zero": false
+    },
+    {
+      "order": 1,
+      "id": "METHOD",
+      "state": "BLOCKED",
+      "resume_from": "Recertify/freeze existing method after Root",
+      "restart_from_zero": false
+    },
+    {
+      "order": 2,
+      "id": "CONVENIENCE",
+      "state": "BLOCKED",
+      "resume_from": "Existing MWM/DataSource diagnostic and classifier; verify collector-to-presentation path",
+      "restart_from_zero": false
+    },
+    {
+      "order": 3,
+      "id": "SIGNALS_COVERAGE",
+      "state": "BLOCKED",
+      "resume_from": "Existing working signal display; resume missing-signal acquisition/coverage investigation",
+      "restart_from_zero": false
+    },
+    {
+      "order": 4,
+      "id": "MAP_UI_LOCATION",
+      "state": "BLOCKED",
+      "resume_from": "Preserve existing accepted behavior; work from recorded unresolved defects",
+      "restart_from_zero": false
+    },
+    {
+      "order": 5,
+      "id": "OTHER_POI_AND_CONTROLS",
+      "state": "BLOCKED",
+      "resume_from": "Develop/validate remaining active requirements in dependency order",
+      "restart_from_zero": false
+    },
+    {
+      "order": 6,
+      "id": "INTEGRATED_APK",
+      "state": "BLOCKED",
+      "resume_from": "Same-HEAD integrated build/evidence",
+      "restart_from_zero": false
+    },
+    {
+      "order": 7,
+      "id": "DEVICE_REGRESSION",
+      "state": "BLOCKED",
+      "resume_from": "Exact APK SHA on CB6",
+      "restart_from_zero": false
+    },
+    {
+      "order": 8,
+      "id": "FINAL_ACCEPTANCE",
+      "state": "BLOCKED",
+      "resume_from": "All unresolved/deferred blockers closed",
+      "restart_from_zero": false
+    }
+  ],
+  "progress_overrides": {
+    "SIG-200M-001": {
+      "implementation_state": "PARTIAL_ACCEPTED",
+      "achieved": [
+        "Signal display path implemented",
+        "200 m display observed on CB6",
+        "500 m display observed on CB6",
+        "Slimmer signal presentation requested/iterated"
+      ],
+      "unresolved": [
+        "Some real traffic signals remain missing"
+      ],
+      "deferred_reason": "Basic display path was established; acquisition/coverage completeness remained for later investigation.",
+      "resume_from": "Trace missing real signals through source acquisition -> dedup/cluster -> filtering -> renderer; preserve working display path.",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "SIG-COVERAGE-001": {
+      "implementation_state": "DEFERRED_WITH_EVIDENCE",
+      "achieved": [
+        "OSM/verified-supplement acquisition path exists",
+        "Basic signal display works at observed locations"
+      ],
+      "unresolved": [
+        "Intersection and non-intersection signal omissions remain",
+        "NAVITIME-observed locations may be absent in CB6"
+      ],
+      "resume_from": "Acquisition completeness and exact missing-location trace",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "SIGNAL-ZOOM-001": {
+      "implementation_state": "PARTIAL_ACCEPTED",
+      "achieved": [
+        "200 m and 500 m display observed",
+        "1 km signal display not required by accepted policy"
+      ],
+      "unresolved": [
+        "Final regression after coverage fixes"
+      ],
+      "resume_from": "Regression only unless evidence invalidates current behavior",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "POI-CONVENIENCE-001": {
+      "implementation_state": "IN_PROGRESS",
+      "achieved": [
+        "Native MWM/DataSource collector path implemented",
+        "Convenience classifier exists",
+        "7-Eleven stock-map POI observed on CB6"
+      ],
+      "unresolved": [
+        "CB6 collector acquisition must be distinguished from stock renderer",
+        "Brand-specific final presentation not yet device-proven"
+      ],
+      "resume_from": "Existing diagnostic collector-to-presentation verification",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "CONVENIENCE-BRANDS-001": {
+      "implementation_state": "IN_PROGRESS",
+      "achieved": [
+        "Brand classifier work exists"
+      ],
+      "unresolved": [
+        "Final brand-specific icon presentation/device proof"
+      ],
+      "resume_from": "Existing classifier and presentation path",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    }
+  },
+  "defer_policy": {
+    "required_fields": [
+      "achieved",
+      "unresolved",
+      "deferred_reason",
+      "resume_from",
+      "restart_from_zero"
+    ],
+    "final_rule": "No FINAL acceptance while a deferred item is unresolved unless the active requirement explicitly permits that item to remain deferred.",
+    "no_restart_rule": "Recertification never means restart from zero. Preserve valid implementation/evidence and restart at the earliest affected unresolved stage."
+  }
 }
