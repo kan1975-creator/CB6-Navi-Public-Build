@@ -214,7 +214,7 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
 
 # The development gate must continuously execute every required method regression test.
 method=load("v2/gates/development_method_contract.json")
-expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy"}
+expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy","method_document","failure_return_policy","completion_authority"}
 if set(method)!=expected_method_fields or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")
 expected_invariants={"restricted_evidence_cannot_be_direct_feature_authority":True,"every_feature_audit_requires_specific_fail_closed_proof":True,"audit_proof_must_execute_before_feature_build":True,"impact_record_must_cover_audit_proof":True}
 if method.get("feature_contract_invariants")!=expected_invariants: fail("development method feature invariants drifted")
@@ -226,6 +226,9 @@ cpol=method.get("change_policy",{})
 if cpol!={"unrecorded_spec_change_forbidden":True,"required_change_must_record_reason_impact_and_authority_update_before_implementation":True,"unrelated_behavior_change_forbidden":True}: fail("development method change policy drifted")
 pup=method.get("pinned_upstream_source_policy",{})
 if pup!={"required_for_every_feature":True,"repository":"comaps/comaps","commit":"7113ccb5f086183f8884b2aa4e58c987466b6704","concrete_source_paths_required":True,"findings_required":True,"analysis_must_precede_implementation":True}: fail("pinned upstream source policy drifted")
+if method.get("method_document")!="docs/CB6_V2_DEVELOPMENT_METHOD.md" or not (ROOT/method["method_document"]).is_file(): fail("development method document missing/drifted")
+if method.get("failure_return_policy")!="return_to_earliest_affected_stage": fail("development method failure return policy drifted")
+if method.get("completion_authority")!={"method":"development_gate_success","build":"verified_apk_evidence","behavior":"accepted_cb6_real_device_evidence"}: fail("development method completion authority drifted")
 for rel in method["required_gate_scripts"]+method["required_regression_tests"]+method["acceptance_scripts"]+[method["post_gate_integrity_script"]]:
  if not (ROOT/rel).is_file(): fail("development method component missing: "+rel)
 devwf=(ROOT/".github/workflows/cb6_development_gate.yml").read_text(encoding="utf-8")
