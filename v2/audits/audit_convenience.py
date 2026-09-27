@@ -18,7 +18,8 @@ collector = COLLECTOR.read_text(encoding="utf-8")
 header = HEADER.read_text(encoding="utf-8")
 
 require(collector, 'GetTypeByPathSafe({"shop", "convenience"})', "native shop=convenience classificator path missing")
-require(collector, "fetcher.ForEachFeature(rect", "FeaturesFetcher MWM iteration missing")
+require(collector, "dataSource.ForEachInRect(", "DataSource MWM iteration missing")
+require(header, "DataSource const & dataSource", "public DataSource collector boundary missing")
 require(collector, "FMD_BRAND", "brand metadata evidence missing")
 require(collector, "FMD_OPERATOR", "operator metadata evidence missing")
 require(collector, "ClassifyConvenience(", "brand classifier integration missing")
@@ -34,7 +35,7 @@ for forbidden in (
     if forbidden in collector or forbidden in header:
         raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: forbidden ownership crossing: " + forbidden)
 
-print("CB6 CONVENIENCE AUDIT PASS: native MWM collector is read-only, offline and signal-independent")
+print("CB6 CONVENIENCE AUDIT PASS: native MWM DataSource collector is read-only, offline and signal-independent")
 
 APPLY = ROOT / "v2/poi/apply_convenience_mwm_diagnostic.py"
 if not APPLY.is_file():
