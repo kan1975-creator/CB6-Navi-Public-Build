@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "feature_id": "convenience-brands",
+  "status": "COMPLETE",
+  "internal_analysis": {
+    "required": true,
+    "paths": [
+      "v2/poi/native/convenience_brand_classifier.cpp",
+      "v2/poi/native/convenience_mwm_collector.cpp",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
+    ],
+    "findings": [
+      "Final brand rendering must consume installed native MWM convenience features through the pinned public DataSource boundary and keep brand classification deterministic.",
+      "Historical CB6 native POI design material is review history only and cannot be direct current feature authority."
+    ]
+  },
+  "upstream_web_research": {
+    "applicable": true,
+    "sources": [
+      "Pinned CoMaps source 7113ccb5f086183f8884b2aa4e58c987466b6704",
+      "CoMaps/Organic Maps MWM metadata and brand behavior reviewed during the convenience diagnostic"
+    ],
+    "findings": [
+      "External/upstream research informs metadata interpretation but is not CB6 implementation authority."
+    ]
+  },
+  "pinned_source_revalidation": {
+    "required": true,
+    "evidence": [
+      "v2/gates/research_records/convenience-mwm-diagnostic.json",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
+    ]
+  },
+  "authority_classification": {
+    "web_is_authority": false,
+    "current_authority": [
+      "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "v2/gates/active_decisions.json",
+      "v2/gates/current_spec.json"
+    ]
+  },
+  "completed_before_implementation": true,
+  "pinned_upstream_source_analysis": {
+    "required": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "source_paths": [
+      "map/framework.hpp",
+      "map/framework.cpp",
+      "indexer/data_source.hpp",
+      "indexer/data_source.cpp",
+      "indexer/feature.hpp",
+      "indexer/feature_meta.hpp",
+      "generator/brands_loader.cpp",
+      "data/categories_brands.txt"
+    ],
+    "findings": [
+      "Framework::GetDataSource and DataSource::ForEachInRect are the pinned public acquisition boundary.",
+      "Feature metadata and pinned brand data are the upstream basis for deterministic convenience brand classification."
+    ]
+  }
+}
