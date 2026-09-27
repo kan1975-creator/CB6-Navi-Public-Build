@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<198:
+if len(items)<228:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -140,3 +140,10 @@ if missing_root_atomic:
 if ledger.get("atomic_requirement_registry",{}).get("current_count") != len(items):
     print("CB6 MASTER LEDGER FAIL: Master atomic count stale",ledger.get("atomic_requirement_registry",{}).get("current_count"),len(items)); raise SystemExit(1)
 print("CB6 MASTER ROOT/RECONSTRUCTION ATOMIC PASS:",len(required_root_atomic))
+
+# Execution-gate and pinned-architecture zero-omission anchors.
+required_exec_arch={"PROC-EVIDENCE-CONSUME","PROC-UNKNOWN-OPEN","PROC-STATE-MACHINE","PROC-FAIL-EARLIEST","PROC-CHANGE-PROPAGATION","PROC-WORKFLOW-GATE-FIRST","PROC-FEATURE-IDENTITY","PROC-LEGACY-NOT-V2","PROC-RETIRED-CROSSCHECK","PROC-EXTERNAL-REFRESH","PROC-OBJECTIVE-PROGRESS","PROC-GENERATED-HASH","PROC-ALL-V2-WORKFLOWS-SCAN","ARCH-POI-PIPELINE","ARCH-POI-NOTVISIBLE","ARCH-STOCK-VS-USERMARK","ARCH-SYMBOL-PIPELINE","ARCH-FRAMEWORK-ROOT","ARCH-CONVENIENCE-TYPE","ARCH-BRAND-META","ARCH-VEHICLE-CV-TEXT","ARCH-EXISTING-MWM-COMPAT","ARCH-SEARCH-STOCK","ARCH-ROUTING-NATIVE","ARCH-BOOKMARK-NATIVE","ARCH-LOCATION-SHARED","ARCH-CONVENIENCE-DIAGNOSTIC","ARCH-CONVENIENCE-REPRESENTATIVE","ARCH-CONVENIENCE-DECISION","ARCH-NO-WHOLESALE-GENERATOR"}
+missing_exec_arch=required_exec_arch-set(ids)
+if missing_exec_arch:
+    print("CB6 MASTER LEDGER FAIL: execution/architecture atomic specifications disappeared",sorted(missing_exec_arch)); raise SystemExit(1)
+print("CB6 MASTER EXECUTION/ARCHITECTURE ATOMIC PASS:",len(required_exec_arch))
