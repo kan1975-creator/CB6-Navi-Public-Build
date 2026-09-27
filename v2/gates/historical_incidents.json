@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "status": "ACTIVE",
+  "incidents": [
+    {
+      "id": "INC-RETIRED-EVIDENCE-REPROMOTION",
+      "cause": "retired evidence directly re-promoted by a feature contract",
+      "proof": "v2/tests/test_feature_gate_contract.py",
+      "expected_block": "restricted evidence"
+    },
+    {
+      "id": "INC-AUDIT-EXISTS-WITHOUT-FAIL-CLOSED-PROOF",
+      "cause": "audit file existence treated as assurance",
+      "proof": "v2/tests/test_feature_gate_contract.py",
+      "expected_block": "audit"
+    },
+    {
+      "id": "INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION",
+      "cause": "Convenience audit required historical FeaturesFetcher after implementation moved to DataSource",
+      "proof": "v2/tests/convenience_audit_selftest.py",
+      "expected_block": "DataSource"
+    },
+    {
+      "id": "INC-STALE-HARDCODED-SIGNAL-SPEC",
+      "cause": "signal destructive test used stale hardcoded zoom instead of current spec",
+      "proof": "v2/tests/test_gate_fail_closed.py",
+      "expected_block": "current spec"
+    },
+    {
+      "id": "INC-PREFLIGHT-WITHOUT-DESTRUCTIVE-PROOF",
+      "cause": "signal preflight audit lacked feature-specific fail-closed proof",
+      "proof": "v2/tests/preflight_gate1_audit_selftest.py",
+      "expected_block": "Post-configure source changed"
+    },
+    {
+      "id": "INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE",
+      "cause": "research record presence passed without affected-domain source coverage",
+      "proof": "v2/tests/test_feature_gate_contract.py",
+      "expected_block": "analysis coverage"
+    },
+    {
+      "id": "INC-PYTHON-ESCAPED-NEWLINE-SYNTAX",
+      "cause": "literal escaped newline reached integrity verifier",
+      "proof": "v2/tests/test_repository_syntax.py",
+      "expected_block": "syntax"
+    },
+    {
+      "id": "INC-APK-EVIDENCE-FEATURE-ASSUMPTION",
+      "cause": "APK evidence generation contained signal-specific assumptions",
+      "proof": "v2/tests/test_apk_evidence_fail_closed.py",
+      "expected_block": "APK evidence"
+    },
+    {
+      "id": "INC-CONTEXT-LOSS",
+      "cause": "mandatory decisions can disappear across time, task or chat context",
+      "proof": "v2/tests/test_root_invariants.py",
+      "expected_block": "repository-only reconstruction"
+    }
+  ]
+}
