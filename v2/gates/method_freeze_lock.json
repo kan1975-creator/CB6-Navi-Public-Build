@@ -11,7 +11,7 @@
     "v2/gates/historical_incidents.json": "91d516cd563e3d27180628bc5491610f53663f7f",
     "v2/gates/repository_state_manifest.json": "3d82ab4bfa5c0583ef9240d557de296c3f131984",
     "v2/gates/research_records/TEMPLATE.json": "ae8cdaf43c09671d672fc41db6f6c87536d265f9",
-    "v2/gates/root_invariants.json": "e6ebef2a4b08bd690208d711562e7ea67f2b9c64",
+    "v2/gates/root_invariants.json": "29b39abc2fe0ffe12e3147bfce65b0bdf080d862",
     "v2/gates/verify_method_freeze.py": "2d716389a4c3d80fea375a066fd87f964a9ebd35",
     "v2/gates/verify_project_gate.py": "520d1517eb6b4ba472787ffcc59b8abc9dece786",
     "v2/gates/verify_project_integrity.py": "a0e22debd00ae63b2ccd43eddb67031485812045",
