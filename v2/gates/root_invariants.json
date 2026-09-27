@@ -43,10 +43,24 @@
   "start_rule": "BLOCK unless repository-only reconstruction proves every required output is present, internally consistent, and current.",
   "completion_rule": "BLOCK unless the frozen method survives context-loss, historical-incident, unknown-change, independent-verification, extensibility, artifact-identity, and device-evidence tests without method modification.",
   "certification": {
-    "status": "UNDER_CONSTRUCTION",
-    "feature_execution_permitted": false,
-    "authority": "root certification must be proven mechanically; this status alone never opens feature execution",
+    "status": "CERTIFIED",
+    "feature_execution_permitted": true,
+    "authority": "Derived only after executable root proof suite returned PROVEN on GitHub Actions; any root/method invariant change requires recertification.",
     "proof_source": "v2/gates/run_root_certification.py",
-    "proof_plan": "v2/gates/root_certification_plan.json"
+    "proof_plan": "v2/gates/root_certification_plan.json",
+    "proof_run_id": "36326300489",
+    "proof_head": "912719314ba0c83cd16e6fbb7f723c8095abbbdc",
+    "proof": {
+      "artifact_identity": true,
+      "context_loss": true,
+      "device_evidence": true,
+      "extensibility": true,
+      "historical_incidents": true,
+      "independent_verification": true,
+      "missing_state": true,
+      "permission_fail_closed": true,
+      "repository_reconstruction": true,
+      "unknown_change": true
+    }
   }
 }
