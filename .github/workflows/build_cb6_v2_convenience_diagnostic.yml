@@ -23,6 +23,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Enforce diagnostic feature gate
         run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=convenience-mwm-diagnostic
+      - name: Seal gated control state
+        run: |
+          python3 v2/gates/create_gate_stamp.py
+          python3 v2/gates/create_gate_stamp.py --verify
       - name: Audit native MWM convenience ownership
         run: python3 v2/audits/audit_convenience.py
       - name: Compile and run brand classifier tests
@@ -86,6 +90,8 @@ jobs:
           set -euxo pipefail
           cd comaps
           bash -x ./configure.sh --skip-map-download 2>&1 | tee ../out/CONFIGURE.log
+      - name: Reverify gated control state before build
+        run: python3 v2/gates/create_gate_stamp.py --verify
       - name: Build diagnostic arm64 release
         run: |
           set -euxo pipefail
