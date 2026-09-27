@@ -32,7 +32,8 @@ def run_case(name, mutate, needle):
     s=s.replace("actions/upload-artifact@","verify_apk_evidence.py # fixture ordering proof\n      - uses: actions/upload-artifact@",1)
    wf.write_text(s)
   gate=root/"v2/gates/features/testfeature.json"; gate.parent.mkdir(exist_ok=True)
-  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"]},"design_section":"signals/display","impact_checked":True,"impact_record":"v2/gates/impact_records/testfeature.json","repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py"],"apk_checks":[{"id":"apk-integrity","description":"verify active resources from current_spec"}],"device_checks":[{"id":"cb6-acceptance","description":"CB6 real-device acceptance required"}],"device_evidence":"PENDING","stage":"IMPLEMENTATION_ENABLED"}
+  proof=root/"v2/tests/audit_signals_selftest.py"; proof.write_text("print(\'fixture audit proof\')\\n")
+  f={"schema":1,"feature_id":"testfeature","requirements":["SIG-200M-001"],"affected_domains":["signals","renderer","symbols","audits","tests"],"domain_verification":{"signals":["v2/signals"],"renderer":["v2/signals","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"],"symbols":["v2/signals","v2/audits/audit_signals.py"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py","v2/tests/audit_signals_selftest.py"]},"design_section":"signals/display","impact_checked":True,"impact_record":"v2/gates/impact_records/testfeature.json","repo_sweep_required":True,"source_paths":["v2/signals"],"audits":["v2/audits/audit_signals.py"],"tests":["v2/tests/test_gate_fail_closed.py","v2/tests/audit_signals_selftest.py"],"apk_checks":[{"id":"apk-integrity","description":"verify active resources from current_spec"}],"device_checks":[{"id":"cb6-acceptance","description":"CB6 real-device acceptance required"}],"device_evidence":"PENDING","stage":"IMPLEMENTATION_ENABLED"}
   impact=root/"v2/gates/impact_records/testfeature.json"; impact.parent.mkdir(exist_ok=True)
   impact.write_text(json.dumps({"schema":1,"feature_id":f["feature_id"],"requirements":f["requirements"],"affected_domains":f["affected_domains"],"reviewed_paths":["docs/CB6_CHANGE_IMPACT_MAP.md"]}))
   mutate(f)
@@ -68,6 +69,8 @@ cases=[
  ("impact-record-reviewed-path-missing",lambda f:None,"feature impact reviewed path missing"),
  ("impact-record-field-drift",lambda f:None,"feature impact record fields drifted"),
  ("no-repo-sweep",lambda f:f.__setitem__("repo_sweep_required",False),"repo-wide sweep not required"),
+ ("retired-evidence-promoted",lambda f:(f["source_paths"].append("docs/CB6_V2_NATIVE_POI_DESIGN.md")),"directly promotes restricted evidence"),
+ ("audit-proof-missing",lambda f:f.__setitem__("tests",["v2/tests/test_gate_fail_closed.py"]),"feature audit lacks registered fail-closed proof"),
  ("missing-source",lambda f:(f.__setitem__("source_paths",["v2/does-not-exist"]),[f["domain_verification"].__setitem__(d,["v2/does-not-exist","v2/audits/audit_signals.py","v2/tests/test_gate_fail_closed.py"]) for d in ("signals","renderer","symbols")]),"source_paths path missing"),
  ("no-apk-check",lambda f:f.__setitem__("apk_checks",[]),"apk_checks must use id/description records"),
  ("no-device-check",lambda f:f.__setitem__("device_checks",[]),"device_checks must use id/description records"),
