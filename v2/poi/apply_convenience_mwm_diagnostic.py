@@ -69,4 +69,25 @@ if decl not in j:
     if pos < 0: raise SystemExit("CB6 convenience diagnostic: Java class end missing")
     j = j[:pos] + decl + j[pos:]
 java.write_text(j)
-print("CB6 convenience diagnostic native bridge applied")
+
+activity = root / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
+a = activity.read_text()
+hook = r'''
+    final Location cb6DiagnosticLocation = MwmApplication.from(this).getLocationHelper().getSavedLocation();
+    if (cb6DiagnosticLocation != null)
+    {
+      final String[] cb6ConvenienceRows =
+          Framework.nativeCb6ConvenienceDiagnostic(cb6DiagnosticLocation.getLatitude(),
+                                                   cb6DiagnosticLocation.getLongitude(), 1200, 17);
+      final String cb6First = cb6ConvenienceRows.length == 0 ? "none" : cb6ConvenienceRows[0];
+      Toast.makeText(this, "CB6 MWM CONVENIENCE: " + cb6ConvenienceRows.length + "\\n" + cb6First,
+                     Toast.LENGTH_LONG).show();
+    }
+'''
+activity_anchor = "    processIntent();\\n"
+if "CB6 MWM CONVENIENCE:" not in a:
+    if activity_anchor not in a:
+        raise SystemExit("CB6 convenience diagnostic: MwmActivity post-render anchor missing")
+    a = a.replace(activity_anchor, activity_anchor + hook, 1)
+activity.write_text(a)
+\nprint("CB6 convenience diagnostic native bridge and visible evidence hook applied")
