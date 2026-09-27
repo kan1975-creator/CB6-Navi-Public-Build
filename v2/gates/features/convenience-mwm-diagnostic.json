@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "feature_id": "convenience-mwm-diagnostic",
+  "requirements": [
+    "POI-CONVENIENCE-001",
+    "OFFLINE-FREE-001",
+    "PRODUCT-BASE-001"
+  ],
+  "design_section": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#POI",
+  "impact_checked": true,
+  "repo_sweep_required": true,
+  "source_paths": [
+    "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+    "v2/poi/native/convenience_brand_classifier.hpp",
+    "v2/poi/native/convenience_brand_classifier.cpp",
+    "v2/poi/native/convenience_mwm_collector.hpp",
+    "v2/poi/native/convenience_mwm_collector.cpp"
+  ],
+  "audits": [
+    "v2/audits/audit_convenience.py"
+  ],
+  "tests": [
+    "v2/tests/convenience_brand_classifier_test.cpp"
+  ],
+  "apk_checks": [
+    {
+      "id": "apk-arm64",
+      "description": "Diagnostic APK contains a valid AArch64 liborganicmaps.so"
+    },
+    {
+      "id": "apk-identity",
+      "description": "Diagnostic APK preserves jp.cb6.navi and CB6 Navi identity"
+    },
+    {
+      "id": "apk-native-mwm-diagnostic",
+      "description": "Diagnostic build contains native MWM convenience collector without network or fabricated POI acquisition"
+    }
+  ],
+  "device_checks": [
+    {
+      "id": "cb6-mwm-convenience-diagnostic",
+      "description": "Installed-map shop=convenience records can be observed on CB6 without adding final convenience rendering"
+    }
+  ],
+  "stage": "IMPLEMENTATION_ENABLED",
+  "affected_domains": [
+    "poi",
+    "classifier",
+    "data-source",
+    "offline",
+    "audits",
+    "tests",
+    "real-device"
+  ],
+  "domain_verification": {
+    "poi": [
+      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+      "v2/poi/native/convenience_mwm_collector.cpp"
+    ],
+    "classifier": [
+      "v2/poi/native/convenience_brand_classifier.cpp",
+      "v2/tests/convenience_brand_classifier_test.cpp"
+    ],
+    "data-source": [
+      "v2/poi/native/convenience_mwm_collector.cpp",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_brand_classifier_test.cpp"
+    ],
+    "offline": [
+      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+      "v2/poi/native/convenience_mwm_collector.cpp"
+    ],
+    "audits": [
+      "v2/audits/audit_convenience.py"
+    ],
+    "tests": [
+      "v2/tests/convenience_brand_classifier_test.cpp"
+    ],
+    "real-device": []
+  },
+  "impact_record": "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+  "device_evidence": "PENDING"
+}
