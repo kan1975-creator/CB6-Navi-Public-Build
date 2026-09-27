@@ -28,5 +28,16 @@
       "REPLACE_WITH_CURRENT_AUTHORITY"
     ]
   },
-  "completed_before_implementation": false
+  "completed_before_implementation": false,
+  "pinned_upstream_source_analysis": {
+    "required": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "source_paths": [
+      "REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"
+    ],
+    "findings": [
+      "REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"
+    ]
+  }
 }
