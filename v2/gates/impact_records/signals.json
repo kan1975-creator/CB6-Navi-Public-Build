@@ -29,6 +29,7 @@
     "v2/signals/java/VerifiedSignalProvider.java",
     "v2/signals/java/OverpassSignalProvider.java",
     "v2/gates/current_spec.json",
-    "v2/tests/signals_audit_selftest.py"
+    "v2/tests/signals_audit_selftest.py",
+    "v2/tests/preflight_gate1_audit_selftest.py"
   ]
 }
