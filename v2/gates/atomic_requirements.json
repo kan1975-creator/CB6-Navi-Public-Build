@@ -1,5 +1,5 @@
 {
-  "schema": 11,
+  "schema": 12,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
   "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
@@ -24068,6 +24068,1614 @@
       ],
       "acceptance": [
         "Must remain consistent with current authority and pinned-source evidence."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-CROSSPROJECT",
+      "group": "PROCESS",
+      "requirement": "Cross-project comparison evidence is REVALIDATION_REQUIRED and cannot become authority until a revalidation record and verification exist.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-FROZEN-LINK",
+      "group": "PROCESS",
+      "requirement": "Historical-mixed frozen behavior may support current requirements only through explicit active-decision evidence links and later supersession wins.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-BASELINE-HIST",
+      "group": "PROCESS",
+      "requirement": "V2 baseline is historical build evidence only, not current authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
+      "group": "PROCESS",
+      "requirement": "Old overall design is RETIRED and cannot directly authorize implementation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-OLD-MODULES-RETIRED",
+      "group": "PROCESS",
+      "requirement": "Old module contracts are RETIRED and cannot directly authorize implementation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-OLD-POI-RETIRED",
+      "group": "PROCESS",
+      "requirement": "Old native POI design is RETIRED and cannot directly authorize implementation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-OLD-SIGNAL-HIST",
+      "group": "PROCESS",
+      "requirement": "Traffic-signal migration document is historical evidence; current active decisions own conflicts.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EVIDENCE-HANDOVER-HIST",
+      "group": "PROCESS",
+      "requirement": "CLAUDE_HANDOVER is historical handover evidence and not independent current authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-AUTH-ALLOWLIST",
+      "group": "PROCESS",
+      "requirement": "Current authority is an explicit allowlist; files outside it cannot become current authority merely by existing.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-AUTH-FORBIDDEN-PHRASES",
+      "group": "PROCESS",
+      "requirement": "Historical authority language is explicitly forbidden from re-establishing obsolete authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RECON-AUTHORITY",
+      "group": "PROCESS",
+      "requirement": "Repository reconstruction must emit current authority state.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RECON-REQUIREMENTS",
+      "group": "PROCESS",
+      "requirement": "Repository reconstruction must emit active requirements and traceability.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RECON-FEATURES",
+      "group": "PROCESS",
+      "requirement": "Repository reconstruction must emit current feature contracts/state.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-RETIRED-REPROMOTION",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay blocks direct re-promotion of retired/restricted evidence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-AUDIT-NOPROOF",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay blocks treating audit-file existence as assurance.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-STALE-CONVENIENCE",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches stale FeaturesFetcher assumptions after DataSource migration.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-STALE-SIGNAL",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches stale hardcoded signal zoom/spec assumptions.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-PREFLIGHT",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches a preflight audit without its destructive proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-RESEARCH-SCOPE",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches research records missing affected-domain source coverage.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-SYNTAX",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches literal escaped-newline Python syntax corruption.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-APK-ASSUMPTION",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches feature-specific assumptions leaking into generic APK evidence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INC-CONTEXT-LOSS",
+      "group": "PROCESS",
+      "requirement": "Historical incident replay catches loss of mandatory state across time/task/chat context.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-STAGE-CONSISTENCY",
+      "group": "PROCESS",
+      "requirement": "All authoritative stage/permission fields must be mutually consistent; IMPLEMENTATION_ENABLED in evidence/authority metadata cannot override project/root fail-closed state.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-CERT-HEAD-FRESHNESS",
+      "group": "PROCESS",
+      "requirement": "Root/Method certification is stale when authority/reconstruction/method inputs change after the certified proof HEAD and must be recertified before feature execution.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of evidence inventory, authority policy, repository reconstruction manifest and historical incidents",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission certification",
+      "evidence": [
+        "v2/gates/evidence_inventory.json",
+        "v2/gates/authority_policy.json",
+        "v2/gates/repository_state_manifest.json",
+        "v2/gates/historical_incidents.json"
+      ],
+      "acceptance": [
+        "Must fail closed when authority/evidence/reconstruction/history classification is violated."
       ],
       "pipeline": {
         "research": {
