@@ -33,3 +33,14 @@ with tempfile.TemporaryDirectory() as td:
  cp=subprocess.run([sys.executable,str(r/VERIFY)],cwd=r,text=True,capture_output=True)
  if cp.returncode==0 or "lower layers must be blocked" not in cp.stdout+cp.stderr:
   raise SystemExit("root certification permission destructive proof failed")
+
+# A CERTIFIED label without the complete proof set must never open the root.
+with tempfile.TemporaryDirectory() as td:
+ r=Path(td)/"repo"; shutil.copytree(SRC,r)
+ root_path=r/"v2/gates/root_invariants.json"
+ root=json.loads(root_path.read_text())
+ root["certification"]={"status":"CERTIFIED","feature_execution_permitted":True,"proof":{}}
+ root_path.write_text(json.dumps(root))
+ cp=run(r)
+ if cp.returncode==0 or "root certification proof incomplete" not in cp.stdout+cp.stderr:
+  raise SystemExit("self-asserted root certification destructive proof failed")
