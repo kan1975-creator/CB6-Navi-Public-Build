@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "feature_id": "signals",
+  "status": "COMPLETE",
+  "internal_analysis": {
+    "required": true,
+    "paths": [
+      "v2/signals/apply_signals.py",
+      "v2/audits/audit_signals.py",
+      "v2/gates/current_spec.json"
+    ],
+    "findings": [
+      "Signal ownership, acquisition, rendering, lifecycle and current-spec boundaries are represented in the V2 implementation and audits."
+    ]
+  },
+  "upstream_web_research": {
+    "applicable": true,
+    "sources": [
+      "Pinned CoMaps source 7113ccb5f086183f8884b2aa4e58c987466b6704",
+      "OpenStreetMap traffic-signal tagging/query behavior previously investigated during Gate 1"
+    ],
+    "findings": [
+      "External findings are research inputs only; current CB6 behavior is revalidated by pinned source, current_spec and executable audits."
+    ]
+  },
+  "pinned_source_revalidation": {
+    "required": true,
+    "evidence": [
+      ".github/workflows/build_cb6_v2_signals.yml exact CoMaps SHA checkout and transformed-source audits"
+    ]
+  },
+  "authority_classification": {
+    "web_is_authority": false,
+    "current_authority": [
+      "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "v2/gates/current_spec.json",
+      "v2/gates/active_decisions.json"
+    ]
+  },
+  "completed_before_implementation": true
+}
