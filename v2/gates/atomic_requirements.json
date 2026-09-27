@@ -1,5 +1,5 @@
 {
-  "schema": 7,
+  "schema": 8,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
   "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
@@ -16278,6 +16278,2083 @@
           "evidence": []
         }
       }
+    },
+    {
+      "id": "PROC-METHOD-GATES",
+      "group": "PROCESS",
+      "requirement": "Method contract requires method-freeze, root, project-gate, integrity, evidence-inventory and design-coverage verifiers.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-REGRESSIONS",
+      "group": "PROCESS",
+      "requirement": "Method contract requires destructive regression tests for freeze/root/syntax/gate/feature/APK/device/stamp/final acceptance.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-AUDIT-SPECIFIC-PROOF",
+      "group": "PROCESS",
+      "requirement": "Every feature audit has its own executable fail-closed proof, executed before feature build.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-IMPACT-COVERS-AUDIT",
+      "group": "PROCESS",
+      "requirement": "Impact records explicitly cover the audit proof affected by the change.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-INTERNAL-ANALYSIS",
+      "group": "PROCESS",
+      "requirement": "Every feature performs internal pinned-source analysis.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-WEB-WHEN-MATERIAL",
+      "group": "PROCESS",
+      "requirement": "Official/upstream/web research is mandatory when external API/data/platform/OSM/upstream behavior is material.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-WEB-NOT-AUTH",
+      "group": "PROCESS",
+      "requirement": "Web research is never direct implementation authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-PINNED-REVALIDATE",
+      "group": "PROCESS",
+      "requirement": "Web/upstream findings are revalidated against exact pinned CoMaps source.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-BEFORE-IMPL",
+      "group": "PROCESS",
+      "requirement": "Research evidence is recorded before implementation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-NO-UNRECORDED-SPEC",
+      "group": "PROCESS",
+      "requirement": "Unrecorded specification changes are forbidden.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-CHANGE-REASON",
+      "group": "PROCESS",
+      "requirement": "Technically required spec changes record reason, impact and authority update before implementation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-NO-UNRELATED-CHANGE",
+      "group": "PROCESS",
+      "requirement": "Unrelated behavior changes are forbidden.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-PINNED-EVERY-FEATURE",
+      "group": "PROCESS",
+      "requirement": "Every feature binds comaps/comaps at exact pinned commit 7113ccb5f086183f8884b2aa4e58c987466b6704.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-PINNED-PATHS",
+      "group": "PROCESS",
+      "requirement": "Every feature records concrete pinned CoMaps source paths inspected.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-PINNED-FINDINGS",
+      "group": "PROCESS",
+      "requirement": "Every feature records findings derived from those pinned paths.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-COVERAGE",
+      "group": "PROCESS",
+      "requirement": "Pinned-source analysis covers every affected domain.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-COMPLETION-METHOD",
+      "group": "PROCESS",
+      "requirement": "Method completion authority is Development Gate success.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-COMPLETION-BUILD",
+      "group": "PROCESS",
+      "requirement": "Build completion authority is verified APK evidence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-COMPLETION-BEHAVIOR",
+      "group": "PROCESS",
+      "requirement": "Behavior completion authority is accepted CB6 real-device evidence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-AUDITS",
+      "group": "PROCESS",
+      "requirement": "Affected audit domains require audit verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-TESTS",
+      "group": "PROCESS",
+      "requirement": "Affected test domains require test verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-WORKFLOW",
+      "group": "PROCESS",
+      "requirement": "Affected workflow domains require audit verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-RENDERER",
+      "group": "PROCESS",
+      "requirement": "Renderer changes require source, audit and test verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-SYMBOLS",
+      "group": "PROCESS",
+      "requirement": "Symbol changes require source and audit verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-CACHE",
+      "group": "PROCESS",
+      "requirement": "Cache changes require source and test verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-DATASOURCE",
+      "group": "PROCESS",
+      "requirement": "Data-source changes require source and test verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-LIFECYCLE",
+      "group": "PROCESS",
+      "requirement": "Lifecycle changes require source and test verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-REALDEVICE",
+      "group": "PROCESS",
+      "requirement": "Real-device domains require device evidence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-GATES",
+      "group": "PROCESS",
+      "requirement": "Gate changes require tests.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DOMAIN-DESIGN",
+      "group": "PROCESS",
+      "requirement": "Design changes require audit verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-TRACE-CONSUMED",
+      "group": "PROCESS",
+      "requirement": "Every active decision is consumed into current design traceability and has verification references.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of development method contract, method document, domain policy and traceability",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root-certified Method recertification/freeze",
+      "evidence": [
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/traceability.json"
+      ],
+      "acceptance": [
+        "Must be machine-enforced by the frozen method and fail closed when violated."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     }
   ],
   "mapping_policy": {
@@ -16313,6 +18390,10 @@
     "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
     "docs/CB6_GATE_COVERAGE_AUDIT.md",
     "docs/CB6_COMAPS_ARCHITECTURE.md",
-    "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+    "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md",
+    "v2/gates/development_method_contract.json",
+    "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+    "v2/gates/domain_verification_policy.json",
+    "v2/gates/traceability.json"
   ]
 }
