@@ -13,9 +13,13 @@
   "source_paths": [
     "docs/CB6_V2_NATIVE_POI_DESIGN.md",
     "v2/poi/native/convenience_brand_classifier.hpp",
-    "v2/poi/native/convenience_brand_classifier.cpp"
+    "v2/poi/native/convenience_brand_classifier.cpp",
+    "v2/poi/native/convenience_mwm_collector.hpp",
+    "v2/poi/native/convenience_mwm_collector.cpp"
   ],
-  "audits": [],
+  "audits": [
+    "v2/audits/audit_convenience.py"
+  ],
   "tests": [
     "v2/tests/convenience_brand_classifier_test.cpp"
   ],
@@ -66,7 +70,8 @@
   "domain_verification": {
     "poi": [
       "docs/CB6_V2_NATIVE_POI_DESIGN.md",
-      "v2/poi/native/convenience_brand_classifier.cpp"
+      "v2/poi/native/convenience_brand_classifier.cpp",
+      "v2/poi/native/convenience_mwm_collector.cpp"
     ],
     "classifier": [
       "v2/poi/native/convenience_brand_classifier.cpp",
@@ -79,12 +84,15 @@
       "docs/CB6_V2_NATIVE_POI_DESIGN.md"
     ],
     "data-source": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md"
+      "v2/poi/native/convenience_mwm_collector.cpp",
+      "v2/tests/convenience_brand_classifier_test.cpp"
     ],
     "offline": [
       "docs/CB6_V2_NATIVE_POI_DESIGN.md"
     ],
-    "audits": [],
+    "audits": [
+      "v2/audits/audit_convenience.py"
+    ],
     "tests": [
       "v2/tests/convenience_brand_classifier_test.cpp"
     ],
