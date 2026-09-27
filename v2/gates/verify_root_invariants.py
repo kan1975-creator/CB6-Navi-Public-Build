@@ -10,7 +10,11 @@ if root.get("status")!="ROOT_INVARIANT": fail("root invariant authority missing"
 cert=root.get("certification",{})
 if cert.get("status") not in {"UNDER_CONSTRUCTION","CERTIFIED"}: fail("root certification state invalid")
 if cert.get("status")=="UNDER_CONSTRUCTION" and cert.get("feature_execution_permitted") is not False: fail("lower layers must be blocked while root is under construction")
-if cert.get("status")=="CERTIFIED" and cert.get("feature_execution_permitted") is not True: fail("certified root execution state inconsistent")
+if cert.get("status")=="CERTIFIED":
+    if cert.get("feature_execution_permitted") is not True: fail("certified root execution state inconsistent")
+    proof=cert.get("proof",{})
+    required={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence"}
+    if set(proof)!=required or not all(v is True for v in proof.values()): fail("root certification proof incomplete")
 inv=root.get("non_negotiable_invariants",{})
 if not inv or not all(v is True for v in inv.values()): fail("root invariant weakened")
 required=root.get("required_reconstruction_outputs",[])
