@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<167:
+if len(items)<198:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -131,3 +131,12 @@ for required_set,label in [(required_policy_atomic,"process policy"),(required_s
     if missing:
         print("CB6 MASTER LEDGER FAIL:",label,"atomic specifications disappeared",sorted(missing)); raise SystemExit(1)
 print("CB6 MASTER POLICY/CURRENT-SPEC ATOMIC PASS:",len(required_policy_atomic)+len(required_signal_spec_atomic))
+
+# Root authority/reconstruction invariants discovered by zero-omission audit are mandatory.
+required_root_atomic={"PROC-EVIDENCE-STATUS","PROC-CROSS-PROJECT-REVALIDATE","PROC-AUTHORITY-ONLY","PROC-FORBIDDEN-HISTORICAL","PROC-ROOT-RECONSTRUCT","PROC-UNKNOWN-BLOCK","PROC-NO-SELF-COMPLETE","PROC-NO-BYPASS","PROC-METHOD-INVALIDATE","PROC-CLAIM-EVIDENCE","PROC-CLOSED-TRACE","PROC-ROOT-BLOCK-LOWER","PROC-ROOT-NO-SELF-CERT","PROC-CONTEXT-NEWCHAT","PROC-CONTEXT-TIME","PROC-CONTEXT-FEATURESWITCH","PROC-CONTEXT-HANDOFF","PROC-CONTEXT-OPERATOR","PROC-CONTEXT-PARTIAL","PROC-CONTEXT-NOCONV","PROC-RECON-AUTH","PROC-RECON-REQ","PROC-RECON-METHOD","PROC-RECON-FEATURE","PROC-RECON-PENDING","PROC-RECON-FAILURES","PROC-RECON-RESEARCH","PROC-RECON-IMPACT","PROC-RECON-VERIFY","PROC-RECON-APK","PROC-RECON-DEVICE"}
+missing_root_atomic=required_root_atomic-set(ids)
+if missing_root_atomic:
+    print("CB6 MASTER LEDGER FAIL: root/reconstruction atomic specifications disappeared",sorted(missing_root_atomic)); raise SystemExit(1)
+if ledger.get("atomic_requirement_registry",{}).get("current_count") != len(items):
+    print("CB6 MASTER LEDGER FAIL: Master atomic count stale",ledger.get("atomic_requirement_registry",{}).get("current_count"),len(items)); raise SystemExit(1)
+print("CB6 MASTER ROOT/RECONSTRUCTION ATOMIC PASS:",len(required_root_atomic))
