@@ -41,7 +41,7 @@ APPLY = ROOT / "v2/poi/apply_convenience_mwm_diagnostic.py"
 if not APPLY.is_file():
     raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: diagnostic apply script missing")
 apply = APPLY.read_text(encoding="utf-8")
-for token in ("nativeCb6ConvenienceDiagnostic", "CollectConveniencePois", "convenience_mwm_collector.cpp"):
+for token in ("nativeCb6ConvenienceDiagnostic", "CollectConveniencePois", "convenience_mwm_collector.cpp", "CB6 MWM CONVENIENCE:", "getSavedLocation()", "1200, 17"):
     require(apply, token, "diagnostic bridge missing " + token)
 for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6DrivingMarks", "CreateUserMark", "CB6_SIGNAL"):
     if forbidden in apply:
