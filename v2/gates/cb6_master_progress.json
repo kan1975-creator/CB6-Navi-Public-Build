@@ -1,5 +1,5 @@
 {
-  "schema": 3,
+  "schema": 4,
   "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
   "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
   "status_vocabulary": [
@@ -789,5 +789,180 @@
     ],
     "final_rule": "No FINAL acceptance while a deferred item is unresolved unless the active requirement explicitly permits that item to remain deferred.",
     "no_restart_rule": "Recertification never means restart from zero. Preserve valid implementation/evidence and restart at the earliest affected unresolved stage."
-  }
+  },
+  "completeness": {
+    "status": "IN_PROGRESS",
+    "claim": "Master is not complete until source inventory, active decisions, known failures, accepted/frozen behavior, current design, feature contracts, research/impact and evidence inventory are all coverage-checked.",
+    "zero_omission_required": true
+  },
+  "source_inventory": [
+    {
+      "path": "v2/gates/active_decisions.json",
+      "role": "all active/superseded requirement decisions",
+      "coverage": "machine-checked"
+    },
+    {
+      "path": "v2/gates/current_spec.json",
+      "role": "machine-readable current values",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "role": "current architecture ownership",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+      "role": "known failure classes, mandatory process and recurrence history",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_FROZEN_FEATURES.md",
+      "role": "real-device accepted/historical behavior with supersession rules",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_CHANGE_IMPACT_MAP.md",
+      "role": "feature impact and real-device acceptance map",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_COMAPS_ARCHITECTURE.md",
+      "role": "CoMaps architecture basis",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md",
+      "role": "pinned upstream internal analysis",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/evidence_inventory.json",
+      "role": "active/historical/retired evidence classification",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/historical_incidents.json",
+      "role": "historical recurrence corpus",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/features",
+      "role": "per-feature implementation/audit/test/APK/device contracts",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/research_records",
+      "role": "research and pinned-source basis",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/impact_records",
+      "role": "change impact records",
+      "coverage": "required"
+    }
+  ],
+  "known_failure_classes": [
+    {
+      "id": "STALE_VALIDATOR",
+      "state": "MUST_REGRESS",
+      "summary": "Renamed/changed flow leaves stale audit/test/workflow/APK expectations."
+    },
+    {
+      "id": "ESCAPED_NEWLINE",
+      "state": "MUST_REGRESS",
+      "summary": "Literal escaped newline contaminates generated/validator source."
+    },
+    {
+      "id": "LATER_PATCH_RESTORE",
+      "state": "MUST_REGRESS",
+      "summary": "Later apply/configure step restores obsolete behavior."
+    },
+    {
+      "id": "USERMARK_GROUP_MISMATCH",
+      "state": "MUST_REGRESS",
+      "summary": "Mark constructor group differs from clear/show/publish group."
+    },
+    {
+      "id": "GROUP_REPLACEMENT",
+      "state": "MUST_REGRESS",
+      "summary": "Whole-group replacement erases unrelated marks."
+    },
+    {
+      "id": "BUILD_NOT_FEATURE_SUCCESS",
+      "state": "MUST_REGRESS",
+      "summary": "Successful APK is not behavioral/device acceptance."
+    },
+    {
+      "id": "MWM_DUPLICATED_BY_NETWORK",
+      "state": "MUST_REGRESS",
+      "summary": "Network supplementation added where native MWM already owns data."
+    },
+    {
+      "id": "CONTEXT_CONTINUITY",
+      "state": "MUST_REGRESS",
+      "summary": "Time/chat/task change must not drop mandatory rules or state."
+    },
+    {
+      "id": "REPEATED_STALE_AUDIT",
+      "state": "MUST_REGRESS",
+      "summary": "Changed behavior and validator diverge despite earlier process rule."
+    }
+  ],
+  "accepted_and_historical_state": {
+    "signals": {
+      "state": "PARTIAL_ACCEPTED_WITH_SUPERSESSION",
+      "accepted": [
+        "Signal renderer observed working on CB6",
+        "200m/500m display observations exist",
+        "1km display not required"
+      ],
+      "superseded": [
+        "Historical 200m standard-size clause is superseded by SIG-200M-001 slim requirement"
+      ],
+      "unresolved": [
+        "Missing real signals/coverage completeness",
+        "V2 clean/update device acceptance"
+      ],
+      "resume": "Preserve working renderer; investigate acquisition completeness."
+    },
+    "convenience": {
+      "state": "IN_PROGRESS_NOT_FROZEN",
+      "accepted": [
+        "Stock CoMaps convenience POI/text observed on CB6"
+      ],
+      "implemented": [
+        "Native MWM/DataSource collector and brand classifier work exist"
+      ],
+      "unresolved": [
+        "CB6-specific brand icon path not device-proven",
+        "Collector result must be distinguished from stock renderer",
+        "Text suppression/final scaling not accepted"
+      ],
+      "resume": "Continue diagnostic collector-to-presentation path; do not restart."
+    }
+  },
+  "detail_dimensions": [
+    "requirement",
+    "current values",
+    "development order",
+    "implementation state",
+    "achieved",
+    "unresolved",
+    "deferred reason",
+    "resume point",
+    "authority/evidence",
+    "pinned CoMaps basis",
+    "research",
+    "impact",
+    "source implementation",
+    "audit",
+    "positive test",
+    "destructive test",
+    "feature gate",
+    "APK evidence",
+    "device evidence",
+    "regression obligations",
+    "supersession/history"
+  ]
 }
