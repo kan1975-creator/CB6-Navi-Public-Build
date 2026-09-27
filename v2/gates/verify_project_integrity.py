@@ -132,7 +132,8 @@ if set(research_template)!=required_research_fields: fail("research record templ
 if research_template.get("schema")!=1 or research_template.get("status")!="PENDING" or research_template.get("completed_before_implementation") is not False: fail("research record template is not fail-closed")
 rtu=research_template.get("pinned_upstream_source_analysis",{})
 if rtu.get("required") is not True or rtu.get("repository")!="comaps/comaps" or rtu.get("commit")!="7113ccb5f086183f8884b2aa4e58c987466b6704": fail("research template pinned CoMaps contract drifted")
-if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")\nif research_template.get("upstream_domain_coverage")!={"REPLACE_WITH_TECHNICAL_AFFECTED_DOMAIN":{"source_paths":["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"],"findings":["REPLACE_WITH_DOMAIN_SPECIFIC_FINDING"]}}: fail("research template domain coverage contract drifted")
+if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")
+if research_template.get("upstream_domain_coverage")!={"REPLACE_WITH_TECHNICAL_AFFECTED_DOMAIN":{"source_paths":["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"],"findings":["REPLACE_WITH_DOMAIN_SPECIFIC_FINDING"]}}: fail("research template domain coverage contract drifted")
 
 signal_selftest=(ROOT/"v2/tests/signals_audit_selftest.py").read_text(encoding="utf-8")
 for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))','SIGNAL_SPEC=SPEC["signal"]','MIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])','f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"']:
