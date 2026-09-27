@@ -126,6 +126,14 @@ tdc=template.get("device_checks")
 if not isinstance(tdc,list) or len(tdc)!=1 or not isinstance(tdc[0],dict) or set(tdc[0])!={"id","description"} or tdc[0].get("id")!="REPLACE_WITH_CHECK_ID" or tdc[0].get("description")!="REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE":
  fail("feature gate template device check contract drifted")
 
+research_template=load("v2/gates/research_records/TEMPLATE.json")
+required_research_fields={"schema","feature_id","status","internal_analysis","upstream_web_research","pinned_source_revalidation","authority_classification","completed_before_implementation","pinned_upstream_source_analysis"}
+if set(research_template)!=required_research_fields: fail("research record template fields drifted")
+if research_template.get("schema")!=1 or research_template.get("status")!="PENDING" or research_template.get("completed_before_implementation") is not False: fail("research record template is not fail-closed")
+rtu=research_template.get("pinned_upstream_source_analysis",{})
+if rtu.get("required") is not True or rtu.get("repository")!="comaps/comaps" or rtu.get("commit")!="7113ccb5f086183f8884b2aa4e58c987466b6704": fail("research template pinned CoMaps contract drifted")
+if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")
+
 # Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
 wfdir=ROOT/".github/workflows"
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
