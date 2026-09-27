@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "stage": "IMPLEMENTATION_ENABLED",
+  "stage": "OVERALL_DESIGN_REBUILD",
   "current_authorities": [
     "AGENTS.md",
     "v2/gates/project_state.json",
