@@ -1,7 +1,7 @@
 {
-  "schema": 2,
+  "schema": 3,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
-  "status": "TRACEABILITY_MAPPING_IN_PROGRESS",
+  "status": "PIPELINE_MAPPING_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
   "requirements": [
     {
@@ -19,7 +19,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -32,7 +32,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-FAIL-CLOSED",
@@ -49,7 +87,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -62,7 +100,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-REPO-MEMORY",
@@ -79,7 +155,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -92,7 +168,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-RESEARCH-FIRST",
@@ -109,7 +223,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -122,7 +236,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-IMPACT-FIRST",
@@ -139,7 +291,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -152,7 +304,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-AUDIT-UNIT",
@@ -169,7 +359,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -182,7 +372,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-DESTRUCTIVE",
@@ -199,7 +427,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -212,7 +440,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-NO-BUILD-COMPLETE",
@@ -229,7 +495,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -242,7 +508,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-APK-IDENTITY",
@@ -259,7 +563,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -272,7 +576,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-DEVICE-AUTHORITY",
@@ -289,7 +631,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -302,7 +644,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-NO-RESTART",
@@ -319,7 +699,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -332,7 +712,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "PROC-DEFER",
@@ -349,7 +767,7 @@
         "PROC-002"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "ROOT_IN_PROGRESS",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Executable Root Certification",
@@ -362,7 +780,45 @@
         "Superseded decisions cannot be authoritative.",
         "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
         "Design-rebuild state rejects feature builds."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-DISPLAY",
@@ -381,7 +837,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -395,7 +851,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-200M-SLIM",
@@ -414,7 +924,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -428,7 +938,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-500M",
@@ -447,7 +1011,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -461,7 +1025,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-1KM-OFF",
@@ -480,7 +1098,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -494,7 +1112,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-FORWARD-EMPHASIS",
@@ -513,7 +1185,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -527,7 +1199,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-COVERAGE-INTERSECTION",
@@ -546,7 +1272,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -560,7 +1286,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-COVERAGE-NONINTERSECTION",
@@ -579,7 +1359,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -593,7 +1373,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-CLEAN-INSTALL",
@@ -612,7 +1446,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -626,7 +1460,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-UPDATE-INSTALL",
@@ -645,7 +1533,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -659,7 +1547,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-INDEPENDENT-OWNERSHIP",
@@ -678,7 +1620,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -692,7 +1634,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-NO-SCREENSHOT-COORDS",
@@ -711,7 +1707,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -725,7 +1721,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SIG-RESUME-COVERAGE",
@@ -744,7 +1794,7 @@
         "SIGNAL-ZOOM-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
@@ -758,7 +1808,61 @@
         "Rebuilt design must address acquisition completeness and real-device verification.",
         "Acceptance route contains both update-install and clean-install checks.",
         "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py",
+            "v2/audits/preflight_gate1.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py",
+            "v2/tests/preflight_gate1_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-ALWAYS",
@@ -775,7 +1879,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -786,7 +1890,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-MWM-FIRST",
@@ -803,7 +1963,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -814,7 +1974,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-711",
@@ -831,7 +2047,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -842,7 +2058,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-FM",
@@ -859,7 +2131,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -870,7 +2142,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-LAWSON",
@@ -887,7 +2215,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -898,7 +2226,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-SEICO",
@@ -915,7 +2299,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -926,7 +2310,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-MYBASKET",
@@ -943,7 +2383,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -954,7 +2394,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-MINISTOP",
@@ -971,7 +2467,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -982,7 +2478,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-BRAND-DAILY",
@@ -999,7 +2551,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1010,7 +2562,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-GENERIC",
@@ -1027,7 +2635,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1038,7 +2646,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-NO-TEXT-URBAN",
@@ -1055,7 +2719,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1066,7 +2730,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-SLIGHTLY-LARGER",
@@ -1083,7 +2803,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1094,7 +2814,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-SCALE",
@@ -1111,7 +2887,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1122,7 +2898,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-NO-DUPLICATE",
@@ -1139,7 +2971,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1150,7 +2982,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-STOCK-DISTINGUISH",
@@ -1167,7 +3055,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1178,7 +3066,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "CV-DEVICE",
@@ -1195,7 +3139,7 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
@@ -1206,7 +3150,63 @@
       "acceptance": [
         "Rebuilt design resolves native MWM evidence before any network duplicate path.",
         "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-HEADING-UP",
@@ -1228,7 +3228,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1246,7 +3246,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-NORTH-TOGGLE",
@@ -1268,7 +3306,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1286,7 +3324,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-INITIAL-200",
@@ -1308,7 +3384,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1326,7 +3402,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-NO-AUTOSCALE",
@@ -1348,7 +3462,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1366,7 +3480,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-REMEMBER-SCALE",
@@ -1388,7 +3540,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1406,7 +3558,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-OWN-LOWER",
@@ -1428,7 +3618,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1446,7 +3636,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-MATCH",
@@ -1468,7 +3696,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1486,7 +3714,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-ROAD-BEARING",
@@ -1508,7 +3774,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1526,7 +3792,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-STATIONARY-JITTER",
@@ -1548,7 +3852,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1566,7 +3870,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-FALSE-SPEED",
@@ -1588,7 +3930,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1606,7 +3948,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "MAP-PIVOT",
@@ -1628,7 +4008,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -1646,7 +4026,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-COMPASS",
@@ -1668,7 +4086,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1686,7 +4104,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-NORTH-CONTROL",
@@ -1708,7 +4164,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1726,7 +4182,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-SCALE",
@@ -1748,7 +4242,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1766,7 +4260,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-ZOOM-CONTROLS",
@@ -1788,7 +4320,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1806,7 +4338,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-ZOOM-STEP",
@@ -1828,7 +4398,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1846,7 +4416,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-LOC-BUTTON",
@@ -1868,7 +4476,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1886,7 +4494,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-SETTINGS",
@@ -1908,7 +4554,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1926,7 +4572,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "UI-FULLMAP",
@@ -1948,7 +4632,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -1966,7 +4650,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "HUD-ROAD",
@@ -1988,7 +4710,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -2006,7 +4728,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "HUD-ROAD-FALLBACK",
@@ -2028,7 +4788,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存UIを基準に要求差分から",
@@ -2046,7 +4806,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "VEHICLE-ICON",
@@ -2068,7 +4866,7 @@
         "VEHICLE-ICON-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "既存成果を保持し記録済み不具合から",
@@ -2086,7 +4884,45 @@
         "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression.",
         "Rebuilt design identifies the accepted camera behavior and regression checks before implementation.",
         "Unrelated feature work leaves the vehicle icon unchanged."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "LABEL-ADDRESS",
@@ -2102,7 +4938,7 @@
         "MAP-LABEL-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "現行style/label挙動の解析から",
@@ -2111,7 +4947,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines style/label ownership and zoom/collision verification."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "LABEL-ROAD",
@@ -2127,7 +5001,7 @@
         "MAP-LABEL-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "現行style/label挙動の解析から",
@@ -2136,7 +5010,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines style/label ownership and zoom/collision verification."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-MAJOR",
@@ -2152,7 +5064,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2161,7 +5073,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-AIRPORT",
@@ -2177,7 +5127,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2186,7 +5136,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-ROADSIDE",
@@ -2202,7 +5190,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2211,7 +5199,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-PARK",
@@ -2227,7 +5253,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2236,7 +5262,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-PUBLIC",
@@ -2252,7 +5316,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2261,7 +5325,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-DEPARTMENT",
@@ -2277,7 +5379,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2286,7 +5388,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-SUPERMARKET",
@@ -2302,7 +5442,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2311,7 +5451,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-LARGE-LABEL",
@@ -2327,7 +5505,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2336,7 +5514,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "POI-COLLISION",
@@ -2352,7 +5568,7 @@
         "POI-MAJOR-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2361,7 +5577,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines categories, source, zoom/priority and collision policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FUEL",
@@ -2377,7 +5631,7 @@
         "POI-FUEL-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2386,7 +5640,45 @@
       ],
       "acceptance": [
         "Rebuilt design assigns authoritative data source, presentation and regression checks."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FUEL-MWM-FIRST",
@@ -2402,7 +5694,7 @@
         "POI-FUEL-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Native MWM/styleと縮尺・collision検証",
@@ -2411,7 +5703,45 @@
       ],
       "acceptance": [
         "Rebuilt design assigns authoritative data source, presentation and regression checks."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "STOP-FORWARD",
@@ -2427,7 +5757,7 @@
         "STOP-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "前方距離・方位filterを独立publisherで検証",
@@ -2436,7 +5766,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "STOP-DISTANCE",
@@ -2452,7 +5820,7 @@
         "STOP-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "前方距離・方位filterを独立publisherで検証",
@@ -2461,7 +5829,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "STOP-HEADING",
@@ -2477,7 +5883,7 @@
         "STOP-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "前方距離・方位filterを独立publisherで検証",
@@ -2486,7 +5892,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "STOP-OWNERSHIP",
@@ -2502,7 +5946,7 @@
         "STOP-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "前方距離・方位filterを独立publisherで検証",
@@ -2511,7 +5955,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SEARCH-STOCK",
@@ -2528,7 +6010,7 @@
         "SEARCH-HISTORY-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張",
@@ -2541,7 +6023,45 @@
       "acceptance": [
         "Alias/fuzzy input reaches normal CoMaps results and preserves stock history/result selection/routing behavior.",
         "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SEARCH-FUZZY",
@@ -2558,7 +6078,7 @@
         "SEARCH-HISTORY-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張",
@@ -2571,7 +6091,45 @@
       "acceptance": [
         "Alias/fuzzy input reaches normal CoMaps results and preserves stock history/result selection/routing behavior.",
         "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SEARCH-HISTORY",
@@ -2588,7 +6146,7 @@
         "SEARCH-HISTORY-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張",
@@ -2601,7 +6159,45 @@
       "acceptance": [
         "Alias/fuzzy input reaches normal CoMaps results and preserves stock history/result selection/routing behavior.",
         "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SEARCH-HISTORY-DELETE",
@@ -2618,7 +6214,7 @@
         "SEARCH-HISTORY-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張",
@@ -2631,7 +6227,45 @@
       "acceptance": [
         "Alias/fuzzy input reaches normal CoMaps results and preserves stock history/result selection/routing behavior.",
         "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "VOICE-JA",
@@ -2647,7 +6281,7 @@
         "SEARCH-VOICE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "日本語音声入力→共通normalization→SearchEngine",
@@ -2657,7 +6291,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines speech lifecycle, normalization, fallback and stock-result preservation."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "VOICE-ONDEVICE",
@@ -2673,7 +6345,7 @@
         "SEARCH-VOICE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "日本語音声入力→共通normalization→SearchEngine",
@@ -2683,7 +6355,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines speech lifecycle, normalization, fallback and stock-result preservation."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "VOICE-FALLBACK",
@@ -2699,7 +6409,7 @@
         "SEARCH-VOICE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "日本語音声入力→共通normalization→SearchEngine",
@@ -2709,7 +6419,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines speech lifecycle, normalization, fallback and stock-result preservation."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "ORIENT-AUTO",
@@ -2725,7 +6473,7 @@
         "ORIENTATION-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Activity/theme/orientation restart時の状態復元から",
@@ -2734,7 +6482,45 @@
       ],
       "acceptance": [
         "Auto/portrait/landscape modes preserve usable CB6 controls and road-name HUD."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "ORIENT-PORTRAIT",
@@ -2750,7 +6536,7 @@
         "ORIENTATION-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Activity/theme/orientation restart時の状態復元から",
@@ -2759,7 +6545,45 @@
       ],
       "acceptance": [
         "Auto/portrait/landscape modes preserve usable CB6 controls and road-name HUD."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "ORIENT-LANDSCAPE",
@@ -2775,7 +6599,7 @@
         "ORIENTATION-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Activity/theme/orientation restart時の状態復元から",
@@ -2784,7 +6608,45 @@
       ],
       "acceptance": [
         "Auto/portrait/landscape modes preserve usable CB6 controls and road-name HUD."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "LIFE-START",
@@ -2800,7 +6662,7 @@
         "LIFECYCLE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Activity/theme/orientation restart時の状態復元から",
@@ -2810,7 +6672,45 @@
       ],
       "acceptance": [
         "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "LIFE-RESTART",
@@ -2826,7 +6726,7 @@
         "LIFECYCLE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Activity/theme/orientation restart時の状態復元から",
@@ -2836,7 +6736,45 @@
       ],
       "acceptance": [
         "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "LIFE-RETURN",
@@ -2852,7 +6790,7 @@
         "LIFECYCLE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Activity/theme/orientation restart時の状態復元から",
@@ -2862,7 +6800,45 @@
       ],
       "acceptance": [
         "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "GMAPS-LAUNCH",
@@ -2878,7 +6854,7 @@
         "GOOGLE-MAPS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Android handoff/return lifecycle実機検証",
@@ -2887,7 +6863,45 @@
       ],
       "acceptance": [
         "Rebuilt design separates supported Android lifecycle behavior from behavior that cannot be guaranteed and defines verification."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "GMAPS-RETURN",
@@ -2903,7 +6917,7 @@
         "GOOGLE-MAPS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Android handoff/return lifecycle実機検証",
@@ -2912,7 +6926,45 @@
       ],
       "acceptance": [
         "Rebuilt design separates supported Android lifecycle behavior from behavior that cannot be guaranteed and defines verification."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "ROUTE-FREE",
@@ -2928,7 +6980,7 @@
         "ROUTING-FREE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Pinned CoMaps routing/toll/access属性解析から",
@@ -2937,7 +6989,45 @@
       ],
       "acceptance": [
         "Rebuilt design proves native toll/access semantics before implementation."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "ROUTE-NO-POSTFILTER",
@@ -2953,7 +7043,7 @@
         "ROUTING-FREE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Pinned CoMaps routing/toll/access属性解析から",
@@ -2962,7 +7052,45 @@
       ],
       "acceptance": [
         "Rebuilt design proves native toll/access semantics before implementation."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "TOLL-AUTH",
@@ -2979,7 +7107,7 @@
         "TOLL-ROUTE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Authorityある料金モデル確立から",
@@ -2989,7 +7117,45 @@
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation.",
         "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "TOLL-PASSENGER",
@@ -3006,7 +7172,7 @@
         "TOLL-ROUTE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Authorityある料金モデル確立から",
@@ -3016,7 +7182,45 @@
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation.",
         "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "TOLL-CANDIDATE",
@@ -3033,7 +7237,7 @@
         "TOLL-ROUTE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Authorityある料金モデル確立から",
@@ -3043,7 +7247,45 @@
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation.",
         "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "TOLL-ZERO",
@@ -3060,7 +7302,7 @@
         "TOLL-ROUTE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Authorityある料金モデル確立から",
@@ -3070,7 +7312,45 @@
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation.",
         "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "TOLL-OFFLINE",
@@ -3087,7 +7367,7 @@
         "TOLL-ROUTE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "Authorityある料金モデル確立から",
@@ -3097,7 +7377,45 @@
       "acceptance": [
         "Rebuilt design records source/version/update/offline policy before implementation.",
         "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FAV-AUTH",
@@ -3113,7 +7431,7 @@
         "FAVORITES-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "BookmarkManager authority・非破壊merge設計から",
@@ -3122,7 +7440,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FAV-IDENTITY",
@@ -3138,7 +7494,7 @@
         "FAVORITES-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "BookmarkManager authority・非破壊merge設計から",
@@ -3147,7 +7503,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FAV-CONFLICT",
@@ -3163,7 +7557,7 @@
         "FAVORITES-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "BookmarkManager authority・非破壊merge設計から",
@@ -3172,7 +7566,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FAV-MERGE",
@@ -3188,7 +7620,7 @@
         "FAVORITES-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "BookmarkManager authority・非破壊merge設計から",
@@ -3197,7 +7629,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "FAV-WIFI",
@@ -3213,7 +7683,7 @@
         "FAVORITES-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "BookmarkManager authority・非破壊merge設計から",
@@ -3222,7 +7692,45 @@
       ],
       "acceptance": [
         "Rebuilt design defines identity, conflict and transport boundaries."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "BASE-COMAPS",
@@ -3239,7 +7747,7 @@
         "OFFLINE-FREE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain",
@@ -3250,7 +7758,45 @@
       "acceptance": [
         "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement.",
         "Rebuilt design documents offline/online ownership and no-paid-API dependency."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "BASE-OFFLINE",
@@ -3267,7 +7813,7 @@
         "OFFLINE-FREE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain",
@@ -3278,7 +7824,45 @@
       "acceptance": [
         "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement.",
         "Rebuilt design documents offline/online ownership and no-paid-API dependency."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "BASE-NO-PAID",
@@ -3295,7 +7879,7 @@
         "OFFLINE-FREE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain",
@@ -3306,7 +7890,45 @@
       "acceptance": [
         "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement.",
         "Rebuilt design documents offline/online ownership and no-paid-API dependency."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     },
     {
       "id": "SCOPE-HOKKAIDO",
@@ -3322,7 +7944,7 @@
         "SCOPE-HOKKAIDO-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "PENDING_TRACEABILITY",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
       "evidence_state": "MAPPED_FROM_PARENT",
       "acceptance_state": "MAPPED_FROM_PARENT",
       "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain",
@@ -3331,11 +7953,64 @@
       ],
       "acceptance": [
         "Rebuilt design states the Hokkaido operating/validation scope and any wider behavior is treated as compatible extension rather than an unreviewed scope change."
-      ]
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     }
   ],
   "mapping_policy": {
     "rule": "Every atomic requirement must map to an explicit development stage, one or more parent active decisions/authority where applicable, evidence and an acceptance route before registry completion.",
     "unmapped_blocks_completion": true
+  },
+  "pipeline_policy": {
+    "stages": [
+      "research",
+      "impact",
+      "implementation",
+      "audit",
+      "positive_test",
+      "destructive_test",
+      "feature_gate",
+      "apk",
+      "device"
+    ],
+    "rule": "Stage state is evidence-derived. Existing historical work is preserved but cannot be promoted to current acceptance without Root/Method recertification and exact evidence.",
+    "build_success_not_completion": true
   }
 }
