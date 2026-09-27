@@ -59,5 +59,12 @@
     "concrete_source_paths_required": true,
     "findings_required": true,
     "analysis_must_precede_implementation": true
+  },
+  "method_document": "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+  "failure_return_policy": "return_to_earliest_affected_stage",
+  "completion_authority": {
+    "method": "development_gate_success",
+    "build": "verified_apk_evidence",
+    "behavior": "accepted_cb6_real_device_evidence"
   }
 }
