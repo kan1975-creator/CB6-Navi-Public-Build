@@ -1,0 +1,998 @@
+{
+  "schema": 1,
+  "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
+  "status": "RECONSTRUCTION_IN_PROGRESS",
+  "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
+  "requirements": [
+    {
+      "id": "PROC-TRACE",
+      "group": "PROCESS",
+      "requirement": "All active requirements remain traceable and superseded requirements cannot regain authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-FAIL-CLOSED",
+      "group": "PROCESS",
+      "requirement": "Feature build is blocked until Root/Method/project/feature gates permit it.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-REPO-MEMORY",
+      "group": "PROCESS",
+      "requirement": "Repository, not chat memory, is the authoritative persistent development state.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-RESEARCH-FIRST",
+      "group": "PROCESS",
+      "requirement": "Analyze exact pinned CoMaps source before implementation and revalidate external findings against it.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-IMPACT-FIRST",
+      "group": "PROCESS",
+      "requirement": "Record change impact and repository-wide affected paths before implementation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-AUDIT-UNIT",
+      "group": "PROCESS",
+      "requirement": "Implementation and its audit are one change unit.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-DESTRUCTIVE",
+      "group": "PROCESS",
+      "requirement": "Every critical audit/gate has destructive fail-closed proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-NO-BUILD-COMPLETE",
+      "group": "PROCESS",
+      "requirement": "Actions/build success is not feature completion.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-APK-IDENTITY",
+      "group": "PROCESS",
+      "requirement": "Release evidence binds exact HEAD, APK SHA256, ABI/package/label and uploaded artifact.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-DEVICE-AUTHORITY",
+      "group": "PROCESS",
+      "requirement": "Behavior completion requires the exact APK on CB6 real device.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-NO-RESTART",
+      "group": "PROCESS",
+      "requirement": "Recertification preserves valid prior work and resumes at earliest affected unresolved stage.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "PROC-DEFER",
+      "group": "PROCESS",
+      "requirement": "Deferred work records achieved state, unresolved state, reason, resume point and completion condition.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-DISPLAY",
+      "group": "SIGNAL",
+      "requirement": "Traffic signals are displayed in driving map mode.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-200M-SLIM",
+      "group": "SIGNAL",
+      "requirement": "At 200 m signals are slim and approximately the accepted 500 m visual size.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-500M",
+      "group": "SIGNAL",
+      "requirement": "At 500 m signals remain visible with small/thin presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-1KM-OFF",
+      "group": "SIGNAL",
+      "requirement": "Signals are not required at 1 km.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-FORWARD-EMPHASIS",
+      "group": "SIGNAL",
+      "requirement": "Near/forward signal emphasis may increase only according to active policy.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-COVERAGE-INTERSECTION",
+      "group": "SIGNAL",
+      "requirement": "Signals missing at intersections must be included when source data permits.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-COVERAGE-NONINTERSECTION",
+      "group": "SIGNAL",
+      "requirement": "Signals outside intersections are included.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-CLEAN-INSTALL",
+      "group": "SIGNAL",
+      "requirement": "Signal behavior is verified after clean install.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-UPDATE-INSTALL",
+      "group": "SIGNAL",
+      "requirement": "Signal behavior is verified after update install.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-INDEPENDENT-OWNERSHIP",
+      "group": "SIGNAL",
+      "requirement": "Signal publisher/group is isolated so POI/stop updates cannot erase signals.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-NO-SCREENSHOT-COORDS",
+      "group": "SIGNAL",
+      "requirement": "Missing signal coordinates are never inferred/hard-coded from screenshots.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SIG-RESUME-COVERAGE",
+      "group": "SIGNAL",
+      "requirement": "Existing working renderer is preserved; unresolved work resumes at acquisition completeness.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-ALWAYS",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience stores are available without requiring search.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-MWM-FIRST",
+      "group": "CONVENIENCE",
+      "requirement": "Native MWM/classificator/style data is preferred when sufficient.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-711",
+      "group": "CONVENIENCE",
+      "requirement": "7-Eleven has CB6 brand-specific presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-FM",
+      "group": "CONVENIENCE",
+      "requirement": "FamilyMart has CB6 brand-specific presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-LAWSON",
+      "group": "CONVENIENCE",
+      "requirement": "Lawson has CB6 brand-specific presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-SEICO",
+      "group": "CONVENIENCE",
+      "requirement": "Seicomart has distinct CB6 presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-MYBASKET",
+      "group": "CONVENIENCE",
+      "requirement": "MyBasket has presentation distinguishable from Seicomart.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-MINISTOP",
+      "group": "CONVENIENCE",
+      "requirement": "Ministop is classified and presented.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-BRAND-DAILY",
+      "group": "CONVENIENCE",
+      "requirement": "Daily Yamazaki is classified and presented.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-GENERIC",
+      "group": "CONVENIENCE",
+      "requirement": "Unknown convenience stores have a generic fallback.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-NO-TEXT-URBAN",
+      "group": "CONVENIENCE",
+      "requirement": "Urban convenience presentation suppresses convenience-store text clutter.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-SLIGHTLY-LARGER",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience icons are slightly larger than ordinary POI icons.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-SCALE",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience presentation is scale-aware.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-NO-DUPLICATE",
+      "group": "CONVENIENCE",
+      "requirement": "Stock/native and CB6 supplemental paths do not create duplicate POIs.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-STOCK-DISTINGUISH",
+      "group": "CONVENIENCE",
+      "requirement": "Diagnostic evidence distinguishes stock CoMaps rendering from CB6 collector acquisition.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "CV-DEVICE",
+      "group": "CONVENIENCE",
+      "requirement": "Final brand presentation is verified on CB6.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-HEADING-UP",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Driving map follows vehicle heading by default.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-NORTH-TOGGLE",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "User can toggle north lock.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-INITIAL-200",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Initial driving scale is 200 m.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-NO-AUTOSCALE",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Unrequested automatic scale changes are prohibited.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-REMEMBER-SCALE",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Previous user scale is remembered.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-OWN-LOWER",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Own-position presentation is lower on screen without changing GPS coordinates.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-MATCH",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Map matching is used for road-aligned driving presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-ROAD-BEARING",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Road bearing and own-position heading are coherently matched.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-STATIONARY-JITTER",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Stationary map/vehicle jitter is suppressed.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-FALSE-SPEED",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Stopped state must not show false driving speed/motion.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "MAP-PIVOT",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Rotation pivot must not shift own-position incorrectly.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-COMPASS",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Compass is at upper left.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-NORTH-CONTROL",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Compass/north control provides north-lock behavior.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-SCALE",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Scale display is below compass.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-ZOOM-CONTROLS",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Scale control can expose +/- controls.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-ZOOM-STEP",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Requested scale adjustment behavior is preserved, including recorded 0.2-step preference where applicable.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-LOC-BUTTON",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Current-location control is at lower left and remains operable.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-SETTINGS",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Settings control is at lower right.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "UI-FULLMAP",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Map tap can hide search/menu for full-map presentation without disabling current-location access.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "HUD-ROAD",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Current driving road name is shown in a lower HUD bar.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "HUD-ROAD-FALLBACK",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Road HUD defines fallback when no road is resolved.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "VEHICLE-ICON",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Accepted/original vehicle icon is preserved unless explicitly changed.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "LABEL-ADDRESS",
+      "group": "LABEL_POI",
+      "requirement": "Unnecessary address labels are suppressed.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "LABEL-ROAD",
+      "group": "LABEL_POI",
+      "requirement": "Road names remain scale-appropriate.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-MAJOR",
+      "group": "LABEL_POI",
+      "requirement": "Major facilities use scale-aware icon/label presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-AIRPORT",
+      "group": "LABEL_POI",
+      "requirement": "Airports are included as major facilities.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-ROADSIDE",
+      "group": "LABEL_POI",
+      "requirement": "Roadside stations are included as major facilities.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-PARK",
+      "group": "LABEL_POI",
+      "requirement": "Parks are included as major facilities.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-PUBLIC",
+      "group": "LABEL_POI",
+      "requirement": "Public facilities are included as major facilities.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-DEPARTMENT",
+      "group": "LABEL_POI",
+      "requirement": "Department stores are included where required.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-SUPERMARKET",
+      "group": "LABEL_POI",
+      "requirement": "Supermarkets are included where required.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-LARGE-LABEL",
+      "group": "LABEL_POI",
+      "requirement": "Important large facilities may use stronger/larger labels.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "POI-COLLISION",
+      "group": "LABEL_POI",
+      "requirement": "Urban label/icon overlap is controlled.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FUEL",
+      "group": "LABEL_POI",
+      "requirement": "Fuel stations are displayed with scale-aware visibility.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FUEL-MWM-FIRST",
+      "group": "LABEL_POI",
+      "requirement": "Fuel stations prefer native MWM/style rather than unnecessary network duplication.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "STOP-FORWARD",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Stop signs are shown only when relevant ahead of the vehicle.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "STOP-DISTANCE",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Stop-sign visibility uses explicit forward distance filtering.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "STOP-HEADING",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Stop-sign visibility uses heading/direction filtering.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "STOP-OWNERSHIP",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Stop-sign publishing cannot erase signals/static POIs.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SEARCH-STOCK",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Keyboard/voice search feeds stock CoMaps SearchEngine.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SEARCH-FUZZY",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Fuzzy/alias normalization is shared across search entry paths.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SEARCH-HISTORY",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Search history behavior is preserved.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SEARCH-HISTORY-DELETE",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Required search history/registered entries can be deleted through intended CoMaps-owned path.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "VOICE-JA",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Japanese voice search is supported.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "VOICE-ONDEVICE",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "On-device recognition is preferred where available.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "VOICE-FALLBACK",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Voice search has a safe Android fallback.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "ORIENT-AUTO",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Auto orientation mode is supported.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "ORIENT-PORTRAIT",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Portrait mode is supported.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "ORIENT-LANDSCAPE",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Landscape mode is supported.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "LIFE-START",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Startup restores correct current-location/follow presentation.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "LIFE-RESTART",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Activity/app restart restores required CB6 state.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "LIFE-RETURN",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "Return from auxiliary navigation restores intended CB6 state.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "GMAPS-LAUNCH",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "CB6 provides a Google Maps auxiliary launch path.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "GMAPS-RETURN",
+      "group": "STOP_SEARCH_LIFECYCLE",
+      "requirement": "CB6 is the intended return app where Android technically supports the flow.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "ROUTE-FREE",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Free-expressway-only option is implemented inside native route calculation semantics.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "ROUTE-NO-POSTFILTER",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "A completed route is not post-filtered to simulate free-expressway routing.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "TOLL-AUTH",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Exact toll uses an authoritative traceable fee source/model.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "TOLL-PASSENGER",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Displayed toll is normal passenger-car toll.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "TOLL-CANDIDATE",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Toll is associated with each route candidate.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "TOLL-ZERO",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Genuinely free sections/candidates display 0 yen.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "TOLL-OFFLINE",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Fee source defines version/update/offline behavior.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FAV-AUTH",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "BookmarkManager remains favorites authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FAV-IDENTITY",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Sync uses item/category identity.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FAV-CONFLICT",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Sync has explicit conflict handling.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FAV-MERGE",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Sync is non-destructive and avoids whole-collection overwrite.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "FAV-WIFI",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Phone-CB6 synchronization is intended to work over local Wi-Fi/tethering where implemented.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "BASE-COMAPS",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "CoMaps standard functionality is preserved unless explicitly extended.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "BASE-OFFLINE",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "CoMaps offline maps remain usable.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "BASE-NO-PAID",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Core CB6 does not require paid Google/Mapbox API registration.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    },
+    {
+      "id": "SCOPE-HOKKAIDO",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Data-source, coverage and validation decisions retain Hokkaido-focused operating scope.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "reconstructed from active repository authority plus established CB6 requirements",
+      "restart_from_zero": false
+    }
+  ]
+}
