@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<343:
+if len(items)<367:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -174,3 +174,9 @@ missing_research_atomic=required_research_atomic-set(ids)
 if missing_research_atomic:
     print("CB6 MASTER LEDGER FAIL: research/impact atomic specifications disappeared",sorted(missing_research_atomic)); raise SystemExit(1)
 print("CB6 MASTER RESEARCH/IMPACT ATOMIC PASS:",len(required_research_atomic))
+
+required_authority_atomic={"PROC-EVIDENCE-CROSSPROJECT","PROC-EVIDENCE-FROZEN-LINK","PROC-EVIDENCE-BASELINE-HIST","PROC-EVIDENCE-OLD-DESIGN-RETIRED","PROC-EVIDENCE-OLD-MODULES-RETIRED","PROC-EVIDENCE-OLD-POI-RETIRED","PROC-EVIDENCE-OLD-SIGNAL-HIST","PROC-EVIDENCE-HANDOVER-HIST","PROC-AUTH-ALLOWLIST","PROC-AUTH-FORBIDDEN-PHRASES","PROC-RECON-AUTHORITY","PROC-RECON-REQUIREMENTS","PROC-RECON-METHOD","PROC-RECON-FEATURES","PROC-RECON-PENDING","PROC-RECON-FAILURES","PROC-RECON-RESEARCH","PROC-RECON-IMPACT","PROC-RECON-VERIFY","PROC-RECON-APK","PROC-RECON-DEVICE","PROC-INC-RETIRED-REPROMOTION","PROC-INC-AUDIT-NOPROOF","PROC-INC-STALE-CONVENIENCE","PROC-INC-STALE-SIGNAL","PROC-INC-PREFLIGHT","PROC-INC-RESEARCH-SCOPE","PROC-INC-SYNTAX","PROC-INC-APK-ASSUMPTION","PROC-INC-CONTEXT-LOSS","PROC-STAGE-CONSISTENCY","PROC-CERT-HEAD-FRESHNESS"}
+missing_authority_atomic=required_authority_atomic-set(ids)
+if missing_authority_atomic:
+    print("CB6 MASTER LEDGER FAIL: authority/reconstruction/incident atomic specifications disappeared",sorted(missing_authority_atomic)); raise SystemExit(1)
+print("CB6 MASTER AUTHORITY/RECONSTRUCTION/INCIDENT ATOMIC PASS:",len(required_authority_atomic))
