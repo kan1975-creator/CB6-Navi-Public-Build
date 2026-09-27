@@ -135,6 +135,9 @@ public final class SignalController
   {
     if (!active || !renderingReady || snapshot.points.isEmpty()) return;
     java.util.List<SignalSnapshot.Point> display = snapshot.displayPoints();
+    if (app.organicmaps.BuildConfig.DEBUG)
+      Log.i("CB6-V2-Signal", "publish acquired=" + snapshot.points.size()
+          + " display=" + display.size() + " clustered=" + snapshot.clusteredPointCount());
     int n = display.size();
     double[] lats = new double[n], lons = new double[n];
     boolean[] forward = new boolean[n];

@@ -44,6 +44,7 @@ public final class SignalPolicyTest
     SignalSnapshot clustered = new SignalSnapshot(clusterInput);
     check(clustered.points.size() == 3, "clustering never deletes acquired signal data");
     check(clustered.displayPoints().size() == 2, "nearby intersection signals collapse only for display");
+    check(clustered.clusteredPointCount() == 1, "diagnostic exposes renderer-only clustered count");
     check(clustered.displayPoints().get(0).id == 1 && clustered.displayPoints().get(1).id == 3,
           "deterministic group id retained and separate signal preserved");
     check(Math.abs(clustered.displayPoints().get(0).lat - 43.00005) < 0.000001,

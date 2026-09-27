@@ -28,6 +28,9 @@ public final class SignalSnapshot
   public static final SignalSnapshot EMPTY = new SignalSnapshot(Collections.emptyList());
   public final List<Point> points;
 
+  /** Counts acquired points hidden only by renderer clustering; acquisition/cache remain unchanged. */
+  public int clusteredPointCount() { return points.size() - displayPoints().size(); }
+
   public SignalSnapshot(List<Point> candidates)
   {
     ArrayList<Point> sorted = new ArrayList<>();
