@@ -45,6 +45,8 @@
   "certification": {
     "status": "UNDER_CONSTRUCTION",
     "feature_execution_permitted": false,
-    "authority": "root certification must be proven mechanically; this status alone never opens feature execution"
+    "authority": "root certification must be proven mechanically; this status alone never opens feature execution",
+    "proof_source": "v2/gates/run_root_certification.py",
+    "proof_plan": "v2/gates/root_certification_plan.json"
   }
 }
