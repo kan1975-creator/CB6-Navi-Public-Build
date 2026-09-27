@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "UNDER_CONSTRUCTION",
+  "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
+  "rules": {
+    "source_change_invalidates_coverage": true,
+    "every_active_requirement_clause_requires_atomic_ids": true,
+    "every_atomic_requirement_requires_provenance": true,
+    "historical_source_cannot_directly_authorize_current_implementation": true,
+    "unknown_or_unmapped_blocks": true
+  },
+  "sources": [
+    {"path":"v2/gates/active_decisions.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/current_spec.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/traceability.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/root_invariants.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/project_state.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/development_method_contract.json","classification":"METHOD_INPUT","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/root_certification_plan.json","classification":"ROOT_PROOF_PLAN","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/evidence_inventory.json","classification":"EVIDENCE_CLASSIFIER","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/authority_policy.json","classification":"AUTHORITY_CLASSIFIER","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/repository_state_manifest.json","classification":"RECONSTRUCTION_MANIFEST","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/historical_incidents.json","classification":"REGRESSION_CORPUS","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/features/signals.json","classification":"FEATURE_CONTRACT","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/features/convenience-mwm-diagnostic.json","classification":"REFERENCE_ONLY_RESTART","coverage":"IN_PROGRESS"},
+    {"path":"v2/gates/features/convenience-brands.json","classification":"REFERENCE_ONLY_RESTART","coverage":"IN_PROGRESS"}
+  ],
+  "clause_coverage": [],
+  "blocking": ["Clause-level mapping is not complete; Root certification remains prohibited."]
+}
