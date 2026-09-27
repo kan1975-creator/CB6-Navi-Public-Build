@@ -21,3 +21,15 @@ with tempfile.TemporaryDirectory() as td:
     if cp.returncode==0 or "reconstruction path missing" not in cp.stdout+cp.stderr:
         raise SystemExit("missing-state destructive proof failed")
 print("CB6 ROOT INVARIANT SELFTEST PASS")
+
+# Root certification itself must fail closed: changing only a feature-execution
+# permission must never be enough to authorize lower-layer work.
+with tempfile.TemporaryDirectory() as td:
+ r=Path(td)/"repo"; shutil.copytree(SRC,r)
+ root_path=r/"v2/gates/root_invariants.json"
+ root=json.loads(root_path.read_text())
+ root["certification"]["feature_execution_permitted"]=True
+ root_path.write_text(json.dumps(root))
+ cp=subprocess.run([sys.executable,str(r/VERIFY)],cwd=r,text=True,capture_output=True)
+ if cp.returncode==0 or "lower layers must be blocked" not in cp.stdout+cp.stderr:
+  raise SystemExit("root certification permission destructive proof failed")
