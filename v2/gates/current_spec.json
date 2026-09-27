@@ -42,11 +42,13 @@
       "cache_max_ms": 86400000,
       "osm_queries": [
         "highway=traffic_signals",
-        "crossing=traffic_signals"
+        "crossing=traffic_signals",
+        "type=traffic_signals_set"
       ],
       "osm_element_types": [
         "node",
-        "way"
+        "way",
+        "relation"
       ]
     }
   }
