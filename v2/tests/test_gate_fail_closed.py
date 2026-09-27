@@ -172,6 +172,14 @@ def mutate_research_template_upstream_sha(r):
  d["pinned_upstream_source_analysis"]["commit"]="0"*40; p.write_text(json.dumps(d))
 CASES.append(("research-template-upstream-sha-drift", mutate_research_template_upstream_sha, "research template pinned CoMaps contract drifted"))
 
+def mutate_signal_selftest_hardcoded_old_zoom(r):
+ p=r/"v2/tests/signals_audit_selftest.py"; s=p.read_text()
+ s=s.replace('f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"', '"return 12;", "return 11;"')
+ p.write_text(s)
+ # Integrity must eventually own this invariant; marker makes the regression visible to the global fail-closed suite.
+ if 'MIN_ZOOM=int(SPEC["display"]["min_zoom"])' not in p.read_text(): raise RuntimeError("fixture mutation failed")
+
+
 def mutate_apk_template_opens_early(root):
  p=root/"v2/gates/apk_evidence/TEMPLATE.json"
  d=json.loads(p.read_text()); d["status"]="VERIFIED"; p.write_text(json.dumps(d))
