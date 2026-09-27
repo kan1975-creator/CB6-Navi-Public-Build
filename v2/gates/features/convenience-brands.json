@@ -11,7 +11,6 @@
   "impact_checked": true,
   "repo_sweep_required": true,
   "source_paths": [
-    "docs/CB6_V2_NATIVE_POI_DESIGN.md",
     "v2/poi/native/convenience_brand_classifier.hpp",
     "v2/poi/native/convenience_brand_classifier.cpp",
     "v2/poi/native/convenience_mwm_collector.hpp",
@@ -21,7 +20,8 @@
     "v2/audits/audit_convenience.py"
   ],
   "tests": [
-    "v2/tests/convenience_brand_classifier_test.cpp"
+    "v2/tests/convenience_brand_classifier_test.cpp",
+    "v2/tests/convenience_audit_selftest.py"
   ],
   "apk_checks": [
     {
@@ -69,7 +69,6 @@
   ],
   "domain_verification": {
     "poi": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
       "v2/poi/native/convenience_brand_classifier.cpp",
       "v2/poi/native/convenience_mwm_collector.cpp"
     ],
@@ -77,27 +76,24 @@
       "v2/poi/native/convenience_brand_classifier.cpp",
       "v2/tests/convenience_brand_classifier_test.cpp"
     ],
-    "renderer": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md"
-    ],
-    "symbols": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md"
-    ],
+    "renderer": [],
+    "symbols": [],
     "data-source": [
       "v2/poi/native/convenience_mwm_collector.cpp",
       "v2/tests/convenience_brand_classifier_test.cpp"
     ],
-    "offline": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md"
-    ],
+    "offline": [],
     "audits": [
-      "v2/audits/audit_convenience.py"
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
     ],
     "tests": [
-      "v2/tests/convenience_brand_classifier_test.cpp"
+      "v2/tests/convenience_brand_classifier_test.cpp",
+      "v2/tests/convenience_audit_selftest.py"
     ],
     "real-device": []
   },
   "impact_record": "v2/gates/impact_records/convenience-brands.json",
-  "device_evidence": "PENDING"
+  "device_evidence": "PENDING",
+  "research_record": "v2/gates/research_records/convenience-brands.json"
 }
