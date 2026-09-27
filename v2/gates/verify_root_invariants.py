@@ -25,6 +25,18 @@ for name,paths in outputs.items():
     for rel in paths:
         if not isinstance(rel,str) or not rel or not (ROOT/rel).is_file(): fail("reconstruction path missing: "+str(rel))
         if "chat" in rel.lower() or "conversation" in rel.lower(): fail("chat dependency in reconstruction: "+rel)
+# Cross-file stage/permission consistency is part of Root, not metadata hygiene.
+project=json.loads((ROOT/"v2/gates/project_state.json").read_text(encoding="utf-8"))
+authority=json.loads((ROOT/"v2/gates/authority_policy.json").read_text(encoding="utf-8"))
+evidence=json.loads((ROOT/"v2/gates/evidence_inventory.json").read_text(encoding="utf-8"))
+method=json.loads((ROOT/"v2/gates/development_method_completion.json").read_text(encoding="utf-8"))
+if project.get("feature_builds_allowed") is not True:
+    if authority.get("stage")=="IMPLEMENTATION_ENABLED": fail("authority stage contradicts project feature-build lock")
+    if evidence.get("stage")=="IMPLEMENTATION_ENABLED": fail("evidence stage contradicts project feature-build lock")
+if project.get("stage")=="OVERALL_DESIGN_REBUILD" and project.get("design_verified") is not False:
+    fail("design rebuild cannot be marked verified")
+if method.get("status")!="COMPLETE" and project.get("feature_builds_allowed") is True:
+    fail("feature builds cannot be enabled while method completion is not COMPLETE")
 inc=json.loads((ROOT/"v2/gates/historical_incidents.json").read_text(encoding="utf-8"))
 if inc.get("status")!="ACTIVE" or not inc.get("incidents"): fail("historical incident corpus missing")
 ids=[x.get("id") for x in inc["incidents"]]
