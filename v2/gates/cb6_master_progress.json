@@ -1,5 +1,5 @@
 {
-  "schema": 4,
+  "schema": 5,
   "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
   "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
   "status_vocabulary": [
@@ -646,6 +646,7 @@
     {
       "order": 0,
       "id": "ROOT",
+      "title": "Root完成・認証",
       "state": "IN_PROGRESS",
       "resume_from": "Executable Root Certification",
       "restart_from_zero": false
@@ -653,57 +654,234 @@
     {
       "order": 1,
       "id": "METHOD",
+      "title": "開発Method完成・Freeze",
       "state": "BLOCKED",
-      "resume_from": "Recertify/freeze existing method after Root",
+      "resume_from": "Root認証後に既存Methodを再認証・Freeze",
       "restart_from_zero": false
     },
     {
       "order": 2,
       "id": "CONVENIENCE",
+      "title": "コンビニ表示完成",
       "state": "BLOCKED",
-      "resume_from": "Existing MWM/DataSource diagnostic and classifier; verify collector-to-presentation path",
+      "requirements": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
       "restart_from_zero": false
     },
     {
       "order": 3,
-      "id": "SIGNALS_COVERAGE",
+      "id": "SIGNALS",
+      "title": "信号機取りこぼし解消・最終回帰",
       "state": "BLOCKED",
-      "resume_from": "Existing working signal display; resume missing-signal acquisition/coverage investigation",
+      "requirements": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "achieved": "基本表示、200m/500m実機表示は既存成果として保持",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
       "restart_from_zero": false
     },
     {
       "order": 4,
-      "id": "MAP_UI_LOCATION",
+      "id": "LOCATION_CAMERA",
+      "title": "自車位置・地図回転・停止時ふらつき・方位",
       "state": "BLOCKED",
-      "resume_from": "Preserve existing accepted behavior; work from recorded unresolved defects",
+      "requirements": [
+        "MAP-CAMERA-001",
+        "LOCATION-STABILITY-001",
+        "CAMERA-FIXED-001",
+        "VEHICLE-ICON-001"
+      ],
+      "resume_from": "既存成果を保持し記録済み不具合から",
       "restart_from_zero": false
     },
     {
       "order": 5,
-      "id": "OTHER_POI_AND_CONTROLS",
+      "id": "UI_HUD_SCALE",
+      "title": "画面UI配置・走行道路名バー・縮尺操作",
       "state": "BLOCKED",
-      "resume_from": "Develop/validate remaining active requirements in dependency order",
+      "requirements": [
+        "UI-LAYOUT-001",
+        "HUD-ROAD-001",
+        "MAP-SCALE-001"
+      ],
+      "resume_from": "既存UIを基準に要求差分から",
       "restart_from_zero": false
     },
     {
       "order": 6,
-      "id": "INTEGRATED_APK",
+      "id": "MAP_LABELS",
+      "title": "地図ラベル・住所抑制・道路名表示",
       "state": "BLOCKED",
-      "resume_from": "Same-HEAD integrated build/evidence",
+      "requirements": [
+        "MAP-LABEL-001"
+      ],
+      "resume_from": "現行style/label挙動の解析から",
       "restart_from_zero": false
     },
     {
       "order": 7,
-      "id": "DEVICE_REGRESSION",
+      "id": "FUEL",
+      "title": "GS表示",
       "state": "BLOCKED",
-      "resume_from": "Exact APK SHA on CB6",
+      "requirements": [
+        "POI-FUEL-001"
+      ],
+      "resume_from": "Native MWM/classificator/style優先で検証",
       "restart_from_zero": false
     },
     {
       "order": 8,
-      "id": "FINAL_ACCEPTANCE",
+      "id": "MAJOR_POI",
+      "title": "主要施設・空港・道の駅・公園・公共施設",
       "state": "BLOCKED",
-      "resume_from": "All unresolved/deferred blockers closed",
+      "requirements": [
+        "POI-MAJOR-001"
+      ],
+      "resume_from": "Native MWM/styleと縮尺・collision検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 9,
+      "id": "STOP_SIGNS",
+      "title": "一時停止標識",
+      "state": "BLOCKED",
+      "requirements": [
+        "STOP-001"
+      ],
+      "resume_from": "前方距離・方位filterを独立publisherで検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 10,
+      "id": "SEARCH",
+      "title": "検索・検索履歴・曖昧検索",
+      "state": "BLOCKED",
+      "requirements": [
+        "SEARCH-FUZZY-001",
+        "SEARCH-HISTORY-001"
+      ],
+      "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張",
+      "restart_from_zero": false
+    },
+    {
+      "order": 11,
+      "id": "VOICE_SEARCH",
+      "title": "音声検索",
+      "state": "BLOCKED",
+      "requirements": [
+        "SEARCH-VOICE-001"
+      ],
+      "resume_from": "日本語音声入力→共通normalization→SearchEngine",
+      "restart_from_zero": false
+    },
+    {
+      "order": 12,
+      "id": "GOOGLE_MAPS",
+      "title": "Google Maps起動・CB6復帰",
+      "state": "BLOCKED",
+      "requirements": [
+        "GOOGLE-MAPS-001"
+      ],
+      "resume_from": "Android handoff/return lifecycle実機検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 13,
+      "id": "ORIENTATION_LIFECYCLE",
+      "title": "画面縦横・起動/再起動/Lifecycle",
+      "state": "BLOCKED",
+      "requirements": [
+        "ORIENTATION-001",
+        "LIFECYCLE-001"
+      ],
+      "resume_from": "Activity/theme/orientation restart時の状態復元から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 14,
+      "id": "FAVORITES_SYNC",
+      "title": "お気に入り・スマホ↔CB6同期",
+      "state": "BLOCKED",
+      "requirements": [
+        "FAVORITES-001"
+      ],
+      "resume_from": "BookmarkManager authority・非破壊merge設計から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 15,
+      "id": "FREE_EXPRESSWAY_ROUTING",
+      "title": "高速無料区間ルーティング",
+      "state": "BLOCKED",
+      "requirements": [
+        "ROUTING-FREE-001"
+      ],
+      "resume_from": "Pinned CoMaps routing/toll/access属性解析から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 16,
+      "id": "TOLL_DISPLAY",
+      "title": "ルート別料金表示",
+      "state": "BLOCKED",
+      "requirements": [
+        "TOLL-001",
+        "TOLL-ROUTE-001"
+      ],
+      "resume_from": "Authorityある料金モデル確立から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 17,
+      "id": "ROAD_INFO",
+      "title": "固定カメラ等の追加道路情報",
+      "state": "BLOCKED",
+      "requirements": [],
+      "note": "候補機能。Active requirement登録・Authority確定前は実装不可。",
+      "resume_from": "正式Requirement登録から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 18,
+      "id": "INTEGRATED_REGRESSION",
+      "title": "全機能統合回帰試験",
+      "state": "BLOCKED",
+      "resume_from": "全対象Feature Gate成立後",
+      "restart_from_zero": false
+    },
+    {
+      "order": 19,
+      "id": "FINAL_APK",
+      "title": "最終arm64 APK生成・APK同一性検証",
+      "state": "BLOCKED",
+      "requirements": [
+        "OFFLINE-FREE-001",
+        "PRODUCT-BASE-001",
+        "SCOPE-HOKKAIDO-001"
+      ],
+      "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain",
+      "restart_from_zero": false
+    },
+    {
+      "order": 20,
+      "id": "DEVICE_REGRESSION",
+      "title": "CB6実機総合試験",
+      "state": "BLOCKED",
+      "resume_from": "最終APK SHA固定後",
+      "restart_from_zero": false
+    },
+    {
+      "order": 21,
+      "id": "FINAL_ACCEPTANCE",
+      "title": "Final Acceptance",
+      "state": "BLOCKED",
+      "resume_from": "全Active requirement・deferred blocker・device evidence閉鎖後",
       "restart_from_zero": false
     }
   ],
@@ -964,5 +1142,12 @@
     "device evidence",
     "regression obligations",
     "supersession/history"
-  ]
+  ],
+  "order_rules": {
+    "no_catch_all_bucket": true,
+    "requirement_mapping_required": "Every active product requirement must map to one or more explicit development-order rows; process requirements may govern the whole pipeline.",
+    "partial_work_preserved": true,
+    "deferred_work_requires_resume_point": true,
+    "dependency_override": "Order may change only with recorded reason/impact/dependency evidence; silent reordering is forbidden."
+  }
 }
