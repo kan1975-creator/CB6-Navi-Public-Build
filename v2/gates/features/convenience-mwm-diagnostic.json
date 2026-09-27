@@ -8,7 +8,6 @@
   "impact_checked": true,
   "repo_sweep_required": true,
   "source_paths": [
-    "docs/CB6_V2_NATIVE_POI_DESIGN.md",
     "v2/poi/native/convenience_brand_classifier.hpp",
     "v2/poi/native/convenience_brand_classifier.cpp",
     "v2/poi/native/convenience_mwm_collector.hpp",
@@ -55,7 +54,6 @@
   ],
   "domain_verification": {
     "poi": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
       "v2/poi/native/convenience_mwm_collector.cpp",
       "v2/poi/apply_convenience_mwm_diagnostic.py"
     ],
@@ -70,7 +68,6 @@
       "v2/poi/apply_convenience_mwm_diagnostic.py"
     ],
     "offline": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
       "v2/poi/native/convenience_mwm_collector.cpp",
       "v2/poi/apply_convenience_mwm_diagnostic.py"
     ],
@@ -84,7 +81,6 @@
     ],
     "real-device": [],
     "presentation": [
-      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
       "v2/audits/audit_convenience.py",
       "v2/poi/apply_convenience_mwm_diagnostic.py"
     ]
