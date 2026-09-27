@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "feature_id": "convenience-mwm-diagnostic",
-  "status": "COMPLETE",
+  "status": "INVALIDATED_RESTART_REQUIRED",
   "internal_analysis": {
     "required": true,
     "paths": [
@@ -40,7 +40,7 @@
       "v2/gates/active_decisions.json"
     ]
   },
-  "completed_before_implementation": true,
+  "completed_before_implementation": false,
   "pinned_upstream_source_analysis": {
     "required": true,
     "repository": "comaps/comaps",
@@ -106,5 +106,18 @@
         "Framework::GetDataSource plus DataSource::ForEachInRect is the public pinned acquisition path."
       ]
     }
+  },
+  "current_authority": false,
+  "invalidation": {
+    "reason": "User-directed source-first restart: prior research record is not accepted as proof that required original/pinned source verification preceded Convenience development.",
+    "reuse_policy": "REFERENCE_ONLY",
+    "required_restart_sequence": [
+      "CB6 active requirements/authority",
+      "exact pinned CoMaps source tree and relevant generator/classificator/style/renderer/DataSource paths",
+      "external/upstream research only where needed",
+      "revalidate findings against pinned source",
+      "fresh impact map",
+      "implementation decision"
+    ]
   }
 }
