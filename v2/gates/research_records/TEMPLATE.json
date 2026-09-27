@@ -39,5 +39,15 @@
     "findings": [
       "REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"
     ]
+  },
+  "upstream_domain_coverage": {
+    "REPLACE_WITH_TECHNICAL_AFFECTED_DOMAIN": {
+      "source_paths": [
+        "REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"
+      ],
+      "findings": [
+        "REPLACE_WITH_DOMAIN_SPECIFIC_FINDING"
+      ]
+    }
   }
 }
