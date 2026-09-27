@@ -14,6 +14,7 @@ on:
       - 'v2/gates/features/convenience-mwm-diagnostic.json'
       - 'v2/gates/impact_records/convenience-mwm-diagnostic.json'
       - 'v2/gates/**'
+      - '.github/workflows/build_cb6_v2_signals.yml'
 
 permissions:
   contents: read
