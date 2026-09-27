@@ -1,4 +1,4 @@
-name: CB6 V2 Convenience MWM Diagnostic
+name: CB6 V2 Convenience MWM Diagnostic\n# CB6 visible MWM evidence diagnostic
 
 on:
   workflow_dispatch:
