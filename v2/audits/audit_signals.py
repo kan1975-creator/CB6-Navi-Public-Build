@@ -58,12 +58,19 @@ policy_values={
  'RADIUS_M':str(acq['radius_m']), 'MAX_POINTS':str(acq['max_points']),
  'MOVEMENT_M':str(float(acq['movement_m']))+'f', 'FORWARD_MAX_M':str(float(acq['forward_max_m']))+'f',
  'FORWARD_CONE_DEG':str(float(acq['forward_cone_deg']))+'f',
- 'DISPLAY_CLUSTER_M':str(float(spec['display']['cluster_radius_m']))+'f'
+ 'DISPLAY_CLUSTER_M':str(float(spec['display']['cluster_radius_m']))+'f',
+ 'SOURCE_DEDUP_M':str(float(acq['source_dedup_m']))+'f'
 }
 for name,value in policy_values.items():
     require(f'{name} = {value}' in policy, 'current-spec constant '+name)
 for token in acq['osm_queries']:
     require('['+token+']' in provider, 'current-spec query '+token)
+require('new CompositeSignalProvider(' in controller and 'new VerifiedSignalProvider()' in controller, 'composite/supplement acquisition not wired')
+require((module/'java/CompositeSignalProvider.java').exists() and (module/'java/VerifiedSignalProvider.java').exists(), 'supplement provider source missing')
+verified = (module/'java/VerifiedSignalProvider.java').read_text()
+composite = (module/'java/CompositeSignalProvider.java').read_text()
+require('provenance' in verified and 'verifiedDate' in verified and 'Intentionally empty' in verified, 'verified supplement provenance gate missing')
+require('SOURCE_DEDUP_M' in composite and 'a == null && b == null' in composite, 'source dedup/fail-safe composition missing')
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('snapshot.displayPoints()' in controller, 'renderer-only signal clustering missing')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
