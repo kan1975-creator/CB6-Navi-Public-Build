@@ -1,26 +1,32 @@
 {
   "schema": 1,
-  "status": "PENDING",
+  "status": "COMPLETE",
   "required": {
     "development_gate": {
-      "head_sha": "PENDING",
-      "run_id": "PENDING",
-      "conclusion": "PENDING"
+      "head_sha": "ee7f14608e730c90b889d7db1560fc98759e04f6",
+      "run_id": "36311713329",
+      "conclusion": "success"
     },
     "signals": {
-      "feature_gate": "PENDING",
-      "audit": "PENDING",
-      "audit_destructive_proof": "PENDING",
-      "preflight_destructive_proof": "PENDING"
+      "feature_gate": "success",
+      "audit": "success",
+      "audit_destructive_proof": "success",
+      "preflight_destructive_proof": "success",
+      "run_id": "36311713267",
+      "apk_evidence": "success"
     },
     "convenience_mwm_diagnostic": {
-      "feature_gate": "PENDING",
-      "audit": "PENDING",
-      "audit_destructive_proof": "PENDING"
+      "feature_gate": "success",
+      "audit": "success",
+      "audit_destructive_proof": "success",
+      "run_id": "36311713305",
+      "apk_evidence": "success"
     },
     "method_contract_locked": true,
     "research_template_locked": true,
     "pinned_comaps_analysis_required": true
   },
-  "completion_rule": "COMPLETE only after all required machine checks are evidenced on the same final method HEAD"
+  "completion_rule": "COMPLETE only after all required machine checks are evidenced on the same final method HEAD",
+  "certified_method_head": "ee7f14608e730c90b889d7db1560fc98759e04f6",
+  "completion_note": "Method repair certified on one common HEAD. This record-only commit does not change implementation, audit, test, or workflow behavior."
 }
