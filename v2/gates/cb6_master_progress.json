@@ -1,5 +1,5 @@
 {
-  "schema": 13,
+  "schema": 14,
   "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
   "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
   "status_vocabulary": [
@@ -663,13 +663,14 @@
       "order": 2,
       "id": "CONVENIENCE",
       "title": "コンビニ表示完成",
-      "state": "BLOCKED",
+      "state": "BLOCKED_RESTART_REQUIRED",
       "requirements": [
         "POI-CONVENIENCE-001",
         "CONVENIENCE-BRANDS-001"
       ],
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
-      "restart_from_zero": false
+      "resume_from": "Root/Method認証後、要求/Authority→Pinned CoMaps元ソース解析から仕切り直し",
+      "restart_from_zero": true,
+      "prior_work": "REFERENCE_ONLY_UNTIL_REVALIDATED"
     },
     {
       "order": 3,
