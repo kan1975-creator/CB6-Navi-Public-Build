@@ -84,7 +84,7 @@ hook = r'''
                      Toast.LENGTH_LONG).show();
     }
 '''
-activity_anchor = "    processIntent();\\n"
+activity_anchor = "    processIntent();\n"
 if "CB6 MWM CONVENIENCE:" not in a:
     if activity_anchor not in a:
         raise SystemExit("CB6 convenience diagnostic: MwmActivity post-render anchor missing")
