@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "feature_id": "convenience-brands",
-  "status": "COMPLETE",
+  "status": "INVALIDATED_RESTART_REQUIRED",
   "internal_analysis": {
     "required": true,
     "paths": [
@@ -41,7 +41,7 @@
       "v2/gates/current_spec.json"
     ]
   },
-  "completed_before_implementation": true,
+  "completed_before_implementation": false,
   "pinned_upstream_source_analysis": {
     "required": true,
     "repository": "comaps/comaps",
@@ -59,6 +59,19 @@
     "findings": [
       "Framework::GetDataSource and DataSource::ForEachInRect are the pinned public acquisition boundary.",
       "Feature metadata and pinned brand data are the upstream basis for deterministic convenience brand classification."
+    ]
+  },
+  "current_authority": false,
+  "invalidation": {
+    "reason": "User-directed source-first restart: prior research record is not accepted as proof that required original/pinned source verification preceded Convenience development.",
+    "reuse_policy": "REFERENCE_ONLY",
+    "required_restart_sequence": [
+      "CB6 active requirements/authority",
+      "exact pinned CoMaps source tree and relevant generator/classificator/style/renderer/DataSource paths",
+      "external/upstream research only where needed",
+      "revalidate findings against pinned source",
+      "fresh impact map",
+      "implementation decision"
     ]
   }
 }
