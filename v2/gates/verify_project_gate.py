@@ -9,6 +9,8 @@ def fail(msg):
 for p in (STATE,EXEC,OLD):
  if not p.exists(): fail("required gate input missing: "+str(p.relative_to(ROOT)))
 s=json.loads(STATE.read_text(encoding="utf-8"))
+root_state=json.loads((ROOT/"v2/gates/root_invariants.json").read_text(encoding="utf-8"))
+root_cert=root_state.get("certification",{})
 ci_sha=os.environ.get("GITHUB_SHA","").strip()
 if ci_sha:
  cp=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True)
@@ -21,6 +23,9 @@ stage=s.get("stage")
 if stage not in {"OVERALL_DESIGN_REBUILD","IMPLEMENTATION_ENABLED"}: fail("unknown stage: "+str(stage))
 old=OLD.read_text(encoding="utf-8")
 if "RETIRED AS CANONICAL" not in old: fail("retired overall design became canonical again")
+if "--require-feature-build" in sys.argv:
+ if root_cert.get("status")!="CERTIFIED" or root_cert.get("feature_execution_permitted") is not True:
+  fail("feature build requested before root certification")
 if stage=="OVERALL_DESIGN_REBUILD":
  if s.get("feature_builds_allowed") is not False: fail("feature builds must be disabled during design rebuild")
  print("CB6 DEVELOPMENT GATE PASS: overall-design rebuild; feature builds BLOCKED")
