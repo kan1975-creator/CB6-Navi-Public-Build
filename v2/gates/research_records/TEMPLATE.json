@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "feature_id": "REPLACE_ME",
+  "status": "PENDING",
+  "internal_analysis": {
+    "required": true,
+    "paths": [
+      "REPLACE_WITH_PINNED_SOURCE_OR_INTERNAL_PATH"
+    ],
+    "findings": [
+      "REPLACE_WITH_FINDING"
+    ]
+  },
+  "upstream_web_research": {
+    "applicable": "REPLACE_WITH_TRUE_OR_FALSE",
+    "sources": [],
+    "findings": []
+  },
+  "pinned_source_revalidation": {
+    "required": true,
+    "evidence": [
+      "REPLACE_WITH_REVALIDATION_EVIDENCE"
+    ]
+  },
+  "authority_classification": {
+    "web_is_authority": false,
+    "current_authority": [
+      "REPLACE_WITH_CURRENT_AUTHORITY"
+    ]
+  },
+  "completed_before_implementation": false
+}
