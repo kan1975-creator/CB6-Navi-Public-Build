@@ -32,3 +32,22 @@ for req_id,state in overrides.items():
     if state.get("implementation_state")=="DEFERRED_WITH_EVIDENCE" and not state.get("deferred_reason"):
         print("CB6 MASTER LEDGER FAIL: deferred reason missing",req_id); raise SystemExit(1)
 print("CB6 MASTER RESUME STATE PASS:",len(overrides),"tracked partial/deferred requirements")
+
+# Master source-inventory closure: no required authority/evidence source may silently disappear.
+inventory=ledger.get("source_inventory",[])
+for item in inventory:
+    p=item.get("path","")
+    if not p:
+        print("CB6 MASTER LEDGER FAIL: empty source inventory path"); raise SystemExit(1)
+    if p.endswith(("features","research_records","impact_records")):
+        if not (ROOT/p).is_dir():
+            print("CB6 MASTER LEDGER FAIL: source directory missing",p); raise SystemExit(1)
+    elif not (ROOT/p).exists():
+        print("CB6 MASTER LEDGER FAIL: source inventory file missing",p); raise SystemExit(1)
+required_failure_ids={"STALE_VALIDATOR","ESCAPED_NEWLINE","LATER_PATCH_RESTORE","USERMARK_GROUP_MISMATCH","GROUP_REPLACEMENT","BUILD_NOT_FEATURE_SUCCESS","MWM_DUPLICATED_BY_NETWORK","CONTEXT_CONTINUITY","REPEATED_STALE_AUDIT"}
+actual_failure_ids={x.get("id") for x in ledger.get("known_failure_classes",[])}
+if required_failure_ids-actual_failure_ids:
+    print("CB6 MASTER LEDGER FAIL: known failure coverage missing",sorted(required_failure_ids-actual_failure_ids)); raise SystemExit(1)
+if not ledger.get("completeness",{}).get("zero_omission_required"):
+    print("CB6 MASTER LEDGER FAIL: zero-omission rule missing"); raise SystemExit(1)
+print("CB6 MASTER SOURCE/HISTORY COVERAGE PASS")
