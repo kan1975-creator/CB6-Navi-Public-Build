@@ -8,7 +8,10 @@
     "v2/gates/traceability.json",
     "v2/gates/current_spec.json",
     "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
-    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+    "v2/gates/root_invariants.json",
+    "v2/gates/repository_state_manifest.json",
+    "v2/gates/historical_incidents.json"
   ],
   "historical_docs": [
     "CLAUDE_HANDOVER.md",
