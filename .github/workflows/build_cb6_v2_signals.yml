@@ -104,6 +104,7 @@ jobs:
           python3 v2/audits/audit_identity.py comaps
           python3 v2/audits/audit_signals.py comaps | tee out/SOURCE_AUDIT.txt
           python3 v2/tests/signals_audit_selftest.py comaps | tee out/SIGNAL_AUDIT_SELFTEST.txt
+          python3 v2/tests/preflight_gate1_audit_selftest.py comaps out/GENERATED_SOURCE_SHA256.json | tee out/PREFLIGHT_AUDIT_SELFTEST.txt
           git -C comaps diff --check
           git -C comaps diff > out/GATE1_UPSTREAM_DIFF.patch
           tar -czf out/GATE1_MODULE_SOURCE.tar.gz v2/signals v2/audits v2/tests
