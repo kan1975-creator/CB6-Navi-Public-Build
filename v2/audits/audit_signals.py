@@ -56,7 +56,7 @@ require(mark.index('if (m_forward)') < mark.index('{17,'), 'unconditional enlarg
 acq=spec['acquisition']
 policy_values={
  'RADIUS_M':str(acq['radius_m']), 'MAX_POINTS':str(acq['max_points']),
- 'MOVEMENT_M':str(acq['movement_m'])+'f', 'FORWARD_MAX_M':str(acq['forward_max_m'])+'f',
+ 'MOVEMENT_M':str(float(acq['movement_m']))+'f', 'FORWARD_MAX_M':str(float(acq['forward_max_m']))+'f',
  'FORWARD_CONE_DEG':str(acq['forward_cone_deg'])+'f'
 }
 for name,value in policy_values.items():
