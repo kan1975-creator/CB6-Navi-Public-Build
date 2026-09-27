@@ -157,7 +157,7 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
    fail("build workflow overrides GITHUB_SHA: "+p.name)
   token="verify_project_gate.py --require-feature-build --feature="
   if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
-  if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
+  freeze_token="verify_method_freeze.py"\n  if freeze_token not in s or s.index(freeze_token)>s.index(token): fail("V2 build workflow bypasses method freeze: "+p.name)\n  if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
    fail("feature gate occurs after build/transform work: "+p.name)
   gate_pos=s.index(token)
   post_gate=s[gate_pos:]
