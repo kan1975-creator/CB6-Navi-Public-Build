@@ -70,9 +70,11 @@ require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in co
 require('main.post(() ->' in controller, 'main-thread publication')
 require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')
 require('way(around:' in provider and '[crossing=traffic_signals]' in provider and ');out center;' in provider, 'signalized crossing way acquisition')
+require('rel(around:' in provider and '[type=traffic_signals_set]' in provider, 'Japanese traffic signal set relation acquisition')
+require('"relation".equals(type)' in provider and 'RELATION_ID_NAMESPACE' in provider, 'relation parser/id namespace missing')
 require('e.optJSONObject("center")' in provider, 'way centre parser missing')
 require('WAY_ID_NAMESPACE' in provider and 'WAY_ID_NAMESPACE | rawId' in provider, 'node/way id namespaces can collide')
-require('tags.optString("highway")' in provider and 'tags.optString("crossing")' in provider, 'road/crossing signal parser')
+require('tags.optString("highway")' in provider and 'tags.optString("crossing")' in provider and 'tags.optString("type")' in provider, 'road/crossing/signal-set parser')
 require('getLatitude()' not in jni, 'invalid JNI source')
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
