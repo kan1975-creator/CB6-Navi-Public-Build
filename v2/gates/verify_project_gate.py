@@ -9,6 +9,11 @@ def fail(msg):
 for p in (STATE,EXEC,OLD):
  if not p.exists(): fail("required gate input missing: "+str(p.relative_to(ROOT)))
 s=json.loads(STATE.read_text(encoding="utf-8"))
+# Root method freeze is a prerequisite for every project/feature gate, not only
+# the Development Gate workflow. This prevents a build workflow from consuming
+# an uncertified method state.
+freeze=subprocess.run([sys.executable,str(ROOT/"v2/gates/verify_method_freeze.py")],cwd=ROOT,text=True,capture_output=True)
+if freeze.returncode!=0: fail("development method freeze invalid: "+(freeze.stdout+freeze.stderr).strip())
 # In GitHub Actions the gated control repository must be exactly the workflow commit.
 # Local/offline verification remains supported when GITHUB_SHA is absent.
 ci_sha=os.environ.get("GITHUB_SHA","").strip()
