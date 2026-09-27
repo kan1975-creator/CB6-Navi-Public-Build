@@ -1,13 +1,16 @@
 {
   "schema": 1,
-  "stage": "IMPLEMENTATION_ENABLED",
+  "stage": "OVERALL_DESIGN_REBUILD",
   "required_gate_scripts": [
+    "v2/gates/verify_root_invariants.py",
     "v2/gates/verify_project_gate.py",
     "v2/gates/verify_project_integrity.py",
     "v2/gates/verify_evidence_inventory_v2.py",
     "v2/gates/verify_design_coverage.py"
   ],
   "required_regression_tests": [
+    "v2/tests/test_root_invariants.py",
+    "v2/tests/test_repository_syntax.py",
     "v2/tests/test_gate_fail_closed.py",
     "v2/tests/test_feature_gate_contract.py",
     "v2/tests/test_apk_evidence_fail_closed.py",
