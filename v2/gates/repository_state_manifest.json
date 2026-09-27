@@ -14,7 +14,9 @@
     "method_contract": [
       "v2/gates/root_invariants.json",
       "v2/gates/development_method_contract.json",
-      "docs/CB6_V2_DEVELOPMENT_METHOD.md"
+      "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+      "v2/gates/root_certification_plan.json",
+      "v2/gates/run_root_certification.py"
     ],
     "current_feature_state": [
       "v2/gates/features/signals.json",
