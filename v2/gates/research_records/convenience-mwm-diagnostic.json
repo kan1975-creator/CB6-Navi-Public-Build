@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "feature_id": "convenience-mwm-diagnostic",
+  "status": "COMPLETE",
+  "internal_analysis": {
+    "required": true,
+    "paths": [
+      "v2/poi/native/convenience_mwm_collector.cpp",
+      "v2/poi/apply_convenience_mwm_diagnostic.py",
+      "v2/audits/audit_convenience.py"
+    ],
+    "findings": [
+      "Pinned CoMaps exposes public Framework::GetDataSource and DataSource::ForEachInRect; the historical FeaturesFetcher assumption is not current implementation authority."
+    ]
+  },
+  "upstream_web_research": {
+    "applicable": true,
+    "sources": [
+      "Pinned CoMaps source 7113ccb5f086183f8884b2aa4e58c987466b6704",
+      "CoMaps/Organic Maps MWM and classificator behavior investigated during diagnostic design"
+    ],
+    "findings": [
+      "Native installed MWM is the diagnostic acquisition boundary; external research is not implementation authority."
+    ]
+  },
+  "pinned_source_revalidation": {
+    "required": true,
+    "evidence": [
+      ".github/workflows/build_cb6_v2_convenience_diagnostic.yml exact CoMaps SHA checkout",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
+    ]
+  },
+  "authority_classification": {
+    "web_is_authority": false,
+    "current_authority": [
+      "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "v2/gates/active_decisions.json"
+    ]
+  },
+  "completed_before_implementation": true
+}
