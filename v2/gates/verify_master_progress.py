@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<100:
+if len(items)<131:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -115,3 +115,10 @@ for x in items:
         if st in {"RECORDED","EXISTS_REQUIRES_RECERTIFICATION","IN_PROGRESS_REQUIRES_RECERTIFICATION"} and not ev:
             print("CB6 MASTER LEDGER FAIL: evidence-bearing pipeline state lacks evidence",x.get("id"),name); raise SystemExit(1)
 print("CB6 MASTER PIPELINE COVERAGE PASS:",len(items),"atomic requirements x",len(pipeline_names),"stages")
+
+# Zero-omission audit anchors from canonical/historical sources.
+required_atomic_ids={"SIG-REFRESH-45","SIG-RETRY-12","SIG-MOVE-250","SIG-RADIUS-3000","SIG-RETENTION","CV-ZOOM-1KM","CV-ZOOM-500M","CV-ZOOM-200M","CV-GROUP","PROC-RENDER-CROSSCUT","PROC-JNI-CROSSCUT","PROC-PATCH-ORDER","PROC-DATASOURCE-CROSSCUT","CV-METADATA-DIAGNOSTIC","MAP-RAW-SEPARATE","MAP-LOW-SPEED-HYSTERESIS","BASE-STOCK-SEARCH","BASE-STOCK-HISTORY","BASE-STOCK-BOOKMARKS","BASE-STOCK-DOWNLOADS","BASE-STOCK-POI"}
+missing_atomic=required_atomic_ids-set(ids)
+if missing_atomic:
+    print("CB6 MASTER LEDGER FAIL: audited detailed specifications disappeared",sorted(missing_atomic)); raise SystemExit(1)
+print("CB6 MASTER ZERO-OMISSION AUDIT ANCHORS PASS:",len(required_atomic_ids))
