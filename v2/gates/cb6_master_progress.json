@@ -1,5 +1,5 @@
 {
-  "schema": 5,
+  "schema": 6,
   "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
   "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
   "status_vocabulary": [
@@ -970,10 +970,16 @@
   },
   "completeness": {
     "status": "IN_PROGRESS",
-    "claim": "Master is not complete until source inventory, active decisions, known failures, accepted/frozen behavior, current design, feature contracts, research/impact and evidence inventory are all coverage-checked.",
-    "zero_omission_required": true
+    "claim": "Master is incomplete until atomic requirement reconstruction and repository/history coverage both pass zero-omission verification.",
+    "zero_omission_required": true,
+    "atomic_specification_coverage": "RECONSTRUCTION_IN_PROGRESS"
   },
   "source_inventory": [
+    {
+      "path": "v2/gates/atomic_requirements.json",
+      "role": "atomic detailed CB6 specification registry",
+      "coverage": "machine-checked and zero-omission reconstruction required"
+    },
     {
       "path": "v2/gates/active_decisions.json",
       "role": "all active/superseded requirement decisions",
@@ -1149,5 +1155,11 @@
     "partial_work_preserved": true,
     "deferred_work_requires_resume_point": true,
     "dependency_override": "Order may change only with recorded reason/impact/dependency evidence; silent reordering is forbidden."
+  },
+  "atomic_requirement_registry": {
+    "path": "v2/gates/atomic_requirements.json",
+    "status": "RECONSTRUCTION_IN_PROGRESS",
+    "current_count": 110,
+    "completion_rule": "Every valid detailed CB6 specification must be represented atomically and mapped to a development stage, parent active decision/authority, progress/evidence and acceptance route. Count alone never proves completeness."
   }
 }
