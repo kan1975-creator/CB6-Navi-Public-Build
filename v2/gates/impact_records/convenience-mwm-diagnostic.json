@@ -28,8 +28,6 @@
     "v2/gates/current_spec.json",
     "v2/poi/apply_convenience_mwm_diagnostic.py",
     "v2/tests/convenience_audit_selftest.py",
-    "pinned:comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704:android/app/src/main/java/app/organicmaps/MwmActivity.java",
     "v2/gates/research_records/convenience-mwm-diagnostic.json"
-  ],
-  "decision": "Expose a diagnostic-only post-render Toast sourced exclusively from Framework.nativeCb6ConvenienceDiagnostic at the saved device location. This distinguishes CB6 collector evidence from standard CoMaps POI rendering without changing final renderer behavior."
+  ]
 }
