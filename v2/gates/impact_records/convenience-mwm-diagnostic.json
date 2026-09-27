@@ -25,6 +25,8 @@
     "v2/tests/convenience_brand_classifier_test.cpp",
     "v2/gates/active_decisions.json",
     "v2/gates/domain_verification_policy.json",
-    "v2/gates/current_spec.json"
+    "v2/gates/current_spec.json",
+    "v2/poi/apply_convenience_mwm_diagnostic.py",
+    "v2/tests/convenience_audit_selftest.py"
   ]
 }
