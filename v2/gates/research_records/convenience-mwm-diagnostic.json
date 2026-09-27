@@ -7,10 +7,12 @@
     "paths": [
       "v2/poi/native/convenience_mwm_collector.cpp",
       "v2/poi/apply_convenience_mwm_diagnostic.py",
-      "v2/audits/audit_convenience.py"
+      "v2/audits/audit_convenience.py",
+      "pinned:comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704:android/app/src/main/java/app/organicmaps/MwmActivity.java"
     ],
     "findings": [
-      "Pinned CoMaps exposes public Framework::GetDataSource and DataSource::ForEachInRect; the historical FeaturesFetcher assumption is not current implementation authority."
+      "Pinned CoMaps exposes public Framework::GetDataSource and DataSource::ForEachInRect; the historical FeaturesFetcher assumption is not current implementation authority.",
+      "Pinned MwmActivity already imports Location, Toast and Framework and invokes processIntent after rendering initialization; a diagnostic-only post-render hook can expose collector count without changing production renderer ownership."
     ]
   },
   "upstream_web_research": {
@@ -49,10 +51,12 @@
       "indexer/data_source.hpp",
       "indexer/data_source.cpp",
       "indexer/feature.hpp",
-      "indexer/feature_meta.hpp"
+      "indexer/feature_meta.hpp",
+      "android/app/src/main/java/app/organicmaps/MwmActivity.java"
     ],
     "findings": [
-      "Pinned CoMaps Framework/DataSource/Feature surfaces are the upstream basis for native installed-MWM convenience acquisition; public DataSource integration supersedes the historical private FeaturesFetcher assumption."
+      "Pinned CoMaps Framework/DataSource/Feature surfaces are the upstream basis for native installed-MWM convenience acquisition; public DataSource integration supersedes the historical private FeaturesFetcher assumption.",
+      "MwmActivity onRenderingInitializationFinished is a concrete diagnostic presentation boundary after map engine initialization."
     ]
   }
 }
