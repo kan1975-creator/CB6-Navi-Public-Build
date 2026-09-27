@@ -16,8 +16,10 @@ import org.json.JSONObject;
 /** Frozen lightweight signal-only acquisition; never queries static POIs. */
 public final class OverpassSignalProvider implements SignalProvider
 {
-  // OSM node and way ids use separate namespaces. Keep way-derived ids positive and collision-free.
+  // OSM node, way and relation ids use separate positive namespaces.
   private static final long WAY_ID_NAMESPACE = 1L << 62;
+  private static final long RELATION_ID_NAMESPACE = (1L << 62) | (1L << 61);
+  private static final long RELATION_RAW_ID_LIMIT = 1L << 61;
   private static final String[] ENDPOINTS = {
       "https://overpass-api.de/api/interpreter",
       "https://overpass.kumi.systems/api/interpreter",
@@ -32,6 +34,7 @@ public final class OverpassSignalProvider implements SignalProvider
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
         + "way(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
+        + "rel(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[type=traffic_signals_set];"
         + ");out center;";
     Exception last = null;
     for (String endpoint : ENDPOINTS)
@@ -61,12 +64,13 @@ public final class OverpassSignalProvider implements SignalProvider
       JSONObject e = elements.optJSONObject(i);
       if (e == null) continue;
       String type = e.optString("type");
-      if (!"node".equals(type) && !"way".equals(type)) continue;
+      if (!"node".equals(type) && !"way".equals(type) && !"relation".equals(type)) continue;
       JSONObject tags = e.optJSONObject("tags");
       if (tags == null) continue;
       boolean roadSignal = "traffic_signals".equals(tags.optString("highway"));
       boolean crossingSignal = "traffic_signals".equals(tags.optString("crossing"));
-      if (!roadSignal && !crossingSignal) continue;
+      boolean signalSet = "traffic_signals_set".equals(tags.optString("type"));
+      if (!roadSignal && !crossingSignal && !signalSet) continue;
       double y, x;
       if ("node".equals(type))
       {
@@ -82,8 +86,18 @@ public final class OverpassSignalProvider implements SignalProvider
       }
       if (!SignalPolicy.validCoordinate(y, x)) continue;
       long rawId = e.optLong("id", -1);
-      if (rawId <= 0 || rawId >= WAY_ID_NAMESPACE) continue;
-      long id = "way".equals(type) ? WAY_ID_NAMESPACE | rawId : rawId;
+      if (rawId <= 0) continue;
+      long id;
+      if ("relation".equals(type))
+      {
+        if (rawId >= RELATION_RAW_ID_LIMIT) continue;
+        id = RELATION_ID_NAMESPACE | rawId;
+      }
+      else
+      {
+        if (rawId >= WAY_ID_NAMESPACE) continue;
+        id = "way".equals(type) ? WAY_ID_NAMESPACE | rawId : rawId;
+      }
       Location.distanceBetween(lat, lon, y, x, distance);
       points.add(new SignalSnapshot.Point(id, y, x, distance[0]));
     }
