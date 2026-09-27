@@ -80,6 +80,15 @@ if "--require-feature-build" in sys.argv:
  if not isinstance(source_paths,list) or not source_paths or any(not isinstance(x,str) or not x or x.startswith("REPLACE_") or x.startswith("v2/") or x.startswith("docs/") for x in source_paths): fail("concrete original CoMaps source paths not recorded")
  findings=upstream.get("findings",[])
  if not isinstance(findings,list) or not findings or any(not isinstance(x,str) or not x.strip() or x.startswith("REPLACE_") for x in findings): fail("pinned CoMaps source findings not recorded")
+ coverage=research.get("upstream_domain_coverage",{})
+ technical_domains=set(f.get("affected_domains",[]))-{"audits","tests","real-device"}
+ if not isinstance(coverage,dict) or set(coverage)!=technical_domains: fail("pinned CoMaps analysis coverage does not match technical affected domains")
+ for domain in sorted(technical_domains):
+  item=coverage.get(domain)
+  if not isinstance(item,dict) or set(item)!={"source_paths","findings"}: fail("pinned CoMaps domain analysis record invalid: "+domain)
+  paths=item.get("source_paths",[]); domain_findings=item.get("findings",[])
+  if not paths or any(x not in source_paths for x in paths): fail("pinned CoMaps domain lacks analyzed source path: "+domain)
+  if not domain_findings or any(not isinstance(x,str) or not x.strip() for x in domain_findings): fail("pinned CoMaps domain lacks findings: "+domain)
  impact_rel=f.get("impact_record","")
  impact_path=ROOT/impact_rel
  if not impact_path.is_file(): fail("feature impact record missing")
