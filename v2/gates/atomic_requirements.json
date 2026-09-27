@@ -1,7 +1,7 @@
 {
-  "schema": 3,
+  "schema": 4,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
-  "status": "PIPELINE_MAPPING_IN_PROGRESS",
+  "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
   "requirements": [
     {
@@ -7992,6 +7992,1559 @@
           "evidence": []
         }
       }
+    },
+    {
+      "id": "SIG-REFRESH-45",
+      "group": "SIGNAL",
+      "requirement": "Signal acquisition refresh target is 45 s.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "取得網羅性→scheduler/cache→renderer",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "SIG-RETRY-12",
+      "group": "SIGNAL",
+      "requirement": "Signal acquisition retry target is 12 s.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "取得網羅性→scheduler/cache→renderer",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "SIG-MOVE-250",
+      "group": "SIGNAL",
+      "requirement": "Signal acquisition movement threshold is 250 m.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "取得網羅性→scheduler/cache→renderer",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "SIG-RADIUS-3000",
+      "group": "SIGNAL",
+      "requirement": "Signal near acquisition radius is 3000 m.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "取得網羅性→scheduler/cache→renderer",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "SIG-RETENTION",
+      "group": "SIGNAL",
+      "requirement": "Signal retention keeps broad coverage with near-first policy.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "PARTIAL_ACCEPTED_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "取得網羅性→scheduler/cache→renderer",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/signals.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/signals.json"
+          ]
+        },
+        "implementation": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_signals.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/SignalPolicyTest.java"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/signals_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/signals.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "CV-ZOOM-1KM",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience icons are very small at 1 km.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存MWM診断・presentationから継続",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "CV-ZOOM-500M",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience icons are small at 500 m.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存MWM診断・presentationから継続",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "CV-ZOOM-200M",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience icons use the accepted standard/near presentation at 200 m.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存MWM診断・presentationから継続",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "CV-GROUP",
+      "group": "CONVENIENCE",
+      "requirement": "Convenience UserMarks use isolated CB6 driving ownership rather than DEBUG_MARK.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存MWM診断・presentationから継続",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RENDER-CROSSCUT",
+      "group": "PROCESS",
+      "requirement": "Every rendering change checks default/vehicle styles, light/dark symbols, generated atlas/drules, zoom and collision/priority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Executable Root Certification",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-JNI-CROSSCUT",
+      "group": "PROCESS",
+      "requirement": "Every Java/JNI change checks declaration/call, JNI signature, native implementation, thread/lifecycle, retained state and group visibility.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Executable Root Certification",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-PATCH-ORDER",
+      "group": "PROCESS",
+      "requirement": "Every patch-script change checks all later scripts, generated files, audits, workflow invariants and final generated tree.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Executable Root Certification",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-DATASOURCE-CROSSCUT",
+      "group": "PROCESS",
+      "requirement": "Every data-source change checks offline availability, cache/update, duplicates, failure behavior, privacy and network load.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Executable Root Certification",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "CV-METADATA-DIAGNOSTIC",
+      "group": "CONVENIENCE",
+      "requirement": "Before external convenience data, inspect actual installed-MWM FeatureID metadata: type/name/brand/operator.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存MWM診断・presentationから継続",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/research_records/convenience-mwm-diagnostic.json",
+            "v2/gates/research_records/convenience-brands.json"
+          ]
+        },
+        "impact": {
+          "state": "RECORDED",
+          "evidence": [
+            "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+            "v2/gates/impact_records/convenience-brands.json"
+          ]
+        },
+        "implementation": {
+          "state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json",
+            "v2/gates/features/convenience-brands.json"
+          ]
+        },
+        "audit": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/audits/audit_convenience.py"
+          ]
+        },
+        "positive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_brand_classifier_test.cpp"
+          ]
+        },
+        "destructive_test": {
+          "state": "EXISTS_REQUIRES_RECERTIFICATION",
+          "evidence": [
+            "v2/tests/convenience_audit_selftest.py"
+          ]
+        },
+        "feature_gate": {
+          "state": "BLOCKED_BY_ROOT_METHOD_RECERTIFICATION",
+          "evidence": [
+            "v2/gates/features/convenience-mwm-diagnostic.json"
+          ]
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "MAP-RAW-SEPARATE",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Raw GPS observation, map-matched presentation and screen offset remain separate concepts.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [
+        "MAP-CAMERA-001",
+        "LOCATION-STABILITY-001",
+        "CAMERA-FIXED-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "MAP-LOW-SPEED-HYSTERESIS",
+      "group": "MAP_LOCATION_UI",
+      "requirement": "Heading/low-speed hysteresis prevents stationary rotation and false motion.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [
+        "MAP-CAMERA-001",
+        "LOCATION-STABILITY-001",
+        "CAMERA-FIXED-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "BASE-STOCK-SEARCH",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Stock CoMaps search result selection/routing is preserved unless explicitly extended.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [
+        "PRODUCT-BASE-001",
+        "OFFLINE-FREE-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "BASE-STOCK-HISTORY",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Stock CoMaps search history is preserved unless explicitly extended.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [
+        "PRODUCT-BASE-001",
+        "OFFLINE-FREE-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "BASE-STOCK-BOOKMARKS",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Stock favorites/bookmarks behavior is preserved unless explicitly extended.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [
+        "PRODUCT-BASE-001",
+        "OFFLINE-FREE-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "BASE-STOCK-DOWNLOADS",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Stock map downloads/offline maps behavior is preserved unless explicitly extended.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [
+        "PRODUCT-BASE-001",
+        "OFFLINE-FREE-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "BASE-STOCK-POI",
+      "group": "ROUTING_FAVORITES_PRODUCT",
+      "requirement": "Stock POIs are preserved unless an explicit CB6 presentation requirement changes them.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [
+        "PRODUCT-BASE-001",
+        "OFFLINE-FREE-001"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "NOT_STARTED_OR_UNPROVEN",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "既存CoMaps挙動を保持して差分検証",
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+      ],
+      "acceptance": [
+        "Must remain represented and verified without silent omission."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     }
   ],
   "mapping_policy": {
@@ -8012,5 +9565,10 @@
     ],
     "rule": "Stage state is evidence-derived. Existing historical work is preserved but cannot be promoted to current acceptance without Root/Method recertification and exact evidence.",
     "build_success_not_completion": true
-  }
+  },
+  "audit_sources": [
+    "docs/CB6_FROZEN_FEATURES.md",
+    "docs/CB6_CHANGE_IMPACT_MAP.md",
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+  ]
 }
