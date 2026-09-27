@@ -287,6 +287,11 @@ def mutate_change_policy(r):
  d["change_policy"]["unrelated_behavior_change_forbidden"]=False; p.write_text(json.dumps(d))
 CASES.append(("change-policy-weakened", mutate_change_policy, "development method change policy drifted"))
 
+def mutate_pinned_upstream_policy(r):
+ p=r/"v2/gates/development_method_contract.json"; d=json.loads(p.read_text())
+ d["pinned_upstream_source_policy"]["required_for_every_feature"]=False; p.write_text(json.dumps(d))
+CASES.append(("pinned-upstream-policy-weakened", mutate_pinned_upstream_policy, "pinned upstream source policy drifted"))
+
 
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
