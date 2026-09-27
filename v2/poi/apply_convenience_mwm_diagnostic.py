@@ -90,4 +90,5 @@ if "CB6 MWM CONVENIENCE:" not in a:
         raise SystemExit("CB6 convenience diagnostic: MwmActivity post-render anchor missing")
     a = a.replace(activity_anchor, activity_anchor + hook, 1)
 activity.write_text(a)
-\nprint("CB6 convenience diagnostic native bridge and visible evidence hook applied")
+
+print("CB6 convenience diagnostic native bridge and visible evidence hook applied")
