@@ -5,7 +5,7 @@
   "files": {
     ".github/workflows/cb6_development_gate.yml": "8a16d0a9f79ed1fa472b0061d5ea09e0ce2d84cb",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
-    "v2/gates/development_method_contract.json": "3b4f0511f8bf93bb473142d3df4ee21ccfc17f48",
+    "v2/gates/development_method_contract.json": "ef309f2957ba069487c6d03a2e0af25a0b369185",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
     "v2/gates/features/TEMPLATE.json": "73ac53c89bff13a9cde930412fed7932b7547343",
     "v2/gates/historical_incidents.json": "91d516cd563e3d27180628bc5491610f53663f7f",
