@@ -134,6 +134,11 @@ rtu=research_template.get("pinned_upstream_source_analysis",{})
 if rtu.get("required") is not True or rtu.get("repository")!="comaps/comaps" or rtu.get("commit")!="7113ccb5f086183f8884b2aa4e58c987466b6704": fail("research template pinned CoMaps contract drifted")
 if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")
 
+signal_selftest=(ROOT/"v2/tests/signals_audit_selftest.py").read_text(encoding="utf-8")
+for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))','MIN_ZOOM=int(SPEC["display"]["min_zoom"])','f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"']:
+ if token not in signal_selftest: fail("signal audit selftest not derived from current spec")
+if '"return 12;", "return 11;"' in signal_selftest: fail("signal audit selftest contains stale hardcoded zoom")
+
 # Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
 wfdir=ROOT/".github/workflows"
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
