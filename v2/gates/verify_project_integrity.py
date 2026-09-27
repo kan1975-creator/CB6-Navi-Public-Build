@@ -135,7 +135,7 @@ if rtu.get("required") is not True or rtu.get("repository")!="comaps/comaps" or 
 if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")
 
 signal_selftest=(ROOT/"v2/tests/signals_audit_selftest.py").read_text(encoding="utf-8")
-for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))','SIGNAL_SPEC=SPEC["signal"]\nMIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])','f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"']:
+for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))','SIGNAL_SPEC=SPEC["signal"]','MIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])','f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"']:
  if token not in signal_selftest: fail("signal audit selftest not derived from current spec")
 if '"return 12;", "return 11;"' in signal_selftest: fail("signal audit selftest contains stale hardcoded zoom")
 
