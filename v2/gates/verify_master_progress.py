@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<319:
+if len(items)<343:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -168,3 +168,9 @@ missing_feature_atomic=required_feature_atomic-set(ids)
 if missing_feature_atomic:
     print("CB6 MASTER LEDGER FAIL: active-decision/feature atomic specifications disappeared",sorted(missing_feature_atomic)); raise SystemExit(1)
 print("CB6 MASTER ACTIVE-DECISION/FEATURE ATOMIC PASS:",len(required_feature_atomic))
+
+required_research_atomic={"SIG-RESEARCH-FRAMEWORK","SIG-RESEARCH-USERMARK","SIG-RESEARCH-JNI","SIG-EXTERNAL-SEPARATE","SIG-CACHE-OUTSIDE-UPSTREAM","CV-DATASOURCE-PUBLIC","CV-FEATURE-METADATA","CV-CLASSIFY-PRIORITY","CV-CLASSIFY-DETERMINISTIC","CV-DIAG-POSTRENDER","CV-DIAG-NOT-RENDERER","CV-NO-PERIODIC-OVERPASS","CV-NO-FABRICATED-MARKS","CV-PRESERVE-SIGNALS","CV-HISTORICAL-SCRIPTS-REVIEW","CV-MWM-PRIMARY","CV-BRAND-UPSTREAM-DATA","PROC-IMPACT-REVIEWED-PATHS","PROC-IMPACT-DECISION","PROC-RESEARCH-PINNED-SHA","PROC-RESEARCH-FINDINGS-CONCRETE","PROC-RESEARCH-DOMAIN-FINDINGS","PROC-RESEARCH-WEB-PROVENANCE","PROC-RESEARCH-TIME-PROOF"}
+missing_research_atomic=required_research_atomic-set(ids)
+if missing_research_atomic:
+    print("CB6 MASTER LEDGER FAIL: research/impact atomic specifications disappeared",sorted(missing_research_atomic)); raise SystemExit(1)
+print("CB6 MASTER RESEARCH/IMPACT ATOMIC PASS:",len(required_research_atomic))
