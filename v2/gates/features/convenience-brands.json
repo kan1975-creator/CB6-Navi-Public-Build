@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "feature_id": "convenience-brands",
+  "requirements": ["POI-CONVENIENCE-001","CONVENIENCE-BRANDS-001","OFFLINE-FREE-001","PRODUCT-BASE-001"],
+  "design_section": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#POI",
+  "impact_checked": true,
+  "repo_sweep_required": true,
+  "source_paths": ["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+  "audits": [],
+  "tests": [],
+  "apk_checks": [
+    {"id":"apk-arm64","description":"APK contains a valid AArch64 liborganicmaps.so"},
+    {"id":"apk-identity","description":"APK package remains jp.cb6.navi and label remains CB6 Navi"},
+    {"id":"apk-convenience-native","description":"Packaged implementation uses native MWM convenience POIs and contains no fabricated diagnostic POI"}
+  ],
+  "device_checks": [
+    {"id":"cb6-convenience-detection","description":"CB6 detects representative installed-map shop=convenience features around the device"},
+    {"id":"cb6-convenience-brands","description":"Known convenience stores render with the correct CB6 brand identity and unknown stores remain generic"},
+    {"id":"cb6-convenience-no-text-clutter","description":"Convenience-store presentation does not add unwanted store-name clutter"},
+    {"id":"cb6-convenience-offline","description":"Convenience POIs remain available from installed MWM without a network-only dependency"}
+  ],
+  "stage": "DESIGN",
+  "affected_domains": ["poi","classifier","renderer","symbols","data-source","offline","audits","tests","real-device"],
+  "domain_verification": {
+    "poi":["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+    "classifier":["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+    "renderer":["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+    "symbols":["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+    "data-source":["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+    "offline":["docs/CB6_V2_NATIVE_POI_DESIGN.md"],
+    "audits":[],
+    "tests":[],
+    "real-device":[]
+  },
+  "impact_record":"v2/gates/impact_records/convenience-brands.json",
+  "device_evidence":"PENDING"
+}
