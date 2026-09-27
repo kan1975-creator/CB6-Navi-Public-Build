@@ -67,3 +67,22 @@ missing_order=required_order_ids-mapped
 if missing_order:
     print("CB6 MASTER LEDGER FAIL: active product requirements missing from development order",sorted(missing_order)); raise SystemExit(1)
 print("CB6 MASTER DEVELOPMENT ORDER PASS:",len(order_rows),"explicit stages")
+
+# Atomic specification registry is mandatory; broad parent requirements are not sufficient.
+atomic_path=ROOT/"v2/gates/atomic_requirements.json"
+atomic=json.loads(atomic_path.read_text())
+items=atomic.get("requirements",[])
+ids=[x.get("id") for x in items]
+if len(ids)!=len(set(ids)) or any(not x for x in ids):
+    print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
+if len(items)<100:
+    print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
+required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
+actual_groups={x.get("group") for x in items}
+if required_groups-actual_groups:
+    print("CB6 MASTER LEDGER FAIL: atomic requirement groups missing",sorted(required_groups-actual_groups)); raise SystemExit(1)
+if ledger.get("atomic_requirement_registry",{}).get("path")!="v2/gates/atomic_requirements.json":
+    print("CB6 MASTER LEDGER FAIL: atomic registry not bound to Master"); raise SystemExit(1)
+if atomic.get("status")!="RECONSTRUCTION_IN_PROGRESS" and atomic.get("status")!="VERIFIED_COMPLETE":
+    print("CB6 MASTER LEDGER FAIL: invalid atomic reconstruction state"); raise SystemExit(1)
+print("CB6 MASTER ATOMIC SPEC COVERAGE PASS:",len(items),"atomic requirements registered")
