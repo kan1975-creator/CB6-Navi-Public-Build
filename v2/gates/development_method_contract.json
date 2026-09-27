@@ -26,5 +26,30 @@
     "every_feature_audit_requires_specific_fail_closed_proof": true,
     "audit_proof_must_execute_before_feature_build": true,
     "impact_record_must_cover_audit_proof": true
+  },
+  "feature_development_pipeline": [
+    "internal_source_analysis",
+    "upstream_and_web_research_when_applicable",
+    "web_findings_revalidated_against_pinned_source",
+    "authority_and_evidence_classification",
+    "change_impact_before_implementation",
+    "implementation_and_audit_as_one_change_unit",
+    "positive_tests",
+    "audit_specific_destructive_tests",
+    "feature_gate",
+    "build_and_apk_evidence",
+    "real_device_evidence"
+  ],
+  "research_policy": {
+    "internal_analysis_required": true,
+    "upstream_web_research": "required_when_external_api_data_model_platform_or_upstream_behavior_is_material",
+    "web_is_authority": false,
+    "pinned_source_revalidation_required": true,
+    "research_evidence_must_be_recorded_before_implementation": true
+  },
+  "change_policy": {
+    "unrecorded_spec_change_forbidden": true,
+    "required_change_must_record_reason_impact_and_authority_update_before_implementation": true,
+    "unrelated_behavior_change_forbidden": true
   }
 }
