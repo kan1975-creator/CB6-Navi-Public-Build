@@ -14,6 +14,7 @@ on:
       - 'v2/gates/**'
       # Development-method changes intentionally retrigger Signal proof.
       - 'v2/gates/create_apk_evidence.py'
+      - '.github/workflows/build_cb6_v2_convenience_diagnostic.yml'
 
 permissions:
   contents: read
