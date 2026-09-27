@@ -9,7 +9,8 @@ a=P.parse_args()
 ROOT=Path(__file__).resolve().parents[2]
 AUDIT=ROOT/"v2/audits/audit_signals.py"
 SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))
-MIN_ZOOM=int(SPEC["display"]["min_zoom"])
+SIGNAL_SPEC=SPEC["signal"]
+MIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])
 
 def run(root):
  return subprocess.run(["python3",str(AUDIT),str(root)],cwd=ROOT,text=True,capture_output=True)
