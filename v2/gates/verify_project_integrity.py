@@ -214,7 +214,10 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
 
 # The development gate must continuously execute every required method regression test.
 method=load("v2/gates/development_method_contract.json")
-expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants"}\nif set(method)!=expected_method_fields or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")\nexpected_invariants={"restricted_evidence_cannot_be_direct_feature_authority":True,"every_feature_audit_requires_specific_fail_closed_proof":True,"audit_proof_must_execute_before_feature_build":True,"impact_record_must_cover_audit_proof":True}\nif method.get("feature_contract_invariants")!=expected_invariants: fail("development method feature invariants drifted")
+expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants"}
+if set(method)!=expected_method_fields or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")
+expected_invariants={"restricted_evidence_cannot_be_direct_feature_authority":True,"every_feature_audit_requires_specific_fail_closed_proof":True,"audit_proof_must_execute_before_feature_build":True,"impact_record_must_cover_audit_proof":True}
+if method.get("feature_contract_invariants")!=expected_invariants: fail("development method feature invariants drifted")
 for rel in method["required_gate_scripts"]+method["required_regression_tests"]+method["acceptance_scripts"]+[method["post_gate_integrity_script"]]:
  if not (ROOT/rel).is_file(): fail("development method component missing: "+rel)
 devwf=(ROOT/".github/workflows/cb6_development_gate.yml").read_text(encoding="utf-8")
