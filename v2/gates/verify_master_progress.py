@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<292:
+if len(items)<319:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -161,3 +161,10 @@ missing_contract_atomic=required_contract_atomic-set(ids)
 if missing_contract_atomic:
     print("CB6 MASTER LEDGER FAIL: project/method/template atomic specifications disappeared",sorted(missing_contract_atomic)); raise SystemExit(1)
 print("CB6 MASTER PROJECT/METHOD/TEMPLATE ATOMIC PASS:",len(required_contract_atomic))
+
+# Active-decision acceptance and current feature-contract zero-omission anchors.
+required_feature_atomic={"PROC-ACTIVE-NO-DISAPPEAR","PROC-SUPERSEDED-NO-AUTH","PROC-BUILD-GATE-DESIGN","SIG-UPDATE-INSTALL","BASE-UPSTREAM-OWNERSHIP","MAP-NORTH-LOCK","HUD-ORIENTATION","STOP-INDEPENDENT","VOICE-SAFE-FALLBACK","ROUTE-PROVE-TOLL","TOLL-SOURCE-VERSION","FAV-TRANSPORT-BOUNDARY","LIFE-STATE-TRANSITIONS","UI-CURRENT-TOUCH","MAJOR-POI-CATEGORIES","TOLL-PASSENGER","TOLL-ZERO","SEARCH-SHOWMAP-NORMALIZE","ORIENT-AUTO","ORIENT-PORTRAIT","ORIENT-LANDSCAPE","SEARCH-HISTORY-DELETE","SCOPE-NO-SILENT-CHANGE","SIG-APK-ARM64","SIG-APK-IDENTITY","SIG-APK-SIGNATURE","CV-DIAG-NO-NETWORK-FAB","CV-DEVICE-DETECTION","CV-DEVICE-BRANDS","CV-DEVICE-NO-TEXT","CV-DEVICE-OFFLINE","CV-RENDERER-OPEN","CV-SYMBOLS-OPEN","CV-OFFLINE-OPEN"}
+missing_feature_atomic=required_feature_atomic-set(ids)
+if missing_feature_atomic:
+    print("CB6 MASTER LEDGER FAIL: active-decision/feature atomic specifications disappeared",sorted(missing_feature_atomic)); raise SystemExit(1)
+print("CB6 MASTER ACTIVE-DECISION/FEATURE ATOMIC PASS:",len(required_feature_atomic))
