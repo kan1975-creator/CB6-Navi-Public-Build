@@ -38,5 +38,21 @@
       "v2/gates/active_decisions.json"
     ]
   },
-  "completed_before_implementation": true
+  "completed_before_implementation": true,
+  "pinned_upstream_source_analysis": {
+    "required": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "source_paths": [
+      "map/framework.hpp",
+      "map/framework.cpp",
+      "indexer/data_source.hpp",
+      "indexer/data_source.cpp",
+      "indexer/feature.hpp",
+      "indexer/feature_meta.hpp"
+    ],
+    "findings": [
+      "Pinned CoMaps Framework/DataSource/Feature surfaces are the upstream basis for native installed-MWM convenience acquisition; public DataSource integration supersedes the historical private FeaturesFetcher assumption."
+    ]
+  }
 }
