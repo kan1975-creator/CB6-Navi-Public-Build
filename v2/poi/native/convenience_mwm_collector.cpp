@@ -2,7 +2,7 @@
 
 #include "indexer/classificator.hpp"
 #include "indexer/feature.hpp"
-#include "map/features_fetcher.hpp"
+#include "indexer/data_source.hpp"
 
 #include "i18n/localisation.hpp"
 
@@ -30,7 +30,7 @@ std::string Name(FeatureType & feature, int8_t lang)
 }
 }  // namespace
 
-std::vector<ConveniencePoi> CollectConveniencePois(FeaturesFetcher const & fetcher, m2::RectD const & rect,
+std::vector<ConveniencePoi> CollectConveniencePois(DataSource const & dataSource, m2::RectD const & rect,
                                                    int scale)
 {
   std::vector<ConveniencePoi> result;
@@ -38,7 +38,7 @@ std::vector<ConveniencePoi> CollectConveniencePois(FeaturesFetcher const & fetch
   if (convenienceType == Classificator::INVALID_TYPE)
     return result;
 
-  fetcher.ForEachFeature(rect, [&](FeatureType & feature)
+  dataSource.ForEachInRect([&](FeatureType & feature)
   {
     if (!IsConvenience(feature, convenienceType))
       return;
@@ -51,7 +51,7 @@ std::vector<ConveniencePoi> CollectConveniencePois(FeaturesFetcher const & fetch
 
     result.push_back({center.x, center.y,
                       ClassifyConvenience(brand, operatorName, preferredName, defaultName)});
-  }, scale);
+  }, rect, scale);
   return result;
 }
 }  // namespace cb6::poi
