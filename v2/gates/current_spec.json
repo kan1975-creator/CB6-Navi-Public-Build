@@ -49,6 +49,11 @@
         "node",
         "way",
         "relation"
+      ],
+      "source_dedup_m": 12,
+      "sources": [
+        "osm_overpass",
+        "verified_supplement"
       ]
     }
   }
