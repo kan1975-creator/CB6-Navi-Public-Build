@@ -52,5 +52,62 @@
     "findings": [
       "Pinned CoMaps map/framework and UserMark/JNI surfaces are the upstream integration boundary inspected before CB6 Signal transformations; exact availability is rechecked by the pinned checkout workflow before build."
     ]
+  },
+  "upstream_domain_coverage": {
+    "signals": {
+      "source_paths": [
+        "map/framework.hpp",
+        "map/framework.cpp"
+      ],
+      "findings": [
+        "Framework integration surface was inspected for CB6 signal ownership boundaries."
+      ]
+    },
+    "renderer": {
+      "source_paths": [
+        "map/user_mark.hpp",
+        "map/user_mark.cpp"
+      ],
+      "findings": [
+        "Pinned UserMark surfaces define the map-mark rendering integration boundary used by the signal transformation."
+      ]
+    },
+    "symbols": {
+      "source_paths": [
+        "map/user_mark.hpp",
+        "map/user_mark.cpp"
+      ],
+      "findings": [
+        "UserMark symbol handling is the pinned source boundary for signal symbol presentation."
+      ]
+    },
+    "data-source": {
+      "source_paths": [
+        "map/framework.hpp",
+        "map/framework.cpp"
+      ],
+      "findings": [
+        "Framework boundary was inspected to keep CB6 external/supplemental signal acquisition separate from native map ownership."
+      ]
+    },
+    "cache": {
+      "source_paths": [
+        "map/framework.hpp",
+        "map/framework.cpp"
+      ],
+      "findings": [
+        "Framework ownership/lifetime boundary was inspected before attaching CB6 signal cache behavior outside upstream state."
+      ]
+    },
+    "lifecycle": {
+      "source_paths": [
+        "map/framework.hpp",
+        "map/framework.cpp",
+        "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
+      ],
+      "findings": [
+        "Framework and JNI lifecycle surfaces were inspected for signal integration and teardown boundaries."
+      ]
+    }
   }
 }
