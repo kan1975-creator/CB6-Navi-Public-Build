@@ -24,6 +24,7 @@
       "v2/gates/features/convenience-brands.json"
     ],
     "pending_work": [
+      "v2/gates/cb6_master_progress.json",
       "v2/gates/project_state.json",
       "v2/gates/development_method_completion.json"
     ],
