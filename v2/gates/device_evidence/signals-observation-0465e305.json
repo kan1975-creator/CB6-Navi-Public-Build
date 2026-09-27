@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "feature_id": "signals",
+  "build_commit": "0465e3059f98ede27b5482bb074c3ba4e02a8ec1",
+  "apk_sha256": "ce42e9a6822a66cd2a20a30ad8ffd00e54ed581623d0233821b1411acaf20c28",
+  "device": "CB6",
+  "android_version": "13",
+  "evidence_type": "PARTIAL_REAL_DEVICE_OBSERVATION",
+  "observed": [
+    {
+      "id": "cb6-clean-install",
+      "result": "PASS",
+      "basis": "User confirmed this APK was installed as a new/clean installation; supplied real-device screenshots show signal rendering."
+    },
+    {
+      "id": "cb6-200m-slim",
+      "result": "PASS",
+      "basis": "User-supplied CB6 screenshot at displayed 200 m scale shows slim traffic-signal marks."
+    },
+    {
+      "id": "cb6-1km-hidden",
+      "result": "PASS",
+      "basis": "User-supplied CB6 screenshot at displayed 1 km scale shows no CB6 traffic-signal marks."
+    }
+  ],
+  "pending": [
+    {
+      "id": "cb6-update-install",
+      "result": "PENDING",
+      "basis": "No update-install test has been performed for this APK lineage."
+    }
+  ],
+  "observations": [
+    {
+      "id": "signal-visual-density",
+      "status": "FOLLOW_UP",
+      "basis": "200 m / 500 m screenshots show multiple nearby signal marks at some intersections. Current requirements prioritize physical-signal coverage; no proximity deletion is authorized without a separate display-policy decision."
+    }
+  ],
+  "status": "PARTIAL",
+  "note": "This is intentionally not ACCEPTED Device Evidence and must not satisfy verify_device_evidence.py until every planned device check passes."
+}
