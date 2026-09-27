@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "id": "CB6-MASTER-PROGRESS",
+  "purpose": "Single repository entrypoint for reconstructing CB6 development progress. Status is evidence-backed; this file must never authorize work by status text alone.",
+  "status_vocabulary": ["BLOCKED","PENDING","IN_PROGRESS","PROVEN","ACCEPTED"],
+  "current_objective": "Produce an arm64 APK with technically verified high probability of installed-map convenience-store acquisition/display, without bypassing Root or Method certification.",
+  "authority_rule": "Detailed evidence remains authoritative in referenced files and executable gates. This checklist is the single progress index, not a substitute for proof.",
+  "sections": [
+    {
+      "id": "ROOT",
+      "status": "IN_PROGRESS",
+      "depends_on": [],
+      "completion": "Executable Root Certification proves repository-only reconstruction, context-loss survival, unknown-state blocking, historical recurrence protection, independent verification, extensibility, artifact identity and device-evidence discipline.",
+      "evidence": ["v2/gates/root_invariants.json","v2/gates/root_certification_plan.json","v2/gates/run_root_certification.py","v2/tests/test_root_invariants.py","v2/tests/test_root_unknown_change.py"],
+      "next": "Resolve remaining executable Root Certification failures; do not open lower layers."
+    },
+    {
+      "id": "METHOD",
+      "status": "BLOCKED",
+      "depends_on": ["ROOT"],
+      "completion": "Frozen development method is recertified on the certified Root and survives destructive/fail-closed/extensibility tests without method modification.",
+      "evidence": ["v2/gates/development_method_contract.json","v2/gates/development_method_completion.json","v2/gates/method_freeze_lock.json","v2/gates/verify_method_freeze.py"],
+      "next": "Recertify only after ROOT is PROVEN."
+    },
+    {
+      "id": "CONVENIENCE",
+      "status": "BLOCKED",
+      "depends_on": ["ROOT","METHOD"],
+      "completion": "Pinned CoMaps MWM/DataSource acquisition, convenience classification and presentation path pass research, impact, audit, destructive tests and feature gate.",
+      "evidence": ["v2/gates/features/convenience-mwm-diagnostic.json","v2/gates/research_records/convenience-mwm-diagnostic.json","v2/gates/impact_records/convenience-mwm-diagnostic.json","v2/audits/audit_convenience.py"],
+      "next": "After Method certification, revalidate collector-to-render/presentation path and build diagnostic/final convenience APK."
+    },
+    {
+      "id": "SIGNALS",
+      "status": "BLOCKED",
+      "depends_on": ["ROOT","METHOD"],
+      "completion": "Signal feature is recertified under the same frozen method; no Convenience change causes Signal regression.",
+      "evidence": ["v2/gates/features/signals.json","v2/gates/research_records/signals.json","v2/gates/impact_records/signals.json","v2/audits/audit_signals.py"],
+      "next": "Regression/re-certification only; do not change unrelated Signal behavior for Convenience."
+    },
+    {
+      "id": "APK",
+      "status": "BLOCKED",
+      "depends_on": ["ROOT","METHOD","CONVENIENCE"],
+      "completion": "arm64 APK build succeeds and APK identity, package/native contents, gate HEAD and SHA256 evidence are verified before artifact upload.",
+      "evidence": ["v2/gates/verify_apk_evidence.py","v2/gates/create_gate_stamp.py"],
+      "next": "Build only after upstream sections are proven."
+    },
+    {
+      "id": "DEVICE",
+      "status": "BLOCKED",
+      "depends_on": ["APK"],
+      "completion": "Exact APK SHA is installed/tested on CB6 and required device evidence is recorded; visual success is not inferred from build success.",
+      "evidence": ["v2/gates/verify_device_evidence.py","v2/gates/verify_final_acceptance.py"],
+      "next": "Requires real CB6 observation after APK generation."
+    },
+    {
+      "id": "FINAL",
+      "status": "BLOCKED",
+      "depends_on": ["ROOT","METHOD","CONVENIENCE","SIGNALS","APK","DEVICE"],
+      "completion": "All required sections are evidence-backed and final acceptance passes with no unresolved blocking state.",
+      "evidence": ["v2/gates/verify_final_acceptance.py"],
+      "next": "No completion claim until every dependency is proven/accepted."
+    }
+  ],
+  "global_blockers": [
+    "Root Certification is not yet proven.",
+    "Development method completion is INVALIDATED and must be recertified after Root.",
+    "Feature builds are globally disabled by project_state while root/design reconstruction is active.",
+    "Convenience real-device evidence remains pending."
+  ],
+  "project_state": "v2/gates/project_state.json",
+  "repository_reconstruction": "v2/gates/repository_state_manifest.json"
+}
