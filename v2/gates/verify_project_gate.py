@@ -129,7 +129,8 @@ if "--require-feature-build" in sys.argv:
  # An audit is not evidence merely because its file exists. Each feature audit must have
  # an explicitly registered executable fail-closed proof in the test set.
  for audit_rel in f["audits"]:
-  stem=pathlib.Path(audit_rel).stem
-  candidates=[t for t in f["tests"] if ("audit" in pathlib.Path(t).stem and ("selftest" in pathlib.Path(t).stem or "fail_closed" in pathlib.Path(t).stem or stem.replace("audit_","") in pathlib.Path(t).stem))]
+  audit_key=pathlib.Path(audit_rel).stem
+  if audit_key.startswith("audit_"): audit_key=audit_key[len("audit_"):]
+  candidates=[t for t in f["tests"] if audit_key in pathlib.Path(t).stem and ("selftest" in pathlib.Path(t).stem or "fail_closed" in pathlib.Path(t).stem)]
   if not candidates: fail("feature audit lacks registered fail-closed proof: "+audit_rel)
 print("CB6 DEVELOPMENT GATE PASS: implementation enabled")
