@@ -58,7 +58,8 @@
     "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
     "concrete_source_paths_required": true,
     "findings_required": true,
-    "analysis_must_precede_implementation": true
+    "analysis_must_precede_implementation": true,
+    "affected_domain_coverage_required": true
   },
   "method_document": "docs/CB6_V2_DEVELOPMENT_METHOD.md",
   "failure_return_policy": "return_to_earliest_affected_stage",
