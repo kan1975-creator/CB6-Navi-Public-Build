@@ -18,6 +18,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: cb6-v2-convenience-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   preflight:
     name: Convenience native MWM diagnostic arm64
