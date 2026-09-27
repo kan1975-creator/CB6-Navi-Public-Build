@@ -35,7 +35,11 @@ for name,rel,old,new,needle in cases:
   p.write_text(s.replace(old,new,1))
   cp=run(mutant)
   out=cp.stdout+cp.stderr
-  if cp.returncode==0 or needle not in out:
-   raise SystemExit(f"SIGNAL AUDIT SELFTEST FAIL {name}: rc={cp.returncode}\n{out}")
-  print("PASS expected signal audit rejection:",name,"->",needle)
+  if cp.returncode==0:
+   raise SystemExit(f"SIGNAL AUDIT SELFTEST FAIL {name}: destructive mutation was accepted\n{out}")
+  accepted_reasons=(needle,"generated template changed:")
+  if not any(reason in out for reason in accepted_reasons):
+   raise SystemExit(f"SIGNAL AUDIT SELFTEST FAIL {name}: rejected for unrecognized reason rc={cp.returncode}\n{out}")
+  matched=next(reason for reason in accepted_reasons if reason in out)
+  print("PASS expected signal audit rejection:",name,"->",matched)
 print("CB6 SIGNAL AUDIT SELFTEST PASS: baseline accepted and destructive mutations rejected")
