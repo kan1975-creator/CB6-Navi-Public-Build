@@ -276,6 +276,11 @@ def mutate_traceability_stage_mismatch(r):
  p.write_text(json.dumps(d))
 
 def mutate_implementation_with_unverified_upload(r):
+ for rel in ("v2/gates/project_state.json","v2/gates/authority_policy.json","v2/gates/evidence_inventory.json","v2/gates/traceability.json","v2/gates/development_method_contract.json"):
+  p0=r/rel; d0=json.loads(p0.read_text()); d0["stage"]="IMPLEMENTATION_ENABLED"
+  if rel.endswith("project_state.json"):
+   d0["feature_builds_allowed"]=True; d0["design_verified"]=True
+  p0.write_text(json.dumps(d0))
  p=r/".github/workflows/build_cb6_v2_signals.yml"
  s=p.read_text()
  start=s.find("      - name: Create and verify APK evidence")
