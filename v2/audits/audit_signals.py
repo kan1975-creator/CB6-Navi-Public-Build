@@ -57,13 +57,15 @@ acq=spec['acquisition']
 policy_values={
  'RADIUS_M':str(acq['radius_m']), 'MAX_POINTS':str(acq['max_points']),
  'MOVEMENT_M':str(float(acq['movement_m']))+'f', 'FORWARD_MAX_M':str(float(acq['forward_max_m']))+'f',
- 'FORWARD_CONE_DEG':str(float(acq['forward_cone_deg']))+'f'
+ 'FORWARD_CONE_DEG':str(float(acq['forward_cone_deg']))+'f',
+ 'DISPLAY_CLUSTER_M':str(float(spec['display']['cluster_radius_m']))+'f'
 }
 for name,value in policy_values.items():
     require(f'{name} = {value}' in policy, 'current-spec constant '+name)
 for token in acq['osm_queries']:
     require('['+token+']' in provider, 'current-spec query '+token)
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
+require('snapshot.displayPoints()' in controller, 'renderer-only signal clustering missing')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
 require('main.post(() ->' in controller, 'main-thread publication')
 require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')

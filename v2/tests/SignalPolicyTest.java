@@ -37,6 +37,15 @@ public final class SignalPolicyTest
     check(snapshot.points.get(0).id == 1 && snapshot.points.get(1399).id == 1400, "nearest retained, not first N");
     input.clear();
     check(snapshot.points.size() == 1400, "snapshot is detached");
+    ArrayList<SignalSnapshot.Point> clusterInput = new ArrayList<>();
+    clusterInput.add(new SignalSnapshot.Point(1, 43.00000, 141.00000, 10));
+    clusterInput.add(new SignalSnapshot.Point(2, 43.00010, 141.00000, 11)); // about 11 m: same visual intersection group
+    clusterInput.add(new SignalSnapshot.Point(3, 43.00050, 141.00000, 12)); // about 56 m: separate signal remains
+    SignalSnapshot clustered = new SignalSnapshot(clusterInput);
+    check(clustered.points.size() == 3, "clustering never deletes acquired signal data");
+    check(clustered.displayPoints().size() == 2, "nearby intersection signals collapse only for display");
+    check(clustered.displayPoints().get(0).id == 1 && clustered.displayPoints().get(1).id == 3,
+          "nearest representative retained and separate signal preserved");
     boolean immutable = false;
     try { snapshot.points.clear(); } catch (UnsupportedOperationException e) { immutable = true; }
     check(immutable, "immutable signal registry");

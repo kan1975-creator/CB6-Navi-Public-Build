@@ -28,7 +28,8 @@
           18,
           34
         ]
-      }
+      },
+      "cluster_radius_m": 30
     },
     "acquisition": {
       "radius_m": 3000,

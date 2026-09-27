@@ -134,13 +134,14 @@ public final class SignalController
   private void publish()
   {
     if (!active || !renderingReady || snapshot.points.isEmpty()) return;
-    int n = snapshot.points.size();
+    java.util.List<SignalSnapshot.Point> display = snapshot.displayPoints();
+    int n = display.size();
     double[] lats = new double[n], lons = new double[n];
     boolean[] forward = new boolean[n];
     float[] result = new float[3];
     for (int i = 0; i < n; ++i)
     {
-      SignalSnapshot.Point p = snapshot.points.get(i);
+      SignalSnapshot.Point p = display.get(i);
       lats[i] = p.lat;
       lons[i] = p.lon;
       if (location != null && location.hasBearing())
