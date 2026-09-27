@@ -100,6 +100,24 @@
       "type": "design",
       "path": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
       "status": "active"
+    },
+    {
+      "id": "EV-ROOT-INVARIANTS",
+      "type": "root-process-authority",
+      "path": "v2/gates/root_invariants.json",
+      "status": "active"
+    },
+    {
+      "id": "EV-REPOSITORY-STATE",
+      "type": "state-reconstruction",
+      "path": "v2/gates/repository_state_manifest.json",
+      "status": "active"
+    },
+    {
+      "id": "EV-HISTORICAL-INCIDENTS",
+      "type": "regression-corpus",
+      "path": "v2/gates/historical_incidents.json",
+      "status": "active"
     }
   ]
 }
