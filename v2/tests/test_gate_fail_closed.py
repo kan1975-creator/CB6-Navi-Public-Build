@@ -271,6 +271,12 @@ CASES.append(("upstream-lock-drift", mutate_upstream_lock_commit, "build workflo
 CASES.append(("upstream-head-assertion-removed", mutate_upstream_head_assertion_removed, "build workflow does not enforce pinned CoMaps checkout"))
 CASES.append(("development-gate-omits-test", mutate_development_gate_omits_test, "development gate omits required regression test"))
 
+def mutate_method_invariant_disabled(r):
+ p=r/"v2/gates/development_method_contract.json"; d=json.loads(p.read_text())
+ d["feature_contract_invariants"]["every_feature_audit_requires_specific_fail_closed_proof"]=False
+ p.write_text(json.dumps(d))
+CASES.append(("method-invariant-disabled", mutate_method_invariant_disabled, "development method feature invariants drifted"))
+
 
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
