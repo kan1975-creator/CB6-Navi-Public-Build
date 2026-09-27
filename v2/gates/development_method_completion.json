@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "COMPLETE",
+  "status": "INVALIDATED",
   "required": {
     "development_gate": {
       "head_sha": "ee7f14608e730c90b889d7db1560fc98759e04f6",
@@ -26,7 +26,11 @@
     "research_template_locked": true,
     "pinned_comaps_analysis_required": true
   },
-  "completion_rule": "COMPLETE only after all required machine checks are evidenced on the same final method HEAD",
-  "certified_method_head": "ee7f14608e730c90b889d7db1560fc98759e04f6",
-  "completion_note": "Method repair certified on one common HEAD. This record-only commit does not change implementation, audit, test, or workflow behavior."
+  "completion_rule": "COMPLETE only after root invariants, repository-only context reconstruction, semantic closure, historical incident replay, independent verification, frozen-method extensibility, same-HEAD feature gates, APK identity, and required device evidence all pass without modifying the frozen method.",
+  "completion_note": "Method repair certified on one common HEAD. This record-only commit does not change implementation, audit, test, or workflow behavior.",
+  "invalidated_reason": "Previous completion certification did not prove context-independent repository reconstruction or semantic closure; current repository also contains post-certification method changes. Re-certification is forbidden until root invariants and destructive context-loss tests pass.",
+  "previous_certification": {
+    "certified_method_head": "ee7f14608e730c90b889d7db1560fc98759e04f6",
+    "disposition": "historical-only-not-current-authority"
+  }
 }
