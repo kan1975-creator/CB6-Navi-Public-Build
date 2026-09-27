@@ -162,6 +162,16 @@ def mutate_feature_template_device_check_drift(root):
  d=json.loads(p.read_text()); d["device_checks"]=["legacy free text"]; p.write_text(json.dumps(d))
 CASES.append(("feature-template-field-drift", mutate_feature_template_field_drift, "feature gate template fields drifted"))
 
+def mutate_research_template_opens_early(r):
+ p=r/"v2/gates/research_records/TEMPLATE.json"; d=json.loads(p.read_text())
+ d["status"]="COMPLETE"; d["completed_before_implementation"]=True; p.write_text(json.dumps(d))
+CASES.append(("research-template-opens-early", mutate_research_template_opens_early, "research record template is not fail-closed"))
+
+def mutate_research_template_upstream_sha(r):
+ p=r/"v2/gates/research_records/TEMPLATE.json"; d=json.loads(p.read_text())
+ d["pinned_upstream_source_analysis"]["commit"]="0"*40; p.write_text(json.dumps(d))
+CASES.append(("research-template-upstream-sha-drift", mutate_research_template_upstream_sha, "research template pinned CoMaps contract drifted"))
+
 def mutate_apk_template_opens_early(root):
  p=root/"v2/gates/apk_evidence/TEMPLATE.json"
  d=json.loads(p.read_text()); d["status"]="VERIFIED"; p.write_text(json.dumps(d))
