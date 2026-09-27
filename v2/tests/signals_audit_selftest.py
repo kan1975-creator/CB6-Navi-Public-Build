@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Destructive proof that audit_signals.py rejects broken transformed Signal source."""
-import argparse, shutil, subprocess, tempfile
+import argparse, json, shutil, subprocess, tempfile
 from pathlib import Path
 
 P=argparse.ArgumentParser()
@@ -8,6 +8,8 @@ P.add_argument("transformed_root",type=Path)
 a=P.parse_args()
 ROOT=Path(__file__).resolve().parents[2]
 AUDIT=ROOT/"v2/audits/audit_signals.py"
+SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))
+MIN_ZOOM=int(SPEC["display"]["min_zoom"])
 
 def run(root):
  return subprocess.run(["python3",str(AUDIT),str(root)],cwd=ROOT,text=True,capture_output=True)
@@ -21,7 +23,7 @@ cases=[
  ("publisher-group", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
   "ClearGroup(UserMark::Type::CB6_SIGNAL)", "ClearGroup(UserMark::Type::DEBUG_MARK)", "publisher clears unrelated state"),
  ("symbol-zoom", "libs/map/cb6_signal_mark.hpp",
-  'return 12;', 'return 11;', "minimum zoom mismatch"),
+  f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};", "minimum zoom mismatch"),
  ("acquisition-query", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
   "[highway=traffic_signals]", "[highway=traffic_lights]", "current-spec query highway=traffic_signals"),
 ]
