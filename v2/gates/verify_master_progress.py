@@ -86,3 +86,17 @@ if ledger.get("atomic_requirement_registry",{}).get("path")!="v2/gates/atomic_re
 if atomic.get("status")!="RECONSTRUCTION_IN_PROGRESS" and atomic.get("status")!="VERIFIED_COMPLETE":
     print("CB6 MASTER LEDGER FAIL: invalid atomic reconstruction state"); raise SystemExit(1)
 print("CB6 MASTER ATOMIC SPEC COVERAGE PASS:",len(items),"atomic requirements registered")
+
+# Atomic traceability closure: each detailed requirement must have explicit order + active parent + evidence + acceptance.
+active_ids={x["id"] for x in active_decisions.get("decisions",[]) if x.get("status")=="active"}
+for x in items:
+    if not isinstance(x.get("development_order"),int) or not x.get("development_stage"):
+        print("CB6 MASTER LEDGER FAIL: atomic development order missing",x.get("id")); raise SystemExit(1)
+    parents=set(x.get("parent_active_decisions",[]))
+    if not parents or not parents.issubset(active_ids):
+        print("CB6 MASTER LEDGER FAIL: atomic authority mapping invalid",x.get("id"),sorted(parents-active_ids)); raise SystemExit(1)
+    if not x.get("evidence") or not x.get("acceptance"):
+        print("CB6 MASTER LEDGER FAIL: atomic evidence/acceptance missing",x.get("id")); raise SystemExit(1)
+    if x.get("restart_from_zero") is not False or not x.get("resume_from"):
+        print("CB6 MASTER LEDGER FAIL: atomic resume semantics missing",x.get("id")); raise SystemExit(1)
+print("CB6 MASTER ATOMIC TRACEABILITY PASS:",len(items),"requirements mapped")
