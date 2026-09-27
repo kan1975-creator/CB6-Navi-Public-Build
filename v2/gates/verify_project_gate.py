@@ -52,11 +52,26 @@ if "--require-feature-build" in sys.argv:
  fp=ROOT/"v2/gates/features"/(feature+".json")
  if not fp.is_file(): fail("missing per-feature gate record: "+feature)
  f=json.loads(fp.read_text(encoding="utf-8"))
- required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage"}
+ required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage"}
  missing=sorted(required-set(f))
  if missing: fail("feature gate fields missing: "+",".join(missing))
  if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
  if not f.get("impact_checked"): fail("feature impact check incomplete")
+ research_rel=f.get("research_record","")
+ research_path=ROOT/research_rel
+ if not research_path.is_file(): fail("feature research record missing")
+ research=json.loads(research_path.read_text(encoding="utf-8"))
+ if research.get("schema")!=1 or research.get("feature_id")!=feature: fail("feature research record identity invalid")
+ if research.get("status")!="COMPLETE" or research.get("completed_before_implementation") is not True: fail("feature research incomplete before implementation")
+ ia=research.get("internal_analysis",{})
+ if ia.get("required") is not True or not ia.get("paths") or not ia.get("findings"): fail("feature internal analysis incomplete")
+ uw=research.get("upstream_web_research",{})
+ if uw.get("applicable") not in {True,False}: fail("feature upstream/web applicability undecided")
+ if uw.get("applicable") is True and (not uw.get("sources") or not uw.get("findings")): fail("applicable upstream/web research incomplete")
+ rv=research.get("pinned_source_revalidation",{})
+ if rv.get("required") is not True or not rv.get("evidence"): fail("feature pinned-source revalidation incomplete")
+ acp=research.get("authority_classification",{})
+ if acp.get("web_is_authority") is not False or not acp.get("current_authority"): fail("feature research authority classification invalid")
  impact_rel=f.get("impact_record","")
  impact_path=ROOT/impact_rel
  if not impact_path.is_file(): fail("feature impact record missing")
