@@ -242,6 +242,14 @@ def mutate_post_gate_control_reset(r):
 CASES.append(("post-gate-control-reset", mutate_post_gate_control_reset, "control repo can change after feature gate"))
 
 def mutate_missing_stamp_in_implementation(r):
+ # This invariant applies specifically to IMPLEMENTATION_ENABLED. Reconstruct that
+ # state inside the isolated fixture even when the live repository is fail-closed
+ # for method recertification.
+ for rel in ("v2/gates/project_state.json","v2/gates/authority_policy.json","v2/gates/evidence_inventory.json","v2/gates/traceability.json","v2/gates/development_method_contract.json"):
+  p0=r/rel; d0=json.loads(p0.read_text()); d0["stage"]="IMPLEMENTATION_ENABLED"
+  if rel.endswith("project_state.json"):
+   d0["feature_builds_allowed"]=True; d0["design_verified"]=True
+  p0.write_text(json.dumps(d0))
  p=r/".github/workflows/build_cb6_v2_signals.yml"
  s=p.read_text()
  s=s.replace("      - name: Seal gated control state\n        run: |\n          python3 v2/gates/create_gate_stamp.py\n          python3 v2/gates/create_gate_stamp.py --verify\n\n","")
