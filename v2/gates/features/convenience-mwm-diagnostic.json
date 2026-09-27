@@ -2,9 +2,7 @@
   "schema": 1,
   "feature_id": "convenience-mwm-diagnostic",
   "requirements": [
-    "POI-CONVENIENCE-001",
-    "OFFLINE-FREE-001",
-    "PRODUCT-BASE-001"
+    "POI-CONVENIENCE-001"
   ],
   "design_section": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#POI",
   "impact_checked": true,
@@ -46,10 +44,11 @@
   "affected_domains": [
     "poi",
     "classifier",
-    "data-source",
+    "presentation",
     "offline",
     "audits",
     "tests",
+    "data-source",
     "real-device"
   ],
   "domain_verification": {
@@ -76,7 +75,11 @@
     "tests": [
       "v2/tests/convenience_brand_classifier_test.cpp"
     ],
-    "real-device": []
+    "real-device": [],
+    "presentation": [
+      "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+      "v2/audits/audit_convenience.py"
+    ]
   },
   "impact_record": "v2/gates/impact_records/convenience-mwm-diagnostic.json",
   "device_evidence": "PENDING"
