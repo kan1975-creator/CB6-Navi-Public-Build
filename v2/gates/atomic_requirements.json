@@ -1,7 +1,7 @@
 {
-  "schema": 1,
+  "schema": 2,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
-  "status": "RECONSTRUCTION_IN_PROGRESS",
+  "status": "TRACEABILITY_MAPPING_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
   "requirements": [
     {
@@ -11,7 +11,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-FAIL-CLOSED",
@@ -20,7 +28,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-REPO-MEMORY",
@@ -29,7 +45,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-RESEARCH-FIRST",
@@ -38,7 +62,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-IMPACT-FIRST",
@@ -47,7 +79,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-AUDIT-UNIT",
@@ -56,7 +96,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-DESTRUCTIVE",
@@ -65,7 +113,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-NO-BUILD-COMPLETE",
@@ -74,7 +130,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-APK-IDENTITY",
@@ -83,7 +147,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-DEVICE-AUTHORITY",
@@ -92,7 +164,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-NO-RESTART",
@@ -101,7 +181,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "PROC-DEFER",
@@ -110,7 +198,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Executable Root Certification"
     },
     {
       "id": "SIG-DISPLAY",
@@ -119,7 +215,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-200M-SLIM",
@@ -128,7 +232,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-500M",
@@ -137,7 +249,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-1KM-OFF",
@@ -146,7 +266,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-FORWARD-EMPHASIS",
@@ -155,7 +283,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-COVERAGE-INTERSECTION",
@@ -164,7 +300,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-COVERAGE-NONINTERSECTION",
@@ -173,7 +317,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-CLEAN-INSTALL",
@@ -182,7 +334,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-UPDATE-INSTALL",
@@ -191,7 +351,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-INDEPENDENT-OWNERSHIP",
@@ -200,7 +368,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-NO-SCREENSHOT-COORDS",
@@ -209,7 +385,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "SIG-RESUME-COVERAGE",
@@ -218,7 +402,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 3,
+      "development_stage": "SIGNALS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡"
     },
     {
       "id": "CV-ALWAYS",
@@ -227,7 +419,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-MWM-FIRST",
@@ -236,7 +436,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-711",
@@ -245,7 +453,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-FM",
@@ -254,7 +470,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-LAWSON",
@@ -263,7 +487,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-SEICO",
@@ -272,7 +504,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-MYBASKET",
@@ -281,7 +521,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-MINISTOP",
@@ -290,7 +538,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-BRAND-DAILY",
@@ -299,7 +555,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-GENERIC",
@@ -308,7 +572,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-NO-TEXT-URBAN",
@@ -317,7 +589,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-SLIGHTLY-LARGER",
@@ -326,7 +606,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-SCALE",
@@ -335,7 +623,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-NO-DUPLICATE",
@@ -344,7 +640,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-STOCK-DISTINGUISH",
@@ -353,7 +657,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "CV-DEVICE",
@@ -362,7 +674,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 2,
+      "development_stage": "CONVENIENCE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続"
     },
     {
       "id": "MAP-HEADING-UP",
@@ -371,7 +691,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-NORTH-TOGGLE",
@@ -380,7 +708,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-INITIAL-200",
@@ -389,7 +725,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-NO-AUTOSCALE",
@@ -398,7 +742,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-REMEMBER-SCALE",
@@ -407,7 +759,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-OWN-LOWER",
@@ -416,7 +776,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-MATCH",
@@ -425,7 +793,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-ROAD-BEARING",
@@ -434,7 +810,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-STATIONARY-JITTER",
@@ -443,7 +827,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-FALSE-SPEED",
@@ -452,7 +844,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "MAP-PIVOT",
@@ -461,7 +861,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "UI-COMPASS",
@@ -470,7 +878,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-NORTH-CONTROL",
@@ -479,7 +895,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-SCALE",
@@ -488,7 +912,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-ZOOM-CONTROLS",
@@ -497,7 +929,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-ZOOM-STEP",
@@ -506,7 +946,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-LOC-BUTTON",
@@ -515,7 +963,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-SETTINGS",
@@ -524,7 +980,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "UI-FULLMAP",
@@ -533,7 +997,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "HUD-ROAD",
@@ -542,7 +1014,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "HUD-ROAD-FALLBACK",
@@ -551,7 +1031,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 5,
+      "development_stage": "UI_HUD_SCALE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存UIを基準に要求差分から"
     },
     {
       "id": "VEHICLE-ICON",
@@ -560,7 +1048,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 4,
+      "development_stage": "LOCATION_CAMERA",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "既存成果を保持し記録済み不具合から"
     },
     {
       "id": "LABEL-ADDRESS",
@@ -569,7 +1065,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 6,
+      "development_stage": "MAP_LABELS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "現行style/label挙動の解析から"
     },
     {
       "id": "LABEL-ROAD",
@@ -578,7 +1082,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 6,
+      "development_stage": "MAP_LABELS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "現行style/label挙動の解析から"
     },
     {
       "id": "POI-MAJOR",
@@ -587,7 +1099,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-AIRPORT",
@@ -596,7 +1116,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-ROADSIDE",
@@ -605,7 +1133,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-PARK",
@@ -614,7 +1150,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-PUBLIC",
@@ -623,7 +1167,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-DEPARTMENT",
@@ -632,7 +1184,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-SUPERMARKET",
@@ -641,7 +1201,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-LARGE-LABEL",
@@ -650,7 +1218,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "POI-COLLISION",
@@ -659,7 +1235,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "FUEL",
@@ -668,7 +1252,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "FUEL-MWM-FIRST",
@@ -677,7 +1269,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 8,
+      "development_stage": "MAJOR_POI",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Native MWM/styleと縮尺・collision検証"
     },
     {
       "id": "STOP-FORWARD",
@@ -686,7 +1286,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 9,
+      "development_stage": "STOP_SIGNS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "前方距離・方位filterを独立publisherで検証"
     },
     {
       "id": "STOP-DISTANCE",
@@ -695,7 +1303,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 9,
+      "development_stage": "STOP_SIGNS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "前方距離・方位filterを独立publisherで検証"
     },
     {
       "id": "STOP-HEADING",
@@ -704,7 +1320,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 9,
+      "development_stage": "STOP_SIGNS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "前方距離・方位filterを独立publisherで検証"
     },
     {
       "id": "STOP-OWNERSHIP",
@@ -713,7 +1337,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 9,
+      "development_stage": "STOP_SIGNS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "前方距離・方位filterを独立publisherで検証"
     },
     {
       "id": "SEARCH-STOCK",
@@ -722,7 +1354,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 10,
+      "development_stage": "SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張"
     },
     {
       "id": "SEARCH-FUZZY",
@@ -731,7 +1371,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 10,
+      "development_stage": "SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張"
     },
     {
       "id": "SEARCH-HISTORY",
@@ -740,7 +1388,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 10,
+      "development_stage": "SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張"
     },
     {
       "id": "SEARCH-HISTORY-DELETE",
@@ -749,7 +1405,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 10,
+      "development_stage": "SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張"
     },
     {
       "id": "VOICE-JA",
@@ -758,7 +1422,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 11,
+      "development_stage": "VOICE_SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "日本語音声入力→共通normalization→SearchEngine"
     },
     {
       "id": "VOICE-ONDEVICE",
@@ -767,7 +1439,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 11,
+      "development_stage": "VOICE_SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "日本語音声入力→共通normalization→SearchEngine"
     },
     {
       "id": "VOICE-FALLBACK",
@@ -776,7 +1456,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 11,
+      "development_stage": "VOICE_SEARCH",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "日本語音声入力→共通normalization→SearchEngine"
     },
     {
       "id": "ORIENT-AUTO",
@@ -785,7 +1473,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 13,
+      "development_stage": "ORIENTATION_LIFECYCLE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Activity/theme/orientation restart時の状態復元から"
     },
     {
       "id": "ORIENT-PORTRAIT",
@@ -794,7 +1490,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 13,
+      "development_stage": "ORIENTATION_LIFECYCLE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Activity/theme/orientation restart時の状態復元から"
     },
     {
       "id": "ORIENT-LANDSCAPE",
@@ -803,7 +1507,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 13,
+      "development_stage": "ORIENTATION_LIFECYCLE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Activity/theme/orientation restart時の状態復元から"
     },
     {
       "id": "LIFE-START",
@@ -812,7 +1524,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 13,
+      "development_stage": "ORIENTATION_LIFECYCLE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Activity/theme/orientation restart時の状態復元から"
     },
     {
       "id": "LIFE-RESTART",
@@ -821,7 +1541,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 13,
+      "development_stage": "ORIENTATION_LIFECYCLE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Activity/theme/orientation restart時の状態復元から"
     },
     {
       "id": "LIFE-RETURN",
@@ -830,7 +1558,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 13,
+      "development_stage": "ORIENTATION_LIFECYCLE",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Activity/theme/orientation restart時の状態復元から"
     },
     {
       "id": "GMAPS-LAUNCH",
@@ -839,7 +1575,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 12,
+      "development_stage": "GOOGLE_MAPS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Android handoff/return lifecycle実機検証"
     },
     {
       "id": "GMAPS-RETURN",
@@ -848,7 +1592,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 12,
+      "development_stage": "GOOGLE_MAPS",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Android handoff/return lifecycle実機検証"
     },
     {
       "id": "ROUTE-FREE",
@@ -857,7 +1609,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 15,
+      "development_stage": "FREE_EXPRESSWAY_ROUTING",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Pinned CoMaps routing/toll/access属性解析から"
     },
     {
       "id": "ROUTE-NO-POSTFILTER",
@@ -866,7 +1626,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 15,
+      "development_stage": "FREE_EXPRESSWAY_ROUTING",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Pinned CoMaps routing/toll/access属性解析から"
     },
     {
       "id": "TOLL-AUTH",
@@ -875,7 +1643,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 16,
+      "development_stage": "TOLL_DISPLAY",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Authorityある料金モデル確立から"
     },
     {
       "id": "TOLL-PASSENGER",
@@ -884,7 +1660,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 16,
+      "development_stage": "TOLL_DISPLAY",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Authorityある料金モデル確立から"
     },
     {
       "id": "TOLL-CANDIDATE",
@@ -893,7 +1677,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 16,
+      "development_stage": "TOLL_DISPLAY",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Authorityある料金モデル確立から"
     },
     {
       "id": "TOLL-ZERO",
@@ -902,7 +1694,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 16,
+      "development_stage": "TOLL_DISPLAY",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Authorityある料金モデル確立から"
     },
     {
       "id": "TOLL-OFFLINE",
@@ -911,7 +1711,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 16,
+      "development_stage": "TOLL_DISPLAY",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "Authorityある料金モデル確立から"
     },
     {
       "id": "FAV-AUTH",
@@ -920,7 +1728,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 14,
+      "development_stage": "FAVORITES_SYNC",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "BookmarkManager authority・非破壊merge設計から"
     },
     {
       "id": "FAV-IDENTITY",
@@ -929,7 +1745,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 14,
+      "development_stage": "FAVORITES_SYNC",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "BookmarkManager authority・非破壊merge設計から"
     },
     {
       "id": "FAV-CONFLICT",
@@ -938,7 +1762,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 14,
+      "development_stage": "FAVORITES_SYNC",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "BookmarkManager authority・非破壊merge設計から"
     },
     {
       "id": "FAV-MERGE",
@@ -947,7 +1779,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 14,
+      "development_stage": "FAVORITES_SYNC",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "BookmarkManager authority・非破壊merge設計から"
     },
     {
       "id": "FAV-WIFI",
@@ -956,7 +1796,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 14,
+      "development_stage": "FAVORITES_SYNC",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "BookmarkManager authority・非破壊merge設計から"
     },
     {
       "id": "BASE-COMAPS",
@@ -965,7 +1813,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain"
     },
     {
       "id": "BASE-OFFLINE",
@@ -974,7 +1830,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain"
     },
     {
       "id": "BASE-NO-PAID",
@@ -983,7 +1847,15 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain"
     },
     {
       "id": "SCOPE-HOKKAIDO",
@@ -992,7 +1864,19 @@
       "status": "ACTIVE",
       "progress": "PENDING_TRACEABILITY",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false
+      "restart_from_zero": false,
+      "development_order": 19,
+      "development_stage": "FINAL_APK",
+      "parent_active_decisions": [],
+      "authority_state": "PARENT_MAPPING_REQUIRED",
+      "progress_state": "PENDING_TRACEABILITY",
+      "evidence_state": "EVIDENCE_MAPPING_REQUIRED",
+      "acceptance_state": "ACCEPTANCE_MAPPING_REQUIRED",
+      "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain"
     }
-  ]
+  ],
+  "mapping_policy": {
+    "rule": "Every atomic requirement must map to an explicit development stage, one or more parent active decisions/authority where applicable, evidence and an acceptance route before registry completion.",
+    "unmapped_blocks_completion": true
+  }
 }
