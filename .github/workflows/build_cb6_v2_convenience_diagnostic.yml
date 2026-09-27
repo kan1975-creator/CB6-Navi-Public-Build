@@ -18,7 +18,11 @@ permissions:
 
 jobs:
   preflight:
+    name: Convenience native MWM diagnostic arm64
     runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SKIP_MAP_DOWNLOAD: "true"
     steps:
       - uses: actions/checkout@v4
       - name: Enforce diagnostic feature gate
@@ -34,19 +38,6 @@ jobs:
           set -euxo pipefail
           g++ -std=c++17 -Wall -Wextra -Werror             v2/tests/convenience_brand_classifier_test.cpp             v2/poi/native/convenience_brand_classifier.cpp             -o /tmp/cb6-convenience-classifier-test
           /tmp/cb6-convenience-classifier-test
-
-  build:
-    name: Convenience native MWM diagnostic arm64
-    needs: preflight
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    env:
-      SKIP_MAP_DOWNLOAD: "true"
-    steps:
-      - name: Checkout V2 control repo
-        uses: actions/checkout@v4
-      - name: Enforce diagnostic feature gate
-        run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=convenience-mwm-diagnostic
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
