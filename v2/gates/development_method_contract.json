@@ -51,5 +51,13 @@
     "unrecorded_spec_change_forbidden": true,
     "required_change_must_record_reason_impact_and_authority_update_before_implementation": true,
     "unrelated_behavior_change_forbidden": true
+  },
+  "pinned_upstream_source_policy": {
+    "required_for_every_feature": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "concrete_source_paths_required": true,
+    "findings_required": true,
+    "analysis_must_precede_implementation": true
   }
 }
