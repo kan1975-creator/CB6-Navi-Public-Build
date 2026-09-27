@@ -24,7 +24,8 @@
   ],
   "tests": [
     "v2/tests/SignalPolicyTest.java",
-    "v2/tests/signals_audit_selftest.py"
+    "v2/tests/signals_audit_selftest.py",
+    "v2/tests/preflight_gate1_audit_selftest.py"
   ],
   "apk_checks": [
     {
@@ -89,11 +90,13 @@
     ],
     "audits": [
       "v2/audits/audit_signals.py",
-      "v2/tests/signals_audit_selftest.py"
+      "v2/tests/signals_audit_selftest.py",
+      "v2/tests/preflight_gate1_audit_selftest.py"
     ],
     "tests": [
       "v2/tests/SignalPolicyTest.java",
-      "v2/tests/signals_audit_selftest.py"
+      "v2/tests/signals_audit_selftest.py",
+      "v2/tests/preflight_gate1_audit_selftest.py"
     ],
     "data-source": [
       "v2/signals/java/OverpassSignalProvider.java",
