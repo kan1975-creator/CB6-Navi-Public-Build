@@ -1,4 +1,5 @@
-name: CB6 V2 Convenience MWM Diagnostic\n# CB6 visible MWM evidence diagnostic
+name: CB6 V2 Convenience MWM Diagnostic
+# CB6 visible MWM evidence diagnostic
 
 on:
   workflow_dispatch:
@@ -32,6 +33,8 @@ jobs:
       SKIP_MAP_DOWNLOAD: "true"
     steps:
       - uses: actions/checkout@v4
+      - name: Verify frozen CB6 development method
+        run: python3 v2/gates/verify_method_freeze.py
       - name: Enforce diagnostic feature gate
         run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=convenience-mwm-diagnostic
       - name: Seal gated control state
