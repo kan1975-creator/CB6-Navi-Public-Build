@@ -86,5 +86,6 @@
     ]
   },
   "impact_record": "v2/gates/impact_records/convenience-mwm-diagnostic.json",
-  "device_evidence": "PENDING"
+  "device_evidence": "PENDING",
+  "research_record": "v2/gates/research_records/convenience-mwm-diagnostic.json"
 }
