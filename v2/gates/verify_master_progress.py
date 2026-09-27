@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<259:
+if len(items)<292:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -154,3 +154,10 @@ missing_method_atomic=required_method_atomic-set(ids)
 if missing_method_atomic:
     print("CB6 MASTER LEDGER FAIL: method/domain atomic specifications disappeared",sorted(missing_method_atomic)); raise SystemExit(1)
 print("CB6 MASTER METHOD/DOMAIN ATOMIC PASS:",len(required_method_atomic))
+
+# Project-state, method-proof and feature/research-contract zero-omission anchors.
+required_contract_atomic={"PROC-PROJECT-BRANCH","PROC-PROJECT-DESIGN-STATE","PROC-CANONICAL-DESIGN","PROC-RETIRED-DESIGN-PATH","PROC-METHOD-CURRENT-INVALID","PROC-METHOD-SAMEHEAD","PROC-METHOD-SEMANTIC-CLOSURE","PROC-METHOD-HISTORICAL-REPLAY","PROC-METHOD-INDEPENDENT","PROC-METHOD-EXTENSIBILITY","PROC-METHOD-ARTIFACT-CHAIN","PROC-METHOD-DEVICE-CHAIN","PROC-ROOT-PROOF-EXEC","PROC-ROOT-CONTEXT-PROOF","PROC-ROOT-MISSING-PROOF","PROC-ROOT-PERMISSION-PROOF","PROC-ROOT-HISTORY-PROOF","PROC-ROOT-UNKNOWN-PROOF","PROC-ROOT-INDEPENDENT-PROOF","PROC-ROOT-EXTENSIBILITY-PROOF","PROC-ROOT-ARTIFACT-PROOF","PROC-ROOT-DEVICE-PROOF","PROC-FEATURE-CONTRACT","PROC-FEATURE-REPO-SWEEP","PROC-FEATURE-DOMAIN-VERIFY","PROC-FEATURE-DEVICE-PENDING","PROC-RESEARCH-STATUS","PROC-RESEARCH-INTERNAL-PATHS","PROC-RESEARCH-APPLICABILITY","PROC-RESEARCH-SOURCES-FINDINGS","PROC-RESEARCH-AUTH-CLASS","PROC-RESEARCH-TEMPORAL","PROC-RESEARCH-DOMAIN-MAP"}
+missing_contract_atomic=required_contract_atomic-set(ids)
+if missing_contract_atomic:
+    print("CB6 MASTER LEDGER FAIL: project/method/template atomic specifications disappeared",sorted(missing_contract_atomic)); raise SystemExit(1)
+print("CB6 MASTER PROJECT/METHOD/TEMPLATE ATOMIC PASS:",len(required_contract_atomic))
