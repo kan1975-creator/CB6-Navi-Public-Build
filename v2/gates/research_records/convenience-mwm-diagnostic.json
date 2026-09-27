@@ -58,5 +58,53 @@
       "Pinned CoMaps Framework/DataSource/Feature surfaces are the upstream basis for native installed-MWM convenience acquisition; public DataSource integration supersedes the historical private FeaturesFetcher assumption.",
       "MwmActivity onRenderingInitializationFinished is a concrete diagnostic presentation boundary after map engine initialization."
     ]
+  },
+  "upstream_domain_coverage": {
+    "poi": {
+      "source_paths": [
+        "indexer/feature.hpp",
+        "indexer/feature_meta.hpp"
+      ],
+      "findings": [
+        "Feature type, center, name and metadata are the native POI evidence consumed by the CB6 diagnostic collector."
+      ]
+    },
+    "classifier": {
+      "source_paths": [
+        "indexer/feature.hpp",
+        "indexer/feature_meta.hpp"
+      ],
+      "findings": [
+        "Feature classificator type and metadata provide the inputs to deterministic convenience classification."
+      ]
+    },
+    "presentation": {
+      "source_paths": [
+        "android/app/src/main/java/app/organicmaps/MwmActivity.java"
+      ],
+      "findings": [
+        "Post-render MwmActivity is the diagnostic-only visible evidence boundary; it does not become final POI rendering."
+      ]
+    },
+    "offline": {
+      "source_paths": [
+        "indexer/data_source.hpp",
+        "indexer/data_source.cpp"
+      ],
+      "findings": [
+        "Installed MWM DataSource iteration is the offline acquisition boundary."
+      ]
+    },
+    "data-source": {
+      "source_paths": [
+        "map/framework.hpp",
+        "map/framework.cpp",
+        "indexer/data_source.hpp",
+        "indexer/data_source.cpp"
+      ],
+      "findings": [
+        "Framework::GetDataSource plus DataSource::ForEachInRect is the public pinned acquisition path."
+      ]
+    }
   }
 }
