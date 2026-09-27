@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<228:
+if len(items)<259:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -147,3 +147,10 @@ missing_exec_arch=required_exec_arch-set(ids)
 if missing_exec_arch:
     print("CB6 MASTER LEDGER FAIL: execution/architecture atomic specifications disappeared",sorted(missing_exec_arch)); raise SystemExit(1)
 print("CB6 MASTER EXECUTION/ARCHITECTURE ATOMIC PASS:",len(required_exec_arch))
+
+# Development-method/domain/traceability zero-omission anchors.
+required_method_atomic={"PROC-METHOD-GATES","PROC-METHOD-REGRESSIONS","PROC-AUDIT-SPECIFIC-PROOF","PROC-IMPACT-COVERS-AUDIT","PROC-INTERNAL-ANALYSIS","PROC-WEB-WHEN-MATERIAL","PROC-WEB-NOT-AUTH","PROC-PINNED-REVALIDATE","PROC-RESEARCH-BEFORE-IMPL","PROC-NO-UNRECORDED-SPEC","PROC-CHANGE-REASON","PROC-NO-UNRELATED-CHANGE","PROC-PINNED-EVERY-FEATURE","PROC-PINNED-PATHS","PROC-PINNED-FINDINGS","PROC-DOMAIN-COVERAGE","PROC-COMPLETION-METHOD","PROC-COMPLETION-BUILD","PROC-COMPLETION-BEHAVIOR","PROC-DOMAIN-AUDITS","PROC-DOMAIN-TESTS","PROC-DOMAIN-WORKFLOW","PROC-DOMAIN-RENDERER","PROC-DOMAIN-SYMBOLS","PROC-DOMAIN-CACHE","PROC-DOMAIN-DATASOURCE","PROC-DOMAIN-LIFECYCLE","PROC-DOMAIN-REALDEVICE","PROC-DOMAIN-GATES","PROC-DOMAIN-DESIGN","PROC-TRACE-CONSUMED"}
+missing_method_atomic=required_method_atomic-set(ids)
+if missing_method_atomic:
+    print("CB6 MASTER LEDGER FAIL: method/domain atomic specifications disappeared",sorted(missing_method_atomic)); raise SystemExit(1)
+print("CB6 MASTER METHOD/DOMAIN ATOMIC PASS:",len(required_method_atomic))
