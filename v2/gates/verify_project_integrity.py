@@ -127,12 +127,12 @@ if not isinstance(tdc,list) or len(tdc)!=1 or not isinstance(tdc[0],dict) or set
  fail("feature gate template device check contract drifted")
 
 research_template=load("v2/gates/research_records/TEMPLATE.json")
-required_research_fields={"schema","feature_id","status","internal_analysis","upstream_web_research","pinned_source_revalidation","authority_classification","completed_before_implementation","pinned_upstream_source_analysis"}
+required_research_fields={"schema","feature_id","status","internal_analysis","upstream_web_research","pinned_source_revalidation","authority_classification","completed_before_implementation","pinned_upstream_source_analysis","upstream_domain_coverage"}
 if set(research_template)!=required_research_fields: fail("research record template fields drifted")
 if research_template.get("schema")!=1 or research_template.get("status")!="PENDING" or research_template.get("completed_before_implementation") is not False: fail("research record template is not fail-closed")
 rtu=research_template.get("pinned_upstream_source_analysis",{})
 if rtu.get("required") is not True or rtu.get("repository")!="comaps/comaps" or rtu.get("commit")!="7113ccb5f086183f8884b2aa4e58c987466b6704": fail("research template pinned CoMaps contract drifted")
-if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")
+if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")\nif research_template.get("upstream_domain_coverage")!={"REPLACE_WITH_TECHNICAL_AFFECTED_DOMAIN":{"source_paths":["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"],"findings":["REPLACE_WITH_DOMAIN_SPECIFIC_FINDING"]}}: fail("research template domain coverage contract drifted")
 
 signal_selftest=(ROOT/"v2/tests/signals_audit_selftest.py").read_text(encoding="utf-8")
 for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))','SIGNAL_SPEC=SPEC["signal"]','MIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])','f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"']:
@@ -238,7 +238,7 @@ if rp!={"internal_analysis_required":True,"upstream_web_research":"required_when
 cpol=method.get("change_policy",{})
 if cpol!={"unrecorded_spec_change_forbidden":True,"required_change_must_record_reason_impact_and_authority_update_before_implementation":True,"unrelated_behavior_change_forbidden":True}: fail("development method change policy drifted")
 pup=method.get("pinned_upstream_source_policy",{})
-if pup!={"required_for_every_feature":True,"repository":"comaps/comaps","commit":"7113ccb5f086183f8884b2aa4e58c987466b6704","concrete_source_paths_required":True,"findings_required":True,"analysis_must_precede_implementation":True}: fail("pinned upstream source policy drifted")
+if pup!={"required_for_every_feature":True,"repository":"comaps/comaps","commit":"7113ccb5f086183f8884b2aa4e58c987466b6704","concrete_source_paths_required":True,"findings_required":True,"analysis_must_precede_implementation":True,"affected_domain_coverage_required":True}: fail("pinned upstream source policy drifted")
 if method.get("method_document")!="docs/CB6_V2_DEVELOPMENT_METHOD.md" or not (ROOT/method["method_document"]).is_file(): fail("development method document missing/drifted")
 if method.get("failure_return_policy")!="return_to_earliest_affected_stage": fail("development method failure return policy drifted")
 if method.get("completion_authority")!={"method":"development_gate_success","build":"verified_apk_evidence","behavior":"accepted_cb6_real_device_evidence"}: fail("development method completion authority drifted")
