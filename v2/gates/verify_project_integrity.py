@@ -214,7 +214,7 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
 
 # The development gate must continuously execute every required method regression test.
 method=load("v2/gates/development_method_contract.json")
-expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy"}
+expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy"}
 if set(method)!=expected_method_fields or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")
 expected_invariants={"restricted_evidence_cannot_be_direct_feature_authority":True,"every_feature_audit_requires_specific_fail_closed_proof":True,"audit_proof_must_execute_before_feature_build":True,"impact_record_must_cover_audit_proof":True}
 if method.get("feature_contract_invariants")!=expected_invariants: fail("development method feature invariants drifted")
@@ -224,6 +224,8 @@ rp=method.get("research_policy",{})
 if rp!={"internal_analysis_required":True,"upstream_web_research":"required_when_external_api_data_model_platform_or_upstream_behavior_is_material","web_is_authority":False,"pinned_source_revalidation_required":True,"research_evidence_must_be_recorded_before_implementation":True}: fail("development method research policy drifted")
 cpol=method.get("change_policy",{})
 if cpol!={"unrecorded_spec_change_forbidden":True,"required_change_must_record_reason_impact_and_authority_update_before_implementation":True,"unrelated_behavior_change_forbidden":True}: fail("development method change policy drifted")
+pup=method.get("pinned_upstream_source_policy",{})
+if pup!={"required_for_every_feature":True,"repository":"comaps/comaps","commit":"7113ccb5f086183f8884b2aa4e58c987466b6704","concrete_source_paths_required":True,"findings_required":True,"analysis_must_precede_implementation":True}: fail("pinned upstream source policy drifted")
 for rel in method["required_gate_scripts"]+method["required_regression_tests"]+method["acceptance_scripts"]+[method["post_gate_integrity_script"]]:
  if not (ROOT/rel).is_file(): fail("development method component missing: "+rel)
 devwf=(ROOT/".github/workflows/cb6_development_gate.yml").read_text(encoding="utf-8")
