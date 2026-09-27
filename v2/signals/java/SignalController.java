@@ -16,7 +16,8 @@ public final class SignalController
 {
   private final Context context;
   private final Handler main = new Handler(Looper.getMainLooper());
-  private final SignalProvider provider = new OverpassSignalProvider();
+  private final SignalProvider provider = new CompositeSignalProvider(
+      new OverpassSignalProvider(), new VerifiedSignalProvider());
   private ExecutorService worker;
   private SignalSnapshot snapshot = SignalSnapshot.EMPTY;
   private SignalSnapshot published;
