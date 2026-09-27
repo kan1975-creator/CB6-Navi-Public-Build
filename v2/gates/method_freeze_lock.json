@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "FROZEN",
+  "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
+  "files": {
+    ".github/workflows/cb6_development_gate.yml": "8a16d0a9f79ed1fa472b0061d5ea09e0ce2d84cb",
+    "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
+    "v2/gates/development_method_contract.json": "3b4f0511f8bf93bb473142d3df4ee21ccfc17f48",
+    "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
+    "v2/gates/features/TEMPLATE.json": "73ac53c89bff13a9cde930412fed7932b7547343",
+    "v2/gates/historical_incidents.json": "91d516cd563e3d27180628bc5491610f53663f7f",
+    "v2/gates/repository_state_manifest.json": "d4e660315e8f9d27e43f1d85bca9e442768b7c22",
+    "v2/gates/research_records/TEMPLATE.json": "ae8cdaf43c09671d672fc41db6f6c87536d265f9",
+    "v2/gates/root_invariants.json": "264bcb5917e73301f322286971dd9bbfb7908cd1",
+    "v2/gates/verify_method_freeze.py": "2d716389a4c3d80fea375a066fd87f964a9ebd35",
+    "v2/gates/verify_project_gate.py": "c7f52457fd0148b0d26f358176d25ab22ffc9cac",
+    "v2/gates/verify_project_integrity.py": "3d9d24220b83f284eb20dce507f4577eda580844",
+    "v2/gates/verify_root_invariants.py": "76c3fe2f23e60d885b917a147bf8c6b66a194fba",
+    "v2/tests/test_apk_evidence_fail_closed.py": "b11a28727243e2dbc5189fdec8ced6cbe3682d85",
+    "v2/tests/test_device_evidence_fail_closed.py": "7b14b783aeeb75ca4e55c366c53ad30413e4273b",
+    "v2/tests/test_feature_gate_contract.py": "7ad38f8f42028d5d28fffb6a91531de359f6a039",
+    "v2/tests/test_final_acceptance_fail_closed.py": "a193b546207a148cf77b629a4db05a9b967a4aa1",
+    "v2/tests/test_gate_fail_closed.py": "a5fdee927bfababf8271453a27ddbe8a126870c2",
+    "v2/tests/test_gate_stamp_fail_closed.py": "9c1c112ed92be6aa4b4532a888e932d0e5242791",
+    "v2/tests/test_method_freeze.py": "fa12f82331502f1533bf89f6b1b72c95720776e4",
+    "v2/tests/test_repository_syntax.py": "d57c449636e5dc71e4cbf5884843a5e0ca851453",
+    "v2/tests/test_root_invariants.py": "1f7f36fe2d9bb3f78c554444f8115f13194cf9e2"
+  }
+}
