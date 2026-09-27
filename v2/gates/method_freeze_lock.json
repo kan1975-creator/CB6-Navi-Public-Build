@@ -13,7 +13,7 @@
     "v2/gates/research_records/TEMPLATE.json": "ae8cdaf43c09671d672fc41db6f6c87536d265f9",
     "v2/gates/root_invariants.json": "264bcb5917e73301f322286971dd9bbfb7908cd1",
     "v2/gates/verify_method_freeze.py": "2d716389a4c3d80fea375a066fd87f964a9ebd35",
-    "v2/gates/verify_project_gate.py": "c7f52457fd0148b0d26f358176d25ab22ffc9cac",
+    "v2/gates/verify_project_gate.py": "d009fd81e3add24c84381c97beb7278c3de23785",
     "v2/gates/verify_project_integrity.py": "3d9d24220b83f284eb20dce507f4577eda580844",
     "v2/gates/verify_root_invariants.py": "76c3fe2f23e60d885b917a147bf8c6b66a194fba",
     "v2/tests/test_apk_evidence_fail_closed.py": "b11a28727243e2dbc5189fdec8ced6cbe3682d85",
