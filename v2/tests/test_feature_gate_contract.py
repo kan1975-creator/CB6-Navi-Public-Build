@@ -10,6 +10,13 @@ def run_case(name, mutate, needle):
   state=root/"v2/gates/project_state.json"; d=json.loads(state.read_text())
   d.update({"stage":"IMPLEMENTATION_ENABLED","feature_builds_allowed":True,"design_verified":True,"canonical_design":"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"})
   state.write_text(json.dumps(d))
+  # Synthetic feature-contract tests isolate the lower-layer contract. Root
+  # certification is supplied as a complete fixture proof set here; production
+  # certification is derived separately by run_root_certification.py.
+  rp=root/"v2/gates/root_invariants.json"; rd=json.loads(rp.read_text())
+  proof_names={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence"}
+  rd["certification"]={"status":"CERTIFIED","feature_execution_permitted":True,"proof":{k:True for k in proof_names}}
+  rp.write_text(json.dumps(rd))
   # Keep all stage-coupled gate inputs coherent so each case reaches the
   # per-feature contract under test rather than failing the global integrity lock.
   for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json"):
