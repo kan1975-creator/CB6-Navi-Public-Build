@@ -51,3 +51,19 @@ if required_failure_ids-actual_failure_ids:
 if not ledger.get("completeness",{}).get("zero_omission_required"):
     print("CB6 MASTER LEDGER FAIL: zero-omission rule missing"); raise SystemExit(1)
 print("CB6 MASTER SOURCE/HISTORY COVERAGE PASS")
+
+# Explicit development-order coverage: prohibit ambiguous catch-all buckets.
+order_rows=ledger.get("development_order",[])
+if len(order_rows)!=22 or [x.get("order") for x in order_rows] != list(range(22)):
+    print("CB6 MASTER LEDGER FAIL: development order must be explicit contiguous 0..21"); raise SystemExit(1)
+if any(x.get("id") in {"OTHER_POI_AND_CONTROLS","OTHER_FEATURES","MISC"} for x in order_rows):
+    print("CB6 MASTER LEDGER FAIL: catch-all development bucket forbidden"); raise SystemExit(1)
+mapped=set()
+for row in order_rows:
+    mapped.update(row.get("requirements",[]))
+# PROC requirements govern the pipeline rather than one feature row.
+required_order_ids={x["id"] for x in ledger.get("specifications",[]) if not x["id"].startswith("PROC-")}
+missing_order=required_order_ids-mapped
+if missing_order:
+    print("CB6 MASTER LEDGER FAIL: active product requirements missing from development order",sorted(missing_order)); raise SystemExit(1)
+print("CB6 MASTER DEVELOPMENT ORDER PASS:",len(order_rows),"explicit stages")
