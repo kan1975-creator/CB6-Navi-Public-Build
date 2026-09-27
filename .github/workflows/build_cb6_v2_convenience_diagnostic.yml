@@ -10,6 +10,7 @@ on:
       - 'v2/poi/**'
       - 'v2/audits/audit_convenience.py'
       - 'v2/tests/convenience_brand_classifier_test.cpp'
+      - 'v2/tests/convenience_audit_selftest.py'
       - 'v2/gates/features/convenience-mwm-diagnostic.json'
       - 'v2/gates/impact_records/convenience-mwm-diagnostic.json'
 
@@ -33,6 +34,8 @@ jobs:
           python3 v2/gates/create_gate_stamp.py --verify
       - name: Audit native MWM convenience ownership
         run: python3 v2/audits/audit_convenience.py
+      - name: Prove convenience audit fail-closed behavior
+        run: python3 v2/tests/convenience_audit_selftest.py
       - name: Compile and run brand classifier tests
         run: |
           set -euxo pipefail
