@@ -100,3 +100,18 @@ for x in items:
     if x.get("restart_from_zero") is not False or not x.get("resume_from"):
         print("CB6 MASTER LEDGER FAIL: atomic resume semantics missing",x.get("id")); raise SystemExit(1)
 print("CB6 MASTER ATOMIC TRACEABILITY PASS:",len(items),"requirements mapped")
+
+# Every atomic requirement exposes the complete development pipeline; evidence-bearing states require evidence.
+pipeline_names=["research","impact","implementation","audit","positive_test","destructive_test","feature_gate","apk","device"]
+for x in items:
+    p=x.get("pipeline",{})
+    if list(p.keys())!=pipeline_names:
+        print("CB6 MASTER LEDGER FAIL: atomic pipeline incomplete/order mismatch",x.get("id")); raise SystemExit(1)
+    for name in pipeline_names:
+        st=p[name].get("state")
+        ev=p[name].get("evidence",[])
+        if not st:
+            print("CB6 MASTER LEDGER FAIL: empty pipeline state",x.get("id"),name); raise SystemExit(1)
+        if st in {"RECORDED","EXISTS_REQUIRES_RECERTIFICATION","IN_PROGRESS_REQUIRES_RECERTIFICATION"} and not ev:
+            print("CB6 MASTER LEDGER FAIL: evidence-bearing pipeline state lacks evidence",x.get("id"),name); raise SystemExit(1)
+print("CB6 MASTER PIPELINE COVERAGE PASS:",len(items),"atomic requirements x",len(pipeline_names),"stages")
