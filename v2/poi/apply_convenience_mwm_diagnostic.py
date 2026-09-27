@@ -37,9 +37,9 @@ Java_app_organicmaps_sdk_Framework_nativeCb6ConvenienceDiagnostic(JNIEnv * env, 
     return env->NewObjectArray(0, env->FindClass("java/lang/String"), nullptr);
 
   auto const center = mercator::FromLatLon(lat, lon);
-  auto const delta = mercator::MetersToMercator(radiusMeters, center.y);
+  auto const delta = mercator::MetersToMercator(radiusMeters);
   m2::RectD const rect(center.x - delta, center.y - delta, center.x + delta, center.y + delta);
-  auto const pois = cb6::poi::CollectConveniencePois(*frm()->GetFeaturesFetcher(), rect, scale);
+  auto const pois = cb6::poi::CollectConveniencePois(frm()->GetDataSource(), rect, scale);
 
   jclass const stringClass = env->FindClass("java/lang/String");
   auto const count = static_cast<jsize>(std::min<size_t>(pois.size(), 200));
