@@ -118,4 +118,18 @@ if "--require-feature-build" in sys.argv:
  for key in ("source_paths","audits","tests"):
   for rel in f[key]:
    if not (ROOT/rel).exists(): fail("feature gate "+key+" path missing: "+rel)
+ # Historical/retired evidence may inform active decisions only through the evidence/traceability layer.
+ # A feature implementation contract must not directly promote such documents back into current source authority.
+ restricted_feature_refs=set()
+ for item in evidence.get("evidence",[]):
+  if item.get("status")!="active": restricted_feature_refs.add(item.get("path"))
+ direct_refs=set(f["source_paths"]+f["audits"]+f["tests"])
+ bad_authority=sorted(x for x in direct_refs if x in restricted_feature_refs)
+ if bad_authority: fail("feature gate directly promotes restricted evidence: "+",".join(bad_authority))
+ # An audit is not evidence merely because its file exists. Each feature audit must have
+ # an explicitly registered executable fail-closed proof in the test set.
+ for audit_rel in f["audits"]:
+  stem=pathlib.Path(audit_rel).stem
+  candidates=[t for t in f["tests"] if ("audit" in pathlib.Path(t).stem and ("selftest" in pathlib.Path(t).stem or "fail_closed" in pathlib.Path(t).stem or stem.replace("audit_","") in pathlib.Path(t).stem))]
+  if not candidates: fail("feature audit lacks registered fail-closed proof: "+audit_rel)
 print("CB6 DEVELOPMENT GATE PASS: implementation enabled")
