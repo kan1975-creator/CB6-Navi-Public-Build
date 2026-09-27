@@ -1,5 +1,5 @@
 {
-  "schema": 6,
+  "schema": 7,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
   "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
@@ -14298,6 +14298,1986 @@
           "evidence": []
         }
       }
+    },
+    {
+      "id": "PROC-EVIDENCE-CONSUME",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Required evidence must be actively consumed by the next engineering step; citation/existence alone is insufficient.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-UNKNOWN-OPEN",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Unknown evidence/design state remains UNKNOWN/OPEN and cannot be converted into an assumption.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-STATE-MACHINE",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Only EVIDENCE→DESIGN→IMPACT→IMPLEMENTATION→REPO-SWEEP→PREFLIGHT→BUILD→APK VERIFY→CB6 DEVICE→ACCEPT/FREEZE transitions are valid.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-FAIL-EARLIEST",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "A failed stage returns to the earliest affected stage and cannot skip forward.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-CHANGE-PROPAGATION",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "A new decision/finding updates owning evidence plus every downstream design/impact/implementation/audit location together or marks them BLOCKED/OPEN.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-WORKFLOW-GATE-FIRST",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Every V2 build workflow enforces the project/feature gate before expensive setup/build steps.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-FEATURE-IDENTITY",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Feature builds require an explicit machine-readable feature identity/contract.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-LEGACY-NOT-V2",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Legacy workflows/branches cannot become V2 authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RETIRED-CROSSCHECK",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Retired design is used only as an omission cross-check after rebuilding from current evidence, never as current truth.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-EXTERNAL-REFRESH",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "External/web evidence gaps are refreshed from authoritative/current sources and then revalidated against pinned source.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-OBJECTIVE-PROGRESS",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Progress claims require objective durable evidence: commit, Actions run, verified artifact, or accepted real-device result as appropriate.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-GENERATED-HASH",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Generated/runtime-sensitive resources require final-tree identity/invariant checks where applicable.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ALL-V2-WORKFLOWS-SCAN",
+      "group": "PROCESS",
+      "subgroup": "PROC",
+      "requirement": "Future V2 build workflows are automatically checked for pre-build gate enforcement.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-POI-PIPELINE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Native POI path is OSM tags→mapping/classificator→MWM→indexer→drawing rules→Drape→screen.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-POI-NOTVISIBLE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "A POI not visible on screen must not be assumed absent from MWM/search data.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-STOCK-VS-USERMARK",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Stock MWM/style rendering and CB6 supplemental UserMark rendering are distinct paths and must be diagnosed separately.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-SYMBOL-PIPELINE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Icon completion requires SVG→generated atlas/skin→symbol mapping→zoom→overlay→screen, not SVG presence alone.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-FRAMEWORK-ROOT",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Pinned CoMaps Framework/DataSource is the native composition/data root to inspect before parallel Android data models.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-CONVENIENCE-TYPE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Pinned CoMaps maps shop|convenience as a native MWM classificator type.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-BRAND-META",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Pinned CoMaps supports brand/operator metadata, but actual Japanese MWM retention must be measured rather than assumed.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-VEHICLE-CV-TEXT",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Pinned vehicle style currently provides generic high-zoom convenience text, not CB6 brand-specific icons.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-EXISTING-MWM-COMPAT",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Already-downloaded MWM compatibility is a constraint; generator/classificator changes cannot be assumed safe.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-SEARCH-STOCK",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Voice/fuzzy normalization feeds stock SearchEngine; no parallel CB6 search database.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-ROUTING-NATIVE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Routing eligibility changes belong in native routing semantics, not Android/post-filter substitutes.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-BOOKMARK-NATIVE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Favorites synchronization operates on native BookmarkManager/category/item identity and serialized data, not UI text.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-LOCATION-SHARED",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Location/camera changes must account for shared native Framework consumers and not rewrite GPS coordinates for screen placement.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-CONVENIENCE-DIAGNOSTIC",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Before convenience architecture replacement, inspect nearby native FeatureIDs and name/brand/operator metadata on existing Japanese MWM.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-CONVENIENCE-REPRESENTATIVE",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "Convenience metadata diagnostic covers representative 7-Eleven, FamilyMart, Lawson, Seicomart, MyBasket, Ministop and Daily Yamazaki.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-CONVENIENCE-DECISION",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "If existing MWM identity is reliable, prefer native brand rendering; otherwise supplement only missing identity/data while preventing duplicates.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "ARCH-NO-WHOLESALE-GENERATOR",
+      "group": "PROCESS",
+      "subgroup": "ARCH",
+      "requirement": "No wholesale generator/classificator convenience change without explicit acceptance of downloaded-map compatibility impact.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of execution gate, gate coverage, CoMaps architecture and pinned internal analysis",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "ROOT_IN_PROGRESS",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Repository reconstruction / Root certification; feature-specific architecture is consumed before implementation",
+      "evidence": [
+        "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Must remain represented and consumed by downstream feature gates where applicable."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     }
   ],
   "mapping_policy": {
@@ -14329,6 +16309,10 @@
     "v2/gates/evidence_inventory.json",
     "v2/gates/authority_policy.json",
     "v2/gates/repository_state_manifest.json",
-    "v2/gates/root_invariants.json"
+    "v2/gates/root_invariants.json",
+    "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+    "docs/CB6_GATE_COVERAGE_AUDIT.md",
+    "docs/CB6_COMAPS_ARCHITECTURE.md",
+    "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
   ]
 }
