@@ -176,8 +176,8 @@ def mutate_signal_selftest_hardcoded_old_zoom(r):
  p=r/"v2/tests/signals_audit_selftest.py"; s=p.read_text()
  s=s.replace('f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"', '"return 12;", "return 11;"')
  p.write_text(s)
- # Integrity must eventually own this invariant; marker makes the regression visible to the global fail-closed suite.
- if 'MIN_ZOOM=int(SPEC["display"]["min_zoom"])' not in p.read_text(): raise RuntimeError("fixture mutation failed")
+ if '"return 12;", "return 11;"' not in p.read_text(): raise RuntimeError("fixture mutation failed")
+CASES.append(("signal-selftest-stale-hardcoded-zoom", mutate_signal_selftest_hardcoded_old_zoom, "signal audit selftest not derived from current spec"))
 
 
 def mutate_apk_template_opens_early(root):
