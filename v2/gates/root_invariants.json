@@ -13,7 +13,9 @@
     "method_change_invalidates_method_completion": true,
     "known_failure_recurrence_must_be_mechanically_blocked": true,
     "unverified_claims_cannot_be_promoted_to_evidence": true,
-    "all_changes_require_closed_traceability": true
+    "all_changes_require_closed_traceability": true,
+    "lower_layers_blocked_until_root_certified": true,
+    "root_certification_cannot_be_self_asserted": true
   },
   "required_reconstruction_outputs": [
     "current_authority",
@@ -39,5 +41,10 @@
     "no_prior_conversation_available"
   ],
   "start_rule": "BLOCK unless repository-only reconstruction proves every required output is present, internally consistent, and current.",
-  "completion_rule": "BLOCK unless the frozen method survives context-loss, historical-incident, unknown-change, independent-verification, extensibility, artifact-identity, and device-evidence tests without method modification."
+  "completion_rule": "BLOCK unless the frozen method survives context-loss, historical-incident, unknown-change, independent-verification, extensibility, artifact-identity, and device-evidence tests without method modification.",
+  "certification": {
+    "status": "UNDER_CONSTRUCTION",
+    "feature_execution_permitted": false,
+    "authority": "root certification must be proven mechanically; this status alone never opens feature execution"
+  }
 }
