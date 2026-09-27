@@ -20,5 +20,11 @@
     "v2/gates/verify_device_evidence.py",
     "v2/gates/verify_final_acceptance.py"
   ],
-  "post_gate_integrity_script": "v2/gates/create_gate_stamp.py"
+  "post_gate_integrity_script": "v2/gates/create_gate_stamp.py",
+  "feature_contract_invariants": {
+    "restricted_evidence_cannot_be_direct_feature_authority": true,
+    "every_feature_audit_requires_specific_fail_closed_proof": true,
+    "audit_proof_must_execute_before_feature_build": true,
+    "impact_record_must_cover_audit_proof": true
+  }
 }
