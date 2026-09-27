@@ -1,0 +1,32 @@
+name: CB6 V2 Convenience MWM Diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cb6-v2-clean
+    paths:
+      - '.github/workflows/build_cb6_v2_convenience_diagnostic.yml'
+      - 'v2/poi/**'
+      - 'v2/audits/audit_convenience.py'
+      - 'v2/tests/convenience_brand_classifier_test.cpp'
+      - 'v2/gates/features/convenience-mwm-diagnostic.json'
+      - 'v2/gates/impact_records/convenience-mwm-diagnostic.json'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce diagnostic feature gate
+        run: python3 v2/gates/verify_project_gate.py --require-feature-build --feature=convenience-mwm-diagnostic
+      - name: Audit native MWM convenience ownership
+        run: python3 v2/audits/audit_convenience.py
+      - name: Compile and run brand classifier tests
+        run: |
+          set -euxo pipefail
+          g++ -std=c++17 -Wall -Wextra -Werror             v2/tests/convenience_brand_classifier_test.cpp             v2/poi/native/convenience_brand_classifier.cpp             -o /tmp/cb6-convenience-classifier-test
+          /tmp/cb6-convenience-classifier-test
