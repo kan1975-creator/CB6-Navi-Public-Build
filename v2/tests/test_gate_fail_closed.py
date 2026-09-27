@@ -5,6 +5,12 @@ from pathlib import Path
 SRC=Path(__file__).resolve().parents[2]
 CASES=[]
 
+def normalize_stage(root):
+ # Integrity destructive tests target one mutation at a time. Keep the isolated
+ # baseline stage coherent so root rebuild state does not mask the mutation.
+ for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json","v2/gates/traceability.json","v2/gates/development_method_contract.json"):
+  p=root/rel; d=json.loads(p.read_text()); d["stage"]="OVERALL_DESIGN_REBUILD"; p.write_text(json.dumps(d))
+
 def mutate_missing_trace(r):
  p=r/"v2/gates/traceability.json"; d=json.loads(p.read_text()); d["traces"]=[x for x in d["traces"] if x["decision_id"]!="SIG-200M-001"]; p.write_text(json.dumps(d))
 CASES.append(("missing-active-decision", mutate_missing_trace, "active decisions absent from traceability"))
@@ -338,6 +344,7 @@ for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
   root=Path(td)/"repo"
   shutil.copytree(SRC,root,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  normalize_stage(root)
   mutate(root)
   cp=subprocess.run(["python3","v2/gates/verify_project_integrity.py"],cwd=root,text=True,capture_output=True)
   output=cp.stdout+cp.stderr
