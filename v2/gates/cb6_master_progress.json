@@ -1,5 +1,5 @@
 {
-  "schema": 11,
+  "schema": 12,
   "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
   "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
   "status_vocabulary": [
@@ -1159,7 +1159,7 @@
   "atomic_requirement_registry": {
     "path": "v2/gates/atomic_requirements.json",
     "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
-    "current_count": 319,
+    "current_count": 343,
     "completion_rule": "Every valid detailed CB6 specification must be represented atomically and mapped to a development stage, parent active decision/authority, progress/evidence and acceptance route. Count alone never proves completeness."
   }
 }
