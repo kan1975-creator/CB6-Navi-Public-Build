@@ -24,6 +24,10 @@
     "v2/audits/preflight_gate1.py",
     "v2/tests/SignalPolicyTest.java",
     ".github/workflows/build_cb6_v2_signals.yml",
-    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+    "v2/signals/java/CompositeSignalProvider.java",
+    "v2/signals/java/VerifiedSignalProvider.java",
+    "v2/signals/java/OverpassSignalProvider.java",
+    "v2/gates/current_spec.json"
   ]
 }
