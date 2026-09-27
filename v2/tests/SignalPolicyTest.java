@@ -45,7 +45,15 @@ public final class SignalPolicyTest
     check(clustered.points.size() == 3, "clustering never deletes acquired signal data");
     check(clustered.displayPoints().size() == 2, "nearby intersection signals collapse only for display");
     check(clustered.displayPoints().get(0).id == 1 && clustered.displayPoints().get(1).id == 3,
-          "nearest representative retained and separate signal preserved");
+          "deterministic group id retained and separate signal preserved");
+    check(Math.abs(clustered.displayPoints().get(0).lat - 43.00005) < 0.000001,
+          "cluster icon is centred between physical signal nodes");
+    ArrayList<SignalSnapshot.Point> chainInput = new ArrayList<>();
+    chainInput.add(new SignalSnapshot.Point(11, 43.00000, 141.00000, 10));
+    chainInput.add(new SignalSnapshot.Point(12, 43.00020, 141.00000, 11)); // ~22m from anchor
+    chainInput.add(new SignalSnapshot.Point(13, 43.00040, 141.00000, 12)); // ~44m from anchor, ~22m from member
+    check(new SignalSnapshot(chainInput).displayPoints().size() == 2,
+          "display clustering cannot chain adjacent junctions together");
     boolean immutable = false;
     try { snapshot.points.clear(); } catch (UnsupportedOperationException e) { immutable = true; }
     check(immutable, "immutable signal registry");

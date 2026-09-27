@@ -46,24 +46,48 @@ public final class SignalSnapshot
     points = Collections.unmodifiableList(retained);
   }
 
-  /** Renderer-only clustering. The complete OSM snapshot/cache remains untouched. */
+  /** Renderer-only clustering. Acquired OSM points/cache remain untouched. */
   public List<Point> displayPoints()
   {
-    ArrayList<Point> visible = new ArrayList<>();
+    final class Group
+    {
+      final Point anchor;
+      long minId;
+      double latSum, lonSum;
+      int count;
+      float minDistance;
+      Group(Point p)
+      {
+        anchor = p; minId = p.id; latSum = p.lat; lonSum = p.lon; count = 1; minDistance = p.distance;
+      }
+      void add(Point p)
+      {
+        minId = Math.min(minId, p.id);
+        latSum += p.lat; lonSum += p.lon; ++count;
+        minDistance = Math.min(minDistance, p.distance);
+      }
+      Point centre() { return new Point(minId, latSum / count, lonSum / count, minDistance); }
+    }
+
+    ArrayList<Group> groups = new ArrayList<>();
     for (Point candidate : points)
     {
-      boolean clustered = false;
-      for (Point representative : visible)
+      Group match = null;
+      for (Group group : groups)
       {
-        if (metres(candidate.lat, candidate.lon, representative.lat, representative.lon)
+        // Compare to the immutable first-node anchor: prevents transitive chaining into the next junction.
+        if (metres(candidate.lat, candidate.lon, group.anchor.lat, group.anchor.lon)
             <= SignalPolicy.DISPLAY_CLUSTER_M)
         {
-          clustered = true;
+          match = group;
           break;
         }
       }
-      if (!clustered) visible.add(candidate);
+      if (match == null) groups.add(new Group(candidate));
+      else match.add(candidate);
     }
+    ArrayList<Point> visible = new ArrayList<>();
+    for (Group group : groups) visible.add(group.centre());
     return Collections.unmodifiableList(visible);
   }
 
