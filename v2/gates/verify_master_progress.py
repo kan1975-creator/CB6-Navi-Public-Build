@@ -75,7 +75,7 @@ items=atomic.get("requirements",[])
 ids=[x.get("id") for x in items]
 if len(ids)!=len(set(ids)) or any(not x for x in ids):
     print("CB6 MASTER LEDGER FAIL: atomic requirement IDs invalid/duplicated"); raise SystemExit(1)
-if len(items)<131:
+if len(items)<167:
     print("CB6 MASTER LEDGER FAIL: atomic specification registry unexpectedly incomplete",len(items)); raise SystemExit(1)
 required_groups={"PROCESS","SIGNAL","CONVENIENCE","MAP_LOCATION_UI","LABEL_POI","STOP_SEARCH_LIFECYCLE","ROUTING_FAVORITES_PRODUCT"}
 actual_groups={x.get("group") for x in items}
@@ -122,3 +122,12 @@ missing_atomic=required_atomic_ids-set(ids)
 if missing_atomic:
     print("CB6 MASTER LEDGER FAIL: audited detailed specifications disappeared",sorted(missing_atomic)); raise SystemExit(1)
 print("CB6 MASTER ZERO-OMISSION AUDIT ANCHORS PASS:",len(required_atomic_ids))
+
+# Current-spec and process-policy anchors found by zero-omission audit must remain atomic.
+required_policy_atomic={"PROC-NO-LINE-FIX","PROC-OBSOLETE-SWEEP","PROC-FROZEN-REGRESSION","PROC-FINAL-GENERATED","PROC-MINIMIZE-BUILDS","PROC-NATIVE-FIRST","PROC-RESPONSIBILITY-OWNERSHIP","PROC-NO-STALE-VALIDATOR-FIX","PROC-AUTOMATION-NOT-PROGRESS","PROC-DURABLE-CHECKPOINT","PROC-FAILURE-LOOP","PROC-DOC-MAINT","PROC-SINGLE-SOURCE","PROC-BEHAVIORAL-FREEZE","PROC-APK-MINIMAL"}
+required_signal_spec_atomic={"SIG-MAX-1400","SIG-FORWARD-450","SIG-CONE-45","SIG-CLUSTER-30","SIG-DEDUP-12","SIG-CACHE-24H","SIG-OSM-HIGHWAY","SIG-OSM-CROSSING","SIG-OSM-SET","SIG-OSM-NODE","SIG-OSM-WAY","SIG-OSM-RELATION","SIG-SUPPLEMENT","SIG-SVG-XS","SIG-SVG-S","SIG-SVG-M","SIG-SVG-L","SIG-Z14-XS","SIG-Z15-XS","SIG-FWD-Z17-M","SIG-FWD-Z19-L"}
+for required_set,label in [(required_policy_atomic,"process policy"),(required_signal_spec_atomic,"current signal spec")]:
+    missing=required_set-set(ids)
+    if missing:
+        print("CB6 MASTER LEDGER FAIL:",label,"atomic specifications disappeared",sorted(missing)); raise SystemExit(1)
+print("CB6 MASTER POLICY/CURRENT-SPEC ATOMIC PASS:",len(required_policy_atomic)+len(required_signal_spec_atomic))
