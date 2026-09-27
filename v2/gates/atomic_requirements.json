@@ -1,5 +1,5 @@
 {
-  "schema": 12,
+  "schema": 13,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
   "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
@@ -1869,9 +1869,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience stores are available without requiring search.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -1879,10 +1879,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -1953,9 +1953,9 @@
       "group": "CONVENIENCE",
       "requirement": "Native MWM/classificator/style data is preferred when sufficient.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -1963,10 +1963,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2037,9 +2037,9 @@
       "group": "CONVENIENCE",
       "requirement": "7-Eleven has CB6 brand-specific presentation.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2047,10 +2047,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2121,9 +2121,9 @@
       "group": "CONVENIENCE",
       "requirement": "FamilyMart has CB6 brand-specific presentation.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2131,10 +2131,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2205,9 +2205,9 @@
       "group": "CONVENIENCE",
       "requirement": "Lawson has CB6 brand-specific presentation.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2215,10 +2215,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2289,9 +2289,9 @@
       "group": "CONVENIENCE",
       "requirement": "Seicomart has distinct CB6 presentation.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2299,10 +2299,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2373,9 +2373,9 @@
       "group": "CONVENIENCE",
       "requirement": "MyBasket has presentation distinguishable from Seicomart.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2383,10 +2383,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2457,9 +2457,9 @@
       "group": "CONVENIENCE",
       "requirement": "Ministop is classified and presented.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2467,10 +2467,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2541,9 +2541,9 @@
       "group": "CONVENIENCE",
       "requirement": "Daily Yamazaki is classified and presented.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2551,10 +2551,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2625,9 +2625,9 @@
       "group": "CONVENIENCE",
       "requirement": "Unknown convenience stores have a generic fallback.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2635,10 +2635,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2709,9 +2709,9 @@
       "group": "CONVENIENCE",
       "requirement": "Urban convenience presentation suppresses convenience-store text clutter.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2719,10 +2719,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2793,9 +2793,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience icons are slightly larger than ordinary POI icons.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2803,10 +2803,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2877,9 +2877,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience presentation is scale-aware.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2887,10 +2887,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -2961,9 +2961,9 @@
       "group": "CONVENIENCE",
       "requirement": "Stock/native and CB6 supplemental paths do not create duplicate POIs.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -2971,10 +2971,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -3045,9 +3045,9 @@
       "group": "CONVENIENCE",
       "requirement": "Diagnostic evidence distinguishes stock CoMaps rendering from CB6 collector acquisition.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -3055,10 +3055,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -3129,9 +3129,9 @@
       "group": "CONVENIENCE",
       "requirement": "Final brand presentation is verified on CB6.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "reconstructed from active repository authority plus established CB6 requirements",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -3139,10 +3139,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM/DataSource diagnostic・classifierから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
@@ -8408,9 +8408,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience icons are very small at 1 km.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -8418,10 +8418,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM診断・presentationから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_CHANGE_IMPACT_MAP.md",
@@ -8491,9 +8491,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience icons are small at 500 m.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -8501,10 +8501,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM診断・presentationから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_CHANGE_IMPACT_MAP.md",
@@ -8574,9 +8574,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience icons use the accepted standard/near presentation at 200 m.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -8584,10 +8584,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM診断・presentationから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_CHANGE_IMPACT_MAP.md",
@@ -8657,9 +8657,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience UserMarks use isolated CB6 driving ownership rather than DEBUG_MARK.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -8667,10 +8667,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM診断・presentationから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_CHANGE_IMPACT_MAP.md",
@@ -9004,9 +9004,9 @@
       "group": "CONVENIENCE",
       "requirement": "Before external convenience data, inspect actual installed-MWM FeatureID metadata: type/name/brand/operator.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of Frozen Features / Change Impact Map / rebuilt system design",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -9014,10 +9014,10 @@
         "CONVENIENCE-BRANDS-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "既存MWM診断・presentationから継続",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "docs/CB6_FROZEN_FEATURES.md",
         "docs/CB6_CHANGE_IMPACT_MAP.md",
@@ -21871,9 +21871,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience diagnostic APK uses native MWM collection without network/fabricated POI acquisition.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -21883,10 +21883,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -21940,9 +21940,9 @@
       "group": "CONVENIENCE",
       "requirement": "CB6 device test detects representative installed-map shop=convenience features.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -21952,10 +21952,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22009,9 +22009,9 @@
       "group": "CONVENIENCE",
       "requirement": "CB6 device test verifies known convenience brand identity and generic fallback.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22021,10 +22021,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22078,9 +22078,9 @@
       "group": "CONVENIENCE",
       "requirement": "CB6 device test verifies no unwanted convenience-store name clutter.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22090,10 +22090,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22147,9 +22147,9 @@
       "group": "CONVENIENCE",
       "requirement": "CB6 device test verifies convenience POIs remain available from installed MWM without network-only dependency.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22159,10 +22159,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22216,9 +22216,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience brand renderer verification remains explicitly unresolved until source/audit/test evidence is supplied.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22228,10 +22228,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22285,9 +22285,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience brand symbol verification remains explicitly unresolved until source/audit evidence is supplied.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22297,10 +22297,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22354,9 +22354,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience brand offline verification remains explicitly unresolved until required evidence is supplied.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of active decisions and current feature contracts",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22366,10 +22366,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience feature contract unresolved domains",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/active_decisions.json",
         "v2/gates/features/signals.json",
@@ -22778,9 +22778,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience MWM acquisition uses public Framework::GetDataSource plus DataSource::ForEachInRect, not historical private FeaturesFetcher assumptions.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22790,10 +22790,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -22849,9 +22849,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience diagnostic/classification consumes native Feature type, center, name and metadata.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22861,10 +22861,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -22920,9 +22920,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience brand classification priority is FMD_BRAND, then FMD_OPERATOR, then names.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -22932,10 +22932,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -22991,9 +22991,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience brand classification is deterministic for the same native feature evidence.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23003,10 +23003,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23062,9 +23062,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience diagnostic visible hook occurs after rendering initialization and remains diagnostic-only.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23074,10 +23074,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23133,9 +23133,9 @@
       "group": "CONVENIENCE",
       "requirement": "Diagnostic Toast/presentation must not become final convenience POI renderer ownership.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23145,10 +23145,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23204,9 +23204,9 @@
       "group": "CONVENIENCE",
       "requirement": "Final convenience implementation must not revive historical periodic Overpass acquisition as the static POI source.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23216,10 +23216,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23275,9 +23275,9 @@
       "group": "CONVENIENCE",
       "requirement": "Final convenience implementation must not fabricate diagnostic convenience marks as production data.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23287,10 +23287,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23346,9 +23346,9 @@
       "group": "CONVENIENCE",
       "requirement": "Convenience implementation must preserve independent Gate 1 signal ownership/behavior.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23358,10 +23358,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23417,9 +23417,9 @@
       "group": "CONVENIENCE",
       "requirement": "Historical convenience scripts are review/impact evidence only and cannot become current authority without revalidation.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23429,10 +23429,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23488,9 +23488,9 @@
       "group": "CONVENIENCE",
       "requirement": "Installed native MWM shop=convenience features are the primary static convenience POI source when proven sufficient.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23500,10 +23500,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
@@ -23559,9 +23559,9 @@
       "group": "CONVENIENCE",
       "requirement": "Pinned Feature metadata, brands_loader and categories_brands are upstream evidence for brand interpretation, not standalone CB6 authority.",
       "status": "ACTIVE",
-      "progress": "PENDING_TRACEABILITY",
+      "progress": "RESTART_REQUIRED",
       "source": "zero-omission audit of current signal/convenience research and impact records",
-      "restart_from_zero": false,
+      "restart_from_zero": true,
       "development_order": 2,
       "development_stage": "CONVENIENCE",
       "parent_active_decisions": [
@@ -23571,10 +23571,10 @@
         "PRODUCT-BASE-001"
       ],
       "authority_state": "MAPPED",
-      "progress_state": "IN_PROGRESS_REQUIRES_RECERTIFICATION",
-      "evidence_state": "MAPPED_FROM_PARENT",
-      "acceptance_state": "MAPPED_FROM_PARENT",
-      "resume_from": "Convenience MWM evidence→renderer",
+      "progress_state": "RESTART_REQUIRED_SOURCE_FIRST",
+      "evidence_state": "PRIOR_EVIDENCE_REFERENCE_ONLY",
+      "acceptance_state": "NOT_ELIGIBLE_UNTIL_FRESH_RESEARCH",
+      "resume_from": "要求/Authority→Pinned CoMaps元ソース解析から",
       "evidence": [
         "v2/gates/impact_records/signals.json",
         "v2/gates/research_records/signals.json",
