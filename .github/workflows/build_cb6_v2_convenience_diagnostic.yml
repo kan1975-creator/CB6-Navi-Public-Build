@@ -104,6 +104,10 @@ jobs:
           grep -F "package: name='jp.cb6.navi'" out/APK_BADGING.txt
           grep -F "application-label:'CB6 Navi'" out/APK_BADGING.txt
           sha256sum out/CB6-V2-Convenience-MWM-Diagnostic-arm64.apk | tee out/SHA256SUMS.txt
+          sha256sum out/CB6-V2-Convenience-MWM-Diagnostic-arm64.apk > out/APK_SHA256.txt
+          python3 v2/gates/create_apk_evidence.py convenience-mwm-diagnostic out/CB6-V2-Convenience-MWM-Diagnostic-arm64.apk out/APK_SHA256.txt
+          python3 v2/gates/verify_apk_evidence.py v2/gates/apk_evidence/convenience-mwm-diagnostic.json
+          cp v2/gates/apk_evidence/convenience-mwm-diagnostic.json out/APK_EVIDENCE.json
       - name: Upload diagnostic evidence
         uses: actions/upload-artifact@v4
         with:
@@ -115,6 +119,8 @@ jobs:
             out/APK_BADGING.txt
             out/NATIVE_VERIFY.txt
             out/SHA256SUMS.txt
+            out/APK_SHA256.txt
+            out/APK_EVIDENCE.json
             out/CONFIGURE.log
             out/GRADLE.log
           if-no-files-found: error
