@@ -1,5 +1,5 @@
 {
-  "schema": 8,
+  "schema": 9,
   "id": "CB6-ATOMIC-REQUIREMENT-REGISTRY",
   "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
   "rule": "No Master completeness claim until every valid detailed CB6 requirement is represented here or explicitly superseded/rejected with evidence.",
@@ -18355,6 +18355,2250 @@
           "evidence": []
         }
       }
+    },
+    {
+      "id": "PROC-PROJECT-BRANCH",
+      "group": "PROCESS",
+      "requirement": "Project state is bound to cb6-v2-clean for current V2 development.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-PROJECT-DESIGN-STATE",
+      "group": "PROCESS",
+      "requirement": "Project remains OVERALL_DESIGN_REBUILD with feature builds disabled until design/root/method prerequisites are current.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 0,
+      "development_stage": "ROOT",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-CANONICAL-DESIGN",
+      "group": "PROCESS",
+      "requirement": "Current canonical design path is docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RETIRED-DESIGN-PATH",
+      "group": "PROCESS",
+      "requirement": "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md remains retired design input only.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-CURRENT-INVALID",
+      "group": "PROCESS",
+      "requirement": "Previous Method completion is INVALIDATED and historical-only until recertified under current Root.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "INVALIDATED",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-SAMEHEAD",
+      "group": "PROCESS",
+      "requirement": "Method recertification requires same-HEAD feature gates/evidence where the completion rule requires them.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-SEMANTIC-CLOSURE",
+      "group": "PROCESS",
+      "requirement": "Method completion requires semantic closure, not only file/schema presence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-HISTORICAL-REPLAY",
+      "group": "PROCESS",
+      "requirement": "Method completion requires historical incident replay.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-INDEPENDENT",
+      "group": "PROCESS",
+      "requirement": "Method completion requires independent verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-EXTENSIBILITY",
+      "group": "PROCESS",
+      "requirement": "Frozen Method must accept a novel correctly registered feature without Method code changes and reject broken mappings.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-ARTIFACT-CHAIN",
+      "group": "PROCESS",
+      "requirement": "Method completion includes artifact identity proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-METHOD-DEVICE-CHAIN",
+      "group": "PROCESS",
+      "requirement": "Method completion includes required device evidence proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-PROOF-EXEC",
+      "group": "PROCESS",
+      "requirement": "Root certification is derived only from executable proof commands, never booleans.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-CONTEXT-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes context-loss reconstruction.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-MISSING-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes missing-state fail-closed behavior.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-PERMISSION-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes permission fail-closed behavior.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-HISTORY-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes historical-incident regression.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-UNKNOWN-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes unknown-change rejection.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-INDEPENDENT-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes independent verification.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-EXTENSIBILITY-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes extensibility proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-ARTIFACT-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes artifact-identity fail-closed proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-ROOT-DEVICE-PROOF",
+      "group": "PROCESS",
+      "requirement": "Root proof suite includes device-evidence fail-closed proof.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-FEATURE-CONTRACT",
+      "group": "PROCESS",
+      "requirement": "Every feature contract declares requirement IDs, design section, source paths, audits, tests, APK checks, device checks, stage, affected domains, impact record and research record.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-FEATURE-REPO-SWEEP",
+      "group": "PROCESS",
+      "requirement": "Feature contracts require repository sweep before implementation/build.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-FEATURE-DOMAIN-VERIFY",
+      "group": "PROCESS",
+      "requirement": "Feature contracts map every affected domain to declared verification evidence.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-FEATURE-DEVICE-PENDING",
+      "group": "PROCESS",
+      "requirement": "Feature device evidence remains explicitly PENDING until accepted real-device evidence exists.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-STATUS",
+      "group": "PROCESS",
+      "requirement": "Research records have explicit status and cannot imply completion while pending.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-INTERNAL-PATHS",
+      "group": "PROCESS",
+      "requirement": "Research records contain concrete internal/pinned paths and findings.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-APPLICABILITY",
+      "group": "PROCESS",
+      "requirement": "Research records explicitly classify upstream/web research as applicable or not applicable.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-SOURCES-FINDINGS",
+      "group": "PROCESS",
+      "requirement": "When web/upstream research is applicable, sources and findings are recorded.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-AUTH-CLASS",
+      "group": "PROCESS",
+      "requirement": "Research records explicitly classify web as non-authority and identify current authority.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-TEMPORAL",
+      "group": "PROCESS",
+      "requirement": "Research completion-before-implementation is explicit and must ultimately be mechanically evidenced rather than trusted as an unsupported boolean.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "PROC-RESEARCH-DOMAIN-MAP",
+      "group": "PROCESS",
+      "requirement": "Research records map each technical affected domain to pinned source paths and findings.",
+      "status": "ACTIVE",
+      "progress": "PENDING_TRACEABILITY",
+      "source": "zero-omission audit of project state, method completion, root proof plan and feature/research templates",
+      "restart_from_zero": false,
+      "development_order": 1,
+      "development_stage": "METHOD",
+      "parent_active_decisions": [
+        "PROC-001",
+        "PROC-002"
+      ],
+      "authority_state": "MAPPED",
+      "progress_state": "METHOD_RECERTIFICATION_PENDING",
+      "evidence_state": "MAPPED_FROM_PARENT",
+      "acceptance_state": "MAPPED_FROM_PARENT",
+      "resume_from": "Root/Master zero-omission completion then Method recertification",
+      "evidence": [
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ],
+      "acceptance": [
+        "Must be represented by machine-readable state and fail closed when incomplete."
+      ],
+      "pipeline": {
+        "research": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "impact": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "implementation": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "audit": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "positive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "destructive_test": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "feature_gate": {
+          "state": "NOT_STARTED",
+          "evidence": []
+        },
+        "apk": {
+          "state": "NOT_CURRENTLY_ACCEPTED",
+          "evidence": []
+        },
+        "device": {
+          "state": "PENDING",
+          "evidence": []
+        }
+      }
     }
   ],
   "mapping_policy": {
@@ -18394,6 +20638,11 @@
     "v2/gates/development_method_contract.json",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md",
     "v2/gates/domain_verification_policy.json",
-    "v2/gates/traceability.json"
+    "v2/gates/traceability.json",
+    "v2/gates/project_state.json",
+    "v2/gates/development_method_completion.json",
+    "v2/gates/root_certification_plan.json",
+    "v2/gates/features/TEMPLATE.json",
+    "v2/gates/research_records/TEMPLATE.json"
   ]
 }
