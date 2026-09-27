@@ -16,6 +16,8 @@ import org.json.JSONObject;
 /** Frozen lightweight signal-only acquisition; never queries static POIs. */
 public final class OverpassSignalProvider implements SignalProvider
 {
+  // OSM node and way ids use separate namespaces. Keep way-derived ids positive and collision-free.
+  private static final long WAY_ID_NAMESPACE = 1L << 62;
   private static final String[] ENDPOINTS = {
       "https://overpass-api.de/api/interpreter",
       "https://overpass.kumi.systems/api/interpreter",
@@ -29,7 +31,8 @@ public final class OverpassSignalProvider implements SignalProvider
     String query = "[out:json][timeout:8];("
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
-        + ");out body;";
+        + "way(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
+        + ");out center;";
     Exception last = null;
     for (String endpoint : ENDPOINTS)
     {
@@ -56,16 +59,33 @@ public final class OverpassSignalProvider implements SignalProvider
     for (int i = 0; i < elements.length(); ++i)
     {
       JSONObject e = elements.optJSONObject(i);
-      if (e == null || !"node".equals(e.optString("type"))) continue;
+      if (e == null) continue;
+      String type = e.optString("type");
+      if (!"node".equals(type) && !"way".equals(type)) continue;
       JSONObject tags = e.optJSONObject("tags");
       if (tags == null) continue;
       boolean roadSignal = "traffic_signals".equals(tags.optString("highway"));
       boolean crossingSignal = "traffic_signals".equals(tags.optString("crossing"));
       if (!roadSignal && !crossingSignal) continue;
-      double y = e.optDouble("lat", Double.NaN), x = e.optDouble("lon", Double.NaN);
+      double y, x;
+      if ("node".equals(type))
+      {
+        y = e.optDouble("lat", Double.NaN);
+        x = e.optDouble("lon", Double.NaN);
+      }
+      else
+      {
+        JSONObject center = e.optJSONObject("center");
+        if (center == null) continue;
+        y = center.optDouble("lat", Double.NaN);
+        x = center.optDouble("lon", Double.NaN);
+      }
       if (!SignalPolicy.validCoordinate(y, x)) continue;
+      long rawId = e.optLong("id", -1);
+      if (rawId <= 0 || rawId >= WAY_ID_NAMESPACE) continue;
+      long id = "way".equals(type) ? WAY_ID_NAMESPACE | rawId : rawId;
       Location.distanceBetween(lat, lon, y, x, distance);
-      points.add(new SignalSnapshot.Point(e.optLong("id", -1), y, x, distance[0]));
+      points.add(new SignalSnapshot.Point(id, y, x, distance[0]));
     }
     return new SignalSnapshot(points); // Sort ALL candidates before the 1400 cap.
   }

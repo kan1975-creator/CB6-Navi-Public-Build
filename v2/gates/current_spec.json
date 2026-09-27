@@ -43,6 +43,10 @@
       "osm_queries": [
         "highway=traffic_signals",
         "crossing=traffic_signals"
+      ],
+      "osm_element_types": [
+        "node",
+        "way"
       ]
     }
   }
