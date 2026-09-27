@@ -17,6 +17,8 @@ jobs:
         run: python3 v2/gates/verify_root_invariants.py
       - name: Destructive context-loss root tests
         run: python3 v2/tests/test_root_invariants.py
+      - name: Derive root certification from executable proofs
+        run: python3 v2/gates/run_root_certification.py
       - name: Verify frozen development method
         run: python3 v2/gates/verify_method_freeze.py
       - name: Destructive method-freeze test
