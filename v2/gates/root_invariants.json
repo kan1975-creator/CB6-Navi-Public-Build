@@ -43,24 +43,16 @@
   "start_rule": "BLOCK unless repository-only reconstruction proves every required output is present, internally consistent, and current.",
   "completion_rule": "BLOCK unless the frozen method survives context-loss, historical-incident, unknown-change, independent-verification, extensibility, artifact-identity, and device-evidence tests without method modification.",
   "certification": {
-    "status": "CERTIFIED",
-    "feature_execution_permitted": true,
-    "authority": "Derived only after executable root proof suite returned PROVEN on GitHub Actions; any root/method invariant change requires recertification.",
+    "status": "UNDER_CONSTRUCTION",
+    "feature_execution_permitted": false,
+    "authority": "Previous executable certification is stale because repository authority/reconstruction inputs changed after its proof HEAD. Re-certification required after zero-omission closure.",
+    "previous_proof": {
+      "run_id": "36326300489",
+      "head": "912719314ba0c83cd16e6fbb7f723c8095abbbdc",
+      "disposition": "HISTORICAL_STALE_NOT_CURRENT_AUTHORITY"
+    },
     "proof_source": "v2/gates/run_root_certification.py",
     "proof_plan": "v2/gates/root_certification_plan.json",
-    "proof_run_id": "36326300489",
-    "proof_head": "912719314ba0c83cd16e6fbb7f723c8095abbbdc",
-    "proof": {
-      "artifact_identity": true,
-      "context_loss": true,
-      "device_evidence": true,
-      "extensibility": true,
-      "historical_incidents": true,
-      "independent_verification": true,
-      "missing_state": true,
-      "permission_fail_closed": true,
-      "repository_reconstruction": true,
-      "unknown_change": true
-    }
+    "proof": {}
   }
 }
