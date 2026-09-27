@@ -292,6 +292,16 @@ def mutate_pinned_upstream_policy(r):
  d["pinned_upstream_source_policy"]["required_for_every_feature"]=False; p.write_text(json.dumps(d))
 CASES.append(("pinned-upstream-policy-weakened", mutate_pinned_upstream_policy, "pinned upstream source policy drifted"))
 
+def mutate_method_document(r):
+ p=r/"v2/gates/development_method_contract.json"; d=json.loads(p.read_text())
+ d["method_document"]="docs/DOES_NOT_EXIST.md"; p.write_text(json.dumps(d))
+CASES.append(("method-document-drift", mutate_method_document, "development method document missing/drifted"))
+
+def mutate_failure_return_policy(r):
+ p=r/"v2/gates/development_method_contract.json"; d=json.loads(p.read_text())
+ d["failure_return_policy"]="continue_anyway"; p.write_text(json.dumps(d))
+CASES.append(("failure-return-policy-weakened", mutate_failure_return_policy, "development method failure return policy drifted"))
+
 
 for name,mutate,needle in CASES:
  with tempfile.TemporaryDirectory() as td:
