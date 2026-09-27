@@ -13,7 +13,10 @@
   "source_paths": [
     "v2/signals/apply_signals.py",
     "v2/signals/java/SignalPolicy.java",
-    "v2/signals/java/SignalSnapshot.java"
+    "v2/signals/java/SignalSnapshot.java",
+    "v2/signals/java/CompositeSignalProvider.java",
+    "v2/signals/java/VerifiedSignalProvider.java",
+    "v2/signals/java/OverpassSignalProvider.java"
   ],
   "audits": [
     "v2/audits/audit_signals.py",
@@ -90,7 +93,10 @@
       "v2/tests/SignalPolicyTest.java"
     ],
     "data-source": [
-      "v2/signals/apply_signals.py",
+      "v2/signals/java/OverpassSignalProvider.java",
+      "v2/signals/java/CompositeSignalProvider.java",
+      "v2/signals/java/VerifiedSignalProvider.java",
+      "v2/audits/audit_signals.py",
       "v2/tests/SignalPolicyTest.java"
     ],
     "cache": [
