@@ -11,6 +11,7 @@ public final class SignalPolicy
   public static final float FORWARD_MAX_M = 450.0f;
   public static final float FORWARD_CONE_DEG = 45.0f;
   public static final float DISPLAY_CLUSTER_M = 30.0f;
+  public static final float SOURCE_DEDUP_M = 12.0f;
   public static final long CACHE_MAX_MS = 24 * 60 * 60 * 1000L;
 
   private SignalPolicy() {}
