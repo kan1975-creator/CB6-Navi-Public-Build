@@ -1,11 +1,11 @@
 #pragma once
 
 #include "convenience_brand_classifier.hpp"
+#include "geometry/rect2d.hpp"
 
 #include <vector>
 
-class FeaturesFetcher;
-namespace m2 { class RectD; }
+class DataSource;
 
 namespace cb6::poi
 {
@@ -16,6 +16,6 @@ struct ConveniencePoi
   ConvenienceIdentity m_identity;
 };
 
-std::vector<ConveniencePoi> CollectConveniencePois(FeaturesFetcher const & fetcher, m2::RectD const & rect,
+std::vector<ConveniencePoi> CollectConveniencePois(DataSource const & dataSource, m2::RectD const & rect,
                                                    int scale);
 }  // namespace cb6::poi
