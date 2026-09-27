@@ -2,17 +2,16 @@
   "schema": 1,
   "feature_id": "convenience-mwm-diagnostic",
   "requirements": [
-    "POI-CONVENIENCE-001",
-    "OFFLINE-FREE-001",
-    "PRODUCT-BASE-001"
+    "POI-CONVENIENCE-001"
   ],
   "affected_domains": [
     "poi",
     "classifier",
-    "data-source",
+    "presentation",
     "offline",
     "audits",
     "tests",
+    "data-source",
     "real-device"
   ],
   "reviewed_paths": [
