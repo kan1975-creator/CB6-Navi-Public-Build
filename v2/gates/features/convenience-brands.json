@@ -66,7 +66,13 @@
     "offline",
     "audits",
     "tests",
-    "real-device"
+    "real-device",
+    "baseline",
+    "routing",
+    "search",
+    "favorites",
+    "offline-maps",
+    "presentation"
   ],
   "domain_verification": {
     "poi": [
@@ -101,7 +107,27 @@
       "v2/tests/convenience_brand_classifier_test.cpp",
       "v2/tests/convenience_audit_selftest.py"
     ],
-    "real-device": []
+    "real-device": [],
+    "baseline": [
+      "v2/audits/audit_convenience.py"
+    ],
+    "routing": [
+      "v2/audits/audit_convenience.py"
+    ],
+    "search": [
+      "v2/audits/audit_convenience.py"
+    ],
+    "favorites": [
+      "v2/audits/audit_convenience.py"
+    ],
+    "offline-maps": [
+      "v2/audits/audit_convenience.py"
+    ],
+    "presentation": [
+      "v2/poi/apply_convenience_brand_render.py",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
+    ]
   },
   "impact_record": "v2/gates/impact_records/convenience-brands.json",
   "device_evidence": "PENDING",

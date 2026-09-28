@@ -16,7 +16,13 @@
     "offline",
     "audits",
     "tests",
-    "real-device"
+    "real-device",
+    "baseline",
+    "routing",
+    "search",
+    "favorites",
+    "offline-maps",
+    "presentation"
   ],
   "reviewed_paths": [
     "docs/CB6_V2_NATIVE_POI_DESIGN.md",
