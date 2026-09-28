@@ -1,5 +1,5 @@
 {
-  "schema": 8,
+  "schema": 9,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -53,7 +53,7 @@
     {
       "path": "v2/gates/authority_policy.json",
       "classification": "AUTHORITY_CLASSIFIER",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/repository_state_manifest.json",
@@ -4236,6 +4236,51 @@
         "path": "v2/gates/historical_incidents.json",
         "status": "active"
       }
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "current_authorities",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTH-ALLOWLIST",
+        "PROC-AUTHORITY-ONLY",
+        "PROC-RECON-AUTHORITY"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "10 current-authority paths"
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "historical_docs",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FORBIDDEN-HISTORICAL",
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-RETIRED-CROSSCHECK"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "11 historical-document paths"
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "forbidden_historical_authority_phrases",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTH-FORBIDDEN-PHRASES",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "7 forbidden historical-authority phrases"
     }
   ],
   "blocking": [
