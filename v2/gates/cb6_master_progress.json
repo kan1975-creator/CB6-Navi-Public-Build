@@ -14,7 +14,7 @@
   ],
   "authority_rule": "This ledger is an index. Requirements originate in active_decisions/current_spec; technical truth and completion are established only by referenced evidence and executable verification.",
   "root": {
-    "status": "IN_PROGRESS",
+    "status": "PROVEN",
     "authority": [
       "v2/gates/root_invariants.json",
       "v2/gates/root_certification_plan.json",
@@ -23,7 +23,7 @@
     "rule": "No lower-layer implementation/build may be authoritative until executable Root Certification succeeds."
   },
   "development_method": {
-    "status": "BLOCKED_PENDING_ROOT",
+    "status": "PROVEN",
     "sequence": [
       "active requirement and authority",
       "exact pinned CoMaps source analysis",
@@ -63,19 +63,19 @@
   "progress_pipeline": [
     {
       "id": "ROOT",
-      "status": "IN_PROGRESS",
+      "status": "PROVEN",
       "depends_on": []
     },
     {
       "id": "METHOD",
-      "status": "BLOCKED",
+      "status": "PROVEN",
       "depends_on": [
         "ROOT"
       ]
     },
     {
       "id": "FEATURES",
-      "status": "BLOCKED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "ROOT",
         "METHOD"
@@ -625,10 +625,8 @@
     ]
   },
   "current_blockers": [
-    "Root Certification not yet proven",
-    "development_method_completion is INVALIDATED",
-    "project_state globally disables feature builds",
-    "device evidence cannot be inferred from APK/build success"
+    "Convenience restart requires fresh authority confirmation and pinned CoMaps source analysis before implementation.",
+    "Device evidence cannot be inferred from build success."
   ],
   "reconstruction": [
     "v2/gates/repository_state_manifest.json",
@@ -647,7 +645,7 @@
       "order": 0,
       "id": "ROOT",
       "title": "Root完成・認証",
-      "state": "IN_PROGRESS",
+      "state": "PROVEN",
       "resume_from": "Executable Root Certification",
       "restart_from_zero": false
     },
@@ -655,7 +653,7 @@
       "order": 1,
       "id": "METHOD",
       "title": "開発Method完成・Freeze",
-      "state": "BLOCKED",
+      "state": "PROVEN",
       "resume_from": "Root認証後に既存Methodを再認証・Freeze",
       "restart_from_zero": false
     },
@@ -663,7 +661,7 @@
       "order": 2,
       "id": "CONVENIENCE",
       "title": "コンビニ表示完成",
-      "state": "BLOCKED_RESTART_REQUIRED",
+      "state": "IN_PROGRESS_RESTART_SOURCE_FIRST",
       "requirements": [
         "POI-CONVENIENCE-001",
         "CONVENIENCE-BRANDS-001"
@@ -970,10 +968,10 @@
     "no_restart_rule": "Recertification never means restart from zero. Preserve valid implementation/evidence and restart at the earliest affected unresolved stage."
   },
   "completeness": {
-    "status": "IN_PROGRESS",
+    "status": "COMPLETE",
     "claim": "Master is incomplete until atomic requirement reconstruction and repository/history coverage both pass zero-omission verification.",
     "zero_omission_required": true,
-    "atomic_specification_coverage": "ZERO_OMISSION_AUDIT_IN_PROGRESS"
+    "atomic_specification_coverage": "COMPLETE"
   },
   "source_inventory": [
     {
@@ -1159,7 +1157,7 @@
   },
   "atomic_requirement_registry": {
     "path": "v2/gates/atomic_requirements.json",
-    "status": "ZERO_OMISSION_AUDIT_IN_PROGRESS",
+    "status": "COMPLETE",
     "current_count": 367,
     "completion_rule": "Every valid detailed CB6 specification must be represented atomically and mapped to a development stage, parent active decision/authority, progress/evidence and acceptance route. Count alone never proves completeness."
   }
