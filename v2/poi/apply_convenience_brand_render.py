@@ -50,7 +50,8 @@ code = r'''
 class Cb6ConvenienceMark final : public UserMark
 {
 public:
-  explicit Cb6ConvenienceMark(m2::PointD const & pt) : UserMark(pt, UserMark::Type::CONVENIENCE) {}\n  void SetKind(int kind) { m_kind = kind; }
+  explicit Cb6ConvenienceMark(m2::PointD const & pt) : UserMark(pt, UserMark::Type::CONVENIENCE) {}
+  void SetKind(int kind) { m_kind = kind; }
 
   drape_ptr<df::UserPointMark::SymbolNameZoomInfo> GetSymbolNames() const override
   {
@@ -136,7 +137,8 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Convenienc
   for (jsize i = 0; i < n; ++i)
   {
     auto const pt = mercator::FromLatLon(lats[i], lons[i]);
-    auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(pt);\n    mark->SetKind(static_cast<int>(kinds[i]));
+    auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(pt);
+    mark->SetKind(static_cast<int>(kinds[i]));
   }
   session.SetIsVisible(UserMark::Type::CONVENIENCE, true);
   env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
