@@ -1,34 +1,37 @@
 {
   "schema": 1,
   "feature_id": "convenience-mwm-diagnostic",
-  "status": "INVALIDATED_RESTART_REQUIRED",
+  "status": "COMPLETE",
   "internal_analysis": {
     "required": true,
     "paths": [
+      "v2/poi/native/convenience_brand_classifier.hpp",
+      "v2/poi/native/convenience_brand_classifier.cpp",
+      "v2/poi/native/convenience_mwm_collector.hpp",
       "v2/poi/native/convenience_mwm_collector.cpp",
       "v2/poi/apply_convenience_mwm_diagnostic.py",
       "v2/audits/audit_convenience.py",
-      "pinned:comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704:android/app/src/main/java/app/organicmaps/MwmActivity.java"
+      "v2/tests/convenience_brand_classifier_test.cpp",
+      "v2/tests/convenience_audit_selftest.py"
     ],
     "findings": [
-      "Pinned CoMaps exposes public Framework::GetDataSource and DataSource::ForEachInRect; the historical FeaturesFetcher assumption is not current implementation authority.",
-      "Pinned MwmActivity already imports Location, Toast and Framework and invokes processIntent after rendering initialization; a diagnostic-only post-render hook can expose collector count without changing production renderer ownership."
+      "Fresh restart revalidates the diagnostic collector against pinned public DataSource/Feature APIs instead of accepting the historical collector by existence.",
+      "Diagnostic scope is acquisition evidence only: identify installed-MWM shop/convenience features and their metadata without promoting final renderer behavior.",
+      "Presentation evidence must remain diagnostic-only; stock vehicle style z17/z18 behavior is recorded separately from CB6 final presentation."
     ]
   },
   "upstream_web_research": {
-    "applicable": true,
-    "sources": [
-      "Pinned CoMaps source 7113ccb5f086183f8884b2aa4e58c987466b6704",
-      "CoMaps/Organic Maps MWM and classificator behavior investigated during diagnostic design"
-    ],
+    "applicable": false,
+    "sources": [],
     "findings": [
-      "Native installed MWM is the diagnostic acquisition boundary; external research is not implementation authority."
+      "No external web source is implementation authority; exact pinned CoMaps source is sufficient for this diagnostic revalidation."
     ]
   },
   "pinned_source_revalidation": {
     "required": true,
     "evidence": [
-      ".github/workflows/build_cb6_v2_convenience_diagnostic.yml exact CoMaps SHA checkout",
+      "v2/gates/research_records/convenience-mwm-diagnostic.json",
+      "v2/gates/impact_records/convenience-mwm-diagnostic.json",
       "v2/audits/audit_convenience.py",
       "v2/tests/convenience_audit_selftest.py"
     ]
@@ -37,87 +40,86 @@
     "web_is_authority": false,
     "current_authority": [
       "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
-      "v2/gates/active_decisions.json"
+      "v2/gates/active_decisions.json",
+      "v2/gates/current_spec.json"
     ]
   },
-  "completed_before_implementation": false,
+  "completed_before_implementation": true,
   "pinned_upstream_source_analysis": {
     "required": true,
     "repository": "comaps/comaps",
     "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
     "source_paths": [
-      "map/framework.hpp",
-      "map/framework.cpp",
-      "indexer/data_source.hpp",
-      "indexer/data_source.cpp",
-      "indexer/feature.hpp",
-      "indexer/feature_meta.hpp",
+      "libs/indexer/feature.hpp",
+      "libs/indexer/feature_meta.hpp",
+      "libs/indexer/feature_meta.cpp",
+      "libs/indexer/classificator.hpp",
+      "libs/indexer/data_source.hpp",
+      "libs/indexer/data_source.cpp",
+      "generator/feature_builder.cpp",
+      "data/styles/vehicle/include/Icons.mapcss",
+      "data/styles/default/light/symbols/convenience-m.svg",
+      "data/styles/default/dark/symbols/convenience-m.svg",
+      "libs/map/framework.hpp",
       "android/app/src/main/java/app/organicmaps/MwmActivity.java"
     ],
     "findings": [
-      "Pinned CoMaps Framework/DataSource/Feature surfaces are the upstream basis for native installed-MWM convenience acquisition; public DataSource integration supersedes the historical private FeaturesFetcher assumption.",
-      "MwmActivity onRenderingInitializationFinished is a concrete diagnostic presentation boundary after map engine initialization."
+      "DataSource::ForEachInRect iterates features from registered local MWM indexes at a requested scale.",
+      "FeatureType exposes type iteration, center, names and FMD_BRAND/FMD_OPERATOR metadata needed by the diagnostic collector.",
+      "brand metadata can be dropped when equal to a feature name, so diagnostic output must not treat missing FMD_BRAND as missing POI.",
+      "Pinned vehicle style presents shop=convenience generically from z17 and text from z18; this is a presentation limitation, not proof of missing MWM data.",
+      "MwmActivity provides a post-render Android boundary suitable only for visible diagnostic evidence."
     ]
   },
   "upstream_domain_coverage": {
     "poi": {
       "source_paths": [
-        "indexer/feature.hpp",
-        "indexer/feature_meta.hpp"
+        "libs/indexer/feature.hpp",
+        "libs/indexer/feature_meta.hpp",
+        "libs/indexer/feature_meta.cpp"
       ],
       "findings": [
-        "Feature type, center, name and metadata are the native POI evidence consumed by the CB6 diagnostic collector."
+        "Native Feature type, center, names and metadata are sufficient to observe convenience POIs in installed MWM data."
       ]
     },
     "classifier": {
       "source_paths": [
-        "indexer/feature.hpp",
-        "indexer/feature_meta.hpp"
+        "libs/indexer/classificator.hpp",
+        "libs/indexer/feature_meta.cpp",
+        "generator/feature_builder.cpp"
       ],
       "findings": [
-        "Feature classificator type and metadata provide the inputs to deterministic convenience classification."
+        "shop/convenience type is the acquisition gate; brand/operator/name are diagnostic identity inputs and brand metadata may legitimately be absent."
       ]
     },
     "presentation": {
       "source_paths": [
+        "data/styles/vehicle/include/Icons.mapcss",
+        "data/styles/default/light/symbols/convenience-m.svg",
+        "data/styles/default/dark/symbols/convenience-m.svg",
         "android/app/src/main/java/app/organicmaps/MwmActivity.java"
       ],
       "findings": [
-        "Post-render MwmActivity is the diagnostic-only visible evidence boundary; it does not become final POI rendering."
+        "Stock map presentation begins at z17; diagnostic UI may expose count after rendering without being accepted as final renderer implementation."
       ]
     },
     "offline": {
       "source_paths": [
-        "indexer/data_source.hpp",
-        "indexer/data_source.cpp"
+        "libs/indexer/data_source.cpp"
       ],
       "findings": [
-        "Installed MWM DataSource iteration is the offline acquisition boundary."
+        "Feature acquisition reads registered local MWM indexes and metadata, preserving offline operation."
       ]
     },
     "data-source": {
       "source_paths": [
-        "map/framework.hpp",
-        "map/framework.cpp",
-        "indexer/data_source.hpp",
-        "indexer/data_source.cpp"
+        "libs/indexer/data_source.hpp",
+        "libs/indexer/data_source.cpp",
+        "libs/map/framework.hpp"
       ],
       "findings": [
-        "Framework::GetDataSource plus DataSource::ForEachInRect is the public pinned acquisition path."
+        "Public DataSource iteration is the pinned installed-MWM acquisition boundary used by the diagnostic."
       ]
     }
-  },
-  "current_authority": false,
-  "invalidation": {
-    "reason": "User-directed source-first restart: prior research record is not accepted as proof that required original/pinned source verification preceded Convenience development.",
-    "reuse_policy": "REFERENCE_ONLY",
-    "required_restart_sequence": [
-      "CB6 active requirements/authority",
-      "exact pinned CoMaps source tree and relevant generator/classificator/style/renderer/DataSource paths",
-      "external/upstream research only where needed",
-      "revalidate findings against pinned source",
-      "fresh impact map",
-      "implementation decision"
-    ]
   }
 }
