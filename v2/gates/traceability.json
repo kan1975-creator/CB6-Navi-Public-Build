@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "stage": "IMPLEMENTATION_ENABLED",
+  "stage": "OVERALL_DESIGN_REBUILD",
   "traces": [
     {
       "decision_id": "PROC-001",
