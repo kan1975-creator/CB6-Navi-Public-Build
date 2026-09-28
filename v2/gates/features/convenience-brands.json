@@ -109,24 +109,22 @@
     ],
     "real-device": [],
     "baseline": [
-      "v2/audits/audit_convenience.py"
+      "v2/poi/apply_convenience_brand_render.py"
     ],
     "routing": [
-      "v2/audits/audit_convenience.py"
+      "v2/poi/apply_convenience_brand_render.py"
     ],
     "search": [
-      "v2/audits/audit_convenience.py"
+      "v2/poi/apply_convenience_brand_render.py"
     ],
     "favorites": [
-      "v2/audits/audit_convenience.py"
+      "v2/poi/apply_convenience_brand_render.py"
     ],
     "offline-maps": [
-      "v2/audits/audit_convenience.py"
+      "v2/poi/native/convenience_mwm_collector.cpp"
     ],
     "presentation": [
-      "v2/poi/apply_convenience_brand_render.py",
-      "v2/audits/audit_convenience.py",
-      "v2/tests/convenience_audit_selftest.py"
+      "v2/poi/apply_convenience_brand_render.py"
     ]
   },
   "impact_record": "v2/gates/impact_records/convenience-brands.json",
