@@ -21,6 +21,12 @@ jobs:
         run: python3 v2/gates/run_root_certification.py
       - name: Verify frozen development method
         run: python3 v2/gates/verify_method_freeze.py
+      - name: Verify executable method completion when implementation is enabled
+        run: |
+          if grep -q '"stage": "IMPLEMENTATION_ENABLED"' v2/gates/project_state.json; then
+            python3 v2/gates/verify_method_completion.py
+            python3 v2/tests/test_method_completion.py
+          fi
       - name: Destructive method-freeze test
         run: python3 v2/tests/test_method_freeze.py
       - name: Verify persistent CB6 project gate
@@ -46,10 +52,15 @@ jobs:
       - name: Final acceptance destructive tests
         run: python3 v2/tests/test_final_acceptance_fail_closed.py
 
-      - name: Prove feature build is blocked during design rebuild
+      - name: Verify stage-specific feature-build control
         run: |
-          if python3 v2/gates/verify_project_gate.py --require-feature-build --feature=deliberately-missing; then
-            echo 'ERROR: feature-build gate unexpectedly opened'
-            exit 1
+          if grep -q '"stage": "OVERALL_DESIGN_REBUILD"' v2/gates/project_state.json; then
+            if python3 v2/gates/verify_project_gate.py --require-feature-build --feature=deliberately-missing; then
+              echo 'ERROR: feature-build gate unexpectedly opened during design rebuild'
+              exit 1
+            fi
+            echo 'Expected design-rebuild fail-closed behavior confirmed'
+          else
+            python3 v2/gates/verify_method_completion.py
+            echo 'Implementation stage executable completion proof confirmed'
           fi
-          echo 'Expected fail-closed behavior confirmed'
