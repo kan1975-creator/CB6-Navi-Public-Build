@@ -1,4 +1,3 @@
-# Build trigger note: validate generated C++ after escaped-newline repair.
 #!/usr/bin/env python3
 from pathlib import Path
 import shutil, sys
@@ -72,8 +71,9 @@ public:
     return symbols;
   }
   int GetMinZoom() const override { return 12; }
-  bool SymbolIsPOI() const override { return true; }
-  bool IsNonDisplaceable() const override { return false; }
+  bool SymbolIsPOI() const override { return false; }
+  bool IsNonDisplaceable() const override { return true; }
+  bool IsMarkAboveText() const override { return true; }
   bool GetDepthTestEnabled() const override { return false; }
 
 private:
