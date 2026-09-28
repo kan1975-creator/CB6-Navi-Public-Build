@@ -61,6 +61,8 @@ for token in (
     "cb6-seven", "cb6-familymart", "cb6-lawson", "cb6-seicomart",
     "cb6-mybasket", "cb6-ministop", "cb6-daily",
     'for theme in ("light", "dark")',
+    'stock_rules = """node|z18-[shop=convenience],',
+    'style = style.replace(stock_rules, "", 1)',
 ):
     require(final, token, "final renderer missing " + token)
 for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6DrivingMarks", "CB6_SIGNAL"):
