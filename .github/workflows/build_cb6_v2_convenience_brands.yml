@@ -21,7 +21,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: cb6-v2-convenience-${{ github.ref }}
+  group: cb6-v2-convenience-brands-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
