@@ -1488,6 +1488,152 @@
         "osm_overpass",
         "verified_supplement"
       ]
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.zoom_symbols.14",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-Z14-XS"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.zoom_symbols.15",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-Z15-XS"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.forward_zoom_symbols.17",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FWD-Z17-M"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.forward_zoom_symbols.19",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FWD-Z19-L"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.xs",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-XS"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.s",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-S"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-M"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.l",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-L"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries.highway=traffic_signals",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-HIGHWAY"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries.crossing=traffic_signals",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-CROSSING"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries.type=traffic_signals_set",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-SET"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types.node",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-NODE"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types.way",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-WAY"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types.relation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-RELATION"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.sources.osm_overpass",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.sources.verified_supplement",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SUPPLEMENT"
+      ],
+      "provenance": "current_spec semantic field"
     }
   ],
   "blocking": [
