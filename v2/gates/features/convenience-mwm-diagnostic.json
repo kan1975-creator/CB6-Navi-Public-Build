@@ -41,7 +41,7 @@
       "description": "Installed-map shop=convenience records can be observed on CB6 without adding final convenience rendering"
     }
   ],
-  "stage": "RESEARCH_REQUIRED_RESTART",
+  "stage": "IMPLEMENTATION_ENABLED",
   "affected_domains": [
     "poi",
     "classifier",
@@ -86,9 +86,9 @@
     ]
   },
   "impact_record": "v2/gates/impact_records/convenience-mwm-diagnostic.json",
-  "device_evidence": "NOT_ELIGIBLE",
+  "device_evidence": "PENDING",
   "research_record": "v2/gates/research_records/convenience-mwm-diagnostic.json",
-  "restart_from_zero": true,
-  "prior_work_policy": "REFERENCE_ONLY_UNTIL_FRESH_SOURCE_RESEARCH_REVALIDATES_IT",
-  "restart_reason": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
+  "restart_from_zero": false,
+  "prior_work_policy": "REVALIDATED_BY_FRESH_PINNED_SOURCE_RESEARCH",
+  "restart_reason": "Fresh source-first revalidation completed against pinned comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704 before diagnostic implementation enablement."
 }
