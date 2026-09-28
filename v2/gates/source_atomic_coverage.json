@@ -1,5 +1,5 @@
 {
-  "schema": 5,
+  "schema": 6,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -38,7 +38,7 @@
     {
       "path": "v2/gates/development_method_contract.json",
       "classification": "METHOD_INPUT",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/root_certification_plan.json",
@@ -3351,6 +3351,428 @@
       ],
       "provenance": "structured root/project state field",
       "value_snapshot": "v2/gates/verify_project_gate.py"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "required_gate_scripts",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": [
+        "v2/gates/verify_method_freeze.py",
+        "v2/gates/verify_root_invariants.py",
+        "v2/gates/verify_project_gate.py",
+        "v2/gates/verify_project_integrity.py",
+        "v2/gates/verify_evidence_inventory_v2.py",
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "required_regression_tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-REGRESSIONS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": [
+        "v2/tests/test_method_freeze.py",
+        "v2/tests/test_root_invariants.py",
+        "v2/tests/test_repository_syntax.py",
+        "v2/tests/test_gate_fail_closed.py",
+        "v2/tests/test_feature_gate_contract.py",
+        "v2/tests/test_apk_evidence_fail_closed.py",
+        "v2/tests/test_device_evidence_fail_closed.py",
+        "v2/tests/test_gate_stamp_fail_closed.py",
+        "v2/tests/test_final_acceptance_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "acceptance_scripts",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-ARTIFACT-CHAIN",
+        "PROC-METHOD-DEVICE-CHAIN"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": [
+        "v2/gates/verify_apk_evidence.py",
+        "v2/gates/verify_device_evidence.py",
+        "v2/gates/verify_final_acceptance.py"
+      ]
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "post_gate_integrity_script",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-SAMEHEAD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "v2/gates/create_gate_stamp.py"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.restricted_evidence_cannot_be_direct_feature_authority",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTHORITY-ONLY"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.every_feature_audit_requires_specific_fail_closed_proof",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUDIT-SPECIFIC-PROOF"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.audit_proof_must_execute_before_feature_build",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUDIT-SPECIFIC-PROOF"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.impact_record_must_cover_audit_proof",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-COVERS-AUDIT"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.internal_source_analysis",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INTERNAL-ANALYSIS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "internal_source_analysis"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.upstream_and_web_research_when_applicable",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WEB-WHEN-MATERIAL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "upstream_and_web_research_when_applicable"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.web_findings_revalidated_against_pinned_source",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-REVALIDATE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "web_findings_revalidated_against_pinned_source"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.authority_and_evidence_classification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTHORITY-ONLY"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "authority_and_evidence_classification"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.change_impact_before_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "change_impact_before_implementation"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.implementation_and_audit_as_one_change_unit",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUDIT-UNIT"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "implementation_and_audit_as_one_change_unit"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.positive_tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-REGRESSIONS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "positive_tests"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.audit_specific_destructive_tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DESTRUCTIVE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "audit_specific_destructive_tests"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.feature_gate",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "feature_gate"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.build_and_apk_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BUILD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "build_and_apk_evidence"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.real_device_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BEHAVIOR"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "real_device_evidence"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.internal_analysis_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INTERNAL-ANALYSIS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.upstream_web_research",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WEB-WHEN-MATERIAL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "required_when_external_api_data_model_platform_or_upstream_behavior_is_material"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.web_is_authority",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WEB-NOT-AUTH"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": false
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.pinned_source_revalidation_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-REVALIDATE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.research_evidence_must_be_recorded_before_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "change_policy.unrecorded_spec_change_forbidden",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-UNRECORDED-SPEC"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "change_policy.required_change_must_record_reason_impact_and_authority_update_before_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CHANGE-REASON"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "change_policy.unrelated_behavior_change_forbidden",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-UNRELATED-CHANGE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.required_for_every_feature",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-EVERY-FEATURE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.repository",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "comaps/comaps"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.commit",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "7113ccb5f086183f8884b2aa4e58c987466b6704"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.concrete_source_paths_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-PATHS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.findings_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-FINDINGS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.analysis_must_precede_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.affected_domain_coverage_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "method_document",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "docs/CB6_V2_DEVELOPMENT_METHOD.md"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "failure_return_policy",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FAIL-EARLIEST"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "return_to_earliest_affected_stage"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "completion_authority.method",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-METHOD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "development_gate_success"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "completion_authority.build",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BUILD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "verified_apk_evidence"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "completion_authority.behavior",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BEHAVIOR"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "accepted_cb6_real_device_evidence"
     }
   ],
   "blocking": [
