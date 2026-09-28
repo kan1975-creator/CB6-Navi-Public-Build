@@ -10,6 +10,7 @@ FILES = [
     "v2/poi/native/convenience_mwm_collector.cpp",
     "v2/poi/native/convenience_brand_classifier.cpp",
     "v2/poi/apply_convenience_mwm_diagnostic.py",
+    "v2/poi/apply_convenience_brand_render.py",
 ]
 
 def run(root):
@@ -48,4 +49,16 @@ with tempfile.TemporaryDirectory() as d:
     if rc == 0:
         raise SystemExit("CB6 CONVENIENCE AUDIT SELFTEST FAIL: signal/UserMark ownership crossing was accepted")
 
-print("CB6 CONVENIENCE AUDIT SELFTEST PASS: valid path accepted and forbidden mutations rejected")
+
+    final = tmp / "v2/poi/apply_convenience_brand_render.py"
+    final_original = final.read_text(encoding="utf-8")
+    final.write_text(final_original.replace("UserMark::Type::CONVENIENCE", "UserMark::Type::DEBUG_MARK"), encoding="utf-8")
+    rc, _ = run(tmp)
+    if rc == 0:
+        raise SystemExit("CB6 CONVENIENCE AUDIT SELFTEST FAIL: non-dedicated renderer group was accepted")
+    final.write_text(final_original + "\n# nativeSetCb6DrivingMarks forbidden crossing\n", encoding="utf-8")
+    rc, _ = run(tmp)
+    if rc == 0:
+        raise SystemExit("CB6 CONVENIENCE AUDIT SELFTEST FAIL: final renderer signal crossing was accepted")
+
+print("CB6 CONVENIENCE AUDIT SELFTEST PASS: valid path accepted and acquisition/render ownership mutations rejected")

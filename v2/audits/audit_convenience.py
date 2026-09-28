@@ -46,3 +46,24 @@ for token in ("nativeCb6ConvenienceDiagnostic", "CollectConveniencePois", "conve
 for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6DrivingMarks", "CreateUserMark", "CB6_SIGNAL", "getSavedLocation()"):
     if forbidden in apply:
         raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: diagnostic bridge ownership crossing: " + forbidden)
+
+FINAL = ROOT / "v2/poi/apply_convenience_brand_render.py"
+if not FINAL.is_file():
+    raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: final renderer apply script missing")
+final = FINAL.read_text(encoding="utf-8")
+for token in (
+    "UserMark::Type::CONVENIENCE",
+    "nativeCb6CollectConvenienceMarks",
+    "CollectConveniencePois",
+    "nativeSetCb6ConvenienceMarks",
+    "mCb6ConvenienceLastLocation",
+    "distanceTo(mCb6ConvenienceLastLocation) >= 800.0f",
+    "cb6-seven", "cb6-familymart", "cb6-lawson", "cb6-seicomart",
+    "cb6-mybasket", "cb6-ministop", "cb6-daily",
+    'for theme in ("light", "dark")',
+):
+    require(final, token, "final renderer missing " + token)
+for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6DrivingMarks", "CB6_SIGNAL"):
+    if forbidden in final:
+        raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: final renderer ownership crossing: " + forbidden)
+print("CB6 CONVENIENCE FINAL RENDER AUDIT PASS: dedicated MWM-backed group, symbols and refresh are signal-independent")
