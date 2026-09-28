@@ -1,5 +1,5 @@
 {
-  "schema": 4,
+  "schema": 5,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -28,12 +28,12 @@
     {
       "path": "v2/gates/root_invariants.json",
       "classification": "ACTIVE_AUTHORITY",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/project_state.json",
       "classification": "ACTIVE_AUTHORITY",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/development_method_contract.json",
@@ -3056,6 +3056,301 @@
           "v2/gates/verify_design_coverage.py"
         ]
       }
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:repository_is_complete_operational_memory",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-REPO-MEMORY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:chat_memory_is_never_required_for_correctness",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-REPO-MEMORY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:fresh_context_must_reconstruct_same_state",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:unknown_or_unmapped_state_blocks_progress",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:no_completion_from_self_declared_flags",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-SELF-COMPLETE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:no_rule_may_be_silently_bypassed",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-BYPASS"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:method_change_invalidates_method_completion",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-INVALIDATE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:known_failure_recurrence_must_be_mechanically_blocked",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-HISTORICAL-REPLAY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:unverified_claims_cannot_be_promoted_to_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CLAIM-EVIDENCE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:all_changes_require_closed_traceability",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CLOSED-TRACE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:lower_layers_blocked_until_root_certified",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-BLOCK-LOWER"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:root_certification_cannot_be_self_asserted",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-NO-SELF-CERT"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:new_chat",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-NEWCHAT"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "new_chat"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:elapsed_time",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-TIME"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "elapsed_time"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:feature_switch",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-FEATURESWITCH"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "feature_switch"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:summary_or_handoff",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-HANDOFF"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "summary_or_handoff"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:operator_change",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-OPERATOR"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "operator_change"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:partial_prior_context",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-PARTIAL"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "partial_prior_context"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:no_prior_conversation_available",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-NOCONV"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "no_prior_conversation_available"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "start_rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "BLOCK unless repository-only reconstruction proves every required output is present, internally consistent, and current."
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "completion_rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-METHOD-SEMANTIC-CLOSURE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "BLOCK unless the frozen method survives context-loss, historical-incident, unknown-change, independent-verification, extensibility, artifact-identity, and device-evidence tests without method modification."
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "certification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-CERT-HEAD-FRESHNESS"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "UNDER_CONSTRUCTION"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "branch",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PROJECT-BRANCH"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "cb6-v2-clean"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PROJECT-DESIGN-STATE",
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "feature_builds_allowed",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FAIL-CLOSED",
+        "PROC-BUILD-GATE-DESIGN"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": false
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "design_verified",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PROJECT-DESIGN-STATE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": false
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "canonical_design",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CANONICAL-DESIGN"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "retired_design",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RETIRED-DESIGN-PATH"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "entrypoint",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WORKFLOW-GATE-FIRST"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "v2/gates/verify_project_gate.py"
     }
   ],
   "blocking": [
