@@ -6,8 +6,9 @@ SRC=Path(__file__).resolve().parents[2]
 CASES=[]
 
 def normalize_stage(root):
- # Integrity destructive tests target one mutation at a time. Keep the isolated
- # baseline stage coherent so root rebuild state does not mask the mutation.
+ # Integrity destructive tests target one mutation at a time. Normalize the
+ # complete stage tuple so the intended mutation, not stage drift, is tested.
+ p=root/"v2/gates/project_state.json"; d=json.loads(p.read_text()); d["stage"]="OVERALL_DESIGN_REBUILD"; d["feature_builds_allowed"]=False; d["design_verified"]=False; p.write_text(json.dumps(d))
  for rel in ("v2/gates/authority_policy.json","v2/gates/evidence_inventory.json","v2/gates/traceability.json","v2/gates/development_method_contract.json"):
   p=root/rel; d=json.loads(p.read_text()); d["stage"]="OVERALL_DESIGN_REBUILD"; p.write_text(json.dumps(d))
 
