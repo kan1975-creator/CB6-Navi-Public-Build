@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "stage": "IMPLEMENTATION_ENABLED",
+  "stage": "OVERALL_DESIGN_REBUILD",
   "required_gate_scripts": [
     "v2/gates/verify_method_freeze.py",
     "v2/gates/verify_root_invariants.py",
