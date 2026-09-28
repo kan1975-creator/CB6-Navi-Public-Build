@@ -72,22 +72,33 @@ java.write_text(j)
 
 activity = root / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
 a = activity.read_text()
-hook = r'''
-    final Location cb6DiagnosticLocation = MwmApplication.from(this).getLocationHelper().getSavedLocation();
-    if (cb6DiagnosticLocation == null)
-    {
-      Toast.makeText(this, "CB6 DIAG: LOCATION NOT READY", Toast.LENGTH_LONG).show();
-    }
-    else
+
+field_anchor = "public class MwmActivity extends BaseMwmFragmentActivity"
+field_decl = "  private boolean mCb6ConvenienceDiagnosticCompleted = false;\n"
+if field_decl not in a:
+    class_open = a.find("{", a.find(field_anchor))
+    if class_open < 0:
+        raise SystemExit("CB6 convenience diagnostic: MwmActivity class anchor missing")
+    a = a[:class_open + 1] + "\n" + field_decl + a[class_open + 1:]
+
+location_anchor = """  public void onLocationUpdated(@NonNull Location location)
+  {
+    dismissLocationErrorDialog();
+"""
+location_hook = """  public void onLocationUpdated(@NonNull Location location)
+  {
+    dismissLocationErrorDialog();
+
+    if (!mCb6ConvenienceDiagnosticCompleted)
     {
       try
       {
         final String[] cb6ConvenienceRows =
-            Framework.nativeCb6ConvenienceDiagnostic(cb6DiagnosticLocation.getLatitude(),
-                                                     cb6DiagnosticLocation.getLongitude(), 1200, 17);
+            Framework.nativeCb6ConvenienceDiagnostic(location.getLatitude(), location.getLongitude(), 1200, 17);
         final String cb6First = cb6ConvenienceRows.length == 0 ? "none" : cb6ConvenienceRows[0];
         Toast.makeText(this, "CB6 MWM CONVENIENCE: " + cb6ConvenienceRows.length + "\\n" + cb6First,
                        Toast.LENGTH_LONG).show();
+        mCb6ConvenienceDiagnosticCompleted = true;
       }
       catch (Throwable cb6DiagnosticError)
       {
@@ -95,12 +106,12 @@ hook = r'''
                        Toast.LENGTH_LONG).show();
       }
     }
-'''
-activity_anchor = "    processIntent();\n"
-if "CB6 MWM CONVENIENCE:" not in a:
-    if activity_anchor not in a:
-        raise SystemExit("CB6 convenience diagnostic: MwmActivity post-render anchor missing")
-    a = a.replace(activity_anchor, activity_anchor + hook, 1)
+"""
+if "mCb6ConvenienceDiagnosticCompleted)" not in a:
+    if location_anchor not in a:
+        raise SystemExit("CB6 convenience diagnostic: onLocationUpdated anchor missing")
+    a = a.replace(location_anchor, location_hook, 1)
+
 activity.write_text(a)
 
-print("CB6 convenience diagnostic native bridge and visible evidence hook applied")
+print("CB6 convenience diagnostic native bridge and location-update evidence hook applied")
