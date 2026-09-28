@@ -24,6 +24,6 @@
     "v2/tests/test_gate_stamp_fail_closed.py": "9c1c112ed92be6aa4b4532a888e932d0e5242791",
     "v2/tests/test_method_freeze.py": "fa12f82331502f1533bf89f6b1b72c95720776e4",
     "v2/tests/test_repository_syntax.py": "d57c449636e5dc71e4cbf5884843a5e0ca851453",
-    "v2/tests/test_root_invariants.py": "ccb27a7a43db009cb03abc64302e9bb211410334"
+    "v2/tests/test_root_invariants.py": "46c940c20c43ba256326cf1a0993fb61baa094a4"
   }
 }
