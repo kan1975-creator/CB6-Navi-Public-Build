@@ -1,5 +1,5 @@
 {
-  "schema": 1,
+  "schema": 2,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -10,21 +10,311 @@
     "unknown_or_unmapped_blocks": true
   },
   "sources": [
-    {"path":"v2/gates/active_decisions.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/current_spec.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/traceability.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/root_invariants.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/project_state.json","classification":"ACTIVE_AUTHORITY","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/development_method_contract.json","classification":"METHOD_INPUT","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/root_certification_plan.json","classification":"ROOT_PROOF_PLAN","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/evidence_inventory.json","classification":"EVIDENCE_CLASSIFIER","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/authority_policy.json","classification":"AUTHORITY_CLASSIFIER","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/repository_state_manifest.json","classification":"RECONSTRUCTION_MANIFEST","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/historical_incidents.json","classification":"REGRESSION_CORPUS","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/features/signals.json","classification":"FEATURE_CONTRACT","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/features/convenience-mwm-diagnostic.json","classification":"REFERENCE_ONLY_RESTART","coverage":"IN_PROGRESS"},
-    {"path":"v2/gates/features/convenience-brands.json","classification":"REFERENCE_ONLY_RESTART","coverage":"IN_PROGRESS"}
+    {
+      "path": "v2/gates/active_decisions.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/current_spec.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/traceability.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/root_invariants.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/project_state.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/development_method_contract.json",
+      "classification": "METHOD_INPUT",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/root_certification_plan.json",
+      "classification": "ROOT_PROOF_PLAN",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/evidence_inventory.json",
+      "classification": "EVIDENCE_CLASSIFIER",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/authority_policy.json",
+      "classification": "AUTHORITY_CLASSIFIER",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/repository_state_manifest.json",
+      "classification": "RECONSTRUCTION_MANIFEST",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/historical_incidents.json",
+      "classification": "REGRESSION_CORPUS",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/features/signals.json",
+      "classification": "FEATURE_CONTRACT",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "coverage": "IN_PROGRESS"
+    },
+    {
+      "path": "v2/gates/features/convenience-brands.json",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "coverage": "IN_PROGRESS"
+    }
   ],
-  "clause_coverage": [],
-  "blocking": ["Clause-level mapping is not complete; Root certification remains prohibited."]
+  "clause_coverage": [
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:PROC-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:PROC-002",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-200M-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-COVERAGE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-UPGRADE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:PRODUCT-BASE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:MAP-CAMERA-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:MAP-SCALE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:HUD-ROAD-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:POI-CONVENIENCE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:POI-FUEL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:STOP-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SEARCH-VOICE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:ROUTING-FREE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:TOLL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:FAVORITES-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:LIFECYCLE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:UI-LAYOUT-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:MAP-LABEL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:LOCATION-STABILITY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:GOOGLE-MAPS-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:POI-MAJOR-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:CAMERA-FIXED-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:OFFLINE-FREE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIGNAL-ZOOM-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:CONVENIENCE-BRANDS-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:TOLL-ROUTE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-200M-LEGACY-001",
+      "classification": "SUPERSEDED",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SEARCH-FUZZY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:ORIENTATION-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SEARCH-HISTORY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:VEHICLE-ICON-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SCOPE-HOKKAIDO-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    }
+  ],
+  "blocking": [
+    "Remaining listed source files still require clause-level classification; Root certification remains prohibited."
+  ]
 }
