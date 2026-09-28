@@ -1,5 +1,5 @@
 {
-  "schema": 13,
+  "schema": 14,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -78,7 +78,7 @@
     {
       "path": "v2/gates/features/convenience-brands.json",
       "classification": "REFERENCE_ONLY_RESTART",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     }
   ],
   "clause_coverage": [
@@ -5198,6 +5198,297 @@
         "PROC-INC-STALE-CONVENIENCE"
       ],
       "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "feature_id",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-FEATURE-IDENTITY"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "convenience-brands"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "requirements",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META",
+        "BASE-OFFLINE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001",
+        "OFFLINE-FREE-001",
+        "PRODUCT-BASE-001"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "design_section",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-DOMAIN-DESIGN"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#POI"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "impact_checked",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "repo_sweep_required",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-FEATURE-REPO-SWEEP"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "source_paths",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "v2/poi/native/convenience_brand_classifier.hpp",
+        "v2/poi/native/convenience_brand_classifier.cpp",
+        "v2/poi/native/convenience_mwm_collector.hpp",
+        "v2/poi/native/convenience_mwm_collector.cpp"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "audits",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-DOMAIN-AUDITS",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "v2/audits/audit_convenience.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "tests",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-DOMAIN-TESTS"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "v2/tests/convenience_brand_classifier_test.cpp",
+        "v2/tests/convenience_audit_selftest.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "apk_checks",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-APK-IDENTITY",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-NO-WHOLESALE-GENERATOR"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        {
+          "id": "apk-arm64",
+          "description": "APK contains a valid AArch64 liborganicmaps.so"
+        },
+        {
+          "id": "apk-identity",
+          "description": "APK package remains jp.cb6.navi and label remains CB6 Navi"
+        },
+        {
+          "id": "apk-convenience-native",
+          "description": "Packaged implementation uses native MWM convenience POIs and contains no fabricated diagnostic POI"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "device_checks",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "ARCH-BRAND-META",
+        "CV-DEVICE-OFFLINE",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        {
+          "id": "cb6-convenience-detection",
+          "description": "CB6 detects representative installed-map shop=convenience features around the device"
+        },
+        {
+          "id": "cb6-convenience-brands",
+          "description": "Known convenience stores render with the correct CB6 brand identity and unknown stores remain generic"
+        },
+        {
+          "id": "cb6-convenience-no-text-clutter",
+          "description": "Convenience-store presentation does not add unwanted store-name clutter"
+        },
+        {
+          "id": "cb6-convenience-offline",
+          "description": "Convenience POIs remain available from installed MWM without a network-only dependency"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "stage",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "RESEARCH_REQUIRED_RESTART"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "affected_domains",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "poi",
+        "classifier",
+        "renderer",
+        "symbols",
+        "data-source",
+        "offline",
+        "audits",
+        "tests",
+        "real-device"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "domain_verification",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-REALDEVICE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": {
+        "poi": [
+          "v2/poi/native/convenience_brand_classifier.cpp",
+          "v2/poi/native/convenience_mwm_collector.cpp"
+        ],
+        "classifier": [
+          "v2/poi/native/convenience_brand_classifier.cpp",
+          "v2/tests/convenience_brand_classifier_test.cpp"
+        ],
+        "renderer": [],
+        "symbols": [],
+        "data-source": [
+          "v2/poi/native/convenience_mwm_collector.cpp",
+          "v2/tests/convenience_brand_classifier_test.cpp"
+        ],
+        "offline": [],
+        "audits": [
+          "v2/audits/audit_convenience.py",
+          "v2/tests/convenience_audit_selftest.py"
+        ],
+        "tests": [
+          "v2/tests/convenience_brand_classifier_test.cpp",
+          "v2/tests/convenience_audit_selftest.py"
+        ],
+        "real-device": []
+      }
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "impact_record",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-IMPACT-REVIEWED-PATHS"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "v2/gates/impact_records/convenience-brands.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "device_evidence",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-FEATURE-DEVICE-PENDING"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "NOT_ELIGIBLE"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "research_record",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "v2/gates/research_records/convenience-brands.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "restart_from_zero",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "prior_work_policy",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "REFERENCE_ONLY_UNTIL_FRESH_SOURCE_RESEARCH_REVALIDATES_IT"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "restart_reason",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
       "value_snapshot": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
     }
   ],
