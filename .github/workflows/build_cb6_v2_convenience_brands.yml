@@ -95,6 +95,10 @@ jobs:
           bash -x ./configure.sh --skip-map-download 2>&1 | tee ../out/CONFIGURE.log
       - name: Reverify gated control state before build
         run: python3 v2/gates/create_gate_stamp.py --verify
+      - name: Inspect generated convenience C++
+        run: |
+          set -euxo pipefail
+          nl -ba comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp | sed -n '920,1030p'
       - name: Build convenience brands arm64 release
         run: |
           set -euxo pipefail
