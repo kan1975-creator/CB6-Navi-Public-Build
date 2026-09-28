@@ -1,5 +1,5 @@
 {
-  "schema": 10,
+  "schema": 11,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -63,7 +63,7 @@
     {
       "path": "v2/gates/historical_incidents.json",
       "classification": "REGRESSION_CORPUS",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/features/signals.json",
@@ -4479,6 +4479,160 @@
       ],
       "provenance": "structured reconstruction manifest rule",
       "value_snapshot": "Every root_invariants.required_reconstruction_outputs entry must map to existing repository files; zero-omission source-to-atomic coverage must also be present and complete before Root certification; no chat or external memory may be required."
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "status",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical regression corpus status",
+      "value_snapshot": "ACTIVE"
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-RETIRED-EVIDENCE-REPROMOTION",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-RETIRED-REPROMOTION",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-RETIRED-EVIDENCE-REPROMOTION",
+        "cause": "retired evidence directly re-promoted by a feature contract",
+        "proof": "v2/tests/test_feature_gate_contract.py",
+        "expected_block": "restricted evidence"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-AUDIT-EXISTS-WITHOUT-FAIL-CLOSED-PROOF",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-AUDIT-NOPROOF",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-AUDIT-EXISTS-WITHOUT-FAIL-CLOSED-PROOF",
+        "cause": "audit file existence treated as assurance",
+        "proof": "v2/tests/test_feature_gate_contract.py",
+        "expected_block": "audit"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-STALE-CONVENIENCE",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION",
+        "cause": "Convenience audit required historical FeaturesFetcher after implementation moved to DataSource",
+        "proof": "v2/tests/convenience_audit_selftest.py",
+        "expected_block": "DataSource"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-STALE-HARDCODED-SIGNAL-SPEC",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-STALE-SIGNAL",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-STALE-HARDCODED-SIGNAL-SPEC",
+        "cause": "signal destructive test used stale hardcoded zoom instead of current spec",
+        "proof": "v2/tests/test_gate_fail_closed.py",
+        "expected_block": "current spec"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-PREFLIGHT-WITHOUT-DESTRUCTIVE-PROOF",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-PREFLIGHT",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-PREFLIGHT-WITHOUT-DESTRUCTIVE-PROOF",
+        "cause": "signal preflight audit lacked feature-specific fail-closed proof",
+        "proof": "v2/tests/preflight_gate1_audit_selftest.py",
+        "expected_block": "Post-configure source changed"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-RESEARCH-SCOPE",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE",
+        "cause": "research record presence passed without affected-domain source coverage",
+        "proof": "v2/tests/test_feature_gate_contract.py",
+        "expected_block": "analysis coverage"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-PYTHON-ESCAPED-NEWLINE-SYNTAX",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-SYNTAX",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-PYTHON-ESCAPED-NEWLINE-SYNTAX",
+        "cause": "literal escaped newline reached integrity verifier",
+        "proof": "v2/tests/test_repository_syntax.py",
+        "expected_block": "syntax"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-APK-EVIDENCE-FEATURE-ASSUMPTION",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-APK-ASSUMPTION",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-APK-EVIDENCE-FEATURE-ASSUMPTION",
+        "cause": "APK evidence generation contained signal-specific assumptions",
+        "proof": "v2/tests/test_apk_evidence_fail_closed.py",
+        "expected_block": "APK evidence"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-CONTEXT-LOSS",
+      "classification": "REGRESSION_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-CONTEXT-LOSS",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-CONTEXT-LOSS",
+        "cause": "mandatory decisions can disappear across time, task or chat context",
+        "proof": "v2/tests/test_root_invariants.py",
+        "expected_block": "repository-only reconstruction"
+      }
     }
   ],
   "blocking": [
