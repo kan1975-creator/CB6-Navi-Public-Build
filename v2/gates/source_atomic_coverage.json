@@ -1,5 +1,5 @@
 {
-  "schema": 11,
+  "schema": 12,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -68,7 +68,7 @@
     {
       "path": "v2/gates/features/signals.json",
       "classification": "FEATURE_CONTRACT",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/features/convenience-mwm-diagnostic.json",
@@ -4633,6 +4633,295 @@
         "proof": "v2/tests/test_root_invariants.py",
         "expected_block": "repository-only reconstruction"
       }
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "feature_id",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-IDENTITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "signals"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "requirements",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT",
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-1KM-OFF"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "design_section",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-DESIGN"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#SIGNAL / #SIG"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "impact_checked",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "repo_sweep_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-REPO-SWEEP"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "source_paths",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "v2/signals/apply_signals.py",
+        "v2/signals/java/SignalPolicy.java",
+        "v2/signals/java/SignalSnapshot.java",
+        "v2/signals/java/CompositeSignalProvider.java",
+        "v2/signals/java/VerifiedSignalProvider.java",
+        "v2/signals/java/OverpassSignalProvider.java"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "audits",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-AUDITS"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "v2/audits/audit_signals.py",
+        "v2/audits/preflight_gate1.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-TESTS"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "v2/tests/SignalPolicyTest.java",
+        "v2/tests/signals_audit_selftest.py",
+        "v2/tests/preflight_gate1_audit_selftest.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "apk_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "PROC-APK-IDENTITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        {
+          "id": "apk-arm64",
+          "description": "APK contains a valid AArch64 liborganicmaps.so"
+        },
+        {
+          "id": "apk-identity",
+          "description": "APK package is jp.cb6.navi and label is CB6 Navi"
+        },
+        {
+          "id": "apk-signals",
+          "description": "Signal source/symbol invariants are present in the packaged APK"
+        },
+        {
+          "id": "apk-signature",
+          "description": "APK signature verifies successfully"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "device_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-200M-SLIM",
+        "SIG-1KM-OFF",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        {
+          "id": "cb6-clean-install",
+          "description": "CB6 Android 13 clean install shows required signal coverage and zoom behavior"
+        },
+        {
+          "id": "cb6-update-install",
+          "description": "CB6 Android 13 update install preserves required signal coverage and zoom behavior"
+        },
+        {
+          "id": "cb6-200m-slim",
+          "description": "At 200 m signal marks remain slim and approximately accepted 500 m visual size"
+        },
+        {
+          "id": "cb6-1km-hidden",
+          "description": "At 1 km signal icons are not required/displayed by CB6 signal policy"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "IMPLEMENTATION_ENABLED"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "affected_domains",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "signals",
+        "renderer",
+        "symbols",
+        "audits",
+        "tests",
+        "data-source",
+        "cache",
+        "lifecycle",
+        "real-device"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "domain_verification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-CACHE",
+        "PROC-DOMAIN-LIFECYCLE",
+        "PROC-DOMAIN-REALDEVICE"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": {
+        "signals": [
+          "v2/signals/apply_signals.py"
+        ],
+        "renderer": [
+          "v2/signals/apply_signals.py",
+          "v2/audits/audit_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "symbols": [
+          "v2/signals/apply_signals.py",
+          "v2/audits/audit_signals.py"
+        ],
+        "audits": [
+          "v2/audits/audit_signals.py",
+          "v2/tests/signals_audit_selftest.py",
+          "v2/tests/preflight_gate1_audit_selftest.py"
+        ],
+        "tests": [
+          "v2/tests/SignalPolicyTest.java",
+          "v2/tests/signals_audit_selftest.py",
+          "v2/tests/preflight_gate1_audit_selftest.py"
+        ],
+        "data-source": [
+          "v2/signals/java/OverpassSignalProvider.java",
+          "v2/signals/java/CompositeSignalProvider.java",
+          "v2/signals/java/VerifiedSignalProvider.java",
+          "v2/audits/audit_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "cache": [
+          "v2/signals/apply_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "lifecycle": [
+          "v2/signals/apply_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "real-device": []
+      }
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "impact_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-REVIEWED-PATHS",
+        "PROC-IMPACT-DECISION"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "v2/gates/impact_records/signals.json"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "device_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DEVICE-PENDING",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "PENDING"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "research_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "v2/gates/research_records/signals.json"
     }
   ],
   "blocking": [
