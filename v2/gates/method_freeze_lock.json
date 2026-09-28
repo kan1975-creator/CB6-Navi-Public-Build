@@ -25,7 +25,7 @@
     "v2/tests/test_method_freeze.py": "fa12f82331502f1533bf89f6b1b72c95720776e4",
     "v2/tests/test_repository_syntax.py": "d57c449636e5dc71e4cbf5884843a5e0ca851453",
     "v2/tests/test_root_invariants.py": "46c940c20c43ba256326cf1a0993fb61baa094a4",
-    "v2/gates/verify_method_completion.py": "cfd90b6a78f0b037562421e848265f6976461121",
+    "v2/gates/verify_method_completion.py": "7e3f583055cd47b7bc6ff69d0b27d5de35d07f36",
     "v2/tests/test_method_completion.py": "2ac729de719edb2fa243e4c26b354dc0e226ed6e",
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7"
   }

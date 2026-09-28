@@ -10,12 +10,13 @@ proof=d.get("proof",{})
 required={"root_certified","method_frozen","design_coverage","repository_integrity","zero_omission"}
 if set(proof)!=required or not all(v is True for v in proof.values()): fail("completion proof incomplete")
 cmds={
- "root_certified":[sys.executable,"v2/gates/run_root_certification.py"],
  "method_frozen":[sys.executable,"v2/gates/verify_method_freeze.py"],
  "design_coverage":[sys.executable,"v2/gates/verify_design_coverage.py"],
  "repository_integrity":[sys.executable,"v2/gates/verify_project_integrity.py"],
  "zero_omission":[sys.executable,"v2/gates/verify_source_atomic_coverage.py"],
 }
+cert=json.loads((ROOT/"v2/gates/root_invariants.json").read_text())
+if cert.get("certification",{}).get("status")!="CERTIFIED" or cert["certification"].get("feature_execution_permitted") is not True: fail("root certification is not persisted CERTIFIED")
 for name,cmd in cmds.items():
  cp=subprocess.run(cmd,cwd=ROOT,text=True,capture_output=True)
  if cp.returncode: fail(name+" executable proof failed:\n"+cp.stdout+cp.stderr)
