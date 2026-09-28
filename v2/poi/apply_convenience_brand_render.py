@@ -216,4 +216,21 @@ if "nativeCb6CollectConvenienceMarks(" not in a:
     a = a.replace(anchor2, hook + anchor2, 1)
 activity.write_text(a)
 
+# Suppress only the stock vehicle-map convenience presentation. The MWM feature,
+# names, metadata and search remain intact; CB6 dedicated marks own map presentation.
+icons = ROOT / "data/styles/vehicle/include/Icons.mapcss"
+style = icons.read_text()
+stock_rules = """node|z18-[shop=convenience],
+{text: name;text-color: @poi_label;text-offset: 1;font-size: 11.5;text-min-distance: 3;}
+
+node|z17-[shop=convenience],
+{icon-image: convenience-m.svg; font-size: 13.25;}
+node|z18-[shop=convenience],
+{font-size: 14.5;}
+"""
+if stock_rules not in style:
+    raise SystemExit("Pinned stock convenience style rules missing")
+style = style.replace(stock_rules, "", 1)
+icons.write_text(style)
+
 print("CB6 dedicated native-MWM convenience collection, renderer, symbols and live-location refresh applied")
