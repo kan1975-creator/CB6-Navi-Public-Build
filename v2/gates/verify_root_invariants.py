@@ -38,6 +38,9 @@ if project.get("stage")=="OVERALL_DESIGN_REBUILD" and project.get("design_verifi
 trace=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8"))
 if trace.get("stage")!=project.get("stage"):
     fail("traceability stage contradicts project stage")
+contract=json.loads((ROOT/"v2/gates/development_method_contract.json").read_text(encoding="utf-8"))
+if contract.get("stage")!=project.get("stage"):
+    fail("development method contract stage contradicts project stage")
 if method.get("status")!="COMPLETE" and project.get("feature_builds_allowed") is True:
     fail("feature builds cannot be enabled while method completion is not COMPLETE")
 inc=json.loads((ROOT/"v2/gates/historical_incidents.json").read_text(encoding="utf-8"))
