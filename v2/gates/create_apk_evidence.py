@@ -17,7 +17,8 @@ evidence_map={
  "apk-identity":"out/APK_BADGING.txt",
  "apk-signals":"out/APK_SIGNAL_AUDIT.txt",
  "apk-signature":"out/SIGNATURE_VERIFY.txt",
- "apk-native-mwm-diagnostic":"out/NATIVE_VERIFY.txt"
+ "apk-native-mwm-diagnostic":"out/NATIVE_VERIFY.txt",
+ "apk-convenience-native":"out/NATIVE_VERIFY.txt"
 }
 checks=[]
 for item in planned:
