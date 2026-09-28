@@ -14,7 +14,8 @@
     "v2/poi/native/convenience_brand_classifier.hpp",
     "v2/poi/native/convenience_brand_classifier.cpp",
     "v2/poi/native/convenience_mwm_collector.hpp",
-    "v2/poi/native/convenience_mwm_collector.cpp"
+    "v2/poi/native/convenience_mwm_collector.cpp",
+    "v2/poi/apply_convenience_brand_render.py"
   ],
   "audits": [
     "v2/audits/audit_convenience.py"
@@ -55,7 +56,7 @@
       "description": "Convenience POIs remain available from installed MWM without a network-only dependency"
     }
   ],
-  "stage": "RESEARCH_REQUIRED_RESTART",
+  "stage": "IMPLEMENTATION_ENABLED",
   "affected_domains": [
     "poi",
     "classifier",
@@ -76,13 +77,22 @@
       "v2/poi/native/convenience_brand_classifier.cpp",
       "v2/tests/convenience_brand_classifier_test.cpp"
     ],
-    "renderer": [],
-    "symbols": [],
+    "renderer": [
+      "v2/poi/apply_convenience_brand_render.py",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
+    ],
+    "symbols": [
+      "v2/poi/apply_convenience_brand_render.py",
+      "v2/audits/audit_convenience.py"
+    ],
     "data-source": [
       "v2/poi/native/convenience_mwm_collector.cpp",
       "v2/tests/convenience_brand_classifier_test.cpp"
     ],
-    "offline": [],
+    "offline": [
+      "v2/poi/native/convenience_mwm_collector.cpp"
+    ],
     "audits": [
       "v2/audits/audit_convenience.py",
       "v2/tests/convenience_audit_selftest.py"
@@ -94,9 +104,9 @@
     "real-device": []
   },
   "impact_record": "v2/gates/impact_records/convenience-brands.json",
-  "device_evidence": "NOT_ELIGIBLE",
+  "device_evidence": "PENDING",
   "research_record": "v2/gates/research_records/convenience-brands.json",
-  "restart_from_zero": true,
-  "prior_work_policy": "REFERENCE_ONLY_UNTIL_FRESH_SOURCE_RESEARCH_REVALIDATES_IT",
-  "restart_reason": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
+  "restart_from_zero": false,
+  "prior_work_policy": "REVALIDATED_BY_FRESH_PINNED_SOURCE_RESEARCH_AND_DEVICE_MWM_PROOF",
+  "restart_reason": "Fresh pinned-source research is complete. Real-device diagnostic observed 88 installed-MWM shop=convenience records through the native DataSource collector; final rendering remains pending and must be signal-independent."
 }
