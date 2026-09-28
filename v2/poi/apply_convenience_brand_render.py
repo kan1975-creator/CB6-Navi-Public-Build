@@ -1,3 +1,4 @@
+# Build trigger note: validate generated C++ after escaped-newline repair.
 #!/usr/bin/env python3
 from pathlib import Path
 import shutil, sys
