@@ -1,5 +1,5 @@
 {
-  "schema": 15,
+  "schema": 16,
   "status": "COMPLETE",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -4431,7 +4431,7 @@
       "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RECON-VERIFY",
-        "PROC-DOMAIN-VERIFY"
+        "PROC-FEATURE-DOMAIN-VERIFY"
       ],
       "provenance": "structured reconstruction manifest output",
       "value_snapshot": [
