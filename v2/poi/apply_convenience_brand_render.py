@@ -31,8 +31,8 @@ uh.write_text(s)
 # Keep DebugPrint exhaustive after adding the dedicated mark type.
 ucpp = ROOT / "libs/map/user_mark.cpp"
 us = ucpp.read_text()
-case_anchor = '  case UserMark::Type::TRAFFIC_LIGHT: return "TRAFFIC_LIGHT";\\n'
-case_line = '  case UserMark::Type::CONVENIENCE: return "CONVENIENCE";\\n'
+case_anchor = '  case UserMark::Type::TRAFFIC_LIGHT: return "TRAFFIC_LIGHT";\n'
+case_line = '  case UserMark::Type::CONVENIENCE: return "CONVENIENCE";\n'
 if case_line not in us:
     if case_anchor not in us: raise SystemExit("UserMark DebugPrint anchor missing")
     us = us.replace(case_anchor, case_anchor + case_line, 1)
