@@ -13,7 +13,7 @@ if cert.get("status")=="UNDER_CONSTRUCTION" and cert.get("feature_execution_perm
 if cert.get("status")=="CERTIFIED":
     if cert.get("feature_execution_permitted") is not True: fail("certified root execution state inconsistent")
     proof=cert.get("proof",{})
-    required={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence"}
+    required={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence","zero_omission"}
     if set(proof)!=required or not all(v is True for v in proof.values()): fail("root certification proof incomplete")
 inv=root.get("non_negotiable_invariants",{})
 if not inv or not all(v is True for v in inv.values()): fail("root invariant weakened")
