@@ -28,6 +28,7 @@ with tempfile.TemporaryDirectory() as td:
  r=Path(td)/"repo"; shutil.copytree(SRC,r)
  root_path=r/"v2/gates/root_invariants.json"
  root=json.loads(root_path.read_text())
+ root["certification"]["status"]="UNDER_CONSTRUCTION"
  root["certification"]["feature_execution_permitted"]=True
  root_path.write_text(json.dumps(root))
  cp=subprocess.run([sys.executable,str(r/VERIFY)],cwd=r,text=True,capture_output=True)
