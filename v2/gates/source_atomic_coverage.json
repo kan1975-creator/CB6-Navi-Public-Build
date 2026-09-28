@@ -1,5 +1,5 @@
 {
-  "schema": 6,
+  "schema": 7,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -43,7 +43,7 @@
     {
       "path": "v2/gates/root_certification_plan.json",
       "classification": "ROOT_PROOF_PLAN",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/evidence_inventory.json",
@@ -3773,6 +3773,162 @@
       ],
       "provenance": "structured method contract field",
       "value_snapshot": "accepted_cb6_real_device_evidence"
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": "Root certification is derived only from executable proof commands. Boolean claims are never proof. Zero-omission source-to-atomic coverage must be COMPLETE and executable before certification."
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.context_loss.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-CONTEXT-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.missing_state.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-MISSING-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.permission_fail_closed.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-PERMISSION-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.repository_reconstruction.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/gates/verify_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.historical_incidents.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_gate_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.unknown_change.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-UNKNOWN-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_unknown_change.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.independent_verification.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-INDEPENDENT-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_feature_gate_contract.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.extensibility.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-EXTENSIBILITY-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_feature_gate_contract.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.artifact_identity.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-ARTIFACT-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_apk_evidence_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.device_evidence.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-DEVICE-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_device_evidence_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.zero_omission.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CLOSED-TRACE",
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/gates/verify_source_atomic_coverage.py"
+      ]
     }
   ],
   "blocking": [
