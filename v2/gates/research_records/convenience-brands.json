@@ -127,6 +127,57 @@
       "findings": [
         "DataSource loads feature and metadata sections from local registered MWM containers; no network-only acquisition is required for static convenience POIs."
       ]
+    },
+    "baseline": {
+      "source_paths": [
+        "libs/map/framework.hpp"
+      ],
+      "findings": [
+        "CB6 convenience extends presentation/acquisition through Framework and does not replace the pinned CoMaps application baseline or its unrelated feature owners."
+      ]
+    },
+    "routing": {
+      "source_paths": [
+        "libs/map/framework.hpp"
+      ],
+      "findings": [
+        "The convenience path reads installed feature data and adds a dedicated mark layer; it does not replace or post-process CoMaps routing authority."
+      ]
+    },
+    "search": {
+      "source_paths": [
+        "libs/indexer/feature.hpp",
+        "libs/map/framework.hpp"
+      ],
+      "findings": [
+        "Convenience classification reads FeatureType metadata/names for presentation only; it does not create a parallel search database or replace stock search ownership."
+      ]
+    },
+    "favorites": {
+      "source_paths": [
+        "libs/map/framework.hpp"
+      ],
+      "findings": [
+        "Dedicated convenience UserMarks are transient presentation marks and do not replace bookmark/favorites data ownership."
+      ]
+    },
+    "offline-maps": {
+      "source_paths": [
+        "libs/indexer/data_source.hpp",
+        "libs/indexer/data_source.cpp"
+      ],
+      "findings": [
+        "Convenience acquisition consumes registered installed MWM data through DataSource and does not replace offline-map storage or download ownership."
+      ]
+    },
+    "presentation": {
+      "source_paths": [
+        "data/styles/vehicle/include/Icons.mapcss",
+        "libs/map/framework.hpp"
+      ],
+      "findings": [
+        "Stock convenience presentation is generic at z17+ with text at z18; CB6 adds a dedicated convenience mark presentation while leaving unrelated stock map presentation intact."
+      ]
     }
   }
 }
