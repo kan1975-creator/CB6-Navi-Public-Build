@@ -1,6 +1,6 @@
 {
-  "schema": 14,
-  "status": "UNDER_CONSTRUCTION",
+  "schema": 15,
+  "status": "COMPLETE",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
     "source_change_invalidates_coverage": true,
@@ -3943,7 +3943,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-PROCESS",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-METHOD-GATES"
@@ -3959,7 +3959,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-IMPACT",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-IMPACT-FIRST"
@@ -3975,7 +3975,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-KNOWN-FAILURES",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-FROZEN-REGRESSION"
@@ -3991,7 +3991,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-COMAPS-ARCH",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-INTERNAL-ANALYSIS"
@@ -4007,7 +4007,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-COMAPS-PINNED",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-RESEARCH-PINNED-SHA"
@@ -4023,7 +4023,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-FROZEN",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-FROZEN-LINK",
         "PROC-ACTIVE-NO-DISAPPEAR"
@@ -4043,7 +4043,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-CROSS-PROJECT",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CROSSPROJECT",
         "PROC-CROSS-PROJECT-REVALIDATE"
@@ -4064,7 +4064,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-BASELINE",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-BASELINE-HIST",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -4080,7 +4080,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-OLD-DESIGN",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
         "PROC-RETIRED-DESIGN-PATH"
@@ -4096,7 +4096,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-OLD-MODULES",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-OLD-MODULES-RETIRED",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -4112,7 +4112,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-OLD-POI",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-OLD-POI-RETIRED",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -4128,7 +4128,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-OLD-SIGNAL",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-OLD-SIGNAL-HIST",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -4144,7 +4144,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-HANDOVER",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-HANDOVER-HIST",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -4160,7 +4160,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-GATE-COVERAGE",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-CLOSED-TRACE"
@@ -4176,7 +4176,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-REBUILT-DESIGN",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-CANONICAL-DESIGN"
@@ -4192,7 +4192,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-ROOT-INVARIANTS",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-ROOT-RECONSTRUCT"
@@ -4208,7 +4208,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-REPOSITORY-STATE",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-RECON-AUTH"
@@ -4224,7 +4224,7 @@
     {
       "source": "v2/gates/evidence_inventory.json",
       "clause_id": "evidence:EV-HISTORICAL-INCIDENTS",
-      "classification": "EVIDENCE_CLASSIFICATION",
+      "classification": "NON_REQUIREMENT",
       "atomic_ids": [
         "PROC-EVIDENCE-CONSUME",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4493,7 +4493,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-RETIRED-EVIDENCE-REPROMOTION",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-RETIRED-REPROMOTION",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4509,7 +4509,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-AUDIT-EXISTS-WITHOUT-FAIL-CLOSED-PROOF",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-AUDIT-NOPROOF",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4525,7 +4525,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-STALE-CONVENIENCE",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4541,7 +4541,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-STALE-HARDCODED-SIGNAL-SPEC",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-STALE-SIGNAL",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4557,7 +4557,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-PREFLIGHT-WITHOUT-DESTRUCTIVE-PROOF",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-PREFLIGHT",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4573,7 +4573,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-RESEARCH-SCOPE",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4589,7 +4589,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-PYTHON-ESCAPED-NEWLINE-SYNTAX",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-SYNTAX",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4605,7 +4605,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-APK-EVIDENCE-FEATURE-ASSUMPTION",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-APK-ASSUMPTION",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4621,7 +4621,7 @@
     {
       "source": "v2/gates/historical_incidents.json",
       "clause_id": "incident:INC-CONTEXT-LOSS",
-      "classification": "REGRESSION_REQUIREMENT",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-INC-CONTEXT-LOSS",
         "PROC-ROOT-HISTORY-PROOF"
@@ -4926,7 +4926,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "feature_id",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-IDENTITY"
       ],
@@ -4936,7 +4936,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "requirements",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-CONTRACT",
         "ARCH-CONVENIENCE-DIAGNOSTIC"
@@ -4949,7 +4949,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "design_section",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-DESIGN"
       ],
@@ -4959,7 +4959,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "impact_checked",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-IMPACT-FIRST"
       ],
@@ -4969,7 +4969,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "repo_sweep_required",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-REPO-SWEEP"
       ],
@@ -4979,7 +4979,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "source_paths",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "ARCH-CONVENIENCE-DIAGNOSTIC",
         "ARCH-CONVENIENCE-TYPE"
@@ -4996,7 +4996,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "audits",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-AUDITS",
         "PROC-INC-STALE-CONVENIENCE"
@@ -5009,7 +5009,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "tests",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-TESTS"
       ],
@@ -5022,7 +5022,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "apk_checks",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-APK-IDENTITY",
         "ARCH-CONVENIENCE-DIAGNOSTIC",
@@ -5047,7 +5047,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "device_checks",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "ARCH-CONVENIENCE-REPRESENTATIVE",
         "PROC-DEVICE-AUTHORITY"
@@ -5063,7 +5063,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "stage",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-STATUS",
         "PROC-RESEARCH-BEFORE-IMPL"
@@ -5074,7 +5074,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "affected_domains",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-COVERAGE"
       ],
@@ -5093,7 +5093,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "domain_verification",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-DOMAIN-VERIFY",
         "PROC-DOMAIN-DATASOURCE",
@@ -5139,7 +5139,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "impact_record",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-IMPACT-REVIEWED-PATHS"
       ],
@@ -5149,7 +5149,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "device_evidence",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-DEVICE-PENDING"
       ],
@@ -5159,7 +5159,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "research_record",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-BEFORE-IMPL",
         "PROC-RESEARCH-PINNED-SHA"
@@ -5170,7 +5170,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "restart_from_zero",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-BEFORE-IMPL",
         "PROC-INC-STALE-CONVENIENCE"
@@ -5181,7 +5181,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "prior_work_policy",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-SUPERSEDED-NO-AUTH",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -5192,7 +5192,7 @@
     {
       "source": "v2/gates/features/convenience-mwm-diagnostic.json",
       "clause_id": "restart_reason",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-BEFORE-IMPL",
         "PROC-INC-STALE-CONVENIENCE"
@@ -5203,7 +5203,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "feature_id",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-IDENTITY"
       ],
@@ -5213,7 +5213,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "requirements",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-CONTRACT",
         "ARCH-CONVENIENCE-TYPE",
@@ -5231,7 +5231,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "design_section",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-DESIGN"
       ],
@@ -5241,7 +5241,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "impact_checked",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-IMPACT-FIRST"
       ],
@@ -5251,7 +5251,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "repo_sweep_required",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-REPO-SWEEP"
       ],
@@ -5261,7 +5261,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "source_paths",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "ARCH-CONVENIENCE-TYPE",
         "ARCH-BRAND-META"
@@ -5277,7 +5277,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "audits",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-AUDITS",
         "PROC-INC-STALE-CONVENIENCE"
@@ -5290,7 +5290,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "tests",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-TESTS"
       ],
@@ -5303,7 +5303,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "apk_checks",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-APK-IDENTITY",
         "ARCH-CONVENIENCE-TYPE",
@@ -5328,7 +5328,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "device_checks",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "ARCH-CONVENIENCE-REPRESENTATIVE",
         "ARCH-BRAND-META",
@@ -5358,7 +5358,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "stage",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-STATUS",
         "PROC-RESEARCH-BEFORE-IMPL"
@@ -5369,7 +5369,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "affected_domains",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-DOMAIN-COVERAGE"
       ],
@@ -5389,7 +5389,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "domain_verification",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-DOMAIN-VERIFY",
         "PROC-DOMAIN-RENDERER",
@@ -5430,7 +5430,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "impact_record",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-IMPACT-REVIEWED-PATHS"
       ],
@@ -5440,7 +5440,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "device_evidence",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-FEATURE-DEVICE-PENDING"
       ],
@@ -5450,7 +5450,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "research_record",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-BEFORE-IMPL",
         "PROC-RESEARCH-PINNED-SHA"
@@ -5461,7 +5461,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "restart_from_zero",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-BEFORE-IMPL",
         "PROC-INC-STALE-CONVENIENCE"
@@ -5472,7 +5472,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "prior_work_policy",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-SUPERSEDED-NO-AUTH",
         "PROC-FORBIDDEN-HISTORICAL"
@@ -5483,7 +5483,7 @@
     {
       "source": "v2/gates/features/convenience-brands.json",
       "clause_id": "restart_reason",
-      "classification": "REFERENCE_ONLY_RESTART",
+      "classification": "ACTIVE_REQUIREMENT",
       "atomic_ids": [
         "PROC-RESEARCH-BEFORE-IMPL",
         "PROC-INC-STALE-CONVENIENCE"
@@ -5492,7 +5492,5 @@
       "value_snapshot": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
     }
   ],
-  "blocking": [
-    "Remaining listed source files still require clause-level classification; Root certification remains prohibited."
-  ]
+  "blocking": []
 }
