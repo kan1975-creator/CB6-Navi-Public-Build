@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "stage": "IMPLEMENTATION_ENABLED",
+  "stage": "OVERALL_DESIGN_REBUILD",
   "canonical_design_target": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
   "required_sections": [
     {
