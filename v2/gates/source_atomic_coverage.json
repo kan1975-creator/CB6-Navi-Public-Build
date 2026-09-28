@@ -1,5 +1,5 @@
 {
-  "schema": 9,
+  "schema": 10,
   "status": "UNDER_CONSTRUCTION",
   "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
   "rules": {
@@ -58,7 +58,7 @@
     {
       "path": "v2/gates/repository_state_manifest.json",
       "classification": "RECONSTRUCTION_MANIFEST",
-      "coverage": "IN_PROGRESS"
+      "coverage": "COMPLETE"
     },
     {
       "path": "v2/gates/historical_incidents.json",
@@ -4281,6 +4281,204 @@
       ],
       "provenance": "structured authority policy field",
       "value_snapshot": "7 forbidden historical-authority phrases"
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "status",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "structured reconstruction manifest field",
+      "value_snapshot": "ACTIVE"
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.current_authority",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-AUTH",
+        "PROC-RECON-AUTHORITY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/authority_policy.json",
+        "v2/gates/evidence_inventory.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.active_requirements",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-REQ",
+        "PROC-RECON-REQUIREMENTS"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/active_decisions.json",
+        "v2/gates/current_spec.json",
+        "v2/gates/traceability.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.method_contract",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-METHOD",
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/root_invariants.json",
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/run_root_certification.py"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.current_feature_state",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-FEATURE",
+        "PROC-RECON-FEATURES"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/features/signals.json",
+        "v2/gates/features/convenience-mwm-diagnostic.json",
+        "v2/gates/features/convenience-brands.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.pending_work",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-PENDING",
+        "PROC-UNKNOWN-OPEN"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/cb6_master_progress.json",
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/source_atomic_coverage.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.known_failures",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-FAILURES",
+        "PROC-FROZEN-REGRESSION"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.historical_incidents",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-FAILURES",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/historical_incidents.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.research_and_pinned_upstream_basis",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-RESEARCH",
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/research_records/signals.json",
+        "v2/gates/research_records/convenience-mwm-diagnostic.json",
+        "v2/gates/research_records/convenience-brands.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.change_impact",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-IMPACT",
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/impact_records/signals.json",
+        "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+        "v2/gates/impact_records/convenience-brands.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.verification_obligations",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-VERIFY",
+        "PROC-DOMAIN-VERIFY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.build_and_apk_identity",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-APK",
+        "PROC-APK-IDENTITY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/verify_apk_evidence.py",
+        "v2/gates/create_gate_stamp.py"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.device_evidence_state",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-DEVICE",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/verify_device_evidence.py",
+        "v2/gates/verify_final_acceptance.py"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-CLOSED-TRACE",
+        "PROC-CONTEXT-NOCONV"
+      ],
+      "provenance": "structured reconstruction manifest rule",
+      "value_snapshot": "Every root_invariants.required_reconstruction_outputs entry must map to existing repository files; zero-omission source-to-atomic coverage must also be present and complete before Root certification; no chat or external memory may be required."
     }
   ],
   "blocking": [
