@@ -8,7 +8,7 @@ def fail(m):
 plan=json.loads(PLAN.read_text())
 if plan.get("schema")!=1: fail("plan schema invalid")
 proofs=plan.get("proofs",{})
-required={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence"}
+required={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence","zero_omission"}
 if set(proofs)!=required: fail("proof set incomplete")
 results={}
 for name in sorted(required):
