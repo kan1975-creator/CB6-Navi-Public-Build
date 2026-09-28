@@ -28,11 +28,7 @@
     "v2/gates/active_decisions.json",
     "v2/gates/domain_verification_policy.json",
     "v2/gates/current_spec.json",
-    "pinned:comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704:libs/indexer/feature_meta.hpp",
-    "pinned:comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704:generator/brands_loader.cpp",
-    "pinned:comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704:data/categories_brands.txt",
     "v2/gates/research_records/convenience-brands.json",
     "v2/tests/convenience_audit_selftest.py"
-  ],
-  "decision": "Use installed native MWM shop=convenience features as the primary static POI source. Classify brand deterministically from FMD_BRAND, then FMD_OPERATOR, then names. Do not revive historical periodic Overpass acquisition or fabricated diagnostic convenience marks. Preserve Gate 1 signal ownership. Retired native-POI design remains historical review evidence only; current authority and fail-closed audit proof are bound through the common development method."
+  ]
 }
