@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "seals": [
+    {
+      "feature_id": "convenience-brands",
+      "version": 1,
+      "path": "v2/gates/acceptance/convenience-brands/v1.json",
+      "blob_sha": "06bee13e9dd1927bc10d6f438e6dfd68c9e56099",
+      "status": "ACTIVE",
+      "revision_reason": "Initial independent observable acceptance baseline before final convenience completion."
+    }
+  ]
+}
