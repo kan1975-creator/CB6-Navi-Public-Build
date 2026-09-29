@@ -13,6 +13,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Repository syntax preflight
         run: python3 v2/tests/test_repository_syntax.py
+      - name: Verify method-version coverage across all feature contracts
+        run: python3 v2/gates/verify_method_version_coverage.py
+      - name: Destructive method-version coverage test
+        run: python3 v2/tests/test_method_version_coverage_fail_closed.py
       - name: Verify root invariants and repository-only reconstruction
         run: python3 v2/gates/verify_root_invariants.py
       - name: Destructive context-loss root tests

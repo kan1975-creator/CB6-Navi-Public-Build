@@ -41,5 +41,6 @@
   },
   "impact_record": "v2/gates/impact_records/REPLACE_ME.json",
   "device_evidence": "PENDING",
-  "research_record": "v2/gates/research_records/REPLACE_ME.json"
+  "research_record": "v2/gates/research_records/REPLACE_ME.json",
+  "method_version": 2
 }

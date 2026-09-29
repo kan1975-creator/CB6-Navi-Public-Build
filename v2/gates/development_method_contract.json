@@ -3,6 +3,7 @@
   "stage": "IMPLEMENTATION_ENABLED",
   "required_gate_scripts": [
     "v2/gates/verify_method_freeze.py",
+    "v2/gates/verify_method_version_coverage.py",
     "v2/gates/verify_root_invariants.py",
     "v2/gates/verify_project_gate.py",
     "v2/gates/verify_project_integrity.py",
@@ -11,6 +12,7 @@
   ],
   "required_regression_tests": [
     "v2/tests/test_method_freeze.py",
+    "v2/tests/test_method_version_coverage_fail_closed.py",
     "v2/tests/test_root_invariants.py",
     "v2/tests/test_repository_syntax.py",
     "v2/tests/test_gate_fail_closed.py",
@@ -72,5 +74,6 @@
     "method": "development_gate_success",
     "build": "verified_apk_evidence",
     "behavior": "accepted_cb6_real_device_evidence"
-  }
+  },
+  "method_version": 2
 }

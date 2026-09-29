@@ -132,5 +132,6 @@
   "research_record": "v2/gates/research_records/convenience-brands.json",
   "restart_from_zero": false,
   "prior_work_policy": "REVALIDATED_BY_FRESH_PINNED_SOURCE_RESEARCH_AND_DEVICE_MWM_PROOF",
-  "restart_reason": "Fresh pinned-source research is complete. Real-device diagnostic observed 88 installed-MWM shop=convenience records through the native DataSource collector; final rendering remains pending and must be signal-independent."
+  "restart_reason": "Fresh pinned-source research is complete. Real-device diagnostic observed 88 installed-MWM shop=convenience records through the native DataSource collector; final rendering remains pending and must be signal-independent.",
+  "method_version": 2
 }
