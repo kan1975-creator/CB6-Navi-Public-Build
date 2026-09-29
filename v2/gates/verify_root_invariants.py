@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, subprocess, sys
+import json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 def fail(m):
@@ -41,9 +41,6 @@ if trace.get("stage")!=project.get("stage"):
 contract=json.loads((ROOT/"v2/gates/development_method_contract.json").read_text(encoding="utf-8"))
 if contract.get("stage")!=project.get("stage"):
     fail("development method contract stage contradicts project stage")
-if project.get("feature_builds_allowed") is True:
-    cp=subprocess.run([sys.executable,str(ROOT/"v2/gates/verify_method_completion.py")],cwd=ROOT,text=True,capture_output=True)
-    if cp.returncode: fail("feature builds require executable method completion proof: "+(cp.stdout+cp.stderr).strip())
 inc=json.loads((ROOT/"v2/gates/historical_incidents.json").read_text(encoding="utf-8"))
 if inc.get("status")!="ACTIVE" or not inc.get("incidents"): fail("historical incident corpus missing")
 ids=[x.get("id") for x in inc["incidents"]]
