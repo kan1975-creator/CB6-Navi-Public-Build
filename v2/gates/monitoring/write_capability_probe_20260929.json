@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Objective repository evidence that the connected GitHub writer can create a substantive commit on the default branch before monitoring is re-enabled.",
+  "baseline_head": "8522653667c9332759d8f198c96f69b16c3cdc4f",
+  "assertions": {
+    "contents_write_exercised": true,
+    "default_branch_write_exercised": true,
+    "empty_commit": false,
+    "timestamp_only_update": false,
+    "policy_state_modified": false
+  },
+  "interpretation": "A commit containing this record proves write capability for this probe only; it does not by itself prove scheduled monitoring liveness."
+}
