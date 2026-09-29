@@ -1,6 +1,7 @@
 package app.organicmaps.cb6.signals;
 
 import android.location.Location;
+import android.util.Log;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -37,17 +38,29 @@ public final class OverpassSignalProvider implements SignalProvider
         + "rel(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[type=traffic_signals_set];"
         + ");out center;";
     Exception last = null;
-    for (String endpoint : ENDPOINTS)
+    for (int endpointIndex = 0; endpointIndex < ENDPOINTS.length; ++endpointIndex)
     {
+      String endpoint = ENDPOINTS[endpointIndex];
       if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
       try
       {
         SignalSnapshot snapshot = parse(new JSONObject(post(endpoint, query)), lat, lon);
         // Match accepted retention: empty/failed endpoint never erases valid marks.
-        if (!snapshot.points.isEmpty()) return snapshot;
+        if (!snapshot.points.isEmpty())
+        {
+          Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex
+              + " result=points count=" + snapshot.points.size());
+          return snapshot;
+        }
+        Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex + " result=empty");
         last = new IllegalStateException("Empty signal response");
       }
-      catch (Exception error) { last = error; }
+      catch (Exception error)
+      {
+        Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex
+            + " result=error type=" + error.getClass().getSimpleName());
+        last = error;
+      }
     }
     throw new IllegalStateException("Signal providers unavailable", last);
   }
