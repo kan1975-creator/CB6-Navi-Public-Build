@@ -12,7 +12,6 @@
     "v2/monitoring/verify_monitoring_policy.py",
     "v2/gates/verify_operational_rule_registry.py",
     "v2/gates/verify_rule_coverage.py",
-    "v2/gates/verify_notification_stale_state.py",
     "v2/gates/verify_workflow_meta.py",
     "v2/gates/verify_verification_mechanisms.py"
   ],

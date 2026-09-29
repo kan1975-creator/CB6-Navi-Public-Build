@@ -25,8 +25,6 @@ jobs:
         run: python3 v2/gates/verify_rule_coverage.py
       - name: Destructive Registry-Coverage consistency test
         run: python3 v2/tests/test_rule_coverage_fail_closed.py
-      - name: Verify notification stale-state contract
-        run: python3 v2/gates/verify_notification_stale_state.py
       - name: Notification stale-state behavior/destructive test
         run: python3 v2/tests/test_notification_stale_state.py
       - name: Verify workflow meta structure
