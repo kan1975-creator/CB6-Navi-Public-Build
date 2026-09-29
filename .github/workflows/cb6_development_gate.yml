@@ -13,6 +13,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Repository syntax preflight
         run: python3 v2/tests/test_repository_syntax.py
+      - name: Verify monitoring policy and cycle accountability
+        run: python3 v2/monitoring/verify_monitoring_policy.py
+      - name: Destructive monitoring policy test
+        run: python3 v2/tests/test_monitoring_policy_fail_closed.py
       - name: Verify method-version coverage across all feature contracts
         run: python3 v2/gates/verify_method_version_coverage.py
       - name: Destructive method-version coverage test
