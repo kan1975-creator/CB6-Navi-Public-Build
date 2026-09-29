@@ -118,9 +118,9 @@ for domain,kinds in domain_policy["rules"].items():
 
 # Feature-gate template is part of the development method and must remain fail-closed.
 template=load("v2/gates/features/TEMPLATE.json")
-required_feature_fields={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage"}
+required_feature_fields={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage","method_version"}
 if set(template) != required_feature_fields: fail("feature gate template fields drifted")
-if template.get("schema")!=1 or template.get("impact_checked") is not False or template.get("repo_sweep_required") is not True or template.get("device_evidence")!="PENDING" or template.get("stage")!="DESIGN":
+if template.get("schema")!=1 or template.get("impact_checked") is not False or template.get("repo_sweep_required") is not True or template.get("device_evidence")!="PENDING" or template.get("stage")!="DESIGN" or template.get("method_version")!=2:
  fail("feature gate template is not fail-closed")
 tdc=template.get("device_checks")
 if not isinstance(tdc,list) or len(tdc)!=1 or not isinstance(tdc[0],dict) or set(tdc[0])!={"id","description"} or tdc[0].get("id")!="REPLACE_WITH_CHECK_ID" or tdc[0].get("description")!="REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE":
