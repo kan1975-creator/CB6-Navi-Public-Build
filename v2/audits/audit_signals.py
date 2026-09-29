@@ -74,6 +74,7 @@ require('SignalPolicy.validCoordinate(record.lat, record.lon)' in verified, 'ver
 require('record.provenance == null || record.provenance.trim().isEmpty()' in verified, 'verified supplement provenance validation missing')
 require('record.verifiedDate == null || !record.verifiedDate.matches' in verified, 'verified supplement date validation missing')
 require('SOURCE_DEDUP_M' in composite and 'a == null && b == null' in composite, 'source dedup/fail-safe composition missing')
+require('primaryError != null && (b == null || b.points.isEmpty())' in composite, 'primary failure can be masked by empty supplement')
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('snapshot.displayPoints()' in controller, 'renderer-only signal clustering missing')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')

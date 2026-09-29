@@ -23,9 +23,13 @@ public final class CompositeSignalProvider implements SignalProvider
     Exception primaryError = null, supplementError = null;
     try { a = primary.load(lat, lon); } catch (Exception e) { primaryError = e; }
     try { b = supplement.load(lat, lon); } catch (Exception e) { supplementError = e; }
+    // A supplemental provider with zero records must not mask primary acquisition failure.
+    // Propagate failure so SignalController keeps the previous marks and uses its retry path.
+    if (primaryError != null && (b == null || b.points.isEmpty()))
+      throw new IllegalStateException("Primary signal provider unavailable and supplement empty", primaryError);
     if (a == null && b == null)
       throw new IllegalStateException("All signal providers unavailable",
-          primaryError != null ? primaryError : supplementError);
+          supplementError);
 
     ArrayList<SignalSnapshot.Point> merged = new ArrayList<>();
     if (a != null) merged.addAll(a.points);
