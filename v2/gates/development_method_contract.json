@@ -9,7 +9,8 @@
     "v2/gates/verify_project_integrity.py",
     "v2/gates/verify_evidence_inventory_v2.py",
     "v2/gates/verify_design_coverage.py",
-    "v2/gates/verify_monitoring_policy.py"
+    "v2/monitoring/verify_monitoring_policy.py",
+    "v2/gates/verify_operational_rule_registry.py"
   ],
   "required_regression_tests": [
     "v2/tests/test_method_freeze.py",
@@ -22,7 +23,8 @@
     "v2/tests/test_device_evidence_fail_closed.py",
     "v2/tests/test_gate_stamp_fail_closed.py",
     "v2/tests/test_final_acceptance_fail_closed.py",
-    "v2/tests/test_monitoring_policy_fail_closed.py"
+    "v2/tests/test_monitoring_policy_fail_closed.py",
+    "v2/tests/test_operational_rule_registry_fail_closed.py"
   ],
   "acceptance_scripts": [
     "v2/gates/verify_apk_evidence.py",
