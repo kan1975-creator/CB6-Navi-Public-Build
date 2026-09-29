@@ -14,7 +14,7 @@ def run_case(name, mutate, needle):
   # certification is supplied as a complete fixture proof set here; production
   # certification is derived separately by run_root_certification.py.
   rp=root/"v2/gates/root_invariants.json"; rd=json.loads(rp.read_text())
-  proof_names={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence"}
+  proof_names={"context_loss","missing_state","permission_fail_closed","repository_reconstruction","historical_incidents","unknown_change","independent_verification","extensibility","artifact_identity","device_evidence","zero_omission"}
   rd["certification"]={"status":"CERTIFIED","feature_execution_permitted":True,"proof":{k:True for k in proof_names}}
   rp.write_text(json.dumps(rd))
   # Keep all stage-coupled gate inputs coherent so each case reaches the

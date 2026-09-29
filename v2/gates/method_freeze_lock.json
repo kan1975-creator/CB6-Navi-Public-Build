@@ -18,7 +18,7 @@
     "v2/gates/verify_root_invariants.py": "da25eb4ce62e9c6460ff0f93082f2776a7a8191a",
     "v2/tests/test_apk_evidence_fail_closed.py": "b11a28727243e2dbc5189fdec8ced6cbe3682d85",
     "v2/tests/test_device_evidence_fail_closed.py": "7b14b783aeeb75ca4e55c366c53ad30413e4273b",
-    "v2/tests/test_feature_gate_contract.py": "b177ceb26fb6c51b498f2c9786a29c0bc61f4a34",
+    "v2/tests/test_feature_gate_contract.py": "c1a0e007670fade3fa7d4f52ab5850583f6e9e7c",
     "v2/tests/test_final_acceptance_fail_closed.py": "756adf2ed9537b312c3e248b815cd14cece4b0bb",
     "v2/tests/test_gate_fail_closed.py": "a748c4a598a7b713bbdb3a49ac5b1be36582e736",
     "v2/tests/test_gate_stamp_fail_closed.py": "9c1c112ed92be6aa4b4532a888e932d0e5242791",
