@@ -124,6 +124,8 @@ public final class SignalController
           snapshot = loaded;
           publish();
         }
+        Log.i("CB6-SIGNAL-DIAG", failed ? "refresh-failed retained=" + snapshot.points.size()
+            : "refresh-loaded=" + loaded.points.size());
         if (app.organicmaps.BuildConfig.DEBUG)
           Log.i("CB6-V2-Signal", failed ? "refresh failed; retained snapshot" : "loaded=" + loaded.points.size());
       });
@@ -134,6 +136,8 @@ public final class SignalController
 
   private void publish()
   {
+    Log.i("CB6-SIGNAL-DIAG", "publish-enter active=" + active + " ready=" + renderingReady
+        + " acquired=" + snapshot.points.size() + " location=" + (location != null));
     if (!active || !renderingReady || snapshot.points.isEmpty()) return;
     java.util.List<SignalSnapshot.Point> display = snapshot.displayPoints();
     if (app.organicmaps.BuildConfig.DEBUG)
@@ -154,7 +158,13 @@ public final class SignalController
         forward[i] = SignalPolicy.forward(result[0], result[1], location.getBearing(), true);
       }
     }
-    if (published == snapshot && Arrays.equals(publishedForward, forward)) return;
+    if (published == snapshot && Arrays.equals(publishedForward, forward))
+    {
+      Log.i("CB6-SIGNAL-DIAG", "publish-skip unchanged display=" + n);
+      return;
+    }
+    Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
+        + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
     Framework.nativeSetCb6Signals(lats, lons, forward);
     published = snapshot;
     publishedForward = forward;

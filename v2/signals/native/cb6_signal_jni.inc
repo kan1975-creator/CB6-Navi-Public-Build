@@ -3,8 +3,13 @@
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     JNIEnv * env, jclass, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray)
 {
-  if (!latArray || !lonArray || !forwardArray) return;
+  if (!latArray || !lonArray || !forwardArray)
+  {
+    LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-reject-null"));
+    return;
+  }
   jsize const n = env->GetArrayLength(latArray);
+  LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-enter", n));
   if (n > 1400 || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
   std::vector<jdouble> lats(n), lons(n);
   std::vector<jboolean> forward(n);
@@ -30,5 +35,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(lats[i], lons[i]));
     mark->SetForward(forward[i] == JNI_TRUE);
   }
+  LOG(LINFO, ("CB6-SIGNAL-DIAG", "marks-created", n));
   session.NotifyChanges();
+  LOG(LINFO, ("CB6-SIGNAL-DIAG", "notify-complete", n));
 }
