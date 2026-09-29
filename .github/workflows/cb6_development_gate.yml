@@ -28,6 +28,8 @@ jobs:
       - name: Notification stale-state behavior/destructive test
         run: python3 v2/tests/test_notification_stale_state.py
       - name: Verify method-version coverage across all feature contracts
+        run: python3 v2/tests/test_notification_stale_state.py
+      - name: Verify method-version coverage across all feature contracts
         run: python3 v2/gates/verify_method_version_coverage.py
       - name: Destructive method-version coverage test
         run: python3 v2/tests/test_method_version_coverage_fail_closed.py
