@@ -54,6 +54,48 @@
         "v2/gates/verify_notification_stale_state.py",
         "v2/tests/test_notification_stale_state.py"
       ]
+    },
+    {
+      "id": "OPS-WORKFLOW-META-001",
+      "status": "ACTIVE",
+      "scope": "workflow_structure_integrity",
+      "source": "user_continuing_instruction",
+      "contract": "v2/gates/verification_mechanisms.json",
+      "verification": [
+        "v2/gates/verify_workflow_meta.py",
+        "v2/tests/test_workflow_meta_fail_closed.py"
+      ]
+    },
+    {
+      "id": "OPS-FAIL-CLASSIFY-001",
+      "status": "ACTIVE",
+      "scope": "expected_vs_unexpected_gate_failure",
+      "source": "user_continuing_instruction",
+      "contract": "v2/gates/verification_mechanisms.json",
+      "verification": [
+        "v2/gates/classify_gate_result.py",
+        "v2/tests/test_gate_result_classification.py"
+      ]
+    },
+    {
+      "id": "OPS-DAILY-SCAN-001",
+      "status": "ACTIVE",
+      "scope": "push_independent_daily_full_scan",
+      "source": "user_continuing_instruction",
+      "contract": "v2/gates/verification_mechanisms.json",
+      "verification": [
+        "v2/gates/verify_verification_mechanisms.py"
+      ]
+    },
+    {
+      "id": "OPS-MECHANISM-CATALOG-001",
+      "status": "ACTIVE",
+      "scope": "verification_mechanism_authority_catalog",
+      "source": "user_continuing_instruction",
+      "contract": "v2/gates/verification_mechanisms.json",
+      "verification": [
+        "v2/gates/verify_verification_mechanisms.py"
+      ]
     }
   ],
   "revision_policy": {

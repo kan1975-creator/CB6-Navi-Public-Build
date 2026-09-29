@@ -27,8 +27,14 @@ jobs:
         run: python3 v2/tests/test_rule_coverage_fail_closed.py
       - name: Notification stale-state behavior/destructive test
         run: python3 v2/tests/test_notification_stale_state.py
-      - name: Verify method-version coverage across all feature contracts
-        run: python3 v2/tests/test_notification_stale_state.py
+      - name: Verify workflow meta structure
+        run: python3 v2/gates/verify_workflow_meta.py
+      - name: Destructive workflow meta test
+        run: python3 v2/tests/test_workflow_meta_fail_closed.py
+      - name: Verify mechanism catalog
+        run: python3 v2/gates/verify_verification_mechanisms.py
+      - name: Gate result classification destructive test
+        run: python3 v2/tests/test_gate_result_classification.py
       - name: Verify method-version coverage across all feature contracts
         run: python3 v2/gates/verify_method_version_coverage.py
       - name: Destructive method-version coverage test
