@@ -9,7 +9,7 @@ proposed={x["id"] for x in reg["rules"] if x.get("status")=="PROPOSED"}
 covered={x["rule_id"] for x in cov["entries"]}
 errors=[]
 for x in sorted(active-covered): errors.append("ACTIVE registry rule missing from coverage: "+x)
-for x in sorted(covered-active): errors.append("coverage entry is not an ACTIVE registry rule: "+x)
+for x in sorted(covered-active): errors.append("coverage rule missing from registry: "+x)
 for x in sorted(proposed & covered): errors.append("PROPOSED rule must not enter coverage: "+x)
 for x in cov["entries"]:
  if x.get("coverage_status")!="MACHINE_ENFORCED": errors.append("unenforced rule: "+x["rule_id"])
