@@ -4,8 +4,21 @@
   "method_version": 2,
   "registry": "v2/gates/operational_rule_registry.json",
   "entries": [
-    {"rule_id":"OPS-MONITOR-001","coverage_status":"MACHINE_ENFORCED"},
-    {"rule_id":"OPS-METHOD-VERSION-001","coverage_status":"MACHINE_ENFORCED"},
-    {"rule_id":"OPS-FUTURE-RULE-INTAKE-001","coverage_status":"MACHINE_ENFORCED"}
+    {
+      "rule_id": "OPS-MONITOR-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-METHOD-VERSION-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-FUTURE-RULE-INTAKE-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "NOTIFICATION-STALE-STATE",
+      "coverage_status": "MACHINE_ENFORCED"
+    }
   ]
 }

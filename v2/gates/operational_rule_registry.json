@@ -43,6 +43,17 @@
         "v2/gates/verify_operational_rule_registry.py",
         "v2/tests/test_operational_rule_registry_fail_closed.py"
       ]
+    },
+    {
+      "id": "NOTIFICATION-STALE-STATE",
+      "status": "ACTIVE",
+      "scope": "notification_entry_and_stale_result_resynchronization",
+      "source": "user_continuing_instruction",
+      "contract": "v2/gates/notification_stale_state.json",
+      "verification": [
+        "v2/gates/verify_notification_stale_state.py",
+        "v2/tests/test_notification_stale_state.py"
+      ]
     }
   ],
   "revision_policy": {

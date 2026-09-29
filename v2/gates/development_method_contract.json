@@ -11,7 +11,8 @@
     "v2/gates/verify_design_coverage.py",
     "v2/monitoring/verify_monitoring_policy.py",
     "v2/gates/verify_operational_rule_registry.py",
-    "v2/gates/verify_rule_coverage.py"
+    "v2/gates/verify_rule_coverage.py",
+    "v2/gates/verify_notification_stale_state.py"
   ],
   "required_regression_tests": [
     "v2/tests/test_method_freeze.py",
@@ -26,7 +27,8 @@
     "v2/tests/test_final_acceptance_fail_closed.py",
     "v2/tests/test_monitoring_policy_fail_closed.py",
     "v2/tests/test_operational_rule_registry_fail_closed.py",
-    "v2/tests/test_rule_coverage_fail_closed.py"
+    "v2/tests/test_rule_coverage_fail_closed.py",
+    "v2/tests/test_notification_stale_state.py"
   ],
   "acceptance_scripts": [
     "v2/gates/verify_apk_evidence.py",
