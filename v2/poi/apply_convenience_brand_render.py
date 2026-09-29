@@ -227,7 +227,7 @@ icon_rule = """node|z17-[shop=convenience],
 size_rule = """node|z18-[shop=convenience],
 {font-size: 14.5;}
 """
-if style.count(caption_selector) != 1:
+if style.count(caption_selector) != 2:
     raise SystemExit("Pinned convenience caption selector count changed")
 if style.count(icon_rule) != 1:
     raise SystemExit("Pinned convenience icon rule count changed")
