@@ -62,7 +62,7 @@ for token in (
     "cb6-mybasket", "cb6-ministop", "cb6-daily",
     'for theme in ("light", "dark")',
     'caption_selector = "node|z18-[shop=convenience],\\n"',
-    'style.count(caption_selector) != 2',
+    'style.count(caption_selector) != 2:',
     'style.count(icon_rule) != 1',
     'style.count(size_rule) != 1',
     'style = style.replace(caption_selector, "", 1)',
