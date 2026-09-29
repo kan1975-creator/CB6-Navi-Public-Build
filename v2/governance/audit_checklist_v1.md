@@ -15,7 +15,7 @@ Allowed result states only: CONFIRMED / EXISTS_UNVERIFIED / ABSENT_OR_UNCONFIRME
 - M-02 Method COMPLETE alone cannot make a feature COMPLETE.
 - M-03 Seal Acceptance Criteria to target version/basis HEAD.
 - M-04 Do not auto-reuse historical Evidence for the current version.
-- M-05 Self-report/chat prose is not Evidence.
+- M-05 Self-report/chat prose is not Evidence.\n- M-06 A new continuing operational promise remains PROPOSED unless its judgment can be derived from named GitHub repository data and machine verification. PROPOSED rules must not enter Rule Coverage or be treated as adopted mechanisms.
 
 ## Rules and Gates
 - R-01 Operational Rule Registry is machine-readable authority.
