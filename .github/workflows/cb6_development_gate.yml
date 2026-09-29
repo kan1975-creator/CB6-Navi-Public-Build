@@ -17,6 +17,10 @@ jobs:
         run: python3 v2/gates/verify_method_version_coverage.py
       - name: Destructive method-version coverage test
         run: python3 v2/tests/test_method_version_coverage_fail_closed.py
+      - name: Verify monitoring policy compliance
+        run: python3 v2/gates/verify_monitoring_policy.py
+      - name: Destructive monitoring-policy test
+        run: python3 v2/tests/test_monitoring_policy_fail_closed.py
       - name: Verify root invariants and repository-only reconstruction
         run: python3 v2/gates/verify_root_invariants.py
       - name: Destructive context-loss root tests

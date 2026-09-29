@@ -8,7 +8,8 @@
     "v2/gates/verify_project_gate.py",
     "v2/gates/verify_project_integrity.py",
     "v2/gates/verify_evidence_inventory_v2.py",
-    "v2/gates/verify_design_coverage.py"
+    "v2/gates/verify_design_coverage.py",
+    "v2/gates/verify_monitoring_policy.py"
   ],
   "required_regression_tests": [
     "v2/tests/test_method_freeze.py",
@@ -20,7 +21,8 @@
     "v2/tests/test_apk_evidence_fail_closed.py",
     "v2/tests/test_device_evidence_fail_closed.py",
     "v2/tests/test_gate_stamp_fail_closed.py",
-    "v2/tests/test_final_acceptance_fail_closed.py"
+    "v2/tests/test_final_acceptance_fail_closed.py",
+    "v2/tests/test_monitoring_policy_fail_closed.py"
   ],
   "acceptance_scripts": [
     "v2/gates/verify_apk_evidence.py",
