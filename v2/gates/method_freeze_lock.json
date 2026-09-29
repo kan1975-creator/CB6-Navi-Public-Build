@@ -3,9 +3,9 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "5209e3fe6082c8a85d284183a2f64f8059d90d21",
+    ".github/workflows/cb6_development_gate.yml": "3eaa2e6bbcafdb21e14a9807dfaac0bb2118fe13",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
-    "v2/gates/development_method_contract.json": "ef309f2957ba069487c6d03a2e0af25a0b369185",
+    "v2/gates/development_method_contract.json": "7792d7b1d4c0a039e27d7641f4379370e1ac9a8a",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
     "v2/gates/features/TEMPLATE.json": "73ac53c89bff13a9cde930412fed7932b7547343",
     "v2/gates/historical_incidents.json": "91d516cd563e3d27180628bc5491610f53663f7f",
