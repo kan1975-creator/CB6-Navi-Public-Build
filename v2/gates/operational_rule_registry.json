@@ -96,6 +96,18 @@
       "verification": [
         "v2/gates/verify_verification_mechanisms.py"
       ]
+    },
+    {
+      "id": "OPS-INDEPENDENT-ACCEPTANCE-001",
+      "status": "ACTIVE",
+      "scope": "feature_final_complete_independent_review",
+      "source": "user_continuing_instruction",
+      "contract": "v2/governance/audit_checklist_v1.md",
+      "verification": [
+        "v2/gates/verify_independent_review.py",
+        "v2/tests/test_independent_review_fail_closed.py",
+        "v2/gates/verify_final_acceptance.py"
+      ]
     }
   ],
   "revision_policy": {
