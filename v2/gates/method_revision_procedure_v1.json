@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "procedure_id": "cb6-method-revision-procedure",
+  "version": 1,
+  "status": "CANDIDATE",
+  "basis_head": "09cf2a8924b43f97433bb95ea10852d830a5e860",
+  "purpose": "Define a fail-closed procedure for changing frozen Method authority without legitimizing a change by merely rewriting freeze hashes.",
+  "authority_split": {
+    "revision_intent": "explicit_user_decision",
+    "verification": "github_executable_evidence",
+    "final_adoption": "explicit_user_adoption_after_evidence"
+  },
+  "states": [
+    "PROPOSED",
+    "IMPLEMENTED_UNVERIFIED",
+    "MACHINE_VERIFIED",
+    "INDEPENDENTLY_REVIEWED",
+    "ACTIVE_REFROZEN"
+  ],
+  "required_sequence": [
+    "record_reason_and_affected_frozen_files",
+    "record_prechange_head_and_freeze_lock",
+    "implement_candidate_without_overwriting_current_active_authority",
+    "run_candidate_positive_and_destructive_verification",
+    "record_successful_github_run_evidence",
+    "perform_independent_review_against_prechange_authority_and_candidate",
+    "obtain_explicit_user_adoption",
+    "update_active_method_authority",
+    "regenerate_freeze_lock_from_adopted_files",
+    "run_full_root_certification_and_development_gate",
+    "record_postchange_head_and_run_evidence"
+  ],
+  "invariants": {
+    "direct_freeze_hash_rewrite_forbidden": true,
+    "candidate_cannot_verify_its_own_adoption": true,
+    "prechange_authority_must_remain_available_until_adoption": true,
+    "failed_or_missing_evidence_blocks_activation": true,
+    "reasonless_revision_forbidden": true,
+    "silent_contradiction_with_prior_decision_forbidden": true
+  },
+  "activation_requirements": [
+    "successful_candidate_destructive_tests",
+    "successful_github_run_evidence",
+    "independent_review_evidence",
+    "explicit_user_adoption_record",
+    "full_post_adoption_root_certification",
+    "full_post_adoption_development_gate"
+  ]
+}
