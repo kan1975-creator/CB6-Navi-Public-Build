@@ -4,6 +4,12 @@ from pathlib import Path
 R=Path(__file__).resolve().parents[2]; d=json.loads((R/"v2/gates/method_revision_procedure_v1.json").read_text()); e=[]
 if d.get("status") not in ("CANDIDATE","INDEPENDENTLY_REVIEWED","ACTIVE_REFROZEN"): e.append("procedure status invalid")
 if d.get("status")!="CANDIDATE" and d.get("adoption_evidence")!="v2/gates/governance_adoption_evidence.json": e.append("procedure adoption evidence missing")
+if d.get("status")=="ACTIVE_REFROZEN":
+ p=R/"v2/gates/governance_postchange_certification.json"
+ if d.get("postchange_evidence")!="v2/gates/governance_postchange_certification.json" or not p.is_file(): e.append("ACTIVE_REFROZEN postchange evidence missing")
+ else:
+  x=json.loads(p.read_text()); dg=x.get("development_gate",{}); rf=x.get("root_certification",{}); mf=x.get("method_freeze",{})
+  if x.get("status")!="CERTIFIED" or dg.get("run_id")!=36664054828 or dg.get("conclusion")!="success" or dg.get("head_sha")!="b3064ba3855eed1ef511424b5dd9f4796d03a3f4" or rf.get("status")!="PROVEN" or mf.get("result")!="PASS": e.append("ACTIVE_REFROZEN postchange evidence invalid")
 if not d.get("basis_head"): e.append("basis head missing")
 a=d.get("authority_split",{})
 if a.get("revision_intent")!="explicit_user_decision" or a.get("verification")!="github_executable_evidence" or a.get("final_adoption")!="explicit_user_adoption_after_evidence": e.append("authority split invalid")

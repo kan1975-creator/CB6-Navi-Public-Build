@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "adoption_id": "GOVERNANCE-LIFECYCLE-METHOD-REVISION-001",
-  "status": "ADOPTED_PENDING_POSTCHANGE_CERTIFICATION",
+  "status": "ACTIVE_REFROZEN",
   "authority": {
     "type": "explicit_user_decision",
     "decision": "Proceed with adoption evidence, Method change, and refreeze after successful candidate validation and independent review."
@@ -24,5 +24,6 @@
     "development_gate_success",
     "root_certification_success",
     "freeze_verification_success"
-  ]
+  ],
+  "postchange_evidence": "v2/gates/governance_postchange_certification.json"
 }

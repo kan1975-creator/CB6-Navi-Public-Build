@@ -35,11 +35,12 @@
     "v2/tests/test_operational_rule_registry_fail_closed.py": "2afc8a22b445c7fbdb1b187376794980f34e95ee",
     "v2/tests/test_rule_coverage_fail_closed.py": "6b9ad189ded213376101108f69c3919bd310cf25",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
-    "v2/gates/method_revision_procedure_v1.json": "77ed48cff2b70cf198bf9b5e95fe772e9b1e697c",
-    "v2/gates/verify_method_revision_procedure.py": "c9fd2853083246c0f5a223aa466f30cdb7d27001",
+    "v2/gates/method_revision_procedure_v1.json": "86b2f69734ed61873f9ab205e04619b04e57b72d",
+    "v2/gates/verify_method_revision_procedure.py": "a030fc425dfbf4274994cceff8bc0eaacc4be031",
     "v2/gates/verify_governance_independent_review.py": "fa6b1c19facac975cd54cd44e07c15ca6bbcf4e6",
     "v2/tests/test_rule_adoption_lifecycle_fail_closed.py": "39d534fc7f64d7d55be7cf7f57b2d70473212bb9",
     "v2/tests/test_method_revision_procedure_fail_closed.py": "89462f824ab3863a92add68247ec3f6768e89a33",
-    "v2/tests/test_governance_independent_review_fail_closed.py": "c8c63c2c785b366c842613143f410061f6fb7975"
+    "v2/tests/test_governance_independent_review_fail_closed.py": "c8c63c2c785b366c842613143f410061f6fb7975",
+    "v2/gates/governance_postchange_certification.json": "e29c7d8c38b3679ee12570f9b12bea584f35b0de"
   }
 }
