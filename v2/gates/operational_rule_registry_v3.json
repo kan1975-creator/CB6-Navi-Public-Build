@@ -114,11 +114,14 @@
     },
     {
       "id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
-      "status": "PROPOSED",
+      "status": "IMPLEMENTED_UNVERIFIED",
       "scope": "implementation_problem_fix_commits",
       "source": "explicit_user_continuing_instruction_2026-09-30",
-      "contract": null,
-      "verification": [],
+      "contract": "v2/gates/user_approval_before_fix_contract.json",
+      "verification": [
+        "v2/gates/verify_user_approval_before_fix.py",
+        "v2/tests/test_user_approval_before_fix_fail_closed.py"
+      ],
       "proposal": {
         "rule": "An implementation-problem fix commit must be blocked unless explicit user approval for the specific proposed change was obtained before implementation work begins.",
         "github_verification_source": "Commit message or pull-request description must contain a machine-readable approval reference including approval timestamp and concise approved-change summary, canonically bound to the exact proposed change identity.",
