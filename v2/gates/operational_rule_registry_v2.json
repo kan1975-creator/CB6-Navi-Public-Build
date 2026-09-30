@@ -14,150 +14,44 @@
     "unverifiable_operational_promise_remains_proposed": true
   },
   "rules": [
+    {"id":"OPS-MONITOR-001","status":"ACTIVE","scope":"hourly_development_monitoring","source":"user_continuing_instruction","contract":"v2/monitoring/monitoring_policy.json","verification":["v2/monitoring/verify_monitoring_policy.py","v2/tests/test_monitoring_policy_fail_closed.py"]},
+    {"id":"OPS-METHOD-VERSION-001","status":"ACTIVE","scope":"feature_method_propagation","source":"user_continuing_instruction","contract":"v2/gates/development_method_contract.json","verification":["v2/gates/verify_method_version_coverage.py","v2/tests/test_method_version_coverage_fail_closed.py"]},
+    {"id":"OPS-FUTURE-RULE-INTAKE-001","status":"ACTIVE","scope":"future_continuing_user_requests","source":"user_continuing_instruction","contract":"v2/gates/operational_rule_registry_v2.json","verification":["v2/gates/verify_operational_rule_registry.py","v2/tests/test_operational_rule_registry_fail_closed.py"]},
+    {"id":"NOTIFICATION-STALE-STATE","status":"ACTIVE","scope":"notification_entry_and_stale_result_resynchronization","source":"user_continuing_instruction","contract":"v2/gates/notification_stale_state.json","verification":["v2/gates/verify_notification_stale_state.py","v2/tests/test_notification_stale_state.py"]},
+    {"id":"OPS-WORKFLOW-META-001","status":"ACTIVE","scope":"workflow_structure_integrity","source":"user_continuing_instruction","contract":"v2/gates/verification_mechanisms.json","verification":["v2/gates/verify_workflow_meta.py","v2/tests/test_workflow_meta_fail_closed.py"]},
+    {"id":"OPS-FAIL-CLASSIFY-001","status":"ACTIVE","scope":"expected_vs_unexpected_gate_failure","source":"user_continuing_instruction","contract":"v2/gates/verification_mechanisms.json","verification":["v2/gates/classify_gate_result.py","v2/tests/test_gate_result_classification.py"]},
+    {"id":"OPS-DAILY-SCAN-001","status":"ACTIVE","scope":"push_independent_daily_full_scan","source":"user_continuing_instruction","contract":"v2/gates/verification_mechanisms.json","verification":["v2/gates/verify_verification_mechanisms.py"]},
+    {"id":"OPS-MECHANISM-CATALOG-001","status":"ACTIVE","scope":"verification_mechanism_authority_catalog","source":"user_continuing_instruction","contract":"v2/gates/verification_mechanisms.json","verification":["v2/gates/verify_verification_mechanisms.py"]},
+    {"id":"OPS-INDEPENDENT-ACCEPTANCE-001","status":"ACTIVE","scope":"feature_final_complete_independent_review","source":"user_continuing_instruction","contract":"v2/governance/audit_checklist_v1.md","verification":["v2/gates/verify_independent_review.py","v2/tests/test_independent_review_fail_closed.py","v2/gates/verify_final_acceptance.py"]},
     {
-      "id": "OPS-MONITOR-001",
-      "status": "ACTIVE",
-      "scope": "hourly_development_monitoring",
-      "source": "user_continuing_instruction",
-      "contract": "v2/monitoring/monitoring_policy.json",
-      "verification": [
-        "v2/monitoring/verify_monitoring_policy.py",
-        "v2/tests/test_monitoring_policy_fail_closed.py"
-      ]
-    },
-    {
-      "id": "OPS-METHOD-VERSION-001",
-      "status": "ACTIVE",
-      "scope": "feature_method_propagation",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/development_method_contract.json",
-      "verification": [
-        "v2/gates/verify_method_version_coverage.py",
-        "v2/tests/test_method_version_coverage_fail_closed.py"
-      ]
-    },
-    {
-      "id": "OPS-FUTURE-RULE-INTAKE-001",
-      "status": "ACTIVE",
-      "scope": "future_continuing_user_requests",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/operational_rule_registry_v2.json",
-      "verification": [
-        "v2/gates/verify_operational_rule_registry.py",
-        "v2/tests/test_operational_rule_registry_fail_closed.py"
-      ]
-    },
-    {
-      "id": "NOTIFICATION-STALE-STATE",
-      "status": "ACTIVE",
-      "scope": "notification_entry_and_stale_result_resynchronization",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/notification_stale_state.json",
-      "verification": [
-        "v2/gates/verify_notification_stale_state.py",
-        "v2/tests/test_notification_stale_state.py"
-      ]
-    },
-    {
-      "id": "OPS-WORKFLOW-META-001",
-      "status": "ACTIVE",
-      "scope": "workflow_structure_integrity",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/verification_mechanisms.json",
-      "verification": [
-        "v2/gates/verify_workflow_meta.py",
-        "v2/tests/test_workflow_meta_fail_closed.py"
-      ]
-    },
-    {
-      "id": "OPS-FAIL-CLASSIFY-001",
-      "status": "ACTIVE",
-      "scope": "expected_vs_unexpected_gate_failure",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/verification_mechanisms.json",
-      "verification": [
-        "v2/gates/classify_gate_result.py",
-        "v2/tests/test_gate_result_classification.py"
-      ]
-    },
-    {
-      "id": "OPS-DAILY-SCAN-001",
-      "status": "ACTIVE",
-      "scope": "push_independent_daily_full_scan",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/verification_mechanisms.json",
-      "verification": [
-        "v2/gates/verify_verification_mechanisms.py"
-      ]
-    },
-    {
-      "id": "OPS-MECHANISM-CATALOG-001",
-      "status": "ACTIVE",
-      "scope": "verification_mechanism_authority_catalog",
-      "source": "user_continuing_instruction",
-      "contract": "v2/gates/verification_mechanisms.json",
-      "verification": [
-        "v2/gates/verify_verification_mechanisms.py"
-      ]
-    },
-    {
-      "id": "OPS-INDEPENDENT-ACCEPTANCE-001",
-      "status": "ACTIVE",
-      "scope": "feature_final_complete_independent_review",
-      "source": "user_continuing_instruction",
-      "contract": "v2/governance/audit_checklist_v1.md",
-      "verification": [
-        "v2/gates/verify_independent_review.py",
-        "v2/tests/test_independent_review_fail_closed.py",
-        "v2/gates/verify_final_acceptance.py"
-      ]
+      "id":"OPS-USER-APPROVAL-BEFORE-FIX-001",
+      "status":"PROPOSED",
+      "scope":"implementation_problem_fix_commits",
+      "source":"explicit_user_continuing_instruction_2026-09-30",
+      "contract":null,
+      "verification":[],
+      "proposal":{
+        "rule":"An implementation-problem fix commit must be blocked unless explicit user approval for the specific proposed change was obtained before implementation work begins.",
+        "github_verification_source":"Commit message or pull-request description must contain a machine-readable approval reference including approval timestamp and a concise summary of the approved change, bound to the affected commit/change.",
+        "fail_closed":true,
+        "required_before_active":["contract_path","verifier_path","destructive_test_path","successful_gate_run_evidence","explicit_user_adoption_record","coverage_status_MACHINE_ENFORCED"]
+      }
     }
   ],
-  "revision_policy": {
-    "in_place_change_forbidden": true,
-    "new_version_required": true,
-    "reason_required": true,
-    "independent_reapproval_required": true
-  },
-  "status": "ACTIVE",
-  "supersedes": "v2/gates/operational_rule_registry.json",
-  "change_reason": "Add machine-verifiable adoption lifecycle so operational promises cannot become ACTIVE by chat declaration or implementation presence alone.",
-  "adoption_lifecycle": {
-    "authority_split": {
-      "rule_content_authority": "explicit_user_decision",
-      "mechanism_acceptance_evidence": "github_gate_evidence"
+  "revision_policy":{"in_place_change_forbidden":true,"new_version_required":true,"reason_required":true,"independent_reapproval_required":true},
+  "status":"ACTIVE",
+  "supersedes":"v2/gates/operational_rule_registry.json",
+  "change_reason":"Add machine-verifiable adoption lifecycle so operational promises cannot become ACTIVE by chat declaration or implementation presence alone.",
+  "adoption_lifecycle":{
+    "authority_split":{"rule_content_authority":"explicit_user_decision","mechanism_acceptance_evidence":"github_gate_evidence"},
+    "states":["PROPOSED","IMPLEMENTED_UNVERIFIED","MACHINE_VERIFIED","ACTIVE"],
+    "transitions":{
+      "PROPOSED":{"to":"IMPLEMENTED_UNVERIFIED","requires":["contract_path","verification_paths"]},
+      "IMPLEMENTED_UNVERIFIED":{"to":"MACHINE_VERIFIED","requires":["destructive_test_path","successful_gate_run_evidence"]},
+      "MACHINE_VERIFIED":{"to":"ACTIVE","requires":["explicit_user_adoption_record","coverage_status_MACHINE_ENFORCED"]}
     },
-    "states": [
-      "PROPOSED",
-      "IMPLEMENTED_UNVERIFIED",
-      "MACHINE_VERIFIED",
-      "ACTIVE"
-    ],
-    "transitions": {
-      "PROPOSED": {
-        "to": "IMPLEMENTED_UNVERIFIED",
-        "requires": [
-          "contract_path",
-          "verification_paths"
-        ]
-      },
-      "IMPLEMENTED_UNVERIFIED": {
-        "to": "MACHINE_VERIFIED",
-        "requires": [
-          "destructive_test_path",
-          "successful_gate_run_evidence"
-        ]
-      },
-      "MACHINE_VERIFIED": {
-        "to": "ACTIVE",
-        "requires": [
-          "explicit_user_adoption_record",
-          "coverage_status_MACHINE_ENFORCED"
-        ]
-      }
-    },
-    "direct_transition_to_active_forbidden": true,
-    "chat_declaration_is_not_transition_evidence": true
+    "direct_transition_to_active_forbidden":true,
+    "chat_declaration_is_not_transition_evidence":true
   },
-  "adoption_evidence": "v2/gates/governance_adoption_evidence.json"
+  "adoption_evidence":"v2/gates/governance_adoption_evidence.json"
 }
