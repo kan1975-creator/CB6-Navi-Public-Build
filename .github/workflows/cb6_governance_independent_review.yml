@@ -24,3 +24,23 @@ jobs:
         run: python3 v2/gates/verify_governance_v3_independent_review.py
       - name: Destructive test v2 to v3 governance review
         run: python3 v2/tests/test_governance_v3_independent_review_fail_closed.py
+      - name: Review v3 active method revision candidate
+        run: |
+          python3 v2/gates/verify_operational_rule_registry_v3_candidate.py
+          python3 v2/gates/verify_rule_coverage_v3_candidate.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=Path('.')
+          c=json.loads((r/'v2/gates/governance_v3_method_revision_change_record.json').read_text())
+          assert c['status']=='IMPLEMENTED_UNVERIFIED'
+          assert c['basis_head']=='8a8479345457e3ffd695a05a8e86a6e07df909fb'
+          assert c['active_authority_unchanged'] is True
+          assert c['freeze_lock_unchanged'] is True
+          assert 'v2/gates/method_freeze_lock.json' in c['affected_frozen_files']
+          print('CB6 GOVERNANCE V3 METHOD REVISION INDEPENDENT REVIEW PASS: candidate verified; prechange authority preserved; freeze lock preserved')
+          PY
+      - name: Destructive test v3 active method revision candidate
+        run: |
+          python3 v2/tests/test_operational_rule_registry_v3_candidate_fail_closed.py
+          python3 v2/tests/test_rule_coverage_v3_candidate_fail_closed.py
