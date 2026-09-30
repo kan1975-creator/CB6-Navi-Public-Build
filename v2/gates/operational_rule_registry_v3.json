@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "registry_id": "cb6-continuing-rule-registry",
-  "version": 2,
+  "version": 3,
   "method_version": 2,
   "intake_policy": {
     "continuing_request_must_be_registered": true,
@@ -111,6 +111,22 @@
         "v2/tests/test_independent_review_fail_closed.py",
         "v2/gates/verify_final_acceptance.py"
       ]
+    },
+    {
+      "id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+      "status": "PROPOSED",
+      "scope": "implementation_problem_fix_commits",
+      "source": "explicit_user_continuing_instruction_2026-09-30",
+      "contract": null,
+      "verification": [],
+      "proposal": {
+        "rule": "An implementation-problem fix commit must be blocked unless explicit user approval for the specific proposed change was obtained before implementation work begins.",
+        "github_verification_source": "Commit message or pull-request description must contain a machine-readable approval reference including approval timestamp and concise approved-change summary, canonically bound to the exact proposed change identity.",
+        "approval_reuse_for_different_change_forbidden": true,
+        "post_hoc_approval_forbidden": true,
+        "missing_approval_forbidden": true,
+        "fail_closed": true
+      }
     }
   ],
   "revision_policy": {
@@ -119,9 +135,9 @@
     "reason_required": true,
     "independent_reapproval_required": true
   },
-  "status": "ACTIVE",
-  "supersedes": "v2/gates/operational_rule_registry.json",
-  "change_reason": "Add machine-verifiable adoption lifecycle so operational promises cannot become ACTIVE by chat declaration or implementation presence alone.",
+  "status": "CANDIDATE",
+  "supersedes": "v2/gates/operational_rule_registry_v2.json",
+  "change_reason": "Propose fail-closed, change-bound explicit user approval before implementation-problem fixes; active v2 remains unchanged until verification, independent review, and explicit adoption.",
   "adoption_lifecycle": {
     "authority_split": {
       "rule_content_authority": "explicit_user_decision",

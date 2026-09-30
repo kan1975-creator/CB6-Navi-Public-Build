@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "change_id": "OPS-USER-APPROVAL-BEFORE-FIX-001-PROPOSAL",
+  "status": "PROPOSED",
+  "basis_head": "57cc022fe6237469f41515076dee683f776ff995",
+  "prechange_freeze_lock": "v2/gates/method_freeze_lock.json",
+  "affected_frozen_files": [
+    "v2/gates/operational_rule_registry_v2.json"
+  ],
+  "reason": "Require explicit, change-specific user approval before implementation-problem fixes and reject missing, post-hoc, or reused approval.",
+  "authority": "explicit_user_instruction_2026-09-30",
+  "candidate": "v2/gates/operational_rule_registry_v3.json",
+  "active_authority": "v2/gates/operational_rule_registry_v2.json",
+  "active_method_unchanged": true,
+  "freeze_lock_unchanged": true,
+  "next_required_evidence": [
+    "candidate_contract_path",
+    "candidate_verifier",
+    "destructive_tests_missing_posthoc_reuse",
+    "successful_github_run_evidence",
+    "independent_review",
+    "explicit_user_adoption"
+  ]
+}
