@@ -1,0 +1,30 @@
+name: CB6 Candidate Governance Validation
+on:
+  workflow_dispatch:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/operational_rule_registry_v2.json'
+      - 'v2/gates/verify_rule_adoption_lifecycle.py'
+      - 'v2/tests/test_rule_adoption_lifecycle_fail_closed.py'
+      - 'v2/gates/rule_adoption_change_record.json'
+      - 'v2/gates/method_revision_procedure_v1.json'
+      - 'v2/gates/verify_method_revision_procedure.py'
+      - 'v2/tests/test_method_revision_procedure_fail_closed.py'
+      - 'v2/gates/method_revision_change_record.json'
+      - '.github/workflows/cb6_candidate_governance_validation.yml'
+permissions:
+  contents: read
+jobs:
+  candidate-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify rule adoption lifecycle candidate
+        run: python3 v2/gates/verify_rule_adoption_lifecycle.py
+      - name: Destructive test rule adoption lifecycle
+        run: python3 v2/tests/test_rule_adoption_lifecycle_fail_closed.py
+      - name: Verify method revision procedure candidate
+        run: python3 v2/gates/verify_method_revision_procedure.py
+      - name: Destructive test method revision procedure
+        run: python3 v2/tests/test_method_revision_procedure_fail_closed.py
