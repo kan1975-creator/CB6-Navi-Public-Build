@@ -5,7 +5,7 @@
   "reason": "Connect the user-confirmed three-class status-reporting candidate verification to executable GitHub Development Gate evidence without directly activating OPS-STATUS-REPORTING-001.",
   "user_intent": {
     "source": "explicit user instruction to begin development of the consolidated list and continue",
-    "confirmed_requirement": "Use exactly one of 進めて推奨 / 待ち / スマホ操作が必要 with the confirmed semantics recorded in the session summary and candidate contract."
+    "confirmed_requirement": "Apply the common operational rules to all 33 consolidated worklist items, all derivative work, and all future CB6 work/features, including unknown future items without opt-in."
   },
   "prechange": {
     "head": "b43892c9febcfcf25157f2dc48eafc7182294513",
@@ -26,9 +26,12 @@
     "active_registry_change_before_adoption": false,
     "rule_coverage_change_before_adoption": false,
     "freeze_lock_hash_rewrite_before_adoption": false,
-    "feature_code_change": false
+    "feature_code_change": false,
+    "project_wide_scope": "all 33 consolidated items + derivative work + all future CB6 work",
+    "feature_specific_scope_only": false
   },
   "required_before_activation": [
+    "machine verification that all 33 consolidated items are in scope and future/unknown work is automatically covered",
     "candidate verifier connected to Development Gate",
     "candidate destructive test connected to Development Gate",
     "successful GitHub Run Evidence on candidate",
