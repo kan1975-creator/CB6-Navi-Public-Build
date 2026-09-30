@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "revision_id": "STATUS-REPORTING-GATE-INTEGRATION-001",
+  "status": "PROPOSED",
+  "reason": "Connect the user-confirmed three-class status-reporting candidate verification to executable GitHub Development Gate evidence without directly activating OPS-STATUS-REPORTING-001.",
+  "user_intent": {
+    "source": "explicit user instruction to begin development of the consolidated list and continue",
+    "confirmed_requirement": "Use exactly one of 進めて推奨 / 待ち / スマホ操作が必要 with the confirmed semantics recorded in the session summary and candidate contract."
+  },
+  "prechange": {
+    "head": "b43892c9febcfcf25157f2dc48eafc7182294513",
+    "freeze_lock": "v2/gates/method_freeze_lock.json",
+    "freeze_status": "FROZEN",
+    "active_authority_unchanged": true
+  },
+  "candidate_inputs": [
+    "v2/gates/status_reporting_contract_candidate_v1.json",
+    "v2/gates/verify_status_reporting_candidate.py",
+    "v2/tests/test_status_reporting_candidate_fail_closed.py"
+  ],
+  "affected_frozen_files": [
+    ".github/workflows/cb6_development_gate.yml"
+  ],
+  "planned_change": {
+    "workflow_change": "Add positive candidate verifier and destructive status-reporting test execution to CB6 Development Gate.",
+    "active_registry_change_before_adoption": false,
+    "rule_coverage_change_before_adoption": false,
+    "freeze_lock_hash_rewrite_before_adoption": false,
+    "feature_code_change": false
+  },
+  "required_before_activation": [
+    "candidate verifier connected to Development Gate",
+    "candidate destructive test connected to Development Gate",
+    "successful GitHub Run Evidence on candidate",
+    "independent review against prechange authority and candidate",
+    "explicit user adoption after Evidence",
+    "ACTIVE authority update",
+    "MACHINE_ENFORCED rule coverage update",
+    "freeze lock regeneration after adoption",
+    "full Root Certification and Development Gate success",
+    "postchange Evidence record"
+  ],
+  "invariants": {
+    "prechange_authority_remains_authoritative_until_adoption": true,
+    "candidate_cannot_self_adopt": true,
+    "direct_freeze_hash_rewrite_forbidden": true,
+    "signal_feature_code_read_only": true
+  }
+}
