@@ -1,0 +1,14 @@
+name: CB6 Governance Independent Review
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Review prechange authority against candidates
+        run: python3 v2/gates/verify_governance_independent_review.py
+      - name: Destructive test governance review
+        run: python3 v2/tests/test_governance_independent_review_fail_closed.py
