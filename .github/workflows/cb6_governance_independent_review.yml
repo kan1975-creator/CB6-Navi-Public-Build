@@ -1,6 +1,8 @@
 name: CB6 Governance Independent Review
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - 'review/governance-adoption'
 permissions:
   contents: read
 jobs:
@@ -8,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Verify dedicated review entry
+        shell: bash
+        run: |
+          test "$GITHUB_REF_NAME" = "review/governance-adoption"
+          test "$GITHUB_SHA" = "$(git rev-parse HEAD)"
+          echo "CB6 GOVERNANCE REVIEW ENTRY PASS: branch=$GITHUB_REF_NAME target=$GITHUB_SHA event=$GITHUB_EVENT_NAME"
       - name: Review prechange authority against candidates
         run: python3 v2/gates/verify_governance_independent_review.py
       - name: Destructive test governance review
