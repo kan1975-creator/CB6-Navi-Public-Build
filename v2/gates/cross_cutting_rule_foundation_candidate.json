@@ -48,10 +48,22 @@
     "sequence": [
       "PROPOSED",
       "CANDIDATE_VERIFIED",
+      "FUTURE_FEATURE_APPLICATION_PROVEN",
       "INDEPENDENTLY_REVIEWED",
       "EXPLICIT_USER_ADOPTED",
       "ACTIVE_REFROZEN"
     ],
     "requires_post_adoption_full_gate": true
+  },
+  "future_feature_positive_application_test": {
+    "required_before_adoption": true,
+    "type": "synthetic_new_feature_contract",
+    "must_prove": [
+      "new feature inherits ALL_ACTIVE_CROSS_CUTTING_RULES",
+      "no per-rule wiring is required",
+      "omitting inheritance marker is rejected",
+      "feature-specific weakening is rejected"
+    ],
+    "independent_review_must_verify": true
   }
 }
