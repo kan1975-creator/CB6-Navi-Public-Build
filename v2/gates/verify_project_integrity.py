@@ -230,8 +230,10 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
 
 # The development gate must continuously execute every required method regression test.
 method=load("v2/gates/development_method_contract.json")
-expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy","method_document","failure_return_policy","completion_authority","method_version"}
+expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy","method_document","failure_return_policy","completion_authority","method_version","governance_adoption"}
 if set(method)!=expected_method_fields or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")
+ga=method.get("governance_adoption",{})
+if ga.get("registry")!="v2/gates/operational_rule_registry_v2.json" or ga.get("evidence")!="v2/gates/governance_adoption_evidence.json" or ga.get("candidate_validation_run_id")!=36648375267 or ga.get("independent_review_run_id")!=36661065964 or ga.get("adopted") is not True: fail("development method governance adoption invalid")
 expected_invariants={"restricted_evidence_cannot_be_direct_feature_authority":True,"every_feature_audit_requires_specific_fail_closed_proof":True,"audit_proof_must_execute_before_feature_build":True,"impact_record_must_cover_audit_proof":True}
 if method.get("feature_contract_invariants")!=expected_invariants: fail("development method feature invariants drifted")
 expected_pipeline=["internal_source_analysis","upstream_and_web_research_when_applicable","web_findings_revalidated_against_pinned_source","authority_and_evidence_classification","change_impact_before_implementation","implementation_and_audit_as_one_change_unit","positive_tests","audit_specific_destructive_tests","feature_gate","build_and_apk_evidence","real_device_evidence"]
