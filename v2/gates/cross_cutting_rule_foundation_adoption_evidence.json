@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "adoption_id": "CB6-CROSS-CUTTING-RULE-FOUNDATION-001-ADOPTION",
+  "status": "USER_ADOPTED_PENDING_ACTIVE_REFREEZE",
+  "subject": "CB6-CROSS-CUTTING-RULE-FOUNDATION-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "CB6-CROSS-CUTTING-RULE-FOUNDATION-001を採用して進めて",
+    "recorded_at": "2026-10-01T07:19:00+09:00"
+  },
+  "target_head_before_adoption": "72e1bcd5aeaed2192388761d599bae550a1e6050",
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 36737554969,
+      "conclusion": "success"
+    },
+    "development_gate": {
+      "run_id": 36737554701,
+      "conclusion": "success"
+    },
+    "independent_review": "v2/gates/cross_cutting_independent_review_candidate.json"
+  },
+  "next_required": [
+    "ACTIVE_registry_and_feature_contract_reflection",
+    "method_refreeze",
+    "root_certification_success",
+    "final_development_gate_success"
+  ]
+}
