@@ -19,6 +19,18 @@ jobs:
         run: python3 v2/tests/test_monitoring_policy_fail_closed.py
       - name: Verify future continuing-rule registry coverage
         run: python3 v2/gates/verify_operational_rule_registry.py
+      - name: Verify rule adoption lifecycle
+        run: python3 v2/gates/verify_rule_adoption_lifecycle.py
+      - name: Destructive rule adoption lifecycle test
+        run: python3 v2/tests/test_rule_adoption_lifecycle_fail_closed.py
+      - name: Verify method revision procedure
+        run: python3 v2/gates/verify_method_revision_procedure.py
+      - name: Destructive method revision procedure test
+        run: python3 v2/tests/test_method_revision_procedure_fail_closed.py
+      - name: Verify governance independent review invariants
+        run: python3 v2/gates/verify_governance_independent_review.py
+      - name: Destructive governance independent review test
+        run: python3 v2/tests/test_governance_independent_review_fail_closed.py
       - name: Destructive future-rule intake test
         run: python3 v2/tests/test_operational_rule_registry_fail_closed.py
       - name: Verify Registry-Coverage bidirectional consistency

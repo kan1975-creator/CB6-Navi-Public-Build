@@ -3,9 +3,9 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "3eaa2e6bbcafdb21e14a9807dfaac0bb2118fe13",
+    ".github/workflows/cb6_development_gate.yml": "a39837a69743971cbcd97ed1ae6a638f06b94336",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
-    "v2/gates/development_method_contract.json": "7792d7b1d4c0a039e27d7641f4379370e1ac9a8a",
+    "v2/gates/development_method_contract.json": "bdb96ba7bcb47c93a941e0ba5aa3767ed66975e3",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
     "v2/gates/features/TEMPLATE.json": "aa6d976ccb99afcbe9946fa0ccb8c529acc0ab8c",
     "v2/gates/historical_incidents.json": "91d516cd563e3d27180628bc5491610f53663f7f",
@@ -27,6 +27,19 @@
     "v2/tests/test_root_invariants.py": "46c940c20c43ba256326cf1a0993fb61baa094a4",
     "v2/gates/verify_method_completion.py": "7e3f583055cd47b7bc6ff69d0b27d5de35d07f36",
     "v2/tests/test_method_completion.py": "2ac729de719edb2fa243e4c26b354dc0e226ed6e",
-    "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7"
+    "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
+    "v2/gates/operational_rule_registry_v2.json": "6604720218362431511e50fbff0a142db888ccde",
+    "v2/gates/verify_operational_rule_registry.py": "d92caee6b1d9b031cab7731e5d081aaf6e8bee3f",
+    "v2/gates/verify_rule_coverage.py": "67bb3b132a2a235c13204320ec5f185b4b6302e8",
+    "v2/gates/rule_coverage.json": "ab881043bce652e127408c2648f25786089fad80",
+    "v2/tests/test_operational_rule_registry_fail_closed.py": "2afc8a22b445c7fbdb1b187376794980f34e95ee",
+    "v2/tests/test_rule_coverage_fail_closed.py": "6b9ad189ded213376101108f69c3919bd310cf25",
+    "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
+    "v2/gates/method_revision_procedure_v1.json": "77ed48cff2b70cf198bf9b5e95fe772e9b1e697c",
+    "v2/gates/verify_method_revision_procedure.py": "c9fd2853083246c0f5a223aa466f30cdb7d27001",
+    "v2/gates/verify_governance_independent_review.py": "fa6b1c19facac975cd54cd44e07c15ca6bbcf4e6",
+    "v2/tests/test_rule_adoption_lifecycle_fail_closed.py": "39d534fc7f64d7d55be7cf7f57b2d70473212bb9",
+    "v2/tests/test_method_revision_procedure_fail_closed.py": "89462f824ab3863a92add68247ec3f6768e89a33",
+    "v2/tests/test_governance_independent_review_fail_closed.py": "c8c63c2c785b366c842613143f410061f6fb7975"
   }
 }

@@ -13,7 +13,10 @@
     "v2/gates/verify_operational_rule_registry.py",
     "v2/gates/verify_rule_coverage.py",
     "v2/gates/verify_workflow_meta.py",
-    "v2/gates/verify_verification_mechanisms.py"
+    "v2/gates/verify_verification_mechanisms.py",
+    "v2/gates/verify_rule_adoption_lifecycle.py",
+    "v2/gates/verify_method_revision_procedure.py",
+    "v2/gates/verify_governance_independent_review.py"
   ],
   "required_regression_tests": [
     "v2/tests/test_method_freeze.py",
@@ -31,7 +34,10 @@
     "v2/tests/test_rule_coverage_fail_closed.py",
     "v2/tests/test_notification_stale_state.py",
     "v2/tests/test_workflow_meta_fail_closed.py",
-    "v2/tests/test_gate_result_classification.py"
+    "v2/tests/test_gate_result_classification.py",
+    "v2/tests/test_rule_adoption_lifecycle_fail_closed.py",
+    "v2/tests/test_method_revision_procedure_fail_closed.py",
+    "v2/tests/test_governance_independent_review_fail_closed.py"
   ],
   "acceptance_scripts": [
     "v2/gates/verify_apk_evidence.py",
@@ -86,5 +92,12 @@
     "build": "verified_apk_evidence",
     "behavior": "accepted_cb6_real_device_evidence"
   },
-  "method_version": 2
+  "method_version": 2,
+  "governance_adoption": {
+    "registry": "v2/gates/operational_rule_registry_v2.json",
+    "evidence": "v2/gates/governance_adoption_evidence.json",
+    "candidate_validation_run_id": 36648375267,
+    "independent_review_run_id": 36661065964,
+    "adopted": true
+  }
 }

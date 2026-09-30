@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]
-reg=json.loads((R/"v2/gates/operational_rule_registry.json").read_text())
+reg=json.loads((R/"v2/gates/operational_rule_registry_v2.json").read_text())
 cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
 active={x["id"] for x in reg["rules"] if x.get("status")=="ACTIVE"}
 proposed={x["id"] for x in reg["rules"] if x.get("status")=="PROPOSED"}

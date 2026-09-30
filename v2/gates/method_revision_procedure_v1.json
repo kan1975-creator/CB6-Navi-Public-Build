@@ -2,7 +2,7 @@
   "schema": 1,
   "procedure_id": "cb6-method-revision-procedure",
   "version": 1,
-  "status": "CANDIDATE",
+  "status": "INDEPENDENTLY_REVIEWED",
   "basis_head": "09cf2a8924b43f97433bb95ea10852d830a5e860",
   "purpose": "Define a fail-closed procedure for changing frozen Method authority without legitimizing a change by merely rewriting freeze hashes.",
   "authority_split": {
@@ -45,5 +45,6 @@
     "explicit_user_adoption_record",
     "full_post_adoption_root_certification",
     "full_post_adoption_development_gate"
-  ]
+  ],
+  "adoption_evidence": "v2/gates/governance_adoption_evidence.json"
 }

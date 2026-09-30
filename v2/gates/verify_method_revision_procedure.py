@@ -2,7 +2,8 @@
 import json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]; d=json.loads((R/"v2/gates/method_revision_procedure_v1.json").read_text()); e=[]
-if d.get("status")!="CANDIDATE": e.append("procedure must remain CANDIDATE before adoption")
+if d.get("status") not in ("CANDIDATE","INDEPENDENTLY_REVIEWED","ACTIVE_REFROZEN"): e.append("procedure status invalid")
+if d.get("status")!="CANDIDATE" and d.get("adoption_evidence")!="v2/gates/governance_adoption_evidence.json": e.append("procedure adoption evidence missing")
 if not d.get("basis_head"): e.append("basis head missing")
 a=d.get("authority_split",{})
 if a.get("revision_intent")!="explicit_user_decision" or a.get("verification")!="github_executable_evidence" or a.get("final_adoption")!="explicit_user_adoption_after_evidence": e.append("authority split invalid")
@@ -18,4 +19,4 @@ if e:
  print("CB6 METHOD REVISION PROCEDURE FAIL:")
  for x in e: print(" -",x)
  raise SystemExit(1)
-print("CB6 METHOD REVISION PROCEDURE PASS: candidate=v1; direct_hash_rewrite=forbidden; self_adoption=forbidden; sequence=complete")
+print(f"CB6 METHOD REVISION PROCEDURE PASS: status={d.get('status')}; direct_hash_rewrite=forbidden; self_adoption=forbidden; sequence=complete")

@@ -41,7 +41,7 @@
       "status": "ACTIVE",
       "scope": "future_continuing_user_requests",
       "source": "user_continuing_instruction",
-      "contract": "v2/gates/operational_rule_registry.json",
+      "contract": "v2/gates/operational_rule_registry_v2.json",
       "verification": [
         "v2/gates/verify_operational_rule_registry.py",
         "v2/tests/test_operational_rule_registry_fail_closed.py"
@@ -119,7 +119,7 @@
     "reason_required": true,
     "independent_reapproval_required": true
   },
-  "status": "CANDIDATE",
+  "status": "ACTIVE",
   "supersedes": "v2/gates/operational_rule_registry.json",
   "change_reason": "Add machine-verifiable adoption lifecycle so operational promises cannot become ACTIVE by chat declaration or implementation presence alone.",
   "adoption_lifecycle": {
@@ -158,5 +158,6 @@
     },
     "direct_transition_to_active_forbidden": true,
     "chat_declaration_is_not_transition_evidence": true
-  }
+  },
+  "adoption_evidence": "v2/gates/governance_adoption_evidence.json"
 }

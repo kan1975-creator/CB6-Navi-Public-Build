@@ -2,7 +2,13 @@
 import json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]; d=json.loads((R/"v2/gates/operational_rule_registry_v2.json").read_text()); e=[]
-if d.get("version")!=2 or d.get("status")!="CANDIDATE": e.append("registry v2 must remain CANDIDATE before adoption")
+if d.get("version")!=2 or d.get("status") not in ("CANDIDATE","ACTIVE"): e.append("registry v2 status invalid")
+if d.get("status")=="ACTIVE":
+ ev=R/"v2/gates/governance_adoption_evidence.json"
+ if not ev.is_file(): e.append("ACTIVE registry lacks adoption evidence")
+ else:
+  x=json.loads(ev.read_text()); runs=x.get("evidence",{})
+  if runs.get("candidate_validation",{}).get("run_id")!=36648375267 or runs.get("independent_review",{}).get("run_id")!=36661065964: e.append("ACTIVE registry adoption runs invalid")
 if d.get("supersedes")!="v2/gates/operational_rule_registry.json": e.append("v2 supersedes path missing")
 if not d.get("change_reason"): e.append("change reason missing")
 a=d.get("adoption_lifecycle",{})
@@ -19,4 +25,4 @@ if e:
  print("CB6 RULE ADOPTION LIFECYCLE FAIL:")
  for x in e: print(" -",x)
  raise SystemExit(1)
-print("CB6 RULE ADOPTION LIFECYCLE PASS: candidate=v2; states=4; direct_active=forbidden; authority_split=verified")
+print(f"CB6 RULE ADOPTION LIFECYCLE PASS: status={d.get('status')}; states=4; direct_active=forbidden; authority_split=verified")
