@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "candidate_id": "CB6-CROSS-CUTTING-RULE-FOUNDATION-001",
+  "status": "PROPOSED",
+  "source": "explicit_user_continuing_instruction_2026-10-01",
+  "scope": {
+    "type": "CB6_PROJECT_WIDE_CROSS_CUTTING",
+    "all_current_features": true,
+    "all_future_features": true,
+    "all_33_consolidated_items": true,
+    "derivative_work": true,
+    "feature_opt_in_required": false,
+    "feature_override_may_weaken": false
+  },
+  "rules": [
+    {
+      "id": "OPS-STATUS-REPORTING-001",
+      "required_classification": "CROSS_CUTTING",
+      "required_status_before_adoption": "PROPOSED"
+    },
+    {
+      "id": "NOTIFICATION-STALE-STATE",
+      "required_classification": "CROSS_CUTTING",
+      "required_status": "ACTIVE"
+    },
+    {
+      "id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+      "required_classification": "CROSS_CUTTING",
+      "required_status": "ACTIVE"
+    }
+  ],
+  "approval_semantics": {
+    "investigation_and_read_only_distinct_from_fix_approval": true,
+    "exact_change_binding_required": true,
+    "reuse_for_different_change_forbidden": true,
+    "post_hoc_forbidden": true,
+    "missing_approval_forbidden": true
+  },
+  "feature_contract_inheritance": {
+    "template": "v2/gates/features/TEMPLATE.json",
+    "automatic": true,
+    "required_marker": "inherits_cross_cutting_rules",
+    "required_value": "ALL_ACTIVE_CROSS_CUTTING_RULES",
+    "new_feature_must_inherit_without_per_rule_wiring": true
+  },
+  "lifecycle": {
+    "direct_active_forbidden": true,
+    "sequence": [
+      "PROPOSED",
+      "CANDIDATE_VERIFIED",
+      "INDEPENDENTLY_REVIEWED",
+      "EXPLICIT_USER_ADOPTED",
+      "ACTIVE_REFROZEN"
+    ],
+    "requires_post_adoption_full_gate": true
+  }
+}
