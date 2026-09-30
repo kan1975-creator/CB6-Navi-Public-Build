@@ -1,0 +1,25 @@
+name: CB6 Cross-Cutting Rule Foundation Candidate Gate
+on:
+  workflow_dispatch:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/cross_cutting_rule_foundation_candidate.json'
+      - 'v2/gates/verify_cross_cutting_rule_foundation_candidate.py'
+      - 'v2/tests/test_cross_cutting_rule_foundation_candidate_fail_closed.py'
+      - '.github/workflows/cb6_cross_cutting_rule_candidate_gate.yml'
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify cross-cutting foundation candidate
+        run: python3 v2/gates/verify_cross_cutting_rule_foundation_candidate.py
+      - name: Destructive cross-cutting foundation test
+        run: python3 v2/tests/test_cross_cutting_rule_foundation_candidate_fail_closed.py
+      - name: Verify active Method remains frozen
+        run: python3 v2/gates/verify_method_freeze.py
+      - name: Verify active Method revision procedure
+        run: python3 v2/gates/verify_method_revision_procedure.py
