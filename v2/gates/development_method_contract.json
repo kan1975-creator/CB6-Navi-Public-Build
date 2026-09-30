@@ -94,10 +94,10 @@
   },
   "method_version": 2,
   "governance_adoption": {
-    "registry": "v2/gates/operational_rule_registry_v2.json",
-    "evidence": "v2/gates/governance_adoption_evidence.json",
-    "candidate_validation_run_id": 36648375267,
-    "independent_review_run_id": 36661065964,
+    "registry": "v2/gates/operational_rule_registry_v3.json",
+    "evidence": "v2/gates/user_approval_rule_adoption_evidence.json",
+    "candidate_validation_run_id": 36684201308,
+    "independent_review_run_id": 36679577881,
     "adopted": true
   }
 }

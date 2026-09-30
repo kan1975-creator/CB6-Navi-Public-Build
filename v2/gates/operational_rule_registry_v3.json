@@ -41,7 +41,7 @@
       "status": "ACTIVE",
       "scope": "future_continuing_user_requests",
       "source": "user_continuing_instruction",
-      "contract": "v2/gates/operational_rule_registry_v2.json",
+      "contract": "v2/gates/operational_rule_registry_v3.json",
       "verification": [
         "v2/gates/verify_operational_rule_registry.py",
         "v2/tests/test_operational_rule_registry_fail_closed.py"
@@ -114,7 +114,7 @@
     },
     {
       "id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
-      "status": "IMPLEMENTED_UNVERIFIED",
+      "status": "ACTIVE",
       "scope": "implementation_problem_fix_commits",
       "source": "explicit_user_continuing_instruction_2026-09-30",
       "contract": "v2/gates/user_approval_before_fix_contract.json",
@@ -159,9 +159,9 @@
     "reason_required": true,
     "independent_reapproval_required": true
   },
-  "status": "CANDIDATE",
+  "status": "ACTIVE",
   "supersedes": "v2/gates/operational_rule_registry_v2.json",
-  "change_reason": "Propose fail-closed, change-bound explicit user approval before implementation-problem fixes; active v2 remains unchanged until verification, independent review, and explicit adoption.",
+  "change_reason": "Adopted candidate for OPS-USER-APPROVAL-BEFORE-FIX-001 after candidate validation, independent review, and explicit user adoption; OPS-STATUS-REPORTING-001 remains PROPOSED.",
   "adoption_lifecycle": {
     "authority_split": {
       "rule_content_authority": "explicit_user_decision",
@@ -199,5 +199,5 @@
     "direct_transition_to_active_forbidden": true,
     "chat_declaration_is_not_transition_evidence": true
   },
-  "adoption_evidence": "v2/gates/governance_adoption_evidence.json"
+  "adoption_evidence": "v2/gates/user_approval_rule_adoption_evidence.json"
 }

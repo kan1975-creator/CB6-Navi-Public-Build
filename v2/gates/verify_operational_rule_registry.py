@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import json
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[2]; P=ROOT/"v2/gates/operational_rule_registry_v2.json"
+ROOT=Path(__file__).resolve().parents[2]; P=ROOT/"v2/gates/operational_rule_registry_v3.json"
 d=json.loads(P.read_text()); errs=[]
 mv=json.loads((ROOT/"v2/gates/development_method_contract.json").read_text()).get("method_version")
 if d.get("method_version")!=mv: errs.append("registry method_version mismatch")
 if d.get("status")!="ACTIVE": errs.append("registry is not ACTIVE")
-if d.get("adoption_evidence")!="v2/gates/governance_adoption_evidence.json": errs.append("adoption evidence link missing")
+if d.get("adoption_evidence")!="v2/gates/user_approval_rule_adoption_evidence.json": errs.append("adoption evidence link missing")
 ip=d.get("intake_policy",{})
 for k in ("continuing_request_must_be_registered","chat_memory_is_not_authority","active_rule_requires_machine_verification","active_rule_requires_github_verification_source","proposed_rule_must_not_enter_coverage","unverifiable_operational_promise_remains_proposed"):
  if ip.get(k) is not True: errs.append("intake policy weakened: "+k)
