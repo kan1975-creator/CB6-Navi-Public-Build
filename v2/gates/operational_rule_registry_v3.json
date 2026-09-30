@@ -130,6 +130,27 @@
         "missing_approval_forbidden": true,
         "fail_closed": true
       }
+    },
+    {
+      "id": "OPS-STATUS-REPORTING-001",
+      "status": "PROPOSED",
+      "scope": "cb6_progress_status_reporting",
+      "source": "explicit_user_continuing_instruction_2026-09-30",
+      "contract": null,
+      "verification": [],
+      "proposal": {
+        "rule": "Every progress report must explicitly classify status as one of: 進めて推奨, 待ち, スマホ操作が必要. Waiting reports must identify the external Run/result and an approximate next-check time. During external waits, non-conflicting read-only investigation/static analysis may continue. A user request of 進捗は？ requires fresh GitHub HEAD, Run, and relevant raw-log retrieval before reporting. Implementation-problem fix commits remain subject to OPS-USER-APPROVAL-BEFORE-FIX-001 or its adopted successor.",
+        "github_verification_source": "Machine-check the latest progress-report message for exactly one required status classification; verifier design pending.",
+        "fail_closed": true,
+        "required_before_active": [
+          "contract_path",
+          "verifier_path",
+          "destructive_test_path",
+          "successful_gate_run_evidence",
+          "explicit_user_adoption_record",
+          "coverage_status_MACHINE_ENFORCED"
+        ]
+      }
     }
   ],
   "revision_policy": {
