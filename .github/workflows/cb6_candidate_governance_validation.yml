@@ -12,6 +12,11 @@ on:
       - 'v2/gates/verify_method_revision_procedure.py'
       - 'v2/tests/test_method_revision_procedure_fail_closed.py'
       - 'v2/gates/method_revision_change_record.json'
+      - 'v2/gates/operational_rule_registry_v3.json'
+      - 'v2/gates/user_approval_rule_change_record.json'
+      - 'v2/gates/user_approval_before_fix_contract.json'
+      - 'v2/gates/verify_user_approval_before_fix.py'
+      - 'v2/tests/test_user_approval_before_fix_fail_closed.py'
       - '.github/workflows/cb6_candidate_governance_validation.yml'
 permissions:
   contents: read
@@ -28,3 +33,5 @@ jobs:
         run: python3 v2/gates/verify_method_revision_procedure.py
       - name: Destructive test method revision procedure
         run: python3 v2/tests/test_method_revision_procedure_fail_closed.py
+      - name: Destructive test pre-fix user approval candidate
+        run: python3 v2/tests/test_user_approval_before_fix_fail_closed.py
