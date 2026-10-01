@@ -118,8 +118,9 @@ for domain,kinds in domain_policy["rules"].items():
 
 # Feature-gate template is part of the development method and must remain fail-closed.
 template=load("v2/gates/features/TEMPLATE.json")
-required_feature_fields={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage","method_version"}
+required_feature_fields={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage","method_version","inherits_cross_cutting_rules"}
 if set(template) != required_feature_fields: fail("feature gate template fields drifted")
+if template.get("inherits_cross_cutting_rules")!="ALL_ACTIVE_CROSS_CUTTING_RULES": fail("feature gate template cross-cutting inheritance drifted")
 if template.get("schema")!=1 or template.get("impact_checked") is not False or template.get("repo_sweep_required") is not True or template.get("device_evidence")!="PENDING" or template.get("stage")!="DESIGN" or template.get("method_version")!=2:
  fail("feature gate template is not fail-closed")
 tdc=template.get("device_checks")
