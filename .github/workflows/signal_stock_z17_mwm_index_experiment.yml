@@ -19,7 +19,9 @@ jobs:
     env:
       COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
       MAP_VERSION: "260830"
+      MAP_SERIES: "2026.06.28"
       MAP_NAME: "Japan_Hokkaido Region_West"
+      MAP_EXPECTED_SIZE: "36636172"
     steps:
       - name: Checkout CB6 control repo
         uses: actions/checkout@v4
@@ -98,12 +100,13 @@ jobs:
           CDN="$(printf '%s' "$SERVERS" | jq -r '.[0]')"
           test -n "$CDN"
           test "$CDN" != "null"
-          URL="$CDN/maps/$MAP_VERSION/$(python3 -c 'import os,urllib.parse; print(urllib.parse.quote(os.environ["MAP_NAME"]+".mwm"))')"
+          URL="$CDN/maps/$MAP_SERIES/$MAP_VERSION/$(python3 -c 'import os,urllib.parse; print(urllib.parse.quote(os.environ["MAP_NAME"]+".mwm"))')"
           printf '%s\n' "$URL" | tee ../../out/MWM_SOURCE_URL.txt
           curl --fail --location --retry 3 --output "$MAP_NAME.mwm" "$URL"
-          test -s "$MAP_NAME.mwm"
+          ACTUAL_SIZE="$(stat --printf='%s' "$MAP_NAME.mwm")"
+          printf '%s\n' "$ACTUAL_SIZE" | tee ../../out/MWM_BEFORE_SIZE.txt
+          test "$ACTUAL_SIZE" = "$MAP_EXPECTED_SIZE"
           sha256sum "$MAP_NAME.mwm" | tee ../../out/MWM_BEFORE_SHA256.txt
-          stat --printf='%s\n' "$MAP_NAME.mwm" | tee ../../out/MWM_BEFORE_SIZE.txt
 
       - name: Rebuild only visibility scale index
         shell: bash
