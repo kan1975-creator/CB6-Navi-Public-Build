@@ -35,6 +35,8 @@ jobs:
             echo "source_run=36890189315"
             echo "source_artifact_id=11177340502"
             echo "source_head=a43f7f69f26d2bbf18f8c8511f8b2eb3fdc717b6"
+            echo "update_check_approval_id=OPS-USER-APPROVAL-BEFORE-FIX-001-20261002-SIGNAL-Z17-MAPSERVER-MAPS-META"
+            echo "update_check_proposed_change_id=SIGNAL-Z17-MAPSERVER-MAPS-META-001"
           } | tee authority.txt
 
       - name: Download approved reindexed MWM artifact
@@ -57,6 +59,18 @@ jobs:
           mkdir -p "public/maps/2026.06.28/260830"
           cp "$MWM" "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm"
           cp authority.txt public/authority.txt
+          mkdir -p public/meta
+          cat > public/meta/maps.json <<\'JSON\'
+          {"map-series":{"2026.06.28":{"latest":260830,"status":"active"}}}
+          JSON
+          python3 - <<\'PY\'
+          import json
+          with open("public/meta/maps.json", encoding="utf-8") as f:
+              data = json.load(f)
+          entry = data["map-series"]["2026.06.28"]
+          assert entry["latest"] == 260830
+          assert entry["status"] != "EOL"
+          PY
           sha256sum "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm" | tee public/MWM_SHA256.txt
           find public -type f -print
 
