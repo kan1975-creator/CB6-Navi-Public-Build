@@ -44,7 +44,7 @@
     "v2/gates/operational_rule_registry_v3.json": "a92dd97c83dfef38546bd758a1dd5fb8ba7518b9",
     "v2/gates/status_reporting_contract_v1.json": "e021b5bbd1012a9f0f55eac216c10d39516602cd",
     "v2/gates/verify_status_reporting_active.py": "7b1ecae18a5230d3ab69d29a702d1cb2c02dcd56",
-    "v2/tests/test_status_reporting_active_fail_closed.py": "6ed138cf5bbbd959405ce45cff0a3ac99ed83a09",
+    "v2/tests/test_status_reporting_active_fail_closed.py": "5c32a09399ccad5dc75a5e6d7df4b1f6d6f40ea5",
     "v2/gates/operational_rule_registry_v4.json": "ec18ced5ad75f537955cbb032e5c3c410fc7c487",
     "v2/gates/verify_cross_cutting_rule_foundation_active.py": "b6c9605561505d5d81f6b2972fcbdc75d75fd3f2",
     "v2/tests/test_cross_cutting_rule_foundation_active_fail_closed.py": "c9f9e18b75e2973359a7276b1c13bed5f28ac25a"

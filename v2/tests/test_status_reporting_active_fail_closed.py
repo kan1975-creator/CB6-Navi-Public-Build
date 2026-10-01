@@ -8,7 +8,7 @@ cases=[
  ("demote-active","v2/gates/status_reporting_contract_v1.json",lambda d:d.update({"status":"CANDIDATE"}),"active identity/status invalid"),
  ("drop-japanese-tag","v2/gates/status_reporting_contract_v1.json",lambda d:d["report_tags"].update({"allowed":["ガバナンス","信号機","コンビニ"]}),"report tags invalid"),
  ("drop-future","v2/gates/status_reporting_contract_v1.json",lambda d:d["scope"].update({"applies_to_unknown_future_features_without_enumeration":False}),"scope weakened"),
- ("registry-proposed","v2/gates/operational_rule_registry_v3.json",lambda d:[x.update({"status":"PROPOSED"}) for x in d["rules"] if x.get("id")=="OPS-STATUS-REPORTING-001"],"registry active binding invalid"),
+ ("registry-proposed","v2/gates/operational_rule_registry_v4.json",lambda d:[x.update({"status":"PROPOSED"}) for x in d["rules"] if x.get("id")=="OPS-STATUS-REPORTING-001"],"registry active binding invalid"),
  ("coverage-missing","v2/gates/rule_coverage.json",lambda d:d.update({"entries":[x for x in d["entries"] if x.get("rule_id")!="OPS-STATUS-REPORTING-001"]}),"machine coverage missing"),
  ("adoption-run-wrong","v2/gates/status_reporting_contract_v1.json",lambda d:d["adoption"].update({"independent_review_run_id":0}),"adoption evidence invalid")]
 for name,path,mut,needle in cases:
