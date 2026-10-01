@@ -44,3 +44,7 @@ jobs:
         run: |
           python3 v2/tests/test_operational_rule_registry_v3_candidate_fail_closed.py
           python3 v2/tests/test_rule_coverage_v3_candidate_fail_closed.py
+      - name: Review Status Reporting candidate
+        run: python3 v2/gates/verify_status_reporting_independent_review.py
+      - name: Destructive test Status Reporting independent review
+        run: python3 v2/tests/test_status_reporting_independent_review_fail_closed.py
