@@ -58,7 +58,6 @@ policy_values={
  'RADIUS_M':str(acq['radius_m']), 'MAX_POINTS':str(acq['max_points']),
  'MOVEMENT_M':str(float(acq['movement_m']))+'f', 'FORWARD_MAX_M':str(float(acq['forward_max_m']))+'f',
  'FORWARD_CONE_DEG':str(float(acq['forward_cone_deg']))+'f',
- 'DISPLAY_CLUSTER_M':str(float(spec['display']['cluster_radius_m']))+'f',
  'SOURCE_DEDUP_M':str(float(acq['source_dedup_m']))+'f'
 }
 for name,value in policy_values.items():
@@ -76,7 +75,11 @@ require('record.verifiedDate == null || !record.verifiedDate.matches' in verifie
 require('SOURCE_DEDUP_M' in composite and 'a == null && b == null' in composite, 'source dedup/fail-safe composition missing')
 require('primaryError != null && (b == null || b.points.isEmpty())' in composite, 'primary failure can be masked by empty supplement')
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
-require('snapshot.displayPoints()' in controller, 'renderer-only signal clustering missing')
+require('snapshot.displayPoints()' in controller, 'signal display publication missing')
+snapshot = (module/'java/SignalSnapshot.java').read_text()
+require('return points;' in snapshot, 'renderer must preserve every acquired signal coordinate')
+require('DISPLAY_CLUSTER_M' not in snapshot and 'latSum' not in snapshot and 'lonSum' not in snapshot,
+        'renderer proximity clustering/coordinate relocation reintroduced')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
 require('main.post(() ->' in controller, 'main-thread publication')
 require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')

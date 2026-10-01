@@ -37,24 +37,17 @@ public final class SignalPolicyTest
     check(snapshot.points.get(0).id == 1 && snapshot.points.get(1399).id == 1400, "nearest retained, not first N");
     input.clear();
     check(snapshot.points.size() == 1400, "snapshot is detached");
-    ArrayList<SignalSnapshot.Point> clusterInput = new ArrayList<>();
-    clusterInput.add(new SignalSnapshot.Point(1, 43.00000, 141.00000, 10));
-    clusterInput.add(new SignalSnapshot.Point(2, 43.00010, 141.00000, 11)); // about 11 m: same visual intersection group
-    clusterInput.add(new SignalSnapshot.Point(3, 43.00050, 141.00000, 12)); // about 56 m: separate signal remains
-    SignalSnapshot clustered = new SignalSnapshot(clusterInput);
-    check(clustered.points.size() == 3, "clustering never deletes acquired signal data");
-    check(clustered.displayPoints().size() == 2, "nearby intersection signals collapse only for display");
-    check(clustered.clusteredPointCount() == 1, "diagnostic exposes renderer-only clustered count");
-    check(clustered.displayPoints().get(0).id == 1 && clustered.displayPoints().get(1).id == 3,
-          "deterministic group id retained and separate signal preserved");
-    check(Math.abs(clustered.displayPoints().get(0).lat - 43.00005) < 0.000001,
-          "cluster icon is centred between physical signal nodes");
-    ArrayList<SignalSnapshot.Point> chainInput = new ArrayList<>();
-    chainInput.add(new SignalSnapshot.Point(11, 43.00000, 141.00000, 10));
-    chainInput.add(new SignalSnapshot.Point(12, 43.00020, 141.00000, 11)); // ~22m from anchor
-    chainInput.add(new SignalSnapshot.Point(13, 43.00040, 141.00000, 12)); // ~44m from anchor, ~22m from member
-    check(new SignalSnapshot(chainInput).displayPoints().size() == 2,
-          "display clustering cannot chain adjacent junctions together");
+    ArrayList<SignalSnapshot.Point> nearbyInput = new ArrayList<>();
+    nearbyInput.add(new SignalSnapshot.Point(1, 43.00000, 141.00000, 10));
+    nearbyInput.add(new SignalSnapshot.Point(2, 43.00010, 141.00000, 11));
+    nearbyInput.add(new SignalSnapshot.Point(3, 43.00050, 141.00000, 12));
+    SignalSnapshot nearby = new SignalSnapshot(nearbyInput);
+    check(nearby.displayPoints().size() == 3, "nearby physical signals remain individually visible");
+    check(nearby.clusteredPointCount() == 0, "renderer never drops acquired signals by proximity");
+    check(nearby.displayPoints().get(0).lat == nearby.points.get(0).lat
+          && nearby.displayPoints().get(1).lat == nearby.points.get(1).lat
+          && nearby.displayPoints().get(2).lat == nearby.points.get(2).lat,
+          "renderer preserves original geographic signal coordinates");
     boolean immutable = false;
     try { snapshot.points.clear(); } catch (UnsupportedOperationException e) { immutable = true; }
     check(immutable, "immutable signal registry");
