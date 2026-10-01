@@ -34,7 +34,7 @@ replace('libs/map/user_mark.cpp',
         '  case UserMark::Type::CB6_SIGNAL: return "CB6_SIGNAL";')
 replace('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp',
         '#include "map/user_mark.hpp"',
-        '#include "map/user_mark.hpp"\n#include "map/cb6_signal_mark.hpp"\n#include <cmath>\n#include <vector>')
+        '#include "map/user_mark.hpp"\n#include "map/cb6_signal_mark.hpp"\n#include "indexer/classificator.hpp"\n#include "indexer/feature.hpp"\n#include "indexer/scales.hpp"\n#include "geometry/mercator.hpp"\n#include <cmath>\n#include <vector>')
 replace('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp',
         'JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeClearApiPoints',
         '#include "cb6_signal_jni.inc"\n\nJNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeClearApiPoints')
@@ -42,7 +42,8 @@ replace('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
         '  public static native String nativeGetAddress(double lat, double lon);',
         '  public static native String nativeGetAddress(double lat, double lon);\n\n'
         '  // Signal-only snapshot. Main thread; arrays must have equal lengths.\n'
-        '  public static native void nativeSetCb6Signals(double[] lat, double[] lon, boolean[] forward);')
+        '  public static native void nativeSetCb6Signals(double[] lat, double[] lon, boolean[] forward);\n' +
+        '  public static native void nativeLogCb6MwmSignals(double lat, double lon);')
 activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'
 replace(activity, '  private int mNavBarHeight;',
         '  private int mNavBarHeight;\n  private app.organicmaps.cb6.signals.SignalController mCb6Signals;')
