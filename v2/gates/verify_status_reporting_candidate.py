@@ -10,7 +10,7 @@ for k in ("all_33_items_mandatory","applies_to_all_derivative_work","applies_to_
 if s.get("consolidated_worklist_required_item_count")!=33:e.append("33-item requirement missing")
 if not wl.is_file():e.append("worklist missing")
 else:
- nums={int(x) for x in re.findall(r'^\|\s*(\d+)\s*\|',wl.read_text(encoding="utf-8"),re.M)}
+ nums={int(x) for x in re.findall(r'^(\d+)\.\s+',wl.read_text(encoding="utf-8"),re.M)}
  if set(range(1,34))-nums:e.append("worklist missing item(s) 1..33")
 if s.get("feature_specific_override_may_weaken_or_disable") is not False:e.append("feature override may weaken")
 if s.get("new_feature_requires_explicit_opt_in") is not False:e.append("future work requires opt-in")
