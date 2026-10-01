@@ -2,6 +2,11 @@ name: CB6 Signal z17 Device Test Map Server
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - cb6-v2-clean
+    paths:
+      - '.github/workflows/signal_z17_device_test_map_server.yml'
 
 permissions:
   actions: read
