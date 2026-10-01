@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "candidate_id": "OPS-FUTURE-RULE-INTAKE-PRECHECK-001",
+  "status": "PROPOSED",
+  "source": "explicit_user_continuing_instruction_2026-10-01",
+  "target_rule": "OPS-FUTURE-RULE-INTAKE-001",
+  "purpose": "Prevent discovering after the fact that a newly proposed continuing instruction was already covered by the development method or governance.",
+  "pre_registration_check": {
+    "required": true,
+    "search_scope": [
+      "ACTIVE operational rules",
+      "CANDIDATE/PROPOSED operational rules",
+      "development method authority",
+      "governance and cross-cutting rules"
+    ],
+    "outcomes": {
+      "exact_duplicate": "DO_NOT_CREATE_NEW_RULE; apply existing authority",
+      "partial_overlap": "ADD_ONLY_MISSING_SEMANTICS; preserve existing authority",
+      "no_overlap": "NEW_RULE_CANDIDATE_MAY_BE_CREATED"
+    },
+    "evidence_required": [
+      "current GitHub HEAD",
+      "paths/IDs checked",
+      "overlap classification",
+      "gap summary when partial/no overlap"
+    ],
+    "chat_memory_only_forbidden": true
+  },
+  "lifecycle": [
+    "PROPOSED",
+    "IMPLEMENTED_UNVERIFIED",
+    "MACHINE_VERIFIED",
+    "INDEPENDENTLY_REVIEWED",
+    "EXPLICIT_USER_ADOPTED",
+    "ACTIVE_REFROZEN"
+  ],
+  "direct_active_forbidden": true
+}
