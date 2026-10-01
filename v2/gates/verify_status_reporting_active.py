@@ -29,7 +29,7 @@ a=d.get("fix_approval_boundary",{})
 if a.get("delegates_to")!="OPS-USER-APPROVAL-BEFORE-FIX-001":e.append("approval delegation invalid")
 for k in ("investigation_permission_is_not_fix_permission","generic_progress_permission_is_not_specific_fix_approval","old_approval_reuse_for_different_change_forbidden"):
  if a.get(k) is not True:e.append("approval boundary weakened: "+k)
-reg=json.loads((R/"v2/gates/operational_rule_registry_v3.json").read_text()); rules={x.get("id"):x for x in reg.get("rules",[])}
+reg=json.loads((R/"v2/gates/operational_rule_registry_v4.json").read_text()); rules={x.get("id"):x for x in reg.get("rules",[])}
 sr=rules.get("OPS-STATUS-REPORTING-001",{})
 if sr.get("status")!="ACTIVE" or sr.get("contract")!="v2/gates/status_reporting_contract_v1.json":e.append("registry active binding invalid")
 if "v2/gates/verify_status_reporting_active.py" not in sr.get("verification",[]) or "v2/tests/test_status_reporting_active_fail_closed.py" not in sr.get("verification",[]):e.append("registry verification binding invalid")

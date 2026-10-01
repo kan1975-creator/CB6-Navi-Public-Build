@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[2]; P=ROOT/"v2/gates/operational_rule_registry_v3.json"
+ROOT=Path(__file__).resolve().parents[2]; P=ROOT/"v2/gates/operational_rule_registry_v4.json"
 d=json.loads(P.read_text()); errs=[]
 mv=json.loads((ROOT/"v2/gates/development_method_contract.json").read_text()).get("method_version")
 if d.get("method_version")!=mv: errs.append("registry method_version mismatch")

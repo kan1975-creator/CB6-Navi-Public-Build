@@ -3,11 +3,11 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "87ce486a398de74e926be31b0b0741211def0632",
+    ".github/workflows/cb6_development_gate.yml": "4a3719728e01ca9db4cf5644980d3ab1e1a2b79d",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
     "v2/gates/development_method_contract.json": "d00c737290ae4f97d46756cf7ae4615757bf23da",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
-    "v2/gates/features/TEMPLATE.json": "aa6d976ccb99afcbe9946fa0ccb8c529acc0ab8c",
+    "v2/gates/features/TEMPLATE.json": "d50f618f11cbc14a1a2cd487032b019159d60432",
     "v2/gates/historical_incidents.json": "91d516cd563e3d27180628bc5491610f53663f7f",
     "v2/gates/repository_state_manifest.json": "2fc34820c5f5b9337c36b3b2f901c4673be741bc",
     "v2/gates/research_records/TEMPLATE.json": "ae8cdaf43c09671d672fc41db6f6c87536d265f9",
@@ -28,11 +28,11 @@
     "v2/gates/verify_method_completion.py": "7e3f583055cd47b7bc6ff69d0b27d5de35d07f36",
     "v2/tests/test_method_completion.py": "2ac729de719edb2fa243e4c26b354dc0e226ed6e",
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
-    "v2/gates/verify_operational_rule_registry.py": "7a3b977844519285aa29cbee14d929e43bfdb32c",
-    "v2/gates/verify_rule_coverage.py": "725cc4ce3962300b60158dba9bfdf8441e03dbad",
-    "v2/gates/rule_coverage.json": "ca98526005ed172a0ace39cac1071a05eee1ca19",
-    "v2/tests/test_operational_rule_registry_fail_closed.py": "dda8647dc7ef69d7dde4d869fa0c522c881a5218",
-    "v2/tests/test_rule_coverage_fail_closed.py": "60c137d6342095da24a3251ae8cf6d29dec34647",
+    "v2/gates/verify_operational_rule_registry.py": "c2554d60ad3f1377ea386302cc7caa6694d69dcf",
+    "v2/gates/verify_rule_coverage.py": "9d032fb6de6d32845ca961f492218241669672a1",
+    "v2/gates/rule_coverage.json": "d9d2ee4c0098bbf88ff040bdbe7cb5aac5e7b0b3",
+    "v2/tests/test_operational_rule_registry_fail_closed.py": "a624d80e4a622afccfcb6d34c826b935d4d30586",
+    "v2/tests/test_rule_coverage_fail_closed.py": "d8b007d21af5ea414d3f06fd1c4d40d9e0a1b093",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
     "v2/gates/method_revision_procedure_v1.json": "86b2f69734ed61873f9ab205e04619b04e57b72d",
     "v2/gates/verify_method_revision_procedure.py": "a030fc425dfbf4274994cceff8bc0eaacc4be031",
@@ -43,7 +43,10 @@
     "v2/gates/governance_postchange_certification.json": "e29c7d8c38b3679ee12570f9b12bea584f35b0de",
     "v2/gates/operational_rule_registry_v3.json": "a92dd97c83dfef38546bd758a1dd5fb8ba7518b9",
     "v2/gates/status_reporting_contract_v1.json": "e021b5bbd1012a9f0f55eac216c10d39516602cd",
-    "v2/gates/verify_status_reporting_active.py": "204ea25e99dd90a82dc605cbaf1d6ad7f39eaf89",
-    "v2/tests/test_status_reporting_active_fail_closed.py": "6ed138cf5bbbd959405ce45cff0a3ac99ed83a09"
+    "v2/gates/verify_status_reporting_active.py": "7b1ecae18a5230d3ab69d29a702d1cb2c02dcd56",
+    "v2/tests/test_status_reporting_active_fail_closed.py": "6ed138cf5bbbd959405ce45cff0a3ac99ed83a09",
+    "v2/gates/operational_rule_registry_v4.json": "ec18ced5ad75f537955cbb032e5c3c410fc7c487",
+    "v2/gates/verify_cross_cutting_rule_foundation_active.py": "b6c9605561505d5d81f6b2972fcbdc75d75fd3f2",
+    "v2/tests/test_cross_cutting_rule_foundation_active_fail_closed.py": "c9f9e18b75e2973359a7276b1c13bed5f28ac25a"
   }
 }

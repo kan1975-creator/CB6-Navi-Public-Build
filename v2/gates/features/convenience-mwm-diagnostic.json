@@ -91,5 +91,6 @@
   "restart_from_zero": false,
   "prior_work_policy": "REVALIDATED_BY_FRESH_PINNED_SOURCE_RESEARCH",
   "restart_reason": "Fresh source-first revalidation completed against pinned comaps/comaps@7113ccb5f086183f8884b2aa4e58c987466b6704 before diagnostic implementation enablement.",
-  "method_version": 2
+  "method_version": 2,
+  "inherits_cross_cutting_rules": "ALL_ACTIVE_CROSS_CUTTING_RULES"
 }

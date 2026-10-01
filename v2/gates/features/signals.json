@@ -118,5 +118,6 @@
   "impact_record": "v2/gates/impact_records/signals.json",
   "device_evidence": "PENDING",
   "research_record": "v2/gates/research_records/signals.json",
-  "method_version": 2
+  "method_version": 2,
+  "inherits_cross_cutting_rules": "ALL_ACTIVE_CROSS_CUTTING_RULES"
 }
