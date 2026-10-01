@@ -17,6 +17,7 @@ tracked = {
  'android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp',
  'android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
  'libs/map/user_mark.hpp', 'libs/map/user_mark.cpp',
+ 'libs/storage/storage.cpp',
  'data/styles/default/include/Icons.mapcss',
 }
 if a.verify:
@@ -39,6 +40,29 @@ else:
     )
     if any(not x.startswith(allowed) for x in new):
         raise SystemExit('Unexpected untracked upstream surface: '+repr(new))
+    # Device-test-only Sapporo z17 integrity override: permit exactly the two
+    # approved storage.cpp substitutions and reject every other storage delta.
+    storage = 'libs/storage/storage.cpp'
+    storage_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+storage], text=True)
+    storage_expected = storage_original.replace(
+        '  auto const countryFile = GetCountryFile(countryId);',
+        '  auto const & stockCountryFile = GetCountryFile(countryId);\n'
+        '  auto countryFile = stockCountryFile;\n'
+        '  bool const cb6SapporoZ17Test = type == MapFileType::Map &&\n'
+        '      countryId == "Japan_Hokkaido Region_Sapporo" &&\n'
+        '      !GetPlatform().CustomMapServerUrl().empty();\n'
+        '  if (cb6SapporoZ17Test)\n'
+        '    countryFile = platform::CountryFile(countryId, 74474156, "v/OFV+PGDp/eEWzsU/fq5VFdNp8=");', 1)
+    storage_expected = storage_expected.replace(
+        '                          [path = GetFileDownloadPath(countryId, fileType), sha1 = GetCountryFile(countryId).GetSha1(),',
+        '                          [path = GetFileDownloadPath(countryId, fileType),\n'
+        '                           sha1 = (fileType == MapFileType::Map &&\n'
+        '                                   countryId == "Japan_Hokkaido Region_Sapporo" &&\n'
+        '                                   !GetPlatform().CustomMapServerUrl().empty())\n'
+        '                                      ? std::string("v/OFV+PGDp/eEWzsU/fq5VFdNp8=")\n'
+        '                                      : GetCountryFile(countryId).GetSha1(),', 1)
+    if storage_expected == storage_original or (root/storage).read_text() != storage_expected:
+        raise SystemExit('Unexpected storage.cpp delta: only approved Sapporo z17 Custom Map Server integrity override is authorized')
     # Stage-1 Signal authority permits exactly the stock traffic_signals z19 -> z17 delta.
     icons = 'data/styles/default/include/Icons.mapcss'
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons], text=True)
