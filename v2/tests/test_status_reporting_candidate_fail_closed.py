@@ -3,6 +3,10 @@ import json,subprocess,tempfile,shutil
 from pathlib import Path
 R=Path(__file__).resolve().parents[2];base=json.loads((R/"v2/gates/status_reporting_contract_candidate_v1.json").read_text(encoding="utf-8"));cases=[]
 def add(n,fn):d=json.loads(json.dumps(base));fn(d);cases.append((n,d))
+add("tag_not_required_at_start",lambda d:d["report_tags"].__setitem__("required_at_report_start",False))
+add("governance_tag_not_required",lambda d:d["report_tags"].__setitem__("governance_report_requires","その他"))
+add("tag_replaces_classification",lambda d:d["report_tags"].__setitem__("tag_presence_does_not_replace_status_classification",False))
+add("unknown_tag_removed",lambda d:d["report_tags"].__setitem__("allowed",["Governance","Signal","Convenience"]))
 add("fourth_class",lambda d:d["allowed_classifications"].append("その他"))
 add("not_exactly_one",lambda d:d.__setitem__("exactly_one_classification_required",False))
 add("not_all_33",lambda d:d["scope"].__setitem__("all_33_items_mandatory",False))
