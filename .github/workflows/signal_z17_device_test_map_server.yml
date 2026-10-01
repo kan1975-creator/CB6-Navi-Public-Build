@@ -1,0 +1,67 @@
+name: CB6 Signal z17 Device Test Map Server
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: cb6-signal-z17-device-test-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Record approved authority
+        run: |
+          {
+            echo "approval_id=OPS-USER-APPROVAL-BEFORE-FIX-001-20261001-SIGNAL-Z17-DEVICE-TEST-SERVER"
+            echo "approved_at=2026-10-01"
+            echo "proposed_change_id=SIGNAL-Z17-DEVICE-TEST-SERVER-001"
+            echo "approved_change_summary=Signal z17実機検証として、再index済みHokkaido West MWMだけをCB6既存Custom Maps server機能から取得できる試験用配布経路を作る最小変更"
+            echo "source_run=36880874586"
+            echo "source_artifact_id=11171985481"
+            echo "source_head=054f19dca4e06cdb38c47d3d08552135c98bab92"
+          } | tee authority.txt
+
+      - name: Download approved reindexed MWM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CB6-Signal-z17-Hokkaido-West-MWM-Experiment
+          repository: kan1975-creator/CB6-Navi-Public-Build
+          run-id: 36880874586
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source
+
+      - name: Verify and stage only Hokkaido West MWM
+        shell: bash
+        run: |
+          set -euxo pipefail
+          MWM="$(find source -type f -name 'Japan_Hokkaido Region_West.mwm' -print -quit)"
+          test -n "$MWM"
+          test "$(stat --printf='%s' "$MWM")" -gt 36636172
+          mkdir -p "public/maps/2026.06.28/260830"
+          cp "$MWM" "public/maps/2026.06.28/260830/Japan_Hokkaido Region_West.mwm"
+          cp authority.txt public/authority.txt
+          sha256sum "public/maps/2026.06.28/260830/Japan_Hokkaido Region_West.mwm" | tee public/MWM_SHA256.txt
+          find public -type f -print
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload test map server
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy test map server
+        id: deployment
+        uses: actions/deploy-pages@v4
