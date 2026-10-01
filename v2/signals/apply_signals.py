@@ -28,6 +28,27 @@ def replace(path, old, new):
         raise SystemExit(f'pinned anchor mismatch: {path}: {old[:80]}')
     p.write_text(text.replace(old, new, 1))
 
+# Device-test-only Sapporo z17 MWM integrity override.
+# Active only when a custom map server is configured; stock server behavior is unchanged.
+replace('libs/storage/storage.cpp',
+        '  auto const countryFile = GetCountryFile(countryId);',
+        '  auto const & stockCountryFile = GetCountryFile(countryId);\n'
+        '  auto countryFile = stockCountryFile;\n'
+        '  bool const cb6SapporoZ17Test = type == MapFileType::Map &&\n'
+        '      countryId == "Japan_Hokkaido Region_Sapporo" &&\n'
+        '      !GetPlatform().CustomMapServerUrl().empty();\n'
+        '  if (cb6SapporoZ17Test)\n'
+        '    countryFile = platform::CountryFile(countryId, 74474156, "v/OFV+PGDp/eEWzsU/fq5VFdNp8=");')
+replace('libs/storage/storage.cpp',
+        '                          [path = GetFileDownloadPath(countryId, fileType), sha1 = GetCountryFile(countryId).GetSha1(),',
+        '                          [path = GetFileDownloadPath(countryId, fileType),\n'
+        '                           sha1 = (fileType == MapFileType::Map &&\n'
+        '                                   countryId == "Japan_Hokkaido Region_Sapporo" &&\n'
+        '                                   !GetPlatform().CustomMapServerUrl().empty())\n'
+        '                                      ? std::string("v/OFV+PGDp/eEWzsU/fq5VFdNp8=")\n'
+        '                                      : GetCountryFile(countryId).GetSha1(),')
+
+
 replace('libs/map/user_mark.hpp',
         '    TRAFFIC_LIGHT,\n    USER_MARK_TYPES_COUNT,',
         '    TRAFFIC_LIGHT,\n    CB6_SIGNAL,\n    USER_MARK_TYPES_COUNT,')
