@@ -76,19 +76,19 @@
   "report_tags": {
     "required_at_report_start": true,
     "allowed": [
-      "Governance",
-      "Signal",
-      "Convenience",
+      "ガバナンス",
+      "信号機",
+      "コンビニ",
       "その他"
     ],
     "multiple_tags_allowed_for_cross_domain_report": true,
     "domain_mapping": {
-      "governance": "Governance",
-      "signal": "Signal",
-      "convenience": "Convenience",
+      "governance": "ガバナンス",
+      "signal": "信号機",
+      "convenience": "コンビニ",
       "unknown_or_other": "その他"
     },
-    "governance_report_requires": "Governance",
+    "governance_report_requires": "ガバナンス",
     "tag_presence_does_not_replace_status_classification": true
   }
 }
