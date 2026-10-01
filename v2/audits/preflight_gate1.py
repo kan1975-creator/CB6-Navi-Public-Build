@@ -17,6 +17,7 @@ tracked = {
  'android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp',
  'android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
  'libs/map/user_mark.hpp', 'libs/map/user_mark.cpp',
+ 'data/styles/default/include/Icons.mapcss',
 }
 if a.verify:
     expected = json.loads(a.manifest.read_text())
@@ -38,6 +39,12 @@ else:
     )
     if any(not x.startswith(allowed) for x in new):
         raise SystemExit('Unexpected untracked upstream surface: '+repr(new))
+    # Stage-1 Signal authority permits exactly the stock traffic_signals z19 -> z17 delta.
+    icons = 'data/styles/default/include/Icons.mapcss'
+    original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons], text=True)
+    expected = original.replace('node|z19-[highway=traffic_signals],', 'node|z17-[highway=traffic_signals],', 1)
+    if expected == original or (root/icons).read_text() != expected:
+        raise SystemExit('Unexpected Icons.mapcss delta: only traffic_signals z19-to-z17 is authorized')
     hashes = {x: hashlib.sha256((root/x).read_bytes()).hexdigest() for x in sorted(tracked | set(new))}
     a.manifest.parent.mkdir(parents=True, exist_ok=True)
     a.manifest.write_text(json.dumps(hashes, indent=2)+'\n')
