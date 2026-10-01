@@ -17,7 +17,7 @@ on:
       - '.github/workflows/build_cb6_v2_convenience_diagnostic.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: cb6-v2-gate1-${{ github.ref }}
@@ -166,6 +166,23 @@ jobs:
           python3 v2/gates/create_apk_evidence.py signals out/CB6-V2-Gate1-Signals-arm64.apk out/APK_SHA256.txt
           python3 v2/gates/verify_apk_evidence.py v2/gates/apk_evidence/signals.json
           cp v2/gates/apk_evidence/signals.json out/APK_EVIDENCE.json
+
+      - name: Publish verified APK for direct smartphone download
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euxo pipefail
+          TAG="cb6-signal-${GITHUB_SHA::8}"
+          gh release create "$TAG" \
+            out/CB6-V2-Gate1-Signals-arm64.apk \
+            out/APK_SHA256.txt \
+            out/APK_EVIDENCE.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "CB6 Signal ${GITHUB_SHA::8}" \
+            --notes "Verified CB6 Signal arm64 APK. Source commit: $GITHUB_SHA"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets,url
 
       - name: Upload verified Gate 1 APK and evidence
         uses: actions/upload-artifact@v4
