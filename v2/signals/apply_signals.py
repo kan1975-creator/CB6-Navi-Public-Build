@@ -5,7 +5,17 @@ import shutil
 import sys
 
 MODULE = Path(__file__).resolve().parent
-ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path('comaps').resolve()
+ROOT = Path(sys.argv[1]).resolve()
+
+# Stage 1: keep stock MWM traffic-signal coordinates/icon, extend only its stock style zoom.
+icons = ROOT / 'data/styles/default/include/Icons.mapcss'
+icons_text = icons.read_text()
+stock_signal_rule = 'node|z19-[highway=traffic_signals],'
+extended_signal_rule = 'node|z17-[highway=traffic_signals],'
+if stock_signal_rule in icons_text:
+    icons.write_text(icons_text.replace(stock_signal_rule, extended_signal_rule, 1))
+elif extended_signal_rule not in icons_text:
+    raise SystemExit('traffic_signals stock style anchor missing') if len(sys.argv) > 1 else Path('comaps').resolve()
 
 def replace(path, old, new):
     p = ROOT / path

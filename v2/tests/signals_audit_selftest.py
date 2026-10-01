@@ -25,6 +25,8 @@ cases=[
   "ClearGroup(UserMark::Type::CB6_SIGNAL)", "ClearGroup(UserMark::Type::DEBUG_MARK)", "publisher clears unrelated state"),
  ("symbol-zoom", "libs/map/cb6_signal_mark.hpp",
   f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};", "minimum zoom mismatch"),
+ ("stock-signal-style", "data/styles/default/include/Icons.mapcss",
+  "node|z17-[highway=traffic_signals],", "node|z16-[highway=traffic_signals],", "stock traffic_signals style delta is not exactly z19-to-z17"),
  ("acquisition-query", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
   "[highway=traffic_signals]", "[highway=traffic_lights]", "current-spec query highway=traffic_signals"),
 ]

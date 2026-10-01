@@ -102,8 +102,15 @@ for theme in ('light','dark'):
     for size, dims in [('xs',('8','14')), ('s',('12','18')), ('m',('16','31')), ('l',('18','34'))]:
         svg = ET.parse(module/f'symbols/{theme}/cb6-signal-{size}.svg').getroot()
         require((svg.get('width'), svg.get('height')) == dims, 'frozen SVG dimensions')
-# Stock functionality: no patch to styles/routing/search/location/bookmark implementation.
-for path in ['data/styles/default/include/Icons.mapcss', 'data/styles/vehicle/include/Icons.mapcss',
+# Stock functionality: Stage 1 permits exactly one style delta: traffic_signals z19 -> z17.
+icons_path = 'data/styles/default/include/Icons.mapcss'
+icons_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons_path]).decode()
+icons_expected = icons_original.replace('node|z19-[highway=traffic_signals],', 'node|z17-[highway=traffic_signals],', 1)
+require(icons_expected != icons_original, 'stock traffic_signals style anchor missing')
+require((root/icons_path).read_text() == icons_expected, 'stock traffic_signals style delta is not exactly z19-to-z17')
+
+# All other protected stock functionality remains byte-identical.
+for path in ['data/styles/vehicle/include/Icons.mapcss',
              'libs/map/bookmark_manager.cpp', 'libs/map/routing_manager.cpp',
              'android/app/src/main/java/app/organicmaps/search/SearchFragment.java']:
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+path])
