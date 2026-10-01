@@ -59,7 +59,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmSignals
     feature::TypesHolder types(ft);
     if (!types.Has(signalType))
       return;
-    auto const pt = feature::GetCenter(ft);
+    auto const pt = ft.GetCenter();
     auto const ll = mercator::ToLatLon(pt);
     ++count;
     LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "point", count, ll.m_lat, ll.m_lon));
