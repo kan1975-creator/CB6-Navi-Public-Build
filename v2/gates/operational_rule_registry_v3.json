@@ -133,14 +133,17 @@
     },
     {
       "id": "OPS-STATUS-REPORTING-001",
-      "status": "PROPOSED",
+      "status": "ACTIVE",
       "scope": "cb6_progress_status_reporting",
       "source": "explicit_user_continuing_instruction_2026-09-30",
-      "contract": null,
-      "verification": [],
+      "contract": "v2/gates/status_reporting_contract_v1.json",
+      "verification": [
+        "v2/gates/verify_status_reporting_active.py",
+        "v2/tests/test_status_reporting_active_fail_closed.py"
+      ],
       "proposal": {
         "rule": "Every progress report must explicitly classify status as one of: 進めて推奨, 待ち, スマホ操作が必要. Waiting reports must identify the external Run/result and an approximate next-check time. During external waits, non-conflicting read-only investigation/static analysis may continue. A user request of 進捗は？ requires fresh GitHub HEAD, Run, and relevant raw-log retrieval before reporting. Implementation-problem fix commits remain subject to OPS-USER-APPROVAL-BEFORE-FIX-001 or its adopted successor.",
-        "github_verification_source": "Machine-check the latest progress-report message for exactly one required status classification; verifier design pending.",
+        "github_verification_source": "CB6 Development Gate executes active verifier and destructive test; adoption evidence is bound in the active contract.",
         "fail_closed": true,
         "required_before_active": [
           "contract_path",
@@ -161,7 +164,7 @@
   },
   "status": "ACTIVE",
   "supersedes": "v2/gates/operational_rule_registry_v2.json",
-  "change_reason": "Adopted candidate for OPS-USER-APPROVAL-BEFORE-FIX-001 after candidate validation, independent review, and explicit user adoption; OPS-STATUS-REPORTING-001 remains PROPOSED.",
+  "change_reason": "OPS-USER-APPROVAL-BEFORE-FIX-001 remains adopted; OPS-STATUS-REPORTING-001 adopted after candidate validation, independent review Run 36838019914, and explicit user adoption on 2026-10-01.",
   "adoption_lifecycle": {
     "authority_split": {
       "rule_content_authority": "explicit_user_decision",
