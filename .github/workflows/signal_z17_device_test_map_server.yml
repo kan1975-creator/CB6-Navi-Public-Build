@@ -28,36 +28,36 @@ jobs:
       - name: Record approved authority
         run: |
           {
-            echo "approval_id=OPS-USER-APPROVAL-BEFORE-FIX-001-20261001-SIGNAL-Z17-DEVICE-TEST-SERVER"
-            echo "approved_at=2026-10-01"
-            echo "proposed_change_id=SIGNAL-Z17-DEVICE-TEST-SERVER-001"
-            echo "approved_change_summary=Signal z17実機検証として、再index済みHokkaido West MWMだけをCB6既存Custom Maps server機能から取得できる試験用配布経路を作る最小変更"
-            echo "source_run=36880874586"
-            echo "source_artifact_id=11171985481"
-            echo "source_head=054f19dca4e06cdb38c47d3d08552135c98bab92"
+            echo "approval_id=OPS-USER-APPROVAL-BEFORE-FIX-001-20261002-SIGNAL-Z17-SAPPORO-MWM"
+            echo "approved_at=2026-10-02"
+            echo "proposed_change_id=SIGNAL-Z17-SAPPORO-MWM-001"
+            echo "approved_change_summary=Signal z17実機検証について、試験対象MWMをHokkaido WestからJapan_Hokkaido Region_Sapporoへ変更し、同じz17 visibility index再構築・整合性検証・試験用Map Server配布を行う最小変更"
+            echo "source_run=36890189315"
+            echo "source_artifact_id=11177340502"
+            echo "source_head=a43f7f69f26d2bbf18f8c8511f8b2eb3fdc717b6"
           } | tee authority.txt
 
       - name: Download approved reindexed MWM artifact
         uses: actions/download-artifact@v4
         with:
-          name: CB6-Signal-z17-Hokkaido-West-MWM-Experiment
+          name: CB6-Signal-z17-Hokkaido-Sapporo-MWM-Experiment
           repository: kan1975-creator/CB6-Navi-Public-Build
-          run-id: 36880874586
+          run-id: 36890189315
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: source
 
-      - name: Verify and stage only Hokkaido West MWM
+      - name: Verify and stage only Hokkaido Sapporo MWM
         shell: bash
         run: |
           set -euxo pipefail
-          MWM="$(find source -type f -name 'Japan_Hokkaido Region_West.mwm' -print -quit)"
+          MWM="$(find source -type f -name 'Japan_Hokkaido Region_Sapporo.mwm' -print -quit)"
           test -n "$MWM"
-          test "$(stat --printf='%s' "$MWM")" = "36636169"
-          echo "4c69601c6a13a5d51d39fad224e3027cacc9437344f5fe172518e5c097ddfc81  $MWM" | sha256sum --check --strict
+          test "$(stat --printf='%s' "$MWM")" = "74474156"
+          echo "ad9fdec227264b80a35e7de7b0f9b344e100270b33ba806a3060b7e7ec8dd04e  $MWM" | sha256sum --check --strict
           mkdir -p "public/maps/2026.06.28/260830"
-          cp "$MWM" "public/maps/2026.06.28/260830/Japan_Hokkaido Region_West.mwm"
+          cp "$MWM" "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm"
           cp authority.txt public/authority.txt
-          sha256sum "public/maps/2026.06.28/260830/Japan_Hokkaido Region_West.mwm" | tee public/MWM_SHA256.txt
+          sha256sum "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm" | tee public/MWM_SHA256.txt
           find public -type f -print
 
       - name: Configure Pages
