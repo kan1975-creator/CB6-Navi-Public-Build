@@ -52,7 +52,8 @@ jobs:
           set -euxo pipefail
           MWM="$(find source -type f -name 'Japan_Hokkaido Region_West.mwm' -print -quit)"
           test -n "$MWM"
-          test "$(stat --printf='%s' "$MWM")" -gt 36636172
+          test "$(stat --printf='%s' "$MWM")" = "36636169"
+          echo "4c69601c6a13a5d51d39fad224e3027cacc9437344f5fe172518e5c097ddfc81  $MWM" | sha256sum --check --strict
           mkdir -p "public/maps/2026.06.28/260830"
           cp "$MWM" "public/maps/2026.06.28/260830/Japan_Hokkaido Region_West.mwm"
           cp authority.txt public/authority.txt
