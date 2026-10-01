@@ -81,6 +81,7 @@ public final class SignalController
   {
     if (!active || !SignalPolicy.validCoordinate(update.getLatitude(), update.getLongitude())) return;
     location = new Location(update); // hasBearing belongs to THIS fix, never a stale retained heading.
+    Framework.nativeLogCb6MwmSignals(location.getLatitude(), location.getLongitude());
     publish();
     requestIfNeeded();
   }
