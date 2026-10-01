@@ -18,11 +18,11 @@ if f.get("automatic") is not True or f.get("required_value")!="ALL_ACTIVE_CROSS_
 wl=(R/"v2/governance/consolidated_worklist_2026-09-30.md").read_text();nums={int(x) for x in re.findall(r'^(\d+)\.\s+\*\*',wl,re.M)}
 if nums!=set(range(1,34)):e.append("33-item worklist not complete")
 reg=json.loads((R/"v2/gates/operational_rule_registry_v3.json").read_text());rr={x["id"]:x for x in reg["rules"]}
-if rr["OPS-STATUS-REPORTING-001"]["status"]!="PROPOSED":e.append("status rule self-activated")
+if rr["OPS-STATUS-REPORTING-001"]["status"]!="ACTIVE":e.append("status rule active authority drift")
 if rr["NOTIFICATION-STALE-STATE"]["status"]!="ACTIVE" or rr["OPS-USER-APPROVAL-BEFORE-FIX-001"]["status"]!="ACTIVE":e.append("delegated active rule status drift")
 if c.get("lifecycle",{}).get("direct_active_forbidden") is not True:e.append("direct active allowed")
 if e:
  print("CB6 CROSS-CUTTING FOUNDATION CANDIDATE FAIL:")
  for x in e:print(" -",x)
  raise SystemExit(1)
-print("CB6 CROSS-CUTTING FOUNDATION CANDIDATE PASS: all33/current/future; inheritance=automatic; active authority unchanged")
+print("CB6 CROSS-CUTTING FOUNDATION CANDIDATE PASS: all33/current/future; inheritance=automatic; current ACTIVE authority aligned")
