@@ -13,15 +13,15 @@ permissions:
 
 jobs:
   experiment:
-    name: Reindex Hokkaido West MWM for stock signal z17
+    name: Reindex Hokkaido Sapporo MWM for stock signal z17
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
       MAP_VERSION: "260830"
       MAP_SERIES: "2026.06.28"
-      MAP_NAME: "Japan_Hokkaido Region_West"
-      MAP_EXPECTED_SIZE: "36636172"
+      MAP_NAME: "Japan_Hokkaido Region_Sapporo"
+      MAP_EXPECTED_SIZE: "74474159"
     steps:
       - name: Checkout CB6 control repo
         uses: actions/checkout@v4
@@ -90,7 +90,7 @@ jobs:
           test -x ../omim-build-release/generator_tool
           ../omim-build-release/generator_tool --help > ../out/GENERATOR_HELP.txt 2>&1 || true
 
-      - name: Download exact CoMaps Hokkaido West MWM
+      - name: Download exact CoMaps Hokkaido Sapporo MWM
         shell: bash
         run: |
           set -euxo pipefail
@@ -135,7 +135,7 @@ jobs:
       - name: Upload reindexed MWM and evidence
         uses: actions/upload-artifact@v4
         with:
-          name: CB6-Signal-z17-Hokkaido-West-MWM-Experiment
+          name: CB6-Signal-z17-Hokkaido-Sapporo-MWM-Experiment
           path: out/
           if-no-files-found: error
           retention-days: 7
