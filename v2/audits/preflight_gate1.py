@@ -108,6 +108,13 @@ else:
     activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'
     activity_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+activity], text=True)
     activity_expected = activity_original.replace(
+        '  private int mNavBarHeight;',
+        '  private int mNavBarHeight;\n  private app.organicmaps.cb6.signals.SignalController mCb6Signals;', 1)
+    activity_expected = activity_expected.replace(
+        '    initViews(isLaunchByDeepLink);',
+        '    mCb6Signals = new app.organicmaps.cb6.signals.SignalController(getApplicationContext());\n'
+        '    initViews(isLaunchByDeepLink);', 1)
+    activity_expected = activity_expected.replace(
         '  protected void onStart()\n'
         '  {\n'
         '    super.onStart();',
@@ -115,7 +122,8 @@ else:
         '  {\n'
         '    super.onStart();\n'
         '    app.organicmaps.sdk.downloader.ChunkTask.setDiagnosticListener(text -> runOnUiThread(() ->\n'
-        '        android.widget.Toast.makeText(this, text, android.widget.Toast.LENGTH_LONG).show()));', 1)
+        '        android.widget.Toast.makeText(this, text, android.widget.Toast.LENGTH_LONG).show()));\n'
+        '    if (mCb6Signals != null) mCb6Signals.start(Map.isEngineCreated());', 1)
     activity_expected = activity_expected.replace(
         '  protected void onStop()\n'
         '  {\n'
@@ -123,9 +131,21 @@ else:
         '  protected void onStop()\n'
         '  {\n'
         '    app.organicmaps.sdk.downloader.ChunkTask.setDiagnosticListener(null);\n'
-        '    super.onStop();', 1)
+        '    if (mCb6Signals != null) mCb6Signals.stop();\n    super.onStop();', 1)
+    activity_expected = activity_expected.replace(
+        '  public void onRenderingInitializationFinished()\n'
+        '  {',
+        '  public void onRenderingInitializationFinished()\n'
+        '  {\n'
+        '    if (mCb6Signals != null) mCb6Signals.renderingReady();', 1)
+    activity_expected = activity_expected.replace(
+        '  public void onLocationUpdated(@NonNull Location location)\n'
+        '  {',
+        '  public void onLocationUpdated(@NonNull Location location)\n'
+        '  {\n'
+        '    if (mCb6Signals != null) mCb6Signals.onLocation(location);', 1)
     if activity_expected == activity_original or (root/activity).read_text() != activity_expected:
-        raise SystemExit('Unexpected MwmActivity.java delta: only approved Sapporo MWM diagnostic Toast bridge is authorized')
+        raise SystemExit('Unexpected MwmActivity.java delta: only approved SignalController integration plus Sapporo MWM diagnostic Toast bridge is authorized')
     # Device-test-only update-check diagnostics: permit exactly the approved
     # meta/maps.json logging insertion and reject every other http_request.cpp delta.
     http_request = 'libs/platform/http_request.cpp'
