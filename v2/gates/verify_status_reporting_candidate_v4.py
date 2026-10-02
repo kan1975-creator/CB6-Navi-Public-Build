@@ -9,6 +9,8 @@ if rev.get("from")!="v2/gates/status_reporting_contract_v3.json" or rev.get("sup
 if d.get("allowed_classifications")!=["進めて推奨","待ち","スマホ操作が必要"] or d.get("exactly_one_classification_required") is not True: e.append("classification contract invalid")
 fields=["分類","次にユーザーがすること","ChatGPTアプリ","スマホ操作"]
 if d.get("required_report_fields")!=fields: e.append("four-line fields invalid")
+t=d.get("four_line_template",{})
+if t.get("placement")!="FINAL_FOUR_LINES" or t.get("final_four_lines_required") is not True or t.get("order_exactly_required")!=fields or t.get("content_after_four_lines_forbidden") is not True: e.append("final four-line placement invalid")
 s=d.get("rules",{}).get("スマホ操作が必要",{}); f=s.get("final_user_action_section",{}); fc=s.get("fail_closed",{})
 for x in ("required_device_action","required_evidence","final_user_action_section"):
  if x not in s.get("required_fields",[]): e.append("smartphone required field missing: "+x)
