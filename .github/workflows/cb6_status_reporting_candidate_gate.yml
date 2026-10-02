@@ -36,12 +36,12 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
-          r=json.loads(Path("v2/gates/operational_rule_registry_v3.json").read_text())
-          c=json.loads(Path("v2/gates/status_reporting_contract_candidate_v1.json").read_text())
+          r=json.loads(Path("v2/gates/operational_rule_registry_v4.json").read_text())
+          c=json.loads(Path("v2/gates/status_reporting_contract_candidate_v2.json").read_text())
           rows=[x for x in r["rules"] if x["id"]=="OPS-STATUS-REPORTING-001"]
-          if len(rows)!=1 or rows[0]["status"]!="PROPOSED":
-              raise SystemExit("status-reporting registry entry self-activated")
+          if len(rows)!=1 or rows[0]["status"]!="ACTIVE":
+              raise SystemExit("active status-reporting authority drifted")
           if c["status"]!="CANDIDATE":
               raise SystemExit("candidate status drifted")
-          print("PASS: active authority unchanged; status-reporting remains pre-adoption")
+          print("PASS: Registry v4 ACTIVE authority unchanged; v2 status-reporting remains CANDIDATE")
           PY
