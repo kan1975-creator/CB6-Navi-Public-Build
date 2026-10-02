@@ -166,6 +166,18 @@ public final class SignalController
     }
     Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
         + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
+    if (location != null)
+    {
+      float[] diagnosticDistance = new float[1];
+      for (SignalSnapshot.Point p : display)
+      {
+        Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+            p.lat, p.lon, diagnosticDistance);
+        if (diagnosticDistance[0] <= 1000.0f)
+          Log.i("CB6-SIGNAL-DIAG", "point id=" + p.id + " lat=" + p.lat + " lon=" + p.lon
+              + " distance=" + diagnosticDistance[0]);
+      }
+    }
     Framework.nativeSetCb6Signals(lats, lons, forward);
     published = snapshot;
     publishedForward = forward;
