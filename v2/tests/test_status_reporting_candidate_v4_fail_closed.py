@@ -5,6 +5,9 @@ S=Path(__file__).resolve().parents[2]; CMD=["python3","v2/gates/verify_status_re
 def run(r): return subprocess.run(CMD,cwd=r,text=True,capture_output=True)
 if run(S).returncode: raise SystemExit("status reporting v4 candidate baseline failed")
 cases=[
+ ("four-lines-not-final",lambda d:d["four_line_template"].update({"placement":"ANYWHERE"}),"final four-line placement invalid"),
+ ("four-lines-reordered",lambda d:d["four_line_template"].update({"order_exactly_required":["分類","ChatGPTアプリ","次にユーザーがすること","スマホ操作"]}),"final four-line placement invalid"),
+ ("allow-content-after-four-lines",lambda d:d["four_line_template"].update({"content_after_four_lines_forbidden":False}),"final four-line placement invalid"),
  ("drop-final-section",lambda d:d["rules"]["スマホ操作が必要"]["required_fields"].remove("final_user_action_section"),"smartphone required field missing"),
  ("wrong-heading",lambda d:d["rules"]["スマホ操作が必要"]["final_user_action_section"].update({"heading":"スマホ操作"}),"final user action section invalid"),
  ("not-at-end",lambda d:d["rules"]["スマホ操作が必要"]["final_user_action_section"].update({"placement":"ANYWHERE"}),"final user action section invalid"),
