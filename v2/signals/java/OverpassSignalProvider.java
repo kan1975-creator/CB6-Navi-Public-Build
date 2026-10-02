@@ -167,15 +167,21 @@ public final class OverpassSignalProvider implements SignalProvider
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
         + ")->.signals;way(bn.signals)[highway];out geom;";
+    Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start");
     try
     {
-      JSONObject root = new JSONObject(post(endpoint, query));
+      String response = post(endpoint, query);
+      Log.i("CB6-SIGNAL-WAY-DIAG", "stage=http-complete bytes=" + response.length());
+      JSONObject root = new JSONObject(response);
       if (root.has("remark"))
       {
-        Log.i("CB6-SIGNAL-WAY-DIAG", "result=incomplete");
+        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=incomplete");
         return;
       }
       JSONArray elements = root.getJSONArray("elements");
+      Log.i("CB6-SIGNAL-WAY-DIAG", "stage=elements count=" + elements.length());
+      if (elements.length() == 0)
+        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-elements");
       for (int i = 0; i < elements.length(); ++i)
       {
         JSONObject way = elements.optJSONObject(i);
@@ -200,8 +206,8 @@ public final class OverpassSignalProvider implements SignalProvider
     }
     catch (Exception error)
     {
-      Log.i("CB6-SIGNAL-WAY-DIAG", "result=error type="
-          + error.getClass().getSimpleName());
+      Log.i("CB6-SIGNAL-WAY-DIAG", "stage=exception type="
+          + error.getClass().getSimpleName() + " message=" + String.valueOf(error.getMessage()));
     }
   }
 
