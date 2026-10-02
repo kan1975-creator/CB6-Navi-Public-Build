@@ -107,7 +107,7 @@ jobs:
           HEADERS="$(mktemp)"
           curl --fail --silent --show-error --location --dump-header "$HEADERS" --output /dev/null "$URL"
           tr -d '\r' < "$HEADERS" | tee normal-get-headers.txt
-          STATUS="$(tr -d '\r' < "$HEADERS" | awk '/^HTTP\\// {code=$2} END {print code}')"
+          STATUS="$(tr -d '\r' < "$HEADERS" | awk '/^HTTP\// {code=$2} END {print code}')"
           CONTENT_LENGTH="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-length:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
           CONTENT_ENCODING="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-encoding:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
           echo "normal_get_status=$STATUS"
