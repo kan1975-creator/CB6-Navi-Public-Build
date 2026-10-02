@@ -159,13 +159,6 @@ public final class SignalController
         forward[i] = SignalPolicy.forward(result[0], result[1], location.getBearing(), true);
       }
     }
-    if (published == snapshot && Arrays.equals(publishedForward, forward))
-    {
-      Log.i("CB6-SIGNAL-DIAG", "publish-skip unchanged display=" + n);
-      return;
-    }
-    Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
-        + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
     if (location != null)
     {
       float[] diagnosticDistance = new float[1];
@@ -178,6 +171,13 @@ public final class SignalController
               + " distance=" + diagnosticDistance[0]);
       }
     }
+    if (published == snapshot && Arrays.equals(publishedForward, forward))
+    {
+      Log.i("CB6-SIGNAL-DIAG", "publish-skip unchanged display=" + n);
+      return;
+    }
+    Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
+        + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
     Framework.nativeSetCb6Signals(lats, lons, forward);
     published = snapshot;
     publishedForward = forward;
