@@ -38,7 +38,16 @@
       "ChatGPTアプリ": "閉じてOK",
       "スマホ操作": "不要。再試行もしなくて大丈夫です。"
     },
-    "state_consistency_required": true
+    "state_consistency_required": true,
+    "placement": "FINAL_FOUR_LINES",
+    "final_four_lines_required": true,
+    "order_exactly_required": [
+      "分類",
+      "次にユーザーがすること",
+      "ChatGPTアプリ",
+      "スマホ操作"
+    ],
+    "content_after_four_lines_forbidden": true
   },
   "rules": {
     "進めて推奨": {
@@ -117,11 +126,11 @@
   },
   "revision": {
     "from": "v2/gates/status_reporting_contract_v3.json",
-    "reason": "Add only the approved mandatory report-end concrete smartphone action section and fail-closed prohibition on requesting unidentified device operations; ACTIVE v3 remains unchanged until lifecycle completion.",
+    "reason": "Add the approved mandatory concrete smartphone-action section and fail-closed unidentified-operation rule, plus require the four status lines to be the final four lines of every CB6 progress report; ACTIVE v3 remains unchanged until lifecycle completion.",
     "supersedes": "v2/gates/status_reporting_contract_v3.json"
   },
   "adoption": {
     "pending": true,
-    "approved_revision_scope": "スマホ操作が必要の場合、報告末尾の『あなたが今すること』に具体的操作を必須表示し、操作内容未特定ならスマホ操作を要求しないfail-closed最小変更"
+    "approved_revision_scope": "スマホ操作が必要の場合の具体的操作明記・未特定操作fail-closedに加え、4行を全CB6進捗報告の最終4行として必須化し、欠落・順序違い・末尾以外をfail-closedで拒否する最小変更"
   }
 }
