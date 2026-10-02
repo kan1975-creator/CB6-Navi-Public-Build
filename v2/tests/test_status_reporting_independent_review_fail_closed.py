@@ -5,9 +5,10 @@ S=Path(__file__).resolve().parents[2]; CMD=["python3","v2/gates/verify_status_re
 def run(r): return subprocess.run(CMD,cwd=r,text=True,capture_output=True)
 if run(S).returncode: raise SystemExit("status reporting independent review baseline failed")
 cases=[
- ("direct-active","v2/gates/status_reporting_contract_candidate_v1.json",lambda d:d["activation"].update({"direct_active_forbidden":False}),"candidate allows direct activation"),
- ("drop-japanese-tag","v2/gates/status_reporting_contract_candidate_v1.json",lambda d:d["report_tags"].update({"allowed":["ガバナンス","信号機","コンビニ"]}),"Japanese report tag contract invalid"),
- ("pre-adopt-active","v2/gates/operational_rule_registry_v3.json",lambda d:[x.update({"status":"ACTIVE"}) for x in d["rules"] if x.get("id")=="OPS-STATUS-REPORTING-001"],"pre-adoption registry authority changed"),
+ ("direct-active","v2/gates/status_reporting_contract_candidate_v2.json",lambda d:d["activation"].update({"direct_active_forbidden":False}),"candidate allows direct activation"),
+ ("drop-japanese-tag","v2/gates/status_reporting_contract_candidate_v2.json",lambda d:d["report_tags"].update({"allowed":["ガバナンス","信号機","コンビニ"]}),"Japanese report tag contract invalid"),
+ ("active-authority-demoted","v2/gates/operational_rule_registry_v4.json",lambda d:[x.update({"status":"PROPOSED"}) for x in d["rules"] if x.get("id")=="OPS-STATUS-REPORTING-001"],"active registry authority changed"),
+ ("drop-post-wait-instruction","v2/gates/status_reporting_contract_candidate_v2.json",lambda d:d["rules"]["待ち"]["post_wait_user_instruction"].update({"required":False}),"post-wait instruction requirement invalid"),
  ("allow-self-adoption","v2/gates/status_reporting_method_revision_candidate.json",lambda d:d["invariants"].update({"candidate_cannot_self_adopt":False}),"method revision pre-adoption protection invalid")]
 for name,path,mut,needle in cases:
  with tempfile.TemporaryDirectory() as td:
