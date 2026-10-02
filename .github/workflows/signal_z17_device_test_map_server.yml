@@ -114,3 +114,22 @@ jobs:
           echo "normal_get_content_length=$CONTENT_LENGTH"
           echo "normal_get_content_encoding=$CONTENT_ENCODING"
           test "$STATUS" = "200"
+
+      - name: Diagnose Android 1MiB Range response
+        shell: bash
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euxo pipefail
+          URL="${PAGE_URL%/}/maps/2026.06.28/260927/Japan_Hokkaido%20Region_Sapporo.mwm"
+          HEADERS="$(mktemp)"
+          curl --fail --silent --show-error --location --range 0-1048575 --dump-header "$HEADERS" --output /dev/null "$URL"
+          tr -d '\r' < "$HEADERS" | tee android-range-headers.txt
+          STATUS="$(tr -d '\r' < "$HEADERS" | awk '/^HTTP\// {code=$2} END {print code}')"
+          CONTENT_RANGE="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-range:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+          CONTENT_LENGTH="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-length:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+          echo "android_range_status=$STATUS"
+          echo "android_range_content_range=$CONTENT_RANGE"
+          echo "android_range_content_length=$CONTENT_LENGTH"
+          test "$STATUS" = "206"
+          test "$CONTENT_RANGE" = "bytes 0-1048575/74474156"
