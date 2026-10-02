@@ -60,17 +60,12 @@ jobs:
           cp "$MWM" "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm"
           cp authority.txt public/authority.txt
           mkdir -p public/meta
-          cat > public/meta/maps.json <<\'JSON\'
-          {"map-series":{"2026.06.28":{"latest":260830,"status":"active"}}}
-          JSON
-          python3 - <<\'PY\'
-          import json
-          with open("public/meta/maps.json", encoding="utf-8") as f:
-              data = json.load(f)
-          entry = data["map-series"]["2026.06.28"]
-          assert entry["latest"] == 260830
-          assert entry["status"] != "EOL"
-          PY
+          printf '%s\n' '{"map-series":{"2026.06.28":{"latest":260830,"status":"active"}}}' > public/meta/maps.json
+          python3 -c 'import json; data=json.load(open("public/meta/maps.json", encoding="utf-8")); entry=data["map-series"]["2026.06.28"]; assert entry["latest"] == 260830; assert entry["status"] != "EOL"'
+          test -f "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm"
+          test "$(stat --printf='%s' "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm")" = "74474156"
+          echo "ad9fdec227264b80a35e7de7b0f9b344e100270b33ba806a3060b7e7ec8dd04e  public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm" | sha256sum --check --strict
+          test -s public/meta/maps.json
           sha256sum "public/maps/2026.06.28/260830/Japan_Hokkaido Region_Sapporo.mwm" | tee public/MWM_SHA256.txt
           find public -type f -print
 
