@@ -36,7 +36,7 @@ public final class OverpassSignalProvider implements SignalProvider
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
         + "way(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
         + "rel(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[type=traffic_signals_set];"
-        + ");out center;";
+        + ");out center geom;";
     Exception last = null;
     for (int endpointIndex = 0; endpointIndex < ENDPOINTS.length; ++endpointIndex)
     {
@@ -84,6 +84,8 @@ public final class OverpassSignalProvider implements SignalProvider
       boolean crossingSignal = "traffic_signals".equals(tags.optString("crossing"));
       boolean signalSet = "traffic_signals_set".equals(tags.optString("type"));
       if (!roadSignal && !crossingSignal && !signalSet) continue;
+      if (signalSet && "relation".equals(type))
+        logSignalSetMembers(e);
       double y, x;
       if ("node".equals(type))
       {
@@ -115,6 +117,47 @@ public final class OverpassSignalProvider implements SignalProvider
       points.add(new SignalSnapshot.Point(id, y, x, distance[0]));
     }
     return new SignalSnapshot(points); // Sort ALL candidates before the 1400 cap.
+  }
+
+  private static void logSignalSetMembers(JSONObject relation)
+  {
+    long relationId = relation.optLong("id", -1);
+    JSONArray members = relation.optJSONArray("members");
+    if (relationId <= 0 || members == null) return;
+    for (int i = 0; i < members.length(); ++i)
+    {
+      JSONObject member = members.optJSONObject(i);
+      if (member == null) continue;
+      long memberId = member.optLong("ref", -1);
+      String role = member.optString("role");
+      double lat = member.optDouble("lat", Double.NaN);
+      double lon = member.optDouble("lon", Double.NaN);
+      if ((!Double.isFinite(lat) || !Double.isFinite(lon)) && member.has("geometry"))
+      {
+        JSONArray geometry = member.optJSONArray("geometry");
+        if (geometry != null && geometry.length() > 0)
+        {
+          JSONObject first = geometry.optJSONObject(0);
+          JSONObject last = geometry.optJSONObject(geometry.length() - 1);
+          if (first != null && last != null)
+          {
+            double firstLat = first.optDouble("lat", Double.NaN);
+            double firstLon = first.optDouble("lon", Double.NaN);
+            double lastLat = last.optDouble("lat", Double.NaN);
+            double lastLon = last.optDouble("lon", Double.NaN);
+            if (SignalPolicy.validCoordinate(firstLat, firstLon)
+                && SignalPolicy.validCoordinate(lastLat, lastLon))
+            {
+              lat = (firstLat + lastLat) / 2.0;
+              lon = (firstLon + lastLon) / 2.0;
+            }
+          }
+        }
+      }
+      Log.i("CB6-SIGNAL-SET-DIAG", "relation=" + relationId
+          + " member=" + memberId + " role=" + role
+          + " lat=" + lat + " lon=" + lon);
+    }
   }
 
   private static String post(String endpoint, String query) throws Exception
