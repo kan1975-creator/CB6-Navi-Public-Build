@@ -1,7 +1,7 @@
 {
   "schema": 3,
   "rule_id": "OPS-STATUS-REPORTING-001",
-  "status": "CANDIDATE",
+  "status": "ACTIVE",
   "source": "explicit_user_continuing_instruction_2026-09-30_scope_confirmation_2026-10-01_and_four_line_extension_2026-10-02",
   "scope": {
     "type": "CB6_PROJECT_WIDE_CROSS_CUTTING",
@@ -14,9 +14,18 @@
     "feature_specific_override_may_weaken_or_disable": false,
     "new_feature_requires_explicit_opt_in": false
   },
-  "allowed_classifications": ["進めて推奨", "待ち", "スマホ操作が必要"],
+  "allowed_classifications": [
+    "進めて推奨",
+    "待ち",
+    "スマホ操作が必要"
+  ],
   "exactly_one_classification_required": true,
-  "required_report_fields": ["分類", "次にユーザーがすること", "ChatGPTアプリ", "スマホ操作"],
+  "required_report_fields": [
+    "分類",
+    "次にユーザーがすること",
+    "ChatGPTアプリ",
+    "スマホ操作"
+  ],
   "four_line_template": {
     "required": true,
     "classification_field": "分類",
@@ -32,13 +41,29 @@
     "state_consistency_required": true
   },
   "rules": {
-    "進めて推奨": {"chat_instruction_wait_alone_forbidden": true},
-    "待ち": {
-      "required_fields": ["approximate_wait_time", "next_check_timing", "parallel_work_available", "post_wait_user_instruction"],
-      "parallel_read_only_work_allowed": true,
-      "post_wait_user_instruction": {"required": true, "when_user_instruction_needed": "state the concrete instruction the user should send after the wait, e.g. 進めて", "when_automatic_monitoring_active": "指示不要・自動モニタリング継続"}
+    "進めて推奨": {
+      "chat_instruction_wait_alone_forbidden": true
     },
-    "スマホ操作が必要": {"required_fields": ["required_device_action", "required_evidence"]}
+    "待ち": {
+      "required_fields": [
+        "approximate_wait_time",
+        "next_check_timing",
+        "parallel_work_available",
+        "post_wait_user_instruction"
+      ],
+      "parallel_read_only_work_allowed": true,
+      "post_wait_user_instruction": {
+        "required": true,
+        "when_user_instruction_needed": "state the concrete instruction the user should send after the wait, e.g. 進めて",
+        "when_automatic_monitoring_active": "指示不要・自動モニタリング継続"
+      }
+    },
+    "スマホ操作が必要": {
+      "required_fields": [
+        "required_device_action",
+        "required_evidence"
+      ]
+    }
   },
   "freshness_rule": {
     "progress_query_requires_current_head": true,
@@ -46,19 +71,41 @@
     "material_log_evidence_requires_fresh_raw_log": true,
     "delegates_stale_state_authority_to": "v2/gates/notification_stale_state.json"
   },
-  "fix_approval_boundary": {"delegates_to": "OPS-USER-APPROVAL-BEFORE-FIX-001"},
+  "fix_approval_boundary": {
+    "delegates_to": "OPS-USER-APPROVAL-BEFORE-FIX-001"
+  },
   "activation": {
     "direct_active_forbidden": true,
-    "requires": ["positive_verification", "destructive_test", "successful_github_run_evidence", "independent_review", "explicit_user_adoption", "machine_enforced_coverage"]
+    "requires": [
+      "positive_verification",
+      "destructive_test",
+      "successful_github_run_evidence",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_coverage"
+    ]
   },
   "report_tags": {
     "required_at_report_start": true,
-    "allowed": ["ガバナンス", "信号機", "コンビニ", "その他"],
+    "allowed": [
+      "ガバナンス",
+      "信号機",
+      "コンビニ",
+      "その他"
+    ],
     "tag_presence_does_not_replace_status_classification": true
   },
   "revision": {
     "from": "v2/gates/status_reporting_contract_v2.json",
     "reason": "Add only the explicitly approved mandatory four-line progress template while leaving ACTIVE v2 unchanged until the existing adoption lifecycle completes.",
     "supersedes": "v2/gates/status_reporting_contract_v2.json"
+  },
+  "adoption": {
+    "decision": "OPS-STATUS-REPORTING-001 v3の4行テンプレートを、独立レビューRun 36976511431のSUCCESSをEvidenceとして正式採用し、ACTIVE化・Registry/Coverage反映・Method refreeze・最終Root Certification/Development Gateまで進めることを承認します。",
+    "adopted_at": "2026-10-02",
+    "candidate_validation_run_id": 36975550390,
+    "independent_review_run_id": 36976511431,
+    "independent_review_head": "aaaf68ecea9bc8e4e7069cf9832ea1b79a28163b",
+    "coverage_required": "MACHINE_ENFORCED"
   }
 }

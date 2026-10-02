@@ -12,7 +12,7 @@ for name,side,needle in [
  with tempfile.TemporaryDirectory() as td:
   r=Path(td)/"repo"; shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))
   if side=="registry":
-   p=r/"v2/gates/operational_rule_registry_v5.json"; d=json.loads(p.read_text()); d["rules"].append({"id":"TEST-RULE-X","status":"ACTIVE","scope":"test","source":"test","contract":"v2/gates/development_method_contract.json","verification":["v2/gates/verify_rule_coverage.py"]}); p.write_text(json.dumps(d))
+   p=r/"v2/gates/operational_rule_registry_v6.json"; d=json.loads(p.read_text()); d["rules"].append({"id":"TEST-RULE-X","status":"ACTIVE","scope":"test","source":"test","contract":"v2/gates/development_method_contract.json","verification":["v2/gates/verify_rule_coverage.py"]}); p.write_text(json.dumps(d))
   else:
    p=r/"v2/gates/rule_coverage.json"; d=json.loads(p.read_text())
    if side=="coverage": d["entries"].append({"rule_id":"TEST-RULE-X","coverage_status":"MACHINE_ENFORCED"})

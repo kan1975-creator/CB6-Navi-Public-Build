@@ -2,7 +2,7 @@
   "schema": 1,
   "coverage_id": "cb6-continuing-rule-coverage",
   "method_version": 2,
-  "registry": "v2/gates/operational_rule_registry_v5.json",
+  "registry": "v2/gates/operational_rule_registry_v6.json",
   "entries": [
     {
       "rule_id": "OPS-MONITOR-001",
