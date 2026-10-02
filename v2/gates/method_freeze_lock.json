@@ -3,7 +3,7 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "a178ae948d435eb7fdf6b15adcae44865c26a927",
+    ".github/workflows/cb6_development_gate.yml": "24323ff449c1d8abe16586aac429e4530439ffe3",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
     "v2/gates/development_method_contract.json": "d00c737290ae4f97d46756cf7ae4615757bf23da",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
@@ -30,7 +30,7 @@
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
     "v2/gates/verify_operational_rule_registry.py": "0eb209301795d830ad1ae768178b0fdead780009",
     "v2/gates/verify_rule_coverage.py": "739eaf10c82a186e192561cd2f3fff8464ff2295",
-    "v2/gates/rule_coverage.json": "da8d09d1aeeca931050fdb30e885d81cb9a24ea6",
+    "v2/gates/rule_coverage.json": "43f69a8fa8f1b8cf1f09385789b2cc641b0a4a37",
     "v2/tests/test_operational_rule_registry_fail_closed.py": "7bf053e46df9236c0e906acafc630d88a2ea5473",
     "v2/tests/test_rule_coverage_fail_closed.py": "8e46f9b2c3ecc70db7842dcc11c19d09c8f8258c",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
@@ -57,6 +57,11 @@
     "v2/gates/verify_status_reporting_active_v3.py": "22f84a44aa5a7c38f6c721db6ce1173be2a55ba2",
     "v2/tests/test_status_reporting_active_v3_fail_closed.py": "a478a2e13f645c3af34f2e5a357df2282970a5e1",
     "v2/gates/operational_rule_registry_v6.json": "d6d2f82a5b64796a4c3607c4e7f64757afd00040",
-    "v2/gates/status_reporting_adoption_evidence_v3.json": "7aecf227756c2bd083838888f7081ecac8591e1b"
+    "v2/gates/status_reporting_adoption_evidence_v3.json": "7aecf227756c2bd083838888f7081ecac8591e1b",
+    "v2/gates/status_reporting_contract_v4.json": "c58d002fb28ad5853bfded765e2fb63b2053e8d7",
+    "v2/gates/verify_status_reporting_active_v4.py": "ff025797025e31f21a35c413bb9345c87e85641b",
+    "v2/tests/test_status_reporting_active_v4_fail_closed.py": "96c21f4bcfe06fb115e44d58ac96bb90220de964",
+    "v2/gates/operational_rule_registry_v7.json": "287a55c12af101903eff01adf71fd4849f9bbf89",
+    "v2/gates/status_reporting_adoption_evidence_v4.json": "04c5c538c0e5d41bfcff4d208658d7017c1dee51"
   }
 }
