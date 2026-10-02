@@ -65,23 +65,67 @@ else:
         '                                      : GetCountryFile(countryId).GetSha1(),', 1)
     if storage_expected == storage_original or (root/storage).read_text() != storage_expected:
         raise SystemExit('Unexpected storage.cpp delta: only approved Sapporo z17 Custom Map Server integrity override is authorized')
-    # Device-test-only Sapporo MWM download diagnostics: permit exactly the
-    # approved logging insertion and reject every other ChunkTask.java delta.
+    # Device-test-only Sapporo MWM screen diagnostics: permit exactly the
+    # approved listener, HTTP fields, and Activity Toast bridge; reject all other deltas.
     chunk_task = 'android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java'
     chunk_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+chunk_task], text=True)
     chunk_expected = chunk_original.replace(
+        'class ChunkTask extends AsyncTask<Void, byte[], Integer>\n'
+        '{\n'
+        '  private static final String TAG = ChunkTask.class.getSimpleName();',
+        'public class ChunkTask extends AsyncTask<Void, byte[], Integer>\n'
+        '{\n'
+        '  public interface DiagnosticListener { void onDiagnostic(String text); }\n'
+        '  private static volatile DiagnosticListener sDiagnosticListener;\n'
+        '  public static void setDiagnosticListener(DiagnosticListener listener) { sDiagnosticListener = listener; }\n'
+        '  private String mCb6Diagnostic;\n'
+        '  private static final String TAG = ChunkTask.class.getSimpleName();', 1)
+    chunk_expected = chunk_expected.replace(
+        '    if (!isCancelled())\n'
+        '      nativeOnFinish(mHttpCallbackID, httpOrErrorCode, mBeg, mEnd);',
+        '    if (!isCancelled())\n'
+        '    {\n'
+        '      DiagnosticListener listener = sDiagnosticListener;\n'
+        '      if (listener != null && mCb6Diagnostic != null) listener.onDiagnostic(mCb6Diagnostic);\n'
+        '      nativeOnFinish(mHttpCallbackID, httpOrErrorCode, mBeg, mEnd);\n'
+        '    }', 1)
+    chunk_expected = chunk_expected.replace(
         '      final int err = urlConnection.getResponseCode();\n'
         '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
         '      final int err = urlConnection.getResponseCode();\n'
-        '      Logger.i(TAG, "CB6_SAPPORO_MWM_DIAG url=" + urlConnection.getURL()\n'
-        '                    + " http=" + err\n'
-        '                    + " contentRange=" + urlConnection.getHeaderField("Content-Range")\n'
-        '                    + " contentLength=" + urlConnection.getHeaderField("Content-Length")\n'
-        '                    + " expectedFileSize=" + mExpectedFileSize\n'
-        '                    + " beg=" + mBeg + " end=" + mEnd);\n'
+        '      String cb6Diag = "CB6_SAPPORO_MWM_DIAG url=" + urlConnection.getURL()\n'
+        '                    + "\\nhttp=" + err\n'
+        '                    + " Content-Range=" + urlConnection.getHeaderField("Content-Range")\n'
+        '                    + "\\nContent-Length=" + urlConnection.getHeaderField("Content-Length")\n'
+        '                    + " expected=" + mExpectedFileSize\n'
+        '                    + "\\nbeg=" + mBeg + " end=" + mEnd;\n'
+        '      Logger.i(TAG, cb6Diag);\n'
+        '      if (mUrl.contains("Japan_Hokkaido%20Region_Sapporo.mwm") || mUrl.contains("Japan_Hokkaido Region_Sapporo.mwm"))\n'
+        '        mCb6Diagnostic = cb6Diag;\n'
         '      if (err == HttpURLConnection.HTTP_NOT_FOUND)', 1)
     if chunk_expected == chunk_original or (root/chunk_task).read_text() != chunk_expected:
-        raise SystemExit('Unexpected ChunkTask.java delta: only approved Sapporo MWM HTTP diagnostic logging is authorized')
+        raise SystemExit('Unexpected ChunkTask.java delta: only approved Sapporo MWM screen diagnostic listener/HTTP fields are authorized')
+    activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'
+    activity_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+activity], text=True)
+    activity_expected = activity_original.replace(
+        '  protected void onStart()\n'
+        '  {\n'
+        '    super.onStart();',
+        '  protected void onStart()\n'
+        '  {\n'
+        '    super.onStart();\n'
+        '    app.organicmaps.sdk.downloader.ChunkTask.setDiagnosticListener(text -> runOnUiThread(() ->\n'
+        '        android.widget.Toast.makeText(this, text, android.widget.Toast.LENGTH_LONG).show()));', 1)
+    activity_expected = activity_expected.replace(
+        '  protected void onStop()\n'
+        '  {\n'
+        '    super.onStop();',
+        '  protected void onStop()\n'
+        '  {\n'
+        '    app.organicmaps.sdk.downloader.ChunkTask.setDiagnosticListener(null);\n'
+        '    super.onStop();', 1)
+    if activity_expected == activity_original or (root/activity).read_text() != activity_expected:
+        raise SystemExit('Unexpected MwmActivity.java delta: only approved Sapporo MWM diagnostic Toast bridge is authorized')
     # Device-test-only update-check diagnostics: permit exactly the approved
     # meta/maps.json logging insertion and reject every other http_request.cpp delta.
     http_request = 'libs/platform/http_request.cpp'
