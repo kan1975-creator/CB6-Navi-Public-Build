@@ -50,7 +50,7 @@ public final class OverpassSignalProvider implements SignalProvider
         {
           Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex
               + " result=points count=" + snapshot.points.size());
-          logSignalNodeWays(endpoint, ll);
+          logSignalNodeWays(endpoint, snapshot);
           return snapshot;
         }
         Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex + " result=empty");
@@ -161,13 +161,30 @@ public final class OverpassSignalProvider implements SignalProvider
     }
   }
 
-  private static void logSignalNodeWays(String endpoint, String ll)
+  private static void logSignalNodeWays(String endpoint, SignalSnapshot snapshot)
   {
-    String query = "[out:json][timeout:8];("
-        + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
-        + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
-        + ")->.signals;way(bn.signals)[highway];out tags qt;";
-    Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start");
+    ArrayList<Long> nodeIds = new ArrayList<>();
+    for (SignalSnapshot.Point point : snapshot.points)
+    {
+      // Way/relation ids are namespaced above the raw OSM node-id range.
+      if (point.id >= WAY_ID_NAMESPACE) continue;
+      nodeIds.add(point.id);
+      if (nodeIds.size() == 12) break;
+    }
+    if (nodeIds.isEmpty())
+    {
+      Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-node-ids");
+      return;
+    }
+    StringBuilder ids = new StringBuilder();
+    for (int i = 0; i < nodeIds.size(); ++i)
+    {
+      if (i > 0) ids.append(',');
+      ids.append(nodeIds.get(i));
+    }
+    String query = "[out:json][timeout:8];node(id:" + ids + ")->.signals;"
+        + "way(bn.signals)[highway];out body qt;";
+    Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start node-count=" + nodeIds.size());
     try
     {
       String response = post(endpoint, query);
@@ -194,7 +211,7 @@ public final class OverpassSignalProvider implements SignalProvider
         for (int j = 0; j < nodes.length(); ++j)
         {
           long nodeId = nodes.optLong(j, -1);
-          if (nodeId <= 0) continue;
+          if (nodeId <= 0 || !nodeIds.contains(nodeId)) continue;
           Log.i("CB6-SIGNAL-WAY-DIAG", "way=" + wayId + " highway=" + highway
               + " node=" + nodeId + " index=" + j);
         }
