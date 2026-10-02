@@ -94,5 +94,5 @@ jobs:
           URL="${PAGE_URL%/}/maps/2026.06.28/260927/Japan_Hokkaido%20Region_Sapporo.mwm"
           HEADERS="$(mktemp)"
           curl --fail --silent --show-error --location --range 0-0 --dump-header "$HEADERS" --output /dev/null "$URL"
-          CONTENT_RANGE="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-range:/ {print $2; exit}')"
+          CONTENT_RANGE="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-range:/ {sub(/^[^:]*:[[:space:]]*/, ""); print; exit}')"
           test "$CONTENT_RANGE" = "bytes 0-0/74474156"
