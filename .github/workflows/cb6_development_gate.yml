@@ -51,10 +51,10 @@ jobs:
         run: python3 v2/gates/verify_method_version_coverage.py
       - name: Destructive method-version coverage test
         run: python3 v2/tests/test_method_version_coverage_fail_closed.py
-      - name: Verify ACTIVE Status Reporting v3 four-line contract
-        run: python3 v2/gates/verify_status_reporting_active_v3.py
-      - name: Destructive ACTIVE Status Reporting v3 test
-        run: python3 v2/tests/test_status_reporting_active_v3_fail_closed.py
+      - name: Verify ACTIVE Status Reporting v4 final-four-line contract
+        run: python3 v2/gates/verify_status_reporting_active_v4.py
+      - name: Destructive ACTIVE Status Reporting v4 test
+        run: python3 v2/tests/test_status_reporting_active_v4_fail_closed.py
       - name: Verify ACTIVE Cross-Cutting Rule Foundation
         run: python3 v2/gates/verify_cross_cutting_rule_foundation_active.py
       - name: Destructive ACTIVE Cross-Cutting Rule Foundation test
