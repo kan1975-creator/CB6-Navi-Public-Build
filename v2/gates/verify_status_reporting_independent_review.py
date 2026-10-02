@@ -2,23 +2,22 @@
 import json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]; e=[]
-c=json.loads((R/"v2/gates/status_reporting_contract_candidate_v2.json").read_text(encoding="utf-8"))
-m=json.loads((R/"v2/gates/status_reporting_method_revision_candidate.json").read_text(encoding="utf-8"))
-r=json.loads((R/"v2/gates/operational_rule_registry_v4.json").read_text(encoding="utf-8"))
-if c.get("rule_id")!="OPS-STATUS-REPORTING-001" or c.get("status")!="CANDIDATE": e.append("status reporting candidate identity/status invalid")
-if c.get("scope",{}).get("all_33_items_mandatory") is not True: e.append("33-item scope weakened")
-if c.get("scope",{}).get("applies_to_all_future_work") is not True or c.get("scope",{}).get("applies_to_unknown_future_features_without_enumeration") is not True: e.append("future scope weakened")
+c=json.loads((R/"v2/gates/status_reporting_contract_v3.json").read_text(encoding="utf-8"))
+a=json.loads((R/"v2/gates/status_reporting_contract_v2.json").read_text(encoding="utf-8"))
+r=json.loads((R/"v2/gates/operational_rule_registry_v5.json").read_text(encoding="utf-8"))
+if c.get("schema")!=3 or c.get("rule_id")!="OPS-STATUS-REPORTING-001" or c.get("status")!="CANDIDATE": e.append("status reporting v3 candidate identity/status invalid")
+if c.get("revision",{}).get("from")!="v2/gates/status_reporting_contract_v2.json" or c.get("revision",{}).get("supersedes")!="v2/gates/status_reporting_contract_v2.json": e.append("v3 lineage invalid")
 if c.get("allowed_classifications")!=["進めて推奨","待ち","スマホ操作が必要"]: e.append("classification contract changed")
-t=c.get("report_tags",{})
-if t.get("allowed")!=["ガバナンス","信号機","コンビニ","その他"] or t.get("required_at_report_start") is not True or t.get("governance_report_requires")!="ガバナンス": e.append("Japanese report tag contract invalid")
+fields=["分類","次にユーザーがすること","ChatGPTアプリ","スマホ操作"]
+if c.get("required_report_fields")!=fields: e.append("four-line fields invalid")
+t=c.get("four_line_template",{}); expected={"分類":"進めて推奨","次にユーザーがすること":"「進めて」","ChatGPTアプリ":"閉じてOK","スマホ操作":"不要。再試行もしなくて大丈夫です。"}
+if t.get("required") is not True or t.get("state_consistency_required") is not True or t.get("no_user_operation_form")!=expected: e.append("four-line template invalid")
 if c.get("activation",{}).get("direct_active_forbidden") is not True: e.append("candidate allows direct activation")
-w=c.get("rules",{}).get("待ち",{}); wi=w.get("post_wait_user_instruction",{})
-if "post_wait_user_instruction" not in w.get("required_fields",[]) or wi.get("required") is not True or "進めて" not in wi.get("when_user_instruction_needed","") or wi.get("when_automatic_monitoring_active")!="指示不要・自動モニタリング継続": e.append("post-wait instruction requirement invalid")
-rules={x.get("id"):x for x in r.get("rules",[])}
-if rules.get("OPS-STATUS-REPORTING-001",{}).get("status")!="ACTIVE": e.append("active registry authority changed")
-if m.get("status")!="PROPOSED" or m.get("invariants",{}).get("prechange_authority_remains_authoritative_until_adoption") is not True or m.get("invariants",{}).get("candidate_cannot_self_adopt") is not True: e.append("method revision pre-adoption protection invalid")
+if a.get("schema")!=2 or a.get("status")!="ACTIVE": e.append("ACTIVE v2 authority changed")
+rules={x.get("id"):x for x in r.get("rules",[])}; sr=rules.get("OPS-STATUS-REPORTING-001",{})
+if sr.get("status")!="ACTIVE" or sr.get("contract")!="v2/gates/status_reporting_contract_v2.json": e.append("ACTIVE registry binding changed")
 if e:
- print("CB6 STATUS REPORTING INDEPENDENT REVIEW FAIL:")
+ print("CB6 STATUS REPORTING V3 INDEPENDENT REVIEW FAIL:")
  for x in e: print(" -",x)
  raise SystemExit(1)
-print("CB6 STATUS REPORTING INDEPENDENT REVIEW PASS: candidate scope/classes/Japanese tags preserved; ACTIVE authority unchanged; post-wait instruction independently verified; self-adoption blocked")
+print("CB6 STATUS REPORTING V3 INDEPENDENT REVIEW PASS: four-line candidate verified; ACTIVE v2 and registry v5 authority unchanged; direct activation blocked")
