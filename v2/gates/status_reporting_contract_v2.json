@@ -1,0 +1,113 @@
+{
+  "schema": 2,
+  "rule_id": "OPS-STATUS-REPORTING-001",
+  "status": "ACTIVE",
+  "source": "explicit_user_continuing_instruction_2026-09-30_and_scope_confirmation_2026-10-01",
+  "scope": {
+    "type": "CB6_PROJECT_WIDE_CROSS_CUTTING",
+    "consolidated_worklist": "v2/governance/consolidated_worklist_2026-09-30.md",
+    "consolidated_worklist_required_item_count": 33,
+    "all_33_items_mandatory": true,
+    "applies_to_all_derivative_work": true,
+    "applies_to_all_future_work": true,
+    "applies_to_unknown_future_features_without_enumeration": true,
+    "examples_non_exhaustive": [
+      "信号機",
+      "コンビニ",
+      "ナビ",
+      "POI",
+      "表示",
+      "設定"
+    ],
+    "feature_specific_override_may_weaken_or_disable": false,
+    "new_feature_requires_explicit_opt_in": false
+  },
+  "allowed_classifications": [
+    "進めて推奨",
+    "待ち",
+    "スマホ操作が必要"
+  ],
+  "exactly_one_classification_required": true,
+  "rules": {
+    "進めて推奨": {
+      "meaning": "Safe assistant/GitHub-side work can continue.",
+      "chat_instruction_wait_alone_forbidden": true
+    },
+    "待ち": {
+      "meaning": "Blocked on an external result.",
+      "required_fields": [
+        "approximate_wait_time",
+        "next_check_timing",
+        "parallel_work_available",
+        "post_wait_user_instruction"
+      ],
+      "parallel_read_only_work_allowed": true,
+      "post_wait_user_instruction": {
+        "required": true,
+        "when_user_instruction_needed": "state the concrete instruction the user should send after the wait, e.g. 進めて",
+        "when_automatic_monitoring_active": "指示不要・自動モニタリング継続"
+      }
+    },
+    "スマホ操作が必要": {
+      "meaning": "Physical CB6/device action or evidence is required for the next step.",
+      "required_fields": [
+        "required_device_action",
+        "required_evidence"
+      ]
+    }
+  },
+  "freshness_rule": {
+    "progress_query_requires_current_head": true,
+    "progress_query_requires_relevant_run": true,
+    "material_log_evidence_requires_fresh_raw_log": true,
+    "delegates_stale_state_authority_to": "v2/gates/notification_stale_state.json"
+  },
+  "fix_approval_boundary": {
+    "delegates_to": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+    "investigation_permission_is_not_fix_permission": true,
+    "generic_progress_permission_is_not_specific_fix_approval": true,
+    "old_approval_reuse_for_different_change_forbidden": true
+  },
+  "activation": {
+    "direct_active_forbidden": true,
+    "requires": [
+      "positive_verification",
+      "destructive_test",
+      "successful_github_run_evidence",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_coverage"
+    ]
+  },
+  "report_tags": {
+    "required_at_report_start": true,
+    "allowed": [
+      "ガバナンス",
+      "信号機",
+      "コンビニ",
+      "その他"
+    ],
+    "multiple_tags_allowed_for_cross_domain_report": true,
+    "domain_mapping": {
+      "governance": "ガバナンス",
+      "signal": "信号機",
+      "convenience": "コンビニ",
+      "unknown_or_other": "その他"
+    },
+    "governance_report_requires": "ガバナンス",
+    "tag_presence_does_not_replace_status_classification": true
+  },
+  "adoption": {
+    "decision": "OPS-STATUS-REPORTING-001 v2を正式採用し、ACTIVE次版への反映・Registry/coverage整合・refreeze・最終Gate検証まで進めて",
+    "adopted_at": "2026-10-02",
+    "candidate_validation_run_id": 36951709218,
+    "independent_review_run_id": 36952667256,
+    "independent_review_head": "2f5b61924d3786996399aae2fe5fefa6f3569277",
+    "coverage_required": "MACHINE_ENFORCED"
+  },
+  "revision": {
+    "from": "v2/gates/status_reporting_contract_v1.json",
+    "reason": "Add only the missing post-wait concrete user instruction requirement approved 2026-10-02; ACTIVE v1 remains unchanged until lifecycle completion.",
+    "supersedes": "v2/gates/status_reporting_contract_v1.json"
+  }
+}
