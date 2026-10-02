@@ -28,6 +28,19 @@ def replace(path, old, new):
         raise SystemExit(f'pinned anchor mismatch: {path}: {old[:80]}')
     p.write_text(text.replace(old, new, 1))
 
+# Device-test-only download diagnostics. Logging only; request/response handling is unchanged.
+replace('android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java',
+        '      final int err = urlConnection.getResponseCode();\n'
+        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
+        '      final int err = urlConnection.getResponseCode();\n'
+        '      Logger.i(TAG, "CB6_SAPPORO_MWM_DIAG url=" + urlConnection.getURL()\n'
+        '                    + " http=" + err\n'
+        '                    + " contentRange=" + urlConnection.getHeaderField("Content-Range")\n'
+        '                    + " contentLength=" + urlConnection.getHeaderField("Content-Length")\n'
+        '                    + " expectedFileSize=" + mExpectedFileSize\n'
+        '                    + " beg=" + mBeg + " end=" + mEnd);\n'
+        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)')
+
 # Device-test-only Sapporo z17 MWM integrity override.
 # Active only when a custom map server is configured; stock server behavior is unchanged.
 replace('libs/storage/storage.cpp',
