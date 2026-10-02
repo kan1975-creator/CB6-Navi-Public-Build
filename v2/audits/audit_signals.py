@@ -83,7 +83,7 @@ require('DISPLAY_CLUSTER_M' not in snapshot and 'latSum' not in snapshot and 'lo
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
 require('main.post(() ->' in controller, 'main-thread publication')
 require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')
-require('way(around:' in provider and '[crossing=traffic_signals]' in provider and ');out center;' in provider, 'signalized crossing way acquisition')
+require('way(around:' in provider and '[crossing=traffic_signals]' in provider and ');out center geom;' in provider, 'signalized crossing way acquisition')
 require('rel(around:' in provider and '[type=traffic_signals_set]' in provider, 'Japanese traffic signal set relation acquisition')
 require('"relation".equals(type)' in provider and 'RELATION_ID_NAMESPACE' in provider, 'relation parser/id namespace missing')
 require('e.optJSONObject("center")' in provider, 'way centre parser missing')
