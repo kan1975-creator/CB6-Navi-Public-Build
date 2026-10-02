@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "adoption_id": "OPS-STATUS-REPORTING-001-V2-ADOPTION",
-  "status": "USER_ADOPTED_PENDING_POSTCHANGE_CERTIFICATION",
+  "status": "ACTIVE_REFROZEN_CERTIFIED",
   "rule_id": "OPS-STATUS-REPORTING-001",
   "supersedes": "v2/gates/status_reporting_adoption_evidence.json",
   "authority": {
@@ -19,12 +19,18 @@
       "conclusion": "success",
       "head_sha": "2f5b61924d3786996399aae2fe5fefa6f3569277",
       "branch": "review/governance-adoption"
+    },
+    "postchange": {
+      "head_sha": "060eb03f31bdfa359fef42b869717cc1dd9d1552",
+      "development_gate": {
+        "run_id": 36955168177,
+        "conclusion": "success"
+      },
+      "root_certification": "PROVEN",
+      "method_freeze": "PASS",
+      "registry": "v2/gates/operational_rule_registry_v5.json",
+      "coverage": "MACHINE_ENFORCED"
     }
   },
-  "next_required": [
-    "method_refreeze",
-    "root_certification_success",
-    "development_gate_success",
-    "postchange_evidence"
-  ]
+  "next_required": []
 }
