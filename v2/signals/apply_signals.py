@@ -41,6 +41,21 @@ replace('android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java
         '                    + " beg=" + mBeg + " end=" + mEnd);\n'
         '      if (err == HttpURLConnection.HTTP_NOT_FOUND)')
 
+# Device-test-only update-check diagnostics for meta/maps.json. Logging only;
+# request URL, HTTP/error code and download handling are otherwise unchanged.
+replace('libs/platform/http_request.cpp',
+        '  virtual void OnFinish(long httpOrErrorCode, int64_t, int64_t)\n'
+        '  {\n'
+        '    if (httpOrErrorCode == 200)',
+        '  virtual void OnFinish(long httpOrErrorCode, int64_t, int64_t)\n'
+        '  {\n'
+        '    if (m_requestUrl.find("meta/maps.json") != string::npos)\n'
+        '      LOG(LWARNING, ("CB6_SAPPORO_META_DIAG url=", m_requestUrl,\n'
+        '                     " httpOrErrorCode=", httpOrErrorCode,\n'
+        '                     " responseBytes=", m_downloadedData.size(),\n'
+        '                     " failureReason=", non_http_error_code::DebugPrint(httpOrErrorCode)));\n'
+        '    if (httpOrErrorCode == 200)')
+
 # Device-test-only Sapporo z17 MWM integrity override.
 # Active only when a custom map server is configured; stock server behavior is unchanged.
 replace('libs/storage/storage.cpp',
