@@ -52,6 +52,6 @@
     "v2/gates/verify_status_reporting_active_v2.py": "b3118912617542acedf4f164be7a7ddd7e9f3cac",
     "v2/tests/test_status_reporting_active_v2_fail_closed.py": "3b806da31d4bb7c92537965f8c6722ef9008d43c",
     "v2/gates/operational_rule_registry_v5.json": "66e6e4ef06c81243fc8e057fd1e43c7687855ed8",
-    "v2/gates/status_reporting_adoption_evidence_v2.json": "356573271bcec1bb8251ba6e0be494f42ce90f94"
+    "v2/gates/status_reporting_adoption_evidence_v2.json": "e3eab948d4a9619124925cce009b5e5f835dfdff"
   }
 }
