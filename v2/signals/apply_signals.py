@@ -51,14 +51,20 @@ replace('android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java
         '    }')
 # Sapporo custom-map z17 device proof: GitHub Pages serves a gzip representation whose
 # Content-Range total is the compressed size. Force identity only for this exact test MWM.
-replace('android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java',
-        '      final int err = urlConnection.getResponseCode();\n'
-        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
-        '      if (mUrl.contains("kan1975-creator.github.io/CB6-Navi-Public-Build/") &&\n'
-        '          (mUrl.contains("Japan_Hokkaido%20Region_Sapporo.mwm") || mUrl.contains("Japan_Hokkaido Region_Sapporo.mwm")))\n'
-        '        urlConnection.setRequestProperty("Accept-Encoding", "identity");\n'
-        '      final int err = urlConnection.getResponseCode();\n'
-        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)')
+chunk_task_path = ROOT / 'android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java'
+chunk_task_text = chunk_task_path.read_text()
+sapporo_identity = (
+    '      if (mUrl.contains("kan1975-creator.github.io/CB6-Navi-Public-Build/") &&\n'
+    '          (mUrl.contains("Japan_Hokkaido%20Region_Sapporo.mwm") || mUrl.contains("Japan_Hokkaido Region_Sapporo.mwm")))\n'
+    '        urlConnection.setRequestProperty("Accept-Encoding", "identity");\n'
+)
+if sapporo_identity not in chunk_task_text:
+    replace('android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java',
+            '      final int err = urlConnection.getResponseCode();\n'
+            '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
+            sapporo_identity +
+            '      final int err = urlConnection.getResponseCode();\n'
+            '      if (err == HttpURLConnection.HTTP_NOT_FOUND)')
 
 replace('android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java',
         '      final int err = urlConnection.getResponseCode();\n'
