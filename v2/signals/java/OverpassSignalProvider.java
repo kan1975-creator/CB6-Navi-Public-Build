@@ -166,7 +166,7 @@ public final class OverpassSignalProvider implements SignalProvider
     String query = "[out:json][timeout:8];("
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
         + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
-        + ")->.signals;way(bn.signals)[highway];out geom;";
+        + ")->.signals;way(bn.signals)[highway];out tags qt;";
     Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start");
     try
     {
@@ -188,19 +188,15 @@ public final class OverpassSignalProvider implements SignalProvider
         if (way == null || !"way".equals(way.optString("type"))) continue;
         JSONObject tags = way.optJSONObject("tags");
         JSONArray nodes = way.optJSONArray("nodes");
-        JSONArray geometry = way.optJSONArray("geometry");
-        if (tags == null || nodes == null || geometry == null) continue;
+        if (tags == null || nodes == null) continue;
         long wayId = way.optLong("id", -1);
         String highway = tags.optString("highway");
-        for (int j = 0; j < nodes.length() && j < geometry.length(); ++j)
+        for (int j = 0; j < nodes.length(); ++j)
         {
           long nodeId = nodes.optLong(j, -1);
-          JSONObject point = geometry.optJSONObject(j);
-          if (nodeId <= 0 || point == null) continue;
-          double lat = point.optDouble("lat", Double.NaN);
-          double lon = point.optDouble("lon", Double.NaN);
+          if (nodeId <= 0) continue;
           Log.i("CB6-SIGNAL-WAY-DIAG", "way=" + wayId + " highway=" + highway
-              + " node=" + nodeId + " index=" + j + " lat=" + lat + " lon=" + lon);
+              + " node=" + nodeId + " index=" + j);
         }
       }
     }
