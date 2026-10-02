@@ -30,6 +30,14 @@ Canonical no-user-operation form:
 
 For `待ち`, the same four-line structure MUST be retained and the classification line or immediately adjacent status text MUST identify the awaited Run/result, approximate wait time, and next-check timing as required below. For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
 
+## Wait-time display
+
+For a newly awaited GitHub Actions Run, the first `待ち` progress report for that Run MUST show the Run start time in JST.
+
+For the second and every later `待ち` progress report for the same Run, the report MUST show the cumulative elapsed time measured from that same Run start time instead of resetting the wait basis to the latest check.
+
+Intermediate progress checks MUST NOT reset the Run start-time basis. When the awaited Run changes to a different Run, the first `待ち` report for the new Run starts again by showing that new Run's start time in JST.
+
 ## Parallel work while waiting
 
 While an external result is pending, non-conflicting read-only investigation, repository inspection, static analysis, and evidence review MAY continue. Waiting for one result is not a reason to stop unrelated safe work.
