@@ -1,0 +1,30 @@
+{
+  "schema": 2,
+  "adoption_id": "OPS-STATUS-REPORTING-001-V2-ADOPTION",
+  "status": "USER_ADOPTED_PENDING_POSTCHANGE_CERTIFICATION",
+  "rule_id": "OPS-STATUS-REPORTING-001",
+  "supersedes": "v2/gates/status_reporting_adoption_evidence.json",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "OPS-STATUS-REPORTING-001 v2を正式採用し、ACTIVE次版への反映・Registry/coverage整合・refreeze・最終Gate検証まで進めて",
+    "recorded_at": "2026-10-02"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 36951709218,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 36952667256,
+      "conclusion": "success",
+      "head_sha": "2f5b61924d3786996399aae2fe5fefa6f3569277",
+      "branch": "review/governance-adoption"
+    }
+  },
+  "next_required": [
+    "method_refreeze",
+    "root_certification_success",
+    "development_gate_success",
+    "postchange_evidence"
+  ]
+}
