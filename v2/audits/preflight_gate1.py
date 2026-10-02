@@ -18,6 +18,7 @@ tracked = {
  'android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
  'libs/map/user_mark.hpp', 'libs/map/user_mark.cpp',
  'libs/storage/storage.cpp',
+ 'android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java',
  'data/styles/default/include/Icons.mapcss',
 }
 if a.verify:
@@ -63,6 +64,23 @@ else:
         '                                      : GetCountryFile(countryId).GetSha1(),', 1)
     if storage_expected == storage_original or (root/storage).read_text() != storage_expected:
         raise SystemExit('Unexpected storage.cpp delta: only approved Sapporo z17 Custom Map Server integrity override is authorized')
+    # Device-test-only Sapporo MWM download diagnostics: permit exactly the
+    # approved logging insertion and reject every other ChunkTask.java delta.
+    chunk_task = 'android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java'
+    chunk_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+chunk_task], text=True)
+    chunk_expected = chunk_original.replace(
+        '      final int err = urlConnection.getResponseCode();\n'
+        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
+        '      final int err = urlConnection.getResponseCode();\n'
+        '      Logger.i(TAG, "CB6_SAPPORO_MWM_DIAG url=" + urlConnection.getURL()\n'
+        '                    + " http=" + err\n'
+        '                    + " contentRange=" + urlConnection.getHeaderField("Content-Range")\n'
+        '                    + " contentLength=" + urlConnection.getHeaderField("Content-Length")\n'
+        '                    + " expectedFileSize=" + mExpectedFileSize\n'
+        '                    + " beg=" + mBeg + " end=" + mEnd);\n'
+        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)', 1)
+    if chunk_expected == chunk_original or (root/chunk_task).read_text() != chunk_expected:
+        raise SystemExit('Unexpected ChunkTask.java delta: only approved Sapporo MWM HTTP diagnostic logging is authorized')
     # Stage-1 Signal authority permits exactly the stock traffic_signals z19 -> z17 delta.
     icons = 'data/styles/default/include/Icons.mapcss'
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons], text=True)
