@@ -133,3 +133,30 @@ jobs:
           echo "android_range_content_length=$CONTENT_LENGTH"
           test "$STATUS" = "206"
           test "$CONTENT_RANGE" = "bytes 0-1048575/74474156"
+
+      - name: Diagnose Android-like 1MiB Range response
+        shell: bash
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euxo pipefail
+          URL="${PAGE_URL%/}/maps/2026.06.28/260927/Japan_Hokkaido%20Region_Sapporo.mwm"
+          for ENCODING in "identity" "gzip"; do
+            HEADERS="$(mktemp)"
+            curl --fail --silent --show-error --location \
+              --user-agent "Dalvik/2.1.0 (Linux; U; Android 13)" \
+              --header "Accept-Encoding: $ENCODING" \
+              --header "Connection: Keep-Alive" \
+              --range 0-1048575 \
+              --dump-header "$HEADERS" --output /dev/null "$URL"
+            tr -d '\r' < "$HEADERS" | tee "android-like-${ENCODING}-headers.txt"
+            STATUS="$(tr -d '\r' < "$HEADERS" | awk '/^HTTP\// {code=$2} END {print code}')"
+            CONTENT_RANGE="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-range:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+            CONTENT_LENGTH="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-length:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+            CONTENT_ENCODING="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^content-encoding:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+            AGE="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^age:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+            VIA="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^via:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+            X_CACHE="$(tr -d '\r' < "$HEADERS" | awk 'BEGIN{IGNORECASE=1} /^x-cache:/ {sub(/^[^:]*:[[:space:]]*/, ""); value=$0} END {print value}')"
+            echo "android_like_encoding=$ENCODING status=$STATUS content_range=$CONTENT_RANGE content_length=$CONTENT_LENGTH content_encoding=$CONTENT_ENCODING age=$AGE via=$VIA x_cache=$X_CACHE"
+            test "$STATUS" = "206"
+          done
