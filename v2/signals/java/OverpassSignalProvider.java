@@ -50,6 +50,7 @@ public final class OverpassSignalProvider implements SignalProvider
         {
           Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex
               + " result=points count=" + snapshot.points.size());
+          logSignalNodeWays(endpoint, ll);
           return snapshot;
         }
         Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex + " result=empty");
@@ -157,6 +158,50 @@ public final class OverpassSignalProvider implements SignalProvider
       Log.i("CB6-SIGNAL-SET-DIAG", "relation=" + relationId
           + " member=" + memberId + " role=" + role
           + " lat=" + lat + " lon=" + lon);
+    }
+  }
+
+  private static void logSignalNodeWays(String endpoint, String ll)
+  {
+    String query = "[out:json][timeout:8];("
+        + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[highway=traffic_signals];"
+        + "node(around:" + SignalPolicy.RADIUS_M + "," + ll + ")[crossing=traffic_signals];"
+        + ")->.signals;way(bn.signals)[highway];out geom;";
+    try
+    {
+      JSONObject root = new JSONObject(post(endpoint, query));
+      if (root.has("remark"))
+      {
+        Log.i("CB6-SIGNAL-WAY-DIAG", "result=incomplete");
+        return;
+      }
+      JSONArray elements = root.getJSONArray("elements");
+      for (int i = 0; i < elements.length(); ++i)
+      {
+        JSONObject way = elements.optJSONObject(i);
+        if (way == null || !"way".equals(way.optString("type"))) continue;
+        JSONObject tags = way.optJSONObject("tags");
+        JSONArray nodes = way.optJSONArray("nodes");
+        JSONArray geometry = way.optJSONArray("geometry");
+        if (tags == null || nodes == null || geometry == null) continue;
+        long wayId = way.optLong("id", -1);
+        String highway = tags.optString("highway");
+        for (int j = 0; j < nodes.length() && j < geometry.length(); ++j)
+        {
+          long nodeId = nodes.optLong(j, -1);
+          JSONObject point = geometry.optJSONObject(j);
+          if (nodeId <= 0 || point == null) continue;
+          double lat = point.optDouble("lat", Double.NaN);
+          double lon = point.optDouble("lon", Double.NaN);
+          Log.i("CB6-SIGNAL-WAY-DIAG", "way=" + wayId + " highway=" + highway
+              + " node=" + nodeId + " index=" + j + " lat=" + lat + " lon=" + lon);
+        }
+      }
+    }
+    catch (Exception error)
+    {
+      Log.i("CB6-SIGNAL-WAY-DIAG", "result=error type="
+          + error.getClass().getSimpleName());
     }
   }
 
