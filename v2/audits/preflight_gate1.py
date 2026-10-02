@@ -92,6 +92,14 @@ else:
     chunk_expected = chunk_expected.replace(
         '      final int err = urlConnection.getResponseCode();\n'
         '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
+        '      if (mUrl.contains("kan1975-creator.github.io/CB6-Navi-Public-Build/") &&\n'
+        '          (mUrl.contains("Japan_Hokkaido%20Region_Sapporo.mwm") || mUrl.contains("Japan_Hokkaido Region_Sapporo.mwm")))\n'
+        '        urlConnection.setRequestProperty("Accept-Encoding", "identity");\n'
+        '      final int err = urlConnection.getResponseCode();\n'
+        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)', 1)
+    chunk_expected = chunk_expected.replace(
+        '      final int err = urlConnection.getResponseCode();\n'
+        '      if (err == HttpURLConnection.HTTP_NOT_FOUND)',
         '      final int err = urlConnection.getResponseCode();\n'
         '      String cb6Diag = "CB6_SAPPORO_MWM_DIAG url=" + urlConnection.getURL()\n'
         '                    + "\\nhttp=" + err\n'
@@ -104,7 +112,7 @@ else:
         '        mCb6Diagnostic = cb6Diag;\n'
         '      if (err == HttpURLConnection.HTTP_NOT_FOUND)', 1)
     if chunk_expected == chunk_original or (root/chunk_task).read_text() != chunk_expected:
-        raise SystemExit('Unexpected ChunkTask.java delta: only approved Sapporo MWM screen diagnostic listener/HTTP fields are authorized')
+        raise SystemExit('Unexpected ChunkTask.java delta: only approved Sapporo Custom Map Server identity encoding plus screen diagnostic listener/HTTP fields are authorized')
     activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'
     activity_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+activity], text=True)
     activity_expected = activity_original.replace(
