@@ -18,6 +18,7 @@ tracked = {
  'android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
  'libs/map/user_mark.hpp', 'libs/map/user_mark.cpp',
  'libs/storage/storage.cpp',
+ 'libs/platform/http_request.cpp',
  'android/sdk/src/main/java/app/organicmaps/sdk/downloader/ChunkTask.java',
  'data/styles/default/include/Icons.mapcss',
 }
@@ -81,6 +82,24 @@ else:
         '      if (err == HttpURLConnection.HTTP_NOT_FOUND)', 1)
     if chunk_expected == chunk_original or (root/chunk_task).read_text() != chunk_expected:
         raise SystemExit('Unexpected ChunkTask.java delta: only approved Sapporo MWM HTTP diagnostic logging is authorized')
+    # Device-test-only update-check diagnostics: permit exactly the approved
+    # meta/maps.json logging insertion and reject every other http_request.cpp delta.
+    http_request = 'libs/platform/http_request.cpp'
+    http_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+http_request], text=True)
+    http_expected = http_original.replace(
+        '  virtual void OnFinish(long httpOrErrorCode, int64_t, int64_t)\n'
+        '  {\n'
+        '    if (httpOrErrorCode == 200)',
+        '  virtual void OnFinish(long httpOrErrorCode, int64_t, int64_t)\n'
+        '  {\n'
+        '    if (m_requestUrl.find("meta/maps.json") != string::npos)\n'
+        '      LOG(LWARNING, ("CB6_SAPPORO_META_DIAG url=", m_requestUrl,\n'
+        '                     " httpOrErrorCode=", httpOrErrorCode,\n'
+        '                     " responseBytes=", m_downloadedData.size(),\n'
+        '                     " failureReason=", non_http_error_code::DebugPrint(httpOrErrorCode)));\n'
+        '    if (httpOrErrorCode == 200)', 1)
+    if http_expected == http_original or (root/http_request).read_text() != http_expected:
+        raise SystemExit('Unexpected http_request.cpp delta: only approved meta/maps.json diagnostic logging is authorized')
     # Stage-1 Signal authority permits exactly the stock traffic_signals z19 -> z17 delta.
     icons = 'data/styles/default/include/Icons.mapcss'
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons], text=True)
