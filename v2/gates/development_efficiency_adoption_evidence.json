@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-DEVELOPMENT-EFFICIENCY-001-ADOPTION",
+  "status": "ACTIVE_PENDING_REFREEZE",
+  "subject": "OPS-DEVELOPMENT-EFFICIENCY-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "OPS-DEVELOPMENT-EFFICIENCY-001を採用して進めて",
+    "recorded_at": "2026-10-04"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37135315388,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37135558644,
+      "conclusion": "success"
+    },
+    "candidate": "v2/gates/development_efficiency_rule_candidate.json",
+    "review": "v2/gates/development_efficiency_independent_review.json"
+  },
+  "next_required": [
+    "ACTIVE verifier PASS",
+    "Method Freeze refreeze",
+    "Development Gate SUCCESS"
+  ]
+}

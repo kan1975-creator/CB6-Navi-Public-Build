@@ -3,7 +3,7 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "99b7d3caa5a446ef517f66bd56e3707b11569de3",
+    ".github/workflows/cb6_development_gate.yml": "1eb68f52a2798ef0f2da37393b72f9b2d0cdf3be",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
     "v2/gates/development_method_contract.json": "d00c737290ae4f97d46756cf7ae4615757bf23da",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
@@ -30,7 +30,7 @@
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
     "v2/gates/verify_operational_rule_registry.py": "0eb209301795d830ad1ae768178b0fdead780009",
     "v2/gates/verify_rule_coverage.py": "739eaf10c82a186e192561cd2f3fff8464ff2295",
-    "v2/gates/rule_coverage.json": "c737b846108adf35aaf5eb8d0fe2cd24e13c23be",
+    "v2/gates/rule_coverage.json": "8281c812e901cf367c62ceeab7c8bf88dfc5a989",
     "v2/tests/test_operational_rule_registry_fail_closed.py": "7bf053e46df9236c0e906acafc630d88a2ea5473",
     "v2/tests/test_rule_coverage_fail_closed.py": "8e46f9b2c3ecc70db7842dcc11c19d09c8f8258c",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
@@ -66,6 +66,10 @@
     "v2/gates/status_reporting_contract_v5.json": "20d04cd3e2ba01c2fde02fb175d26173683bfce6",
     "v2/gates/verify_status_reporting_active_v5.py": "3266e4856c23f71d3ab49340def367a6a88a4711",
     "v2/tests/test_status_reporting_active_v5_fail_closed.py": "4440614eade04a1b5b8e25a9e6391c6fdff6a99f",
-    "v2/gates/operational_rule_registry_v8.json": "78cef659128aa43b6308263f20c94c898ae3c7fc"
+    "v2/gates/operational_rule_registry_v8.json": "78cef659128aa43b6308263f20c94c898ae3c7fc",
+    "v2/gates/operational_rule_registry_v11.json": "3f07a5b22fae8599b153fe7dc5e42f8c9d69c597",
+    "v2/gates/development_efficiency_adoption_evidence.json": "dc4652ee2785352cd119219a065406e42945096c",
+    "v2/gates/verify_development_efficiency_active.py": "11d2478d8d91f02f1892231a4e9ab994193327e2",
+    "v2/tests/test_development_efficiency_active_fail_closed.py": "19d961f9d65efcbdf5ce0995c369f65a5462037d"
   }
 }
