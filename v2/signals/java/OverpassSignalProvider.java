@@ -619,7 +619,6 @@ public final class OverpassSignalProvider implements SignalProvider
             + " member-count=" + members.size() + " max-diameter=" + maxDiameter);
         ++groupId;
       }
-    }
       return displaySnapshot;
     }
     catch (Exception error)
