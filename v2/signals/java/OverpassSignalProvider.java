@@ -187,7 +187,7 @@ public final class OverpassSignalProvider implements SignalProvider
       ids.append(nodeIds.get(i));
     }
     String query = "[out:json][timeout:8];node(id:" + ids + ")->.signals;"
-        + "way(bn.signals)[highway];out body qt;";
+        + "way(bn.signals)[highway]->.roads;(.roads;node(w.roads););out body qt;";
     Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start node-count=" + nodeIds.size());
     try
     {
@@ -205,6 +205,20 @@ public final class OverpassSignalProvider implements SignalProvider
         Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-elements");
 
       ArrayList<ArrayList<String>> roadWays = new ArrayList<>();
+      ArrayList<Long> responseNodeIds = new ArrayList<>();
+      ArrayList<Double> responseNodeLats = new ArrayList<>();
+      ArrayList<Double> responseNodeLons = new ArrayList<>();
+      for (int i = 0; i < elements.length(); ++i)
+      {
+        JSONObject element = elements.optJSONObject(i);
+        if (element == null || !"node".equals(element.optString("type"))) continue;
+        long responseNodeId = element.optLong("id", -1);
+        if (responseNodeId <= 0 || !element.has("lat") || !element.has("lon")) continue;
+        responseNodeIds.add(responseNodeId);
+        responseNodeLats.add(element.optDouble("lat"));
+        responseNodeLons.add(element.optDouble("lon"));
+      }
+
       ArrayList<Long> roadWayIds = new ArrayList<>();
       ArrayList<ArrayList<Long>> roadWayNodes = new ArrayList<>();
       for (int i = 0; i < nodeIds.size(); ++i) roadWays.add(new ArrayList<>());
@@ -281,6 +295,21 @@ public final class OverpassSignalProvider implements SignalProvider
                   commonRoadNodes.add(roadNode);
               }
             }
+          }
+          for (Long commonRoadNode : commonRoadNodes)
+          {
+            int commonIndex = responseNodeIds.indexOf(commonRoadNode);
+            if (commonIndex < 0) continue;
+            double commonLat = responseNodeLats.get(commonIndex);
+            double commonLon = responseNodeLons.get(commonIndex);
+            float[] aToCommon = new float[1];
+            float[] bToCommon = new float[1];
+            Location.distanceBetween(a.lat, a.lon, commonLat, commonLon, aToCommon);
+            Location.distanceBetween(b.lat, b.lon, commonLat, commonLon, bToCommon);
+            Log.i("CB6-SIGNAL-WAY-DIAG", "common-road-node=" + commonRoadNode
+                + " lat=" + commonLat + " lon=" + commonLon
+                + " pair-a=" + a.id + " a-distance=" + aToCommon[0]
+                + " pair-b=" + b.id + " b-distance=" + bToCommon[0]);
           }
           boolean groupLink = shared || !commonRoadNodes.isEmpty();
           groupLinks[i][j] = groupLinks[j][i] = groupLink;
