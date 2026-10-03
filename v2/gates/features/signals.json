@@ -16,7 +16,9 @@
     "v2/signals/java/SignalSnapshot.java",
     "v2/signals/java/CompositeSignalProvider.java",
     "v2/signals/java/VerifiedSignalProvider.java",
-    "v2/signals/java/OverpassSignalProvider.java"
+    "v2/signals/java/OverpassSignalProvider.java",
+    "v2/signals/java/SignalController.java",
+    "v2/signals/native/cb6_signal_jni.inc"
   ],
   "audits": [
     "v2/audits/audit_signals.py",
@@ -82,11 +84,19 @@
     "renderer": [
       "v2/signals/apply_signals.py",
       "v2/audits/audit_signals.py",
-      "v2/tests/SignalPolicyTest.java"
+      "v2/tests/SignalPolicyTest.java",
+      "v2/signals/java/SignalController.java",
+      "v2/signals/native/cb6_signal_jni.inc",
+      "data/styles/default/include/Icons.mapcss",
+      "data/mapcss-mapping.csv"
     ],
     "symbols": [
       "v2/signals/apply_signals.py",
-      "v2/audits/audit_signals.py"
+      "v2/audits/audit_signals.py",
+      "v2/signals/java/SignalController.java",
+      "v2/signals/native/cb6_signal_jni.inc",
+      "data/styles/default/include/Icons.mapcss",
+      "data/mapcss-mapping.csv"
     ],
     "audits": [
       "v2/audits/audit_signals.py",
@@ -111,7 +121,9 @@
     ],
     "lifecycle": [
       "v2/signals/apply_signals.py",
-      "v2/tests/SignalPolicyTest.java"
+      "v2/tests/SignalPolicyTest.java",
+      "v2/signals/java/SignalController.java",
+      "v2/signals/native/cb6_signal_jni.inc"
     ],
     "real-device": []
   },
