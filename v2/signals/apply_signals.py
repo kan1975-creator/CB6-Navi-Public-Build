@@ -141,7 +141,7 @@ replace('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
         '  public static native String nativeGetAddress(double lat, double lon);',
         '  public static native String nativeGetAddress(double lat, double lon);\n\n'
         '  // Signal-only snapshot. Main thread; arrays must have equal lengths.\n'
-        '  public static native void nativeSetCb6Signals(double[] lat, double[] lon, boolean[] forward);\n' +
+        '  public static native void nativeSetCb6Signals(long[] ids, double[] lat, double[] lon, boolean[] forward);\n' +
         '  public static native void nativeLogCb6MwmSignals(double lat, double lon);\n' +
         '  public static native void nativeLogCb6MwmDirectDuplicateCandidates(double lat, double lon, long[] ids, double[] lats, double[] lons);')
 activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'

@@ -145,12 +145,14 @@ public final class SignalController
       Log.i("CB6-V2-Signal", "publish acquired=" + snapshot.points.size()
           + " display=" + display.size() + " clustered=" + snapshot.clusteredPointCount());
     int n = display.size();
+    long[] ids = new long[n];
     double[] lats = new double[n], lons = new double[n];
     boolean[] forward = new boolean[n];
     float[] result = new float[3];
     for (int i = 0; i < n; ++i)
     {
       SignalSnapshot.Point p = display.get(i);
+      ids[i] = p.id;
       lats[i] = p.lat;
       lons[i] = p.lon;
       if (location != null && location.hasBearing())
@@ -178,7 +180,7 @@ public final class SignalController
     }
     Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
         + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
-    Framework.nativeSetCb6Signals(lats, lons, forward);
+    Framework.nativeSetCb6Signals(ids, lats, lons, forward);
     published = snapshot;
     publishedForward = forward;
   }

@@ -1,20 +1,23 @@
 // Included inside Framework.cpp's existing extern "C" section.
 // Caller: Android main thread, matching BookmarkManager's thread contract.
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
-    JNIEnv * env, jclass, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray)
+    JNIEnv * env, jclass, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray)
 {
-  if (!latArray || !lonArray || !forwardArray)
+  if (!idArray || !latArray || !lonArray || !forwardArray)
   {
     LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-reject-null"));
     return;
   }
   jsize const n = env->GetArrayLength(latArray);
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-enter", n));
-  if (n > 1400 || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
+  if (n > 1400 || env->GetArrayLength(idArray) != n || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
+  std::vector<jlong> ids(n);
   std::vector<jdouble> lats(n), lons(n);
   std::vector<jboolean> forward(n);
   if (n > 0)
   {
+    env->GetLongArrayRegion(idArray, 0, n, ids.data());
+    if (env->ExceptionCheck()) return;
     env->GetDoubleArrayRegion(latArray, 0, n, lats.data());
     if (env->ExceptionCheck()) return;
     env->GetDoubleArrayRegion(lonArray, 0, n, lons.data());
@@ -27,15 +30,74 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     if (!std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0
         || lons[i] < -180.0 || lons[i] > 180.0) return;
 
+  std::vector<ms::LatLon> mwmSignals;
+  if (n > 0)
+  {
+    double minLat = lats[0], maxLat = lats[0], minLon = lons[0], maxLon = lons[0];
+    for (jsize i = 1; i < n; ++i)
+    {
+      minLat = std::min(minLat, static_cast<double>(lats[i]));
+      maxLat = std::max(maxLat, static_cast<double>(lats[i]));
+      minLon = std::min(minLon, static_cast<double>(lons[i]));
+      maxLon = std::max(maxLon, static_cast<double>(lons[i]));
+    }
+    auto const minPt = mercator::FromLatLon(minLat, minLon);
+    auto const maxPt = mercator::FromLatLon(maxLat, maxLon);
+    m2::RectD const rect(std::min(minPt.x, maxPt.x), std::min(minPt.y, maxPt.y),
+                         std::max(minPt.x, maxPt.x), std::max(minPt.y, maxPt.y));
+    static uint32_t const signalType = classif().GetTypeByPath({"highway", "traffic_signals"});
+    frm()->GetDataSource().ForEachInRect([&](FeatureType & ft)
+    {
+      if (ft.GetGeomType() != feature::GeomType::Point) return;
+      feature::TypesHolder types(ft);
+      if (!types.Has(signalType)) return;
+      mwmSignals.push_back(mercator::ToLatLon(ft.GetCenter()));
+    }, rect, scales::GetUpperScale());
+  }
+
+  constexpr double kDirectDuplicateM = 0.5;
+  constexpr double kEarthRadiusM = 6371000.0;
+  constexpr double kPi = 3.14159265358979323846;
+  auto const distanceMeters = [&](double lat1, double lon1, double lat2, double lon2)
+  {
+    double const p1 = lat1 * kPi / 180.0, p2 = lat2 * kPi / 180.0;
+    double const dp = (lat2 - lat1) * kPi / 180.0, dl = (lon2 - lon1) * kPi / 180.0;
+    double const a = std::sin(dp / 2.0) * std::sin(dp / 2.0)
+        + std::cos(p1) * std::cos(p2) * std::sin(dl / 2.0) * std::sin(dl / 2.0);
+    return 2.0 * kEarthRadiusM * std::asin(std::sqrt(a));
+  };
+
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
+  size_t created = 0, suppressed = 0;
+  constexpr jlong kWayIdNamespace = (static_cast<jlong>(1) << 62);
   for (jsize i = 0; i < n; ++i)
   {
+    bool directDuplicate = false;
+    if (ids[i] > 0 && ids[i] < kWayIdNamespace)
+    {
+      for (auto const & mwm : mwmSignals)
+      {
+        if (distanceMeters(mwm.m_lat, mwm.m_lon, lats[i], lons[i]) <= kDirectDuplicateM)
+        {
+          directDuplicate = true;
+          break;
+        }
+      }
+    }
+    if (directDuplicate)
+    {
+      ++suppressed;
+      LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "direct-duplicate-suppressed", "overpass-node", ids[i]));
+      continue;
+    }
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(lats[i], lons[i]));
     mark->SetForward(forward[i] == JNI_TRUE);
+    ++created;
   }
-  LOG(LINFO, ("CB6-SIGNAL-DIAG", "marks-created", n));
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "suppressed", suppressed));
+  LOG(LINFO, ("CB6-SIGNAL-DIAG", "marks-created", created));
   session.NotifyChanges();
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "notify-complete", n));
 }
