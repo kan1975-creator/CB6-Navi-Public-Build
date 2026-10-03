@@ -76,27 +76,26 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmDirectD
     JNIEnv * env, jclass, jdouble lat, jdouble lon, jlongArray idArray,
     jdoubleArray latArray, jdoubleArray lonArray)
 {
-  if (!std::isfinite(lat) || !std::isfinite(lon) || lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0
-      || !idArray || !latArray || !lonArray)
-    return;
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "enter"));
+  if (!std::isfinite(lat) || !std::isfinite(lon) || lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "invalid-origin")); return; }
+  if (!idArray || !latArray || !lonArray) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "null-array")); return; }
   jsize const n = env->GetArrayLength(idArray);
-  if (n > 1400 || env->GetArrayLength(latArray) != n || env->GetArrayLength(lonArray) != n)
-    return;
+  if (n > 1400) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "node-count-over-1400", "node-count", n)); return; }
+  if (env->GetArrayLength(latArray) != n || env->GetArrayLength(lonArray) != n) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "array-length-mismatch", "node-count", n)); return; }
   std::vector<jlong> ids(n);
   std::vector<jdouble> lats(n), lons(n);
   if (n > 0)
   {
     env->GetLongArrayRegion(idArray, 0, n, ids.data());
-    if (env->ExceptionCheck()) return;
+    if (env->ExceptionCheck()) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "id-array-exception")); return; }
     env->GetDoubleArrayRegion(latArray, 0, n, lats.data());
-    if (env->ExceptionCheck()) return;
+    if (env->ExceptionCheck()) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "lat-array-exception")); return; }
     env->GetDoubleArrayRegion(lonArray, 0, n, lons.data());
-    if (env->ExceptionCheck()) return;
+    if (env->ExceptionCheck()) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "lon-array-exception")); return; }
   }
   for (jsize i = 0; i < n; ++i)
-    if (ids[i] <= 0 || !std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0
-        || lons[i] < -180.0 || lons[i] > 180.0)
-      return;
+    if (ids[i] <= 0 || !std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0 || lons[i] < -180.0 || lons[i] > 180.0) { LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "early-return", "reason", "invalid-node", "index", i)); return; }
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "validated", "node-count", n));
 
   auto const center = mercator::FromLatLon(lat, lon);
   auto const rect = mercator::RectByCenterXYAndSizeInMeters(center, 1000.0);
