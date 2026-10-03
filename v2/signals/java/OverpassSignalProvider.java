@@ -321,6 +321,10 @@ public final class OverpassSignalProvider implements SignalProvider
             float[] roadNodeDistance = new float[1];
             int nearRoadNodePairCount = 0;
             ArrayList<String> nearRoadNodePairs = new ArrayList<>();
+            long nearAWayId = -1;
+            long nearBWayId = -1;
+            ArrayList<Long> nearANodes = new ArrayList<>();
+            ArrayList<Long> nearBNodes = new ArrayList<>();
             for (String aWay : aWays)
             {
               long aWayId = Long.parseLong(aWay.substring(0, aWay.indexOf(':')));
@@ -346,6 +350,10 @@ public final class OverpassSignalProvider implements SignalProvider
                     {
                       ++nearRoadNodePairCount;
                       nearRoadNodePairs.add(aRoadNode + ":" + bRoadNode + ":" + roadNodeDistance[0]);
+                      if (!nearANodes.contains(aRoadNode)) nearANodes.add(aRoadNode);
+                      if (!nearBNodes.contains(bRoadNode)) nearBNodes.add(bRoadNode);
+                      nearAWayId = aWayId;
+                      nearBWayId = bWayId;
                     }
                     if (roadNodeDistance[0] < minRoadNodeDistance)
                     {
@@ -361,6 +369,45 @@ public final class OverpassSignalProvider implements SignalProvider
             }
             if (minAWayId > 0)
             {
+              float aNearSpan = 0.0f;
+              float bNearSpan = 0.0f;
+              if (nearAWayId > 0)
+              {
+                int aNearWayIndex = roadWayIds.indexOf(nearAWayId);
+                int bNearWayIndex = roadWayIds.indexOf(nearBWayId);
+                if (aNearWayIndex >= 0)
+                {
+                  ArrayList<Long> nodes = roadWayNodes.get(aNearWayIndex);
+                  for (int n = 1; n < nodes.size(); ++n)
+                  {
+                    if (!nearANodes.contains(nodes.get(n - 1)) || !nearANodes.contains(nodes.get(n))) continue;
+                    int p = responseNodeIds.indexOf(nodes.get(n - 1));
+                    int q = responseNodeIds.indexOf(nodes.get(n));
+                    if (p < 0 || q < 0) continue;
+                    Location.distanceBetween(responseNodeLats.get(p), responseNodeLons.get(p),
+                        responseNodeLats.get(q), responseNodeLons.get(q), roadNodeDistance);
+                    aNearSpan += roadNodeDistance[0];
+                  }
+                }
+                if (bNearWayIndex >= 0)
+                {
+                  ArrayList<Long> nodes = roadWayNodes.get(bNearWayIndex);
+                  for (int n = 1; n < nodes.size(); ++n)
+                  {
+                    if (!nearBNodes.contains(nodes.get(n - 1)) || !nearBNodes.contains(nodes.get(n))) continue;
+                    int p = responseNodeIds.indexOf(nodes.get(n - 1));
+                    int q = responseNodeIds.indexOf(nodes.get(n));
+                    if (p < 0 || q < 0) continue;
+                    Location.distanceBetween(responseNodeLats.get(p), responseNodeLons.get(p),
+                        responseNodeLats.get(q), responseNodeLons.get(q), roadNodeDistance);
+                    bNearSpan += roadNodeDistance[0];
+                  }
+                }
+                Log.i("CB6-SIGNAL-WAY-DIAG", "separate-way-span pair-a=" + a.id
+                    + " pair-b=" + b.id + " a-way=" + nearAWayId + " b-way=" + nearBWayId
+                    + " a-near-nodes=" + nearANodes + " b-near-nodes=" + nearBNodes
+                    + " a-near-span=" + aNearSpan + " b-near-span=" + bNearSpan);
+              }
               Log.i("CB6-SIGNAL-WAY-DIAG", "separate-way-shape pair-a=" + a.id
                   + " pair-b=" + b.id + " near-15m-count=" + nearRoadNodePairCount
                   + " near-15m-node-pairs=" + nearRoadNodePairs);
