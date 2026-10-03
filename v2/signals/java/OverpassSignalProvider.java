@@ -446,6 +446,8 @@ public final class OverpassSignalProvider implements SignalProvider
       }
 
       boolean[] mergedCenter = new boolean[centerCandidateIds.size()];
+      ArrayList<Integer> mergedCenterBases = new ArrayList<>();
+      ArrayList<ArrayList<Integer>> mergedCenterDisplayMembers = new ArrayList<>();
       int mergedCenterClusterId = 0;
       for (int base = 0; base < centerCandidateIds.size(); ++base)
       {
@@ -487,6 +489,8 @@ public final class OverpassSignalProvider implements SignalProvider
             if (pairDistance[0] > mergedMaxDiameter) mergedMaxDiameter = pairDistance[0];
           }
         }
+        mergedCenterBases.add(base);
+        mergedCenterDisplayMembers.add(new ArrayList<Integer>(mergedMembers));
         Log.i("CB6-SIGNAL-WAY-DIAG", "merged-center-cluster=" + mergedCenterClusterId
             + " base-center-node=" + centerCandidateIds.get(base)
             + " merged-center-nodes=" + mergedCenterIds + " members=" + mergedMemberIds
@@ -499,26 +503,12 @@ public final class OverpassSignalProvider implements SignalProvider
       // Each cluster is anchored to its base center; merged centers never become new anchors.
       boolean[] displayMemberAssigned = new boolean[diagnosticPoints.size()];
       ArrayList<SignalSnapshot.Point> displayPoints = new ArrayList<>(snapshot.points);
-      for (int base = 0; base < centerCandidateIds.size(); ++base)
+      for (int cluster = 0; cluster < mergedCenterBases.size(); ++cluster)
       {
-        if (!mergedCenter[base]) continue;
-        ArrayList<Integer> clusterMembers = new ArrayList<>();
-        for (Integer member : centerCandidateMembers.get(base))
-          if (!clusterMembers.contains(member)) clusterMembers.add(member);
+        int base = mergedCenterBases.get(cluster);
+        ArrayList<Integer> clusterMembers = mergedCenterDisplayMembers.get(cluster);
         int baseNodeIndex = responseNodeIds.indexOf(centerCandidateIds.get(base));
         if (baseNodeIndex < 0) continue;
-        for (int candidate = base + 1; candidate < centerCandidateIds.size(); ++candidate)
-        {
-          if (!mergedCenter[candidate]) continue;
-          int candidateNodeIndex = responseNodeIds.indexOf(centerCandidateIds.get(candidate));
-          if (candidateNodeIndex < 0) continue;
-          Location.distanceBetween(responseNodeLats.get(baseNodeIndex),
-              responseNodeLons.get(baseNodeIndex), responseNodeLats.get(candidateNodeIndex),
-              responseNodeLons.get(candidateNodeIndex), pairDistance);
-          if (pairDistance[0] > 15.0f) continue;
-          for (Integer member : centerCandidateMembers.get(candidate))
-            if (!clusterMembers.contains(member)) clusterMembers.add(member);
-        }
         ArrayList<Integer> unassignedMembers = new ArrayList<>();
         for (Integer member : clusterMembers)
           if (!displayMemberAssigned[member]) unassignedMembers.add(member);
