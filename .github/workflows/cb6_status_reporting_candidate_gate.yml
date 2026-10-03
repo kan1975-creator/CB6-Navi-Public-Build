@@ -14,7 +14,7 @@ on:
       - 'v2/gates/status_reporting_contract_candidate_v4.json'
       - 'v2/gates/verify_status_reporting_candidate_v4.py'
       - 'v2/tests/test_status_reporting_candidate_v4_fail_closed.py'
-      - '.github/workflows/cb6_status_reporting_candidate_gate.yml'
+      - 'v2/gates/status_reporting_contract_candidate_v5.json'\n      - 'v2/gates/verify_status_reporting_candidate_v5.py'\n      - 'v2/tests/test_status_reporting_candidate_v5_fail_closed.py'\n      - '.github/workflows/cb6_status_reporting_candidate_gate.yml'
 permissions:
   contents: read
 jobs:
@@ -34,7 +34,7 @@ jobs:
         run: python3 v2/gates/verify_status_reporting_candidate_v4.py
       - name: Destructive status-reporting v4 smartphone-action test
         run: python3 v2/tests/test_status_reporting_candidate_v4_fail_closed.py
-      - name: Verify active Development Gate remains frozen
+      - name: Verify status-reporting v5 wait-time candidate\n        run: python3 v2/gates/verify_status_reporting_candidate_v5.py\n      - name: Destructive status-reporting v5 wait-time test\n        run: python3 v2/tests/test_status_reporting_candidate_v5_fail_closed.py\n      - name: Verify active Development Gate remains frozen
         run: python3 v2/gates/verify_method_freeze.py
       - name: Verify active method revision procedure
         run: python3 v2/gates/verify_method_revision_procedure.py
