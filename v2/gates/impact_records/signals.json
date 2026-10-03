@@ -33,6 +33,6 @@
     "v2/tests/preflight_gate1_audit_selftest.py",
     "data/styles/default/include/Icons.mapcss",
     "data/mapcss-mapping.csv",
-    "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc"
+    "v2/signals/native/cb6_signal_jni.inc"
   ]
 }
