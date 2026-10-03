@@ -64,3 +64,7 @@ jobs:
         run: python3 v2/gates/verify_status_reporting_v4_independent_review.py
       - name: Destructive test Status Reporting v4 independent review
         run: python3 v2/tests/test_status_reporting_v4_independent_review_fail_closed.py
+      - name: Review Status Reporting v5 wait-time candidate
+        run: python3 v2/gates/verify_status_reporting_v5_independent_review.py
+      - name: Destructive test Status Reporting v5 independent review
+        run: python3 v2/tests/test_status_reporting_v5_independent_review_fail_closed.py
