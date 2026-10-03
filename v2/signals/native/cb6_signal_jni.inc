@@ -62,7 +62,8 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmSignals
     auto const pt = ft.GetCenter();
     auto const ll = mercator::ToLatLon(pt);
     ++count;
-    LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "point", count, "latE7", std::llround(ll.m_lat * 10000000.0),\n        "lonE7", std::llround(ll.m_lon * 10000000.0)));
+    LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "point", count, "latE7", std::llround(ll.m_lat * 10000000.0),
+        "lonE7", std::llround(ll.m_lon * 10000000.0)));
   }, rect, scales::GetUpperScale());
   LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "complete", count, lat, lon));
 }
