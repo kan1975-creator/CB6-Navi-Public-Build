@@ -175,7 +175,7 @@ else:
     # Signal authority: preserve MWM traffic-signal data while suppressing only its stock icon.
     icons = 'data/styles/default/include/Icons.mapcss'
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons], text=True)
-    stock_signal_rule = 'node|z19-[highway=traffic_signals],\\n{icon-image: traffic_signals.svg}\\n'
+    stock_signal_rule = 'node|z19-[highway=traffic_signals],\n{icon-image: traffic_signals.svg}\n'
     expected = original.replace(stock_signal_rule, '', 1)
     if expected == original or (root/icons).read_text() != expected:
         raise SystemExit('Unexpected Icons.mapcss delta: only exact stock traffic_signals icon suppression is authorized')
