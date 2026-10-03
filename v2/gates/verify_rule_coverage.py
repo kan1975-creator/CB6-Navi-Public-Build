@@ -2,8 +2,14 @@
 import json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]
-reg=json.loads((R/"v2/gates/operational_rule_registry_v6.json").read_text())
 cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
+reg_rel=cov.get("registry")
+if not isinstance(reg_rel,str) or not reg_rel.startswith("v2/gates/operational_rule_registry_v") or ".." in reg_rel:
+ print("CB6 RULE COVERAGE FAIL:\n - invalid registry pointer"); raise SystemExit(1)
+reg_path=R/reg_rel
+if not reg_path.is_file():
+ print("CB6 RULE COVERAGE FAIL:\n - registry pointer target missing: "+reg_rel); raise SystemExit(1)
+reg=json.loads(reg_path.read_text())
 active={x["id"] for x in reg["rules"] if x.get("status")=="ACTIVE"}
 proposed={x["id"] for x in reg["rules"] if x.get("status")=="PROPOSED"}
 covered={x["rule_id"] for x in cov["entries"]}

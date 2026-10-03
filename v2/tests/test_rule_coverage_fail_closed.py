@@ -8,14 +8,16 @@ if base.returncode: raise SystemExit("coverage baseline failed\n"+base.stdout+ba
 for name,side,needle in [
  ("registry-only","registry","registry rule missing from coverage"),
  ("coverage-only","coverage","coverage rule missing from registry"),
- ("unenforced","unenforced","unenforced rule")]:
+ ("unenforced","unenforced","unenforced rule"),
+ ("bad-pointer","pointer","invalid registry pointer")]:
  with tempfile.TemporaryDirectory() as td:
   r=Path(td)/"repo"; shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))
   if side=="registry":
-   p=r/"v2/gates/operational_rule_registry_v6.json"; d=json.loads(p.read_text()); d["rules"].append({"id":"TEST-RULE-X","status":"ACTIVE","scope":"test","source":"test","contract":"v2/gates/development_method_contract.json","verification":["v2/gates/verify_rule_coverage.py"]}); p.write_text(json.dumps(d))
+   covp=r/"v2/gates/rule_coverage.json"; cv=json.loads(covp.read_text()); p=r/cv["registry"]; d=json.loads(p.read_text()); d["rules"].append({"id":"TEST-RULE-X","status":"ACTIVE","scope":"test","source":"test","contract":"v2/gates/development_method_contract.json","verification":["v2/gates/verify_rule_coverage.py"]}); p.write_text(json.dumps(d))
   else:
    p=r/"v2/gates/rule_coverage.json"; d=json.loads(p.read_text())
-   if side=="coverage": d["entries"].append({"rule_id":"TEST-RULE-X","coverage_status":"MACHINE_ENFORCED"})
+   if side=="pointer": d["registry"]="../outside.json"
+   elif side=="coverage": d["entries"].append({"rule_id":"TEST-RULE-X","coverage_status":"MACHINE_ENFORCED"})
    else: d["entries"][0]["coverage_status"]="UNENFORCED"
    p.write_text(json.dumps(d))
   cp=run(r); out=cp.stdout+cp.stderr
