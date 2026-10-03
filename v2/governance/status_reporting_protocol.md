@@ -38,6 +38,16 @@ For the second and every later `待ち` progress report for the same Run, the re
 
 Intermediate progress checks MUST NOT reset the Run start-time basis. When the awaited Run changes to a different Run, the first `待ち` report for the new Run starts again by showing that new Run's start time in JST.
 
+### Historical duration reference for future wait estimates
+
+Future wait-time guidance MUST use the actual execution duration of recent completed Runs of the same workflow as a reference when that history is available. Actual execution duration is measured from the GitHub Actions Run start timestamp to its completion timestamp; it is NOT measured from the user's progress-check interval.
+
+The user's next progress check may occur minutes, hours, or days later. That delay MUST NOT be added to, substituted for, or otherwise distort the recorded Run duration.
+
+For an in-progress Run, reports MUST distinguish the current elapsed time from the recommended next-check interval. The recommended next-check interval SHOULD be based on recent actual durations for the same workflow, so repeated unnecessary checks can be reduced. Completed Run durations SHOULD be retained as reference observations for later Runs of that workflow.
+
+If the user checks after the Run has already completed, report the completed result rather than presenting the user's elapsed absence as wait time.
+
 ## Parallel work while waiting
 
 While an external result is pending, non-conflicting read-only investigation, repository inspection, static analysis, and evidence review MAY continue. Waiting for one result is not a reason to stop unrelated safe work.
