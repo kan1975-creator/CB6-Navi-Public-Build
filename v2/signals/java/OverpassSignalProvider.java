@@ -445,6 +445,56 @@ public final class OverpassSignalProvider implements SignalProvider
         }
       }
 
+      boolean[] mergedCenter = new boolean[centerCandidateIds.size()];
+      int mergedCenterClusterId = 0;
+      for (int base = 0; base < centerCandidateIds.size(); ++base)
+      {
+        if (mergedCenter[base]) continue;
+        mergedCenter[base] = true;
+        ArrayList<Long> mergedCenterIds = new ArrayList<>();
+        mergedCenterIds.add(centerCandidateIds.get(base));
+        ArrayList<Integer> mergedMembers = new ArrayList<>();
+        for (Integer member : centerCandidateMembers.get(base))
+          if (!mergedMembers.contains(member)) mergedMembers.add(member);
+        int baseNodeIndex = responseNodeIds.indexOf(centerCandidateIds.get(base));
+        if (baseNodeIndex >= 0)
+        {
+          for (int candidate = base + 1; candidate < centerCandidateIds.size(); ++candidate)
+          {
+            if (mergedCenter[candidate]) continue;
+            int candidateNodeIndex = responseNodeIds.indexOf(centerCandidateIds.get(candidate));
+            if (candidateNodeIndex < 0) continue;
+            Location.distanceBetween(responseNodeLats.get(baseNodeIndex),
+                responseNodeLons.get(baseNodeIndex), responseNodeLats.get(candidateNodeIndex),
+                responseNodeLons.get(candidateNodeIndex), pairDistance);
+            if (pairDistance[0] > 15.0f) continue;
+            mergedCenter[candidate] = true;
+            mergedCenterIds.add(centerCandidateIds.get(candidate));
+            for (Integer member : centerCandidateMembers.get(candidate))
+              if (!mergedMembers.contains(member)) mergedMembers.add(member);
+          }
+        }
+        ArrayList<Long> mergedMemberIds = new ArrayList<>();
+        float mergedMaxDiameter = 0.0f;
+        for (int m = 0; m < mergedMembers.size(); ++m)
+        {
+          SignalSnapshot.Point a = diagnosticPoints.get(mergedMembers.get(m));
+          mergedMemberIds.add(a.id);
+          for (int n = m + 1; n < mergedMembers.size(); ++n)
+          {
+            SignalSnapshot.Point b = diagnosticPoints.get(mergedMembers.get(n));
+            Location.distanceBetween(a.lat, a.lon, b.lat, b.lon, pairDistance);
+            if (pairDistance[0] > mergedMaxDiameter) mergedMaxDiameter = pairDistance[0];
+          }
+        }
+        Log.i("CB6-SIGNAL-WAY-DIAG", "merged-center-cluster=" + mergedCenterClusterId
+            + " base-center-node=" + centerCandidateIds.get(base)
+            + " merged-center-nodes=" + mergedCenterIds + " members=" + mergedMemberIds
+            + " member-count=" + mergedMembers.size()
+            + " max-diameter=" + mergedMaxDiameter);
+        ++mergedCenterClusterId;
+      }
+
       boolean[] centerAssigned = new boolean[diagnosticPoints.size()];
       int centerClusterId = 0;
       for (int center = 0; center < centerCandidateIds.size(); ++center)
