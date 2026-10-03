@@ -3,7 +3,7 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "66a784cb316a628f718e51b55a6fef591b789e65",
+    ".github/workflows/cb6_development_gate.yml": "ccb17a2d3ff137d18e0ca8d89b72550ab51e4178",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
     "v2/gates/development_method_contract.json": "d00c737290ae4f97d46756cf7ae4615757bf23da",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
@@ -30,7 +30,7 @@
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
     "v2/gates/verify_operational_rule_registry.py": "0eb209301795d830ad1ae768178b0fdead780009",
     "v2/gates/verify_rule_coverage.py": "739eaf10c82a186e192561cd2f3fff8464ff2295",
-    "v2/gates/rule_coverage.json": "d71208c6d81e02713de4796de037fc1147cc72da",
+    "v2/gates/rule_coverage.json": "6a67bb18b31b9aba0d5b4c74217dce30907b42fb",
     "v2/tests/test_operational_rule_registry_fail_closed.py": "7bf053e46df9236c0e906acafc630d88a2ea5473",
     "v2/tests/test_rule_coverage_fail_closed.py": "8e46f9b2c3ecc70db7842dcc11c19d09c8f8258c",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
