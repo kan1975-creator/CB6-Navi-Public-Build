@@ -52,6 +52,8 @@ For every intermediate check while the same Run remains in progress, the recomme
 
 The historical Run durations and the calculation/reasoning used to derive the recommended next-check interval MUST NOT normally be displayed in progress reports. They remain internal/reference evidence and MUST be shown only when the user asks for the reason, basis, past wait times, or equivalent detail. The resulting next-check guidance itself remains visible as required by this protocol.
 
+Routine progress reports MUST also omit explanatory prose stating that an intermediate check does not reset the wait timer, that the next-check interval has been recalculated, or equivalent descriptions of the wait-calculation mechanism. Apply that mechanism silently and display only the required wait status values (such as cumulative elapsed time and the resulting next-check guidance). Explain the mechanism only when the user explicitly asks about it.
+
 ## Parallel work while waiting
 
 While an external result is pending, non-conflicting read-only investigation, repository inspection, static analysis, and evidence review MAY continue. Waiting for one result is not a reason to stop unrelated safe work.
