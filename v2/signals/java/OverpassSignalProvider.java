@@ -311,6 +311,53 @@ public final class OverpassSignalProvider implements SignalProvider
                 + " pair-a=" + a.id + " a-distance=" + aToCommon[0]
                 + " pair-b=" + b.id + " b-distance=" + bToCommon[0]);
           }
+          if (!shared && commonRoadNodes.isEmpty())
+          {
+            float minRoadNodeDistance = Float.MAX_VALUE;
+            long minAWayId = -1;
+            long minBWayId = -1;
+            long minANodeId = -1;
+            long minBNodeId = -1;
+            float[] roadNodeDistance = new float[1];
+            for (String aWay : aWays)
+            {
+              long aWayId = Long.parseLong(aWay.substring(0, aWay.indexOf(':')));
+              int aWayIndex = roadWayIds.indexOf(aWayId);
+              if (aWayIndex < 0) continue;
+              for (String bWay : bWays)
+              {
+                long bWayId = Long.parseLong(bWay.substring(0, bWay.indexOf(':')));
+                int bWayIndex = roadWayIds.indexOf(bWayId);
+                if (bWayIndex < 0) continue;
+                for (Long aRoadNode : roadWayNodes.get(aWayIndex))
+                {
+                  int aNodeIndex = responseNodeIds.indexOf(aRoadNode);
+                  if (aNodeIndex < 0) continue;
+                  for (Long bRoadNode : roadWayNodes.get(bWayIndex))
+                  {
+                    int bNodeIndex = responseNodeIds.indexOf(bRoadNode);
+                    if (bNodeIndex < 0) continue;
+                    Location.distanceBetween(responseNodeLats.get(aNodeIndex),
+                        responseNodeLons.get(aNodeIndex), responseNodeLats.get(bNodeIndex),
+                        responseNodeLons.get(bNodeIndex), roadNodeDistance);
+                    if (roadNodeDistance[0] < minRoadNodeDistance)
+                    {
+                      minRoadNodeDistance = roadNodeDistance[0];
+                      minAWayId = aWayId;
+                      minBWayId = bWayId;
+                      minANodeId = aRoadNode;
+                      minBNodeId = bRoadNode;
+                    }
+                  }
+                }
+              }
+            }
+            if (minAWayId > 0)
+              Log.i("CB6-SIGNAL-WAY-DIAG", "separate-way pair-a=" + a.id
+                  + " pair-b=" + b.id + " a-way=" + minAWayId + " b-way=" + minBWayId
+                  + " a-node=" + minANodeId + " b-node=" + minBNodeId
+                  + " min-node-distance=" + minRoadNodeDistance);
+          }
           boolean groupLink = shared || !commonRoadNodes.isEmpty();
           groupLinks[i][j] = groupLinks[j][i] = groupLink;
           Log.i("CB6-SIGNAL-WAY-DIAG", "pair-a=" + a.id + " pair-b=" + b.id
