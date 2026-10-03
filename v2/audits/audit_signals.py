@@ -93,7 +93,7 @@ require('getLatitude()' not in jni, 'invalid JNI source')
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
     require(activity.count(hook) == 1, 'lifecycle hook ' + hook)
-require('nativeSetCb6Signals(double[] lat, double[] lon, boolean[] forward)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
+require('nativeSetCb6Signals(long[] ids, double[] lat, double[] lon, boolean[] forward)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
 require('#include "cb6_signal_jni.inc"' in read('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp'), 'JNI translation unit')
 require('CB6_SIGNAL,' in read('libs/map/user_mark.hpp'), 'type registration')
 require('DebugMarkPoint(m2::PointD const & ptOrg, UserMark::Type type);' in read('libs/map/user_mark.hpp'), 'typed constructor declaration')
