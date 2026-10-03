@@ -7,15 +7,14 @@ import sys
 MODULE = Path(__file__).resolve().parent
 ROOT = Path(sys.argv[1]).resolve()
 
-# Stage 1: keep stock MWM traffic-signal coordinates/icon, extend only its stock style zoom.
+# Stage 1: preserve the stock MWM traffic-signal feature, but CB6 owns its visible symbol.
 icons = ROOT / 'data/styles/default/include/Icons.mapcss'
 icons_text = icons.read_text()
-stock_signal_rule = 'node|z19-[highway=traffic_signals],'
-extended_signal_rule = 'node|z17-[highway=traffic_signals],'
+stock_signal_rule = 'node|z19-[highway=traffic_signals],\n{icon-image: traffic_signals.svg}\n'
 if stock_signal_rule in icons_text:
-    icons.write_text(icons_text.replace(stock_signal_rule, extended_signal_rule, 1))
-elif extended_signal_rule not in icons_text:
-    raise SystemExit('traffic_signals stock style anchor missing') if len(sys.argv) > 1 else Path('comaps').resolve()
+    icons.write_text(icons_text.replace(stock_signal_rule, '', 1))
+elif 'node|z19-[highway=traffic_signals],' in icons_text or '{icon-image: traffic_signals.svg}' in icons_text:
+    raise SystemExit('traffic_signals stock style anchor changed')
 
 def replace(path, old, new):
     p = ROOT / path
@@ -141,7 +140,7 @@ replace('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
         '  public static native String nativeGetAddress(double lat, double lon);',
         '  public static native String nativeGetAddress(double lat, double lon);\n\n'
         '  // Signal-only snapshot. Main thread; arrays must have equal lengths.\n'
-        '  public static native void nativeSetCb6Signals(long[] ids, double[] lat, double[] lon, boolean[] forward);\n' +
+        '  public static native void nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward);\n' +
         '  public static native void nativeLogCb6MwmSignals(double lat, double lon);\n' +
         '  public static native void nativeLogCb6MwmDirectDuplicateCandidates(double lat, double lon, long[] ids, double[] lats, double[] lons);')
 activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'
@@ -175,4 +174,4 @@ for name, dst in [('cb6_signal_mark.hpp', 'libs/map/cb6_signal_mark.hpp'),
 for theme in ('light', 'dark'):
     for p in (MODULE / 'symbols' / theme).glob('*.svg'):
         shutil.copyfile(p, ROOT / 'data/styles/default' / theme / 'symbols' / p.name)
-print('V2 signal transform applied; stock styles/search/navigation/location preserved')
+print('V2 signal transform applied; stock signal feature preserved, stock signal icon suppressed; search/navigation/location preserved')

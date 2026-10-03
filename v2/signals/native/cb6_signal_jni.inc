@@ -1,7 +1,7 @@
 // Included inside Framework.cpp's existing extern "C" section.
 // Caller: Android main thread, matching BookmarkManager's thread contract.
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
-    JNIEnv * env, jclass, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray)
+    JNIEnv * env, jclass, jdouble originLat, jdouble originLon, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray)
 {
   if (!idArray || !latArray || !lonArray || !forwardArray)
   {
@@ -30,30 +30,19 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     if (!std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0
         || lons[i] < -180.0 || lons[i] > 180.0) return;
 
+  if (!std::isfinite(originLat) || !std::isfinite(originLon) || originLat < -90.0 || originLat > 90.0
+      || originLon < -180.0 || originLon > 180.0) return;
   std::vector<ms::LatLon> mwmSignals;
-  if (n > 0)
+  auto const center = mercator::FromLatLon(originLat, originLon);
+  auto const rect = mercator::RectByCenterXYAndSizeInMeters(center, 3000.0);
+  static uint32_t const signalType = classif().GetTypeByPath({"highway", "traffic_signals"});
+  frm()->GetDataSource().ForEachInRect([&](FeatureType & ft)
   {
-    double minLat = lats[0], maxLat = lats[0], minLon = lons[0], maxLon = lons[0];
-    for (jsize i = 1; i < n; ++i)
-    {
-      minLat = std::min(minLat, static_cast<double>(lats[i]));
-      maxLat = std::max(maxLat, static_cast<double>(lats[i]));
-      minLon = std::min(minLon, static_cast<double>(lons[i]));
-      maxLon = std::max(maxLon, static_cast<double>(lons[i]));
-    }
-    auto const minPt = mercator::FromLatLon(minLat, minLon);
-    auto const maxPt = mercator::FromLatLon(maxLat, maxLon);
-    m2::RectD const rect(std::min(minPt.x, maxPt.x), std::min(minPt.y, maxPt.y),
-                         std::max(minPt.x, maxPt.x), std::max(minPt.y, maxPt.y));
-    static uint32_t const signalType = classif().GetTypeByPath({"highway", "traffic_signals"});
-    frm()->GetDataSource().ForEachInRect([&](FeatureType & ft)
-    {
-      if (ft.GetGeomType() != feature::GeomType::Point) return;
-      feature::TypesHolder types(ft);
-      if (!types.Has(signalType)) return;
-      mwmSignals.push_back(mercator::ToLatLon(ft.GetCenter()));
-    }, rect, scales::GetUpperScale());
-  }
+    if (ft.GetGeomType() != feature::GeomType::Point) return;
+    feature::TypesHolder types(ft);
+    if (!types.Has(signalType)) return;
+    mwmSignals.push_back(mercator::ToLatLon(ft.GetCenter()));
+  }, rect, scales::GetUpperScale());
 
   constexpr double kDirectDuplicateM = 0.5;
   constexpr double kEarthRadiusM = 6371000.0;
@@ -70,8 +59,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
-  size_t created = 0, suppressed = 0;
-  constexpr jlong kWayIdNamespace = (static_cast<jlong>(1) << 62);
+  size_t created = 0, suppressed = 0, mwmCreated = 0;\n  for (auto const & mwm : mwmSignals)\n  {\n    auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));\n    mark->SetForward(false);\n    ++created;\n    ++mwmCreated;\n  }\n  constexpr jlong kWayIdNamespace = (static_cast<jlong>(1) << 62);
   for (jsize i = 0; i < n; ++i)
   {
     bool directDuplicate = false;
@@ -96,7 +84,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     mark->SetForward(forward[i] == JNI_TRUE);
     ++created;
   }
-  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "suppressed", suppressed));
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "mwm-created", mwmCreated, "suppressed", suppressed));
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "marks-created", created));
   session.NotifyChanges();
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "notify-complete", n));

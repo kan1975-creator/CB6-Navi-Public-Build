@@ -139,7 +139,7 @@ public final class SignalController
   {
     Log.i("CB6-SIGNAL-DIAG", "publish-enter active=" + active + " ready=" + renderingReady
         + " acquired=" + snapshot.points.size() + " location=" + (location != null));
-    if (!active || !renderingReady || snapshot.points.isEmpty()) return;
+    if (!active || !renderingReady || location == null) return;
     java.util.List<SignalSnapshot.Point> display = snapshot.displayPoints();
     if (app.organicmaps.BuildConfig.DEBUG)
       Log.i("CB6-V2-Signal", "publish acquired=" + snapshot.points.size()
@@ -180,7 +180,7 @@ public final class SignalController
     }
     Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
         + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
-    Framework.nativeSetCb6Signals(ids, lats, lons, forward);
+    Framework.nativeSetCb6Signals(location.getLatitude(), location.getLongitude(), ids, lats, lons, forward);
     published = snapshot;
     publishedForward = forward;
   }

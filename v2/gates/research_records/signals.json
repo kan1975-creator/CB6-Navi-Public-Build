@@ -47,10 +47,12 @@
       "map/framework.cpp",
       "map/user_mark.hpp",
       "map/user_mark.cpp",
-      "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
+      "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp",
+      "data/styles/default/include/Icons.mapcss",
+      "data/mapcss-mapping.csv"
     ],
     "findings": [
-      "Pinned CoMaps map/framework and UserMark/JNI surfaces are the upstream integration boundary inspected before CB6 Signal transformations; exact availability is rechecked by the pinned checkout workflow before build."
+      "Pinned CoMaps map/framework, UserMark/JNI, stock traffic-signal style and mapcss mapping were inspected before CB6 Signal transformation; the stock icon rule is presentation-only while highway|traffic_signals remains mapped as MWM feature data."
     ]
   },
   "upstream_domain_coverage": {

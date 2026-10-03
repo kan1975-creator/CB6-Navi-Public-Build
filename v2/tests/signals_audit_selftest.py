@@ -26,9 +26,11 @@ cases=[
  ("symbol-zoom", "libs/map/cb6_signal_mark.hpp",
   f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};", "minimum zoom mismatch"),
  ("stock-signal-style", "data/styles/default/include/Icons.mapcss",
-  "node|z17-[highway=traffic_signals],", "node|z16-[highway=traffic_signals],", "stock traffic_signals style delta is not exactly z19-to-z17"),
+  "node|z17-[highway=elevator],", "node|z16-[highway=elevator],", "stock traffic_signals icon suppression is not exact"),
  ("acquisition-query", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
   "[highway=traffic_signals]", "[highway=traffic_lights]", "current-spec query highway=traffic_signals"),
+ ("topology-batch", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
+  "TOPOLOGY_BATCH_SIZE = 64", "TOPOLOGY_BATCH_SIZE = 12", "topology normalization is still limited to the legacy 12-node diagnostic window"),
 ]
 for name,rel,old,new,needle in cases:
  with tempfile.TemporaryDirectory() as td:

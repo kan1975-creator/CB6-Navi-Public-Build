@@ -76,10 +76,12 @@ require('SOURCE_DEDUP_M' in composite and 'a == null && b == null' in composite,
 require('primaryError != null && (b == null || b.points.isEmpty())' in composite, 'primary failure can be masked by empty supplement')
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('snapshot.displayPoints()' in controller, 'signal display publication missing')
+require('location == null' in controller and 'nativeSetCb6Signals(location.getLatitude(), location.getLongitude(),' in controller,
+        'MWM-anchor publication must run from current location even with empty Overpass snapshot')
 snapshot = (module/'java/SignalSnapshot.java').read_text()
-require('return points;' in snapshot, 'renderer must preserve every acquired signal coordinate')
+require('return points;' in snapshot, 'proximity-only snapshot layer must retain uncertain signals')
 require('DISPLAY_CLUSTER_M' not in snapshot and 'latSum' not in snapshot and 'lonSum' not in snapshot,
-        'renderer proximity clustering/coordinate relocation reintroduced')
+        'proximity-only clustering/coordinate relocation reintroduced')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
 require('main.post(() ->' in controller, 'main-thread publication')
 require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')
@@ -90,10 +92,18 @@ require('e.optJSONObject("center")' in provider, 'way centre parser missing')
 require('WAY_ID_NAMESPACE' in provider and 'WAY_ID_NAMESPACE | rawId' in provider, 'node/way id namespaces can collide')
 require('tags.optString("highway")' in provider and 'tags.optString("crossing")' in provider and 'tags.optString("type")' in provider, 'road/crossing/signal-set parser')
 require('getLatitude()' not in jni, 'invalid JNI source')
+require('RectByCenterXYAndSizeInMeters(center, 3000.0)' in jni and 'mwmCreated' in jni,
+        'MWM traffic-signal anchors are not published as CB6_SIGNAL')
+require('kDirectDuplicateM = 0.5' in jni and 'direct-duplicate-suppressed' in jni,
+        'MWM anchor priority/direct duplicate suppression missing')
+require('TOPOLOGY_BATCH_SIZE = 64' in provider and 'nodeIds.size() == 12' not in provider,
+        'topology normalization is still limited to the legacy 12-node diagnostic window')
+require('applySignalNodeCenterClusterBatch' in provider and 'if (pairDistance[0] > 30.0f) continue;' in provider,
+        'topology-evidence intersection normalization missing')
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
     require(activity.count(hook) == 1, 'lifecycle hook ' + hook)
-require('nativeSetCb6Signals(long[] ids, double[] lat, double[] lon, boolean[] forward)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
+require('nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
 require('#include "cb6_signal_jni.inc"' in read('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp'), 'JNI translation unit')
 require('CB6_SIGNAL,' in read('libs/map/user_mark.hpp'), 'type registration')
 require('DebugMarkPoint(m2::PointD const & ptOrg, UserMark::Type type);' in read('libs/map/user_mark.hpp'), 'typed constructor declaration')
@@ -102,12 +112,16 @@ for theme in ('light','dark'):
     for size, dims in [('xs',('8','14')), ('s',('12','18')), ('m',('16','31')), ('l',('18','34'))]:
         svg = ET.parse(module/f'symbols/{theme}/cb6-signal-{size}.svg').getroot()
         require((svg.get('width'), svg.get('height')) == dims, 'frozen SVG dimensions')
-# Stock functionality: Stage 1 permits exactly one style delta: traffic_signals z19 -> z17.
+# Stock MWM traffic-signal feature remains mapped, but CB6_SIGNAL owns visible rendering.
 icons_path = 'data/styles/default/include/Icons.mapcss'
 icons_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons_path]).decode()
-icons_expected = icons_original.replace('node|z19-[highway=traffic_signals],', 'node|z17-[highway=traffic_signals],', 1)
+stock_signal_rule = 'node|z19-[highway=traffic_signals],\\n{icon-image: traffic_signals.svg}\\n'
+icons_expected = icons_original.replace(stock_signal_rule, '', 1)
 require(icons_expected != icons_original, 'stock traffic_signals style anchor missing')
-require((root/icons_path).read_text() == icons_expected, 'stock traffic_signals style delta is not exactly z19-to-z17')
+require((root/icons_path).read_text() == icons_expected, 'stock traffic_signals icon suppression is not exact')
+mapping_path = 'data/mapcss-mapping.csv'
+require(subprocess.check_output(['git','-C',str(root),'show','HEAD:'+mapping_path]) == (root/mapping_path).read_bytes(),
+        'stock traffic_signals MWM mapping modified')
 
 # All other protected stock functionality remains byte-identical.
 for path in ['data/styles/vehicle/include/Icons.mapcss',

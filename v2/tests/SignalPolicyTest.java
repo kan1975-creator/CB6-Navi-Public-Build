@@ -42,12 +42,12 @@ public final class SignalPolicyTest
     nearbyInput.add(new SignalSnapshot.Point(2, 43.00010, 141.00000, 11));
     nearbyInput.add(new SignalSnapshot.Point(3, 43.00050, 141.00000, 12));
     SignalSnapshot nearby = new SignalSnapshot(nearbyInput);
-    check(nearby.displayPoints().size() == 3, "nearby physical signals remain individually visible");
-    check(nearby.clusteredPointCount() == 0, "renderer never drops acquired signals by proximity");
+    check(nearby.displayPoints().size() == 3, "proximity alone does not merge uncertain signals");
+    check(nearby.clusteredPointCount() == 0, "uncertain signals are retained without topology evidence");
     check(nearby.displayPoints().get(0).lat == nearby.points.get(0).lat
           && nearby.displayPoints().get(1).lat == nearby.points.get(1).lat
           && nearby.displayPoints().get(2).lat == nearby.points.get(2).lat,
-          "renderer preserves original geographic signal coordinates");
+          "proximity-only layer preserves original signal coordinates");
     boolean immutable = false;
     try { snapshot.points.clear(); } catch (UnsupportedOperationException e) { immutable = true; }
     check(immutable, "immutable signal registry");

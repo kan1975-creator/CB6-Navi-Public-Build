@@ -172,12 +172,17 @@ else:
         '    if (httpOrErrorCode == 200)', 1)
     if http_expected == http_original or (root/http_request).read_text() != http_expected:
         raise SystemExit('Unexpected http_request.cpp delta: only approved meta/maps.json diagnostic logging is authorized')
-    # Stage-1 Signal authority permits exactly the stock traffic_signals z19 -> z17 delta.
+    # Signal authority: preserve MWM traffic-signal data while suppressing only its stock icon.
     icons = 'data/styles/default/include/Icons.mapcss'
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons], text=True)
-    expected = original.replace('node|z19-[highway=traffic_signals],', 'node|z17-[highway=traffic_signals],', 1)
+    stock_signal_rule = 'node|z19-[highway=traffic_signals],\\n{icon-image: traffic_signals.svg}\\n'
+    expected = original.replace(stock_signal_rule, '', 1)
     if expected == original or (root/icons).read_text() != expected:
-        raise SystemExit('Unexpected Icons.mapcss delta: only traffic_signals z19-to-z17 is authorized')
+        raise SystemExit('Unexpected Icons.mapcss delta: only exact stock traffic_signals icon suppression is authorized')
+    mapping = 'data/mapcss-mapping.csv'
+    mapping_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+mapping], text=True)
+    if (root/mapping).read_text() != mapping_original:
+        raise SystemExit('Unexpected mapcss-mapping.csv delta: stock traffic_signals MWM feature mapping must remain unchanged')
     hashes = {x: hashlib.sha256((root/x).read_bytes()).hexdigest() for x in sorted(tracked | set(new))}
     a.manifest.parent.mkdir(parents=True, exist_ok=True)
     a.manifest.write_text(json.dumps(hashes, indent=2)+'\n')

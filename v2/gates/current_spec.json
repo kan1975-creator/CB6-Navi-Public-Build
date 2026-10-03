@@ -28,6 +28,15 @@
           18,
           34
         ]
+      },
+      "ownership": {
+        "visible_symbol_owner": "CB6_SIGNAL",
+        "stock_mwm_icon": "suppressed",
+        "mwm_feature_data": "preserved",
+        "mwm_anchor_priority": true,
+        "overpass_role": "missing-signal-supplement",
+        "intersection_normalization": "topology-evidence-only",
+        "uncertain_signal_policy": "retain"
       }
     },
     "acquisition": {

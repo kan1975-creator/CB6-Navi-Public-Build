@@ -22,6 +22,7 @@ public final class OverpassSignalProvider implements SignalProvider
   private static final long WAY_ID_NAMESPACE = 1L << 62;
   private static final long RELATION_ID_NAMESPACE = (1L << 62) | (1L << 61);
   private static final long RELATION_RAW_ID_LIMIT = 1L << 61;
+  private static final int TOPOLOGY_BATCH_SIZE = 64;
   private static final String[] ENDPOINTS = {
       "https://overpass-api.de/api/interpreter",
       "https://overpass.kumi.systems/api/interpreter",
@@ -194,13 +195,33 @@ public final class OverpassSignalProvider implements SignalProvider
       nodeIds.add(point.id);
       Log.i("CB6-SIGNAL-WAY-DIAG", "node=" + point.id
           + " lat=" + point.lat + " lon=" + point.lon + " distance=" + point.distance);
-      if (nodeIds.size() == 12) break;
     }
     if (nodeIds.isEmpty())
     {
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-node-ids");
       return snapshot;
     }
+    if (nodeIds.size() > TOPOLOGY_BATCH_SIZE)
+    {
+      SignalSnapshot current = snapshot;
+      for (int offset = 0; offset < nodeIds.size(); offset += TOPOLOGY_BATCH_SIZE)
+      {
+        int end = Math.min(offset + TOPOLOGY_BATCH_SIZE, nodeIds.size());
+        ArrayList<SignalSnapshot.Point> batchPoints = new ArrayList<>();
+        for (int i = offset; i < end; ++i) batchPoints.add(diagnosticPoints.get(i));
+        current = applySignalNodeCenterClusterBatch(endpoint, current, batchPoints, originLat, originLon);
+      }
+      return current;
+    }
+    return applySignalNodeCenterClusterBatch(endpoint, snapshot, diagnosticPoints, originLat, originLon);
+  }
+
+  private static SignalSnapshot applySignalNodeCenterClusterBatch(
+      String endpoint, SignalSnapshot snapshot, ArrayList<SignalSnapshot.Point> diagnosticPoints,
+      double originLat, double originLon)
+  {
+    ArrayList<Long> nodeIds = new ArrayList<>();
+    for (SignalSnapshot.Point point : diagnosticPoints) nodeIds.add(point.id);
     StringBuilder ids = new StringBuilder();
     for (int i = 0; i < nodeIds.size(); ++i)
     {
