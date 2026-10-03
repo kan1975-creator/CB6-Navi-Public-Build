@@ -67,6 +67,7 @@ public:
     case 9: symbol = "cb6-daily"; break;
     default: break;
     }
+    LOG(LINFO, ("CB6-CONVENIENCE-DIAG symbol-selected", "kind", m_kind, "symbol", symbol));
     symbols->insert({12, symbol});
     return symbols;
   }
@@ -109,6 +110,9 @@ JNIEXPORT jobjectArray JNICALL Java_app_organicmaps_sdk_Framework_nativeCb6Colle
   m2::RectD const rect(center.x-delta, center.y-delta, center.x+delta, center.y+delta);
   auto const pois = cb6::poi::CollectConveniencePois(frm()->GetDataSource(), rect, scale);
   auto const n = static_cast<jsize>(std::min<size_t>(pois.size(), 250));
+  std::array<size_t, 10> brandCounts{};
+  for (jsize i = 0; i < n; ++i) { auto const k = Cb6ConvenienceKind(pois[static_cast<size_t>(i)].m_identity.m_brand); if (k >= 0 && static_cast<size_t>(k) < brandCounts.size()) ++brandCounts[static_cast<size_t>(k)]; }
+  LOG(LINFO, ("CB6-CONVENIENCE-DIAG mwm-collected", "total", pois.size(), "returned", n, "seven", brandCounts[1], "familymart", brandCounts[2], "lawson", brandCounts[3], "seicomart", brandCounts[4], "mybasket", brandCounts[5], "generic", brandCounts[6], "ministop", brandCounts[8], "daily", brandCounts[9]));
   jdoubleArray lats = env->NewDoubleArray(n), lons = env->NewDoubleArray(n), kinds = env->NewDoubleArray(n);
   std::vector<jdouble> la(n), lo(n), ki(n);
   for (jsize i=0;i<n;++i)
@@ -127,19 +131,16 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Convenienc
     JNIEnv * env, jclass, jdoubleArray latsArray, jdoubleArray lonsArray, jintArray kindsArray)
 {
   jsize const n = env->GetArrayLength(latsArray);
-  if (env->GetArrayLength(lonsArray) != n || env->GetArrayLength(kindsArray) != n)
-    return;
+  LOG(LINFO, ("CB6-CONVENIENCE-DIAG nativeSet-enter", "count", n));
+  if (env->GetArrayLength(lonsArray) != n || env->GetArrayLength(kindsArray) != n) { LOG(LINFO, ("CB6-CONVENIENCE-DIAG nativeSet-return", "reason", "array-length-mismatch")); return; }
   jdouble * lats = env->GetDoubleArrayElements(latsArray, nullptr);
   jdouble * lons = env->GetDoubleArrayElements(lonsArray, nullptr);
   jint * kinds = env->GetIntArrayElements(kindsArray, nullptr);
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CONVENIENCE);
-  for (jsize i = 0; i < n; ++i)
-  {
-    auto const pt = mercator::FromLatLon(lats[i], lons[i]);
-    auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(pt);
-    mark->SetKind(static_cast<int>(kinds[i]));
-  }
+  std::array<size_t, 10> setBrandCounts{}; size_t created = 0;
+  for (jsize i = 0; i < n; ++i) { auto const pt = mercator::FromLatLon(lats[i], lons[i]); auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(pt); auto const kind = static_cast<int>(kinds[i]); mark->SetKind(kind); if (kind >= 0 && static_cast<size_t>(kind) < setBrandCounts.size()) ++setBrandCounts[static_cast<size_t>(kind)]; ++created; }
+  LOG(LINFO, ("CB6-CONVENIENCE-DIAG marks-created", "count", created, "seven", setBrandCounts[1], "familymart", setBrandCounts[2], "lawson", setBrandCounts[3], "seicomart", setBrandCounts[4], "mybasket", setBrandCounts[5], "generic", setBrandCounts[6], "ministop", setBrandCounts[8], "daily", setBrandCounts[9]));
   session.SetIsVisible(UserMark::Type::CONVENIENCE, true);
   env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
   env->ReleaseDoubleArrayElements(lonsArray, lons, JNI_ABORT);
@@ -204,6 +205,7 @@ hook = """    if (mCb6ConvenienceLastLocation == null ||
         final int[] kinds = new int[n];
         for (int i = 0; i < n; ++i)
           kinds[i] = (int) cb6[2][i];
+        android.util.Log.i("CB6-CONVENIENCE-DIAG", "java-transfer count=" + n);
         Framework.nativeSetCb6ConvenienceMarks(lats, lons, kinds);
         mCb6ConvenienceLastLocation = new Location(location);
       }
