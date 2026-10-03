@@ -169,6 +169,8 @@ public final class OverpassSignalProvider implements SignalProvider
       // Way/relation ids are namespaced above the raw OSM node-id range.
       if (point.id >= WAY_ID_NAMESPACE) continue;
       nodeIds.add(point.id);
+      Log.i("CB6-SIGNAL-WAY-DIAG", "node=" + point.id
+          + " lat=" + point.lat + " lon=" + point.lon + " distance=" + point.distance);
       if (nodeIds.size() == 12) break;
     }
     if (nodeIds.isEmpty())
