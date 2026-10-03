@@ -1,0 +1,25 @@
+name: CB6 Development Efficiency Candidate Gate
+on:
+  workflow_dispatch:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/development_efficiency_rule_candidate.json'
+      - 'v2/gates/verify_development_efficiency_rule_candidate.py'
+      - 'v2/tests/test_development_efficiency_rule_candidate_fail_closed.py'
+      - '.github/workflows/cb6_development_efficiency_candidate_gate.yml'
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify development efficiency candidate
+        run: python3 v2/gates/verify_development_efficiency_rule_candidate.py
+      - name: Destructive development efficiency candidate test
+        run: python3 v2/tests/test_development_efficiency_rule_candidate_fail_closed.py
+      - name: Verify active Method remains frozen
+        run: python3 v2/gates/verify_method_freeze.py
+      - name: Verify active cross-cutting foundation remains valid
+        run: python3 v2/gates/verify_cross_cutting_rule_foundation_active.py
