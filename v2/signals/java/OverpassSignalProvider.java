@@ -240,6 +240,7 @@ public final class OverpassSignalProvider implements SignalProvider
       }
 
       float[] pairDistance = new float[1];
+      boolean[][] groupLinks = new boolean[diagnosticPoints.size()][diagnosticPoints.size()];
       for (int i = 0; i < diagnosticPoints.size(); ++i)
       {
         SignalSnapshot.Point a = diagnosticPoints.get(i);
@@ -281,12 +282,55 @@ public final class OverpassSignalProvider implements SignalProvider
               }
             }
           }
+          boolean groupLink = shared || !commonRoadNodes.isEmpty();
+          groupLinks[i][j] = groupLinks[j][i] = groupLink;
           Log.i("CB6-SIGNAL-WAY-DIAG", "pair-a=" + a.id + " pair-b=" + b.id
               + " distance=" + pairDistance[0] + " a-road-ways=" + aWays
               + " b-road-ways=" + bWays + " shared-road-way=" + shared
               + " connected-road-way=" + !commonRoadNodes.isEmpty()
-              + " common-road-nodes=" + commonRoadNodes);
+              + " common-road-nodes=" + commonRoadNodes
+              + " group-link=" + groupLink);
         }
+      }
+
+      boolean[] grouped = new boolean[diagnosticPoints.size()];
+      int groupId = 0;
+      for (int seed = 0; seed < diagnosticPoints.size(); ++seed)
+      {
+        if (grouped[seed]) continue;
+        ArrayList<Integer> members = new ArrayList<>();
+        ArrayList<Integer> queue = new ArrayList<>();
+        grouped[seed] = true;
+        queue.add(seed);
+        for (int q = 0; q < queue.size(); ++q)
+        {
+          int current = queue.get(q);
+          members.add(current);
+          for (int candidate = 0; candidate < diagnosticPoints.size(); ++candidate)
+          {
+            if (!grouped[candidate] && groupLinks[current][candidate])
+            {
+              grouped[candidate] = true;
+              queue.add(candidate);
+            }
+          }
+        }
+        ArrayList<Long> memberIds = new ArrayList<>();
+        float maxDiameter = 0.0f;
+        for (int i = 0; i < members.size(); ++i)
+        {
+          SignalSnapshot.Point a = diagnosticPoints.get(members.get(i));
+          memberIds.add(a.id);
+          for (int j = i + 1; j < members.size(); ++j)
+          {
+            SignalSnapshot.Point b = diagnosticPoints.get(members.get(j));
+            Location.distanceBetween(a.lat, a.lon, b.lat, b.lon, pairDistance);
+            if (pairDistance[0] > maxDiameter) maxDiameter = pairDistance[0];
+          }
+        }
+        Log.i("CB6-SIGNAL-WAY-DIAG", "group=" + groupId + " members=" + memberIds
+            + " member-count=" + members.size() + " max-diameter=" + maxDiameter);
+        ++groupId;
       }
     }
     catch (Exception error)
