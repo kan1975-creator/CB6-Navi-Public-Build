@@ -48,6 +48,10 @@ For an in-progress Run, reports MUST distinguish the current elapsed time from t
 
 If the user checks after the Run has already completed, report the completed result rather than presenting the user's elapsed absence as wait time.
 
+For every intermediate check while the same Run remains in progress, the recommended next-check interval MUST be recalculated from the Run's original start time and the recent actual duration history for that workflow. It MUST represent the remaining recommended interval from the current check; an earlier interval (for example, 15 minutes) MUST NOT be reset or repeated merely because another progress check occurred. If the Run has already exceeded the normal recent duration range, use a shorter reasonable next-check interval rather than restarting the original interval.
+
+The historical Run durations and the calculation/reasoning used to derive the recommended next-check interval MUST NOT normally be displayed in progress reports. They remain internal/reference evidence and MUST be shown only when the user asks for the reason, basis, past wait times, or equivalent detail. The resulting next-check guidance itself remains visible as required by this protocol.
+
 ## Parallel work while waiting
 
 While an external result is pending, non-conflicting read-only investigation, repository inspection, static analysis, and evidence review MAY continue. Waiting for one result is not a reason to stop unrelated safe work.
