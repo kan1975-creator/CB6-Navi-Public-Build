@@ -50,8 +50,7 @@ public final class OverpassSignalProvider implements SignalProvider
         {
           Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex
               + " result=points count=" + snapshot.points.size());
-          logSignalNodeWays(endpoint, snapshot);
-          return snapshot;
+          return applySignalNodeCenterClusters(endpoint, snapshot, lat, lon);
         }
         Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex + " result=empty");
         last = new IllegalStateException("Empty signal response");
@@ -161,7 +160,8 @@ public final class OverpassSignalProvider implements SignalProvider
     }
   }
 
-  private static void logSignalNodeWays(String endpoint, SignalSnapshot snapshot)
+  private static SignalSnapshot applySignalNodeCenterClusters(
+      String endpoint, SignalSnapshot snapshot, double originLat, double originLon)
   {
     ArrayList<SignalSnapshot.Point> diagnosticPoints = new ArrayList<>();
     ArrayList<Long> nodeIds = new ArrayList<>();
@@ -178,7 +178,7 @@ public final class OverpassSignalProvider implements SignalProvider
     if (nodeIds.isEmpty())
     {
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-node-ids");
-      return;
+      return snapshot;
     }
     StringBuilder ids = new StringBuilder();
     for (int i = 0; i < nodeIds.size(); ++i)
@@ -197,7 +197,7 @@ public final class OverpassSignalProvider implements SignalProvider
       if (root.has("remark"))
       {
         Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=incomplete");
-        return;
+        return snapshot;
       }
       JSONArray elements = root.getJSONArray("elements");
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=elements count=" + elements.length());
@@ -495,6 +495,53 @@ public final class OverpassSignalProvider implements SignalProvider
         ++mergedCenterClusterId;
       }
 
+      // Production display connection: use the already-fetched diagnostic road response only.
+      // Each cluster is anchored to its base center; merged centers never become new anchors.
+      boolean[] displayMemberAssigned = new boolean[diagnosticPoints.size()];
+      ArrayList<SignalSnapshot.Point> displayPoints = new ArrayList<>(snapshot.points);
+      for (int base = 0; base < centerCandidateIds.size(); ++base)
+      {
+        if (!mergedCenter[base]) continue;
+        ArrayList<Integer> clusterMembers = new ArrayList<>();
+        for (Integer member : centerCandidateMembers.get(base))
+          if (!clusterMembers.contains(member)) clusterMembers.add(member);
+        int baseNodeIndex = responseNodeIds.indexOf(centerCandidateIds.get(base));
+        if (baseNodeIndex < 0) continue;
+        for (int candidate = base + 1; candidate < centerCandidateIds.size(); ++candidate)
+        {
+          if (!mergedCenter[candidate]) continue;
+          int candidateNodeIndex = responseNodeIds.indexOf(centerCandidateIds.get(candidate));
+          if (candidateNodeIndex < 0) continue;
+          Location.distanceBetween(responseNodeLats.get(baseNodeIndex),
+              responseNodeLons.get(baseNodeIndex), responseNodeLats.get(candidateNodeIndex),
+              responseNodeLons.get(candidateNodeIndex), pairDistance);
+          if (pairDistance[0] > 15.0f) continue;
+          for (Integer member : centerCandidateMembers.get(candidate))
+            if (!clusterMembers.contains(member)) clusterMembers.add(member);
+        }
+        ArrayList<Integer> unassignedMembers = new ArrayList<>();
+        for (Integer member : clusterMembers)
+          if (!displayMemberAssigned[member]) unassignedMembers.add(member);
+        if (unassignedMembers.size() < 2) continue;
+        SignalSnapshot.Point representative = diagnosticPoints.get(unassignedMembers.get(0));
+        for (Integer member : unassignedMembers)
+        {
+          displayMemberAssigned[member] = true;
+          displayPoints.remove(diagnosticPoints.get(member));
+        }
+        float[] centerDistance = new float[1];
+        double centerLat = responseNodeLats.get(baseNodeIndex);
+        double centerLon = responseNodeLons.get(baseNodeIndex);
+        Location.distanceBetween(originLat, originLon, centerLat, centerLon, centerDistance);
+        displayPoints.add(new SignalSnapshot.Point(representative.id, centerLat, centerLon,
+            centerDistance[0]));
+        Log.i("CB6-SIGNAL-WAY-DIAG", "display-center-node=" + centerCandidateIds.get(base)
+            + " representative-signal=" + representative.id
+            + " replaced-member-count=" + unassignedMembers.size());
+      }
+
+      SignalSnapshot displaySnapshot = new SignalSnapshot(displayPoints);
+
       boolean[] centerAssigned = new boolean[diagnosticPoints.size()];
       int centerClusterId = 0;
       for (int center = 0; center < centerCandidateIds.size(); ++center)
@@ -583,10 +630,13 @@ public final class OverpassSignalProvider implements SignalProvider
         ++groupId;
       }
     }
+      return displaySnapshot;
+    }
     catch (Exception error)
     {
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=exception type="
           + error.getClass().getSimpleName() + " message=" + String.valueOf(error.getMessage()));
+      return snapshot;
     }
   }
 
