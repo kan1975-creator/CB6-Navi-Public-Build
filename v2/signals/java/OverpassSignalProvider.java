@@ -319,6 +319,8 @@ public final class OverpassSignalProvider implements SignalProvider
             long minANodeId = -1;
             long minBNodeId = -1;
             float[] roadNodeDistance = new float[1];
+            int nearRoadNodePairCount = 0;
+            ArrayList<String> nearRoadNodePairs = new ArrayList<>();
             for (String aWay : aWays)
             {
               long aWayId = Long.parseLong(aWay.substring(0, aWay.indexOf(':')));
@@ -340,6 +342,11 @@ public final class OverpassSignalProvider implements SignalProvider
                     Location.distanceBetween(responseNodeLats.get(aNodeIndex),
                         responseNodeLons.get(aNodeIndex), responseNodeLats.get(bNodeIndex),
                         responseNodeLons.get(bNodeIndex), roadNodeDistance);
+                    if (roadNodeDistance[0] <= 15.0f)
+                    {
+                      ++nearRoadNodePairCount;
+                      nearRoadNodePairs.add(aRoadNode + ":" + bRoadNode + ":" + roadNodeDistance[0]);
+                    }
                     if (roadNodeDistance[0] < minRoadNodeDistance)
                     {
                       minRoadNodeDistance = roadNodeDistance[0];
@@ -353,10 +360,15 @@ public final class OverpassSignalProvider implements SignalProvider
               }
             }
             if (minAWayId > 0)
+            {
+              Log.i("CB6-SIGNAL-WAY-DIAG", "separate-way-shape pair-a=" + a.id
+                  + " pair-b=" + b.id + " near-15m-count=" + nearRoadNodePairCount
+                  + " near-15m-node-pairs=" + nearRoadNodePairs);
               Log.i("CB6-SIGNAL-WAY-DIAG", "separate-way pair-a=" + a.id
                   + " pair-b=" + b.id + " a-way=" + minAWayId + " b-way=" + minBWayId
                   + " a-node=" + minANodeId + " b-node=" + minBNodeId
                   + " min-node-distance=" + minRoadNodeDistance);
+            }
           }
           boolean groupLink = shared || !commonRoadNodes.isEmpty();
           groupLinks[i][j] = groupLinks[j][i] = groupLink;
