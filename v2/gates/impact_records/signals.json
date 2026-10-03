@@ -31,8 +31,6 @@
     "v2/gates/current_spec.json",
     "v2/tests/signals_audit_selftest.py",
     "v2/tests/preflight_gate1_audit_selftest.py",
-    "data/styles/default/include/Icons.mapcss",
-    "data/mapcss-mapping.csv",
     "v2/signals/native/cb6_signal_jni.inc"
   ]
 }
