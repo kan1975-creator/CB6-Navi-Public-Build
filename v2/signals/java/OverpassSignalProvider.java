@@ -2,6 +2,7 @@ package app.organicmaps.cb6.signals;
 
 import android.location.Location;
 import android.util.Log;
+import app.organicmaps.sdk.Framework;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -50,6 +51,7 @@ public final class OverpassSignalProvider implements SignalProvider
         {
           Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex
               + " result=points count=" + snapshot.points.size());
+          logMwmDirectDuplicateCandidates(snapshot, lat, lon);
           return applySignalNodeCenterClusters(endpoint, snapshot, lat, lon);
         }
         Log.i("CB6-SIGNAL-DIAG", "provider-endpoint=" + endpointIndex + " result=empty");
@@ -117,6 +119,25 @@ public final class OverpassSignalProvider implements SignalProvider
       points.add(new SignalSnapshot.Point(id, y, x, distance[0]));
     }
     return new SignalSnapshot(points); // Sort ALL candidates before the 1400 cap.
+  }
+
+  private static void logMwmDirectDuplicateCandidates(
+      SignalSnapshot snapshot, double originLat, double originLon)
+  {
+    ArrayList<SignalSnapshot.Point> nodes = new ArrayList<>();
+    for (SignalSnapshot.Point point : snapshot.points)
+      if (point.id > 0 && point.id < WAY_ID_NAMESPACE) nodes.add(point);
+    long[] ids = new long[nodes.size()];
+    double[] lats = new double[nodes.size()];
+    double[] lons = new double[nodes.size()];
+    for (int i = 0; i < nodes.size(); ++i)
+    {
+      SignalSnapshot.Point point = nodes.get(i);
+      ids[i] = point.id;
+      lats[i] = point.lat;
+      lons[i] = point.lon;
+    }
+    Framework.nativeLogCb6MwmDirectDuplicateCandidates(originLat, originLon, ids, lats, lons);
   }
 
   private static void logSignalSetMembers(JSONObject relation)

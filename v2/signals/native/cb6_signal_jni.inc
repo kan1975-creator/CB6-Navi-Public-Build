@@ -67,3 +67,76 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmSignals
   }, rect, scales::GetUpperScale());
   LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "complete", count, lat, lon));
 }
+
+
+// Read-only diagnostic: compare raw Overpass signal-node coordinates with stock MWM
+// traffic-signal features in the existing 1000 m diagnostic search area.
+// Does not create, remove, filter, or alter any map mark.
+JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmDirectDuplicateCandidates(
+    JNIEnv * env, jclass, jdouble lat, jdouble lon, jlongArray idArray,
+    jdoubleArray latArray, jdoubleArray lonArray)
+{
+  if (!std::isfinite(lat) || !std::isfinite(lon) || lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0
+      || !idArray || !latArray || !lonArray)
+    return;
+  jsize const n = env->GetArrayLength(idArray);
+  if (n > 1400 || env->GetArrayLength(latArray) != n || env->GetArrayLength(lonArray) != n)
+    return;
+  std::vector<jlong> ids(n);
+  std::vector<jdouble> lats(n), lons(n);
+  if (n > 0)
+  {
+    env->GetLongArrayRegion(idArray, 0, n, ids.data());
+    if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(latArray, 0, n, lats.data());
+    if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(lonArray, 0, n, lons.data());
+    if (env->ExceptionCheck()) return;
+  }
+  for (jsize i = 0; i < n; ++i)
+    if (ids[i] <= 0 || !std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0
+        || lons[i] < -180.0 || lons[i] > 180.0)
+      return;
+
+  auto const center = mercator::FromLatLon(lat, lon);
+  auto const rect = mercator::RectByCenterXYAndSizeInMeters(center, 1000.0);
+  static uint32_t const signalType = classif().GetTypeByPath({"highway", "traffic_signals"});
+  size_t candidateCount = 0;
+  constexpr double kEarthRadiusM = 6371000.0;
+  constexpr double kPi = 3.14159265358979323846;
+  auto const distanceMeters = [&](double lat1, double lon1, double lat2, double lon2)
+  {
+    double const p1 = lat1 * kPi / 180.0;
+    double const p2 = lat2 * kPi / 180.0;
+    double const dp = (lat2 - lat1) * kPi / 180.0;
+    double const dl = (lon2 - lon1) * kPi / 180.0;
+    double const a = std::sin(dp / 2.0) * std::sin(dp / 2.0)
+        + std::cos(p1) * std::cos(p2) * std::sin(dl / 2.0) * std::sin(dl / 2.0);
+    return 2.0 * kEarthRadiusM * std::asin(std::sqrt(a));
+  };
+
+  frm()->GetDataSource().ForEachInRect([&](FeatureType & ft)
+  {
+    if (ft.GetGeomType() != feature::GeomType::Point)
+      return;
+    feature::TypesHolder types(ft);
+    if (!types.Has(signalType))
+      return;
+    auto const mwmLl = mercator::ToLatLon(ft.GetCenter());
+    for (jsize i = 0; i < n; ++i)
+    {
+      double const distance = distanceMeters(mwmLl.m_lat, mwmLl.m_lon, lats[i], lons[i]);
+      if (distance > 0.5)
+        continue;
+      ++candidateCount;
+      LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "direct-duplicate-candidate",
+          "mwm-latE7", std::llround(mwmLl.m_lat * 10000000.0),
+          "mwm-lonE7", std::llround(mwmLl.m_lon * 10000000.0),
+          "overpass-node", ids[i],
+          "overpass-latE7", std::llround(lats[i] * 10000000.0),
+          "overpass-lonE7", std::llround(lons[i] * 10000000.0),
+          "distance-m", distance));
+    }
+  }, rect, scales::GetUpperScale());
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "complete", "candidate-count", candidateCount));
+}
