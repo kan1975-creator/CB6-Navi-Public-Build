@@ -18,14 +18,14 @@ x=dw["wait_time_display"].get("exceeded_normal_duration",{})
 if x.get("basis")!="RECENT_SUCCESSFUL_SAME_WORKFLOW_ACTUAL_DURATIONS": e.append("normal duration evidence basis missing")
 for k in ("recent_successful_same_workflow_actual_durations_required_when_available","fixed_or_unsubstantiated_threshold_forbidden","may_classify_exceeded_only_after_evidence_based_normal_duration_range_exceeded","use_shorter_reasonable_next_check_interval","restart_original_interval_forbidden"):
  if x.get(k) is not True: e.append("normal duration guard invalid: "+k)
-reg=json.loads((R/"v2/gates/operational_rule_registry_v10.json").read_text()); sr={x.get("id"):x for x in reg["rules"]}.get("OPS-STATUS-REPORTING-001",{})
-if reg.get("version")!=10 or sr.get("status")!="ACTIVE" or sr.get("contract")!="v2/gates/status_reporting_contract_v7.json": e.append("registry v10 active binding invalid")
+reg=json.loads((R/"v2/gates/operational_rule_registry_v11.json").read_text()); sr={x.get("id"):x for x in reg["rules"]}.get("OPS-STATUS-REPORTING-001",{})
+if reg.get("version")!=11 or sr.get("status")!="ACTIVE" or sr.get("contract")!="v2/gates/status_reporting_contract_v7.json": e.append("registry v11 active binding invalid")
 cov=json.loads((R/"v2/gates/rule_coverage.json").read_text()); ce={x.get("rule_id"):x for x in cov["entries"]}
-if cov.get("registry")!="v2/gates/operational_rule_registry_v10.json" or ce.get("OPS-STATUS-REPORTING-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("machine coverage v10 missing")
+if cov.get("registry")!="v2/gates/operational_rule_registry_v11.json" or ce.get("OPS-STATUS-REPORTING-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("machine coverage v11 missing")
 ad=d.get("adoption",{})
 if ad.get("candidate_validation_run_id")!=37128623188 or ad.get("independent_review_run_id")!=37128782100 or ad.get("independent_review_head")!="b016f9d10b549b3b0dd907c5cf32dffb1c073173": e.append("v7 adoption evidence invalid")
 if e:
  print("CB6 STATUS REPORTING V7 ACTIVE FAIL:")
  for x in e: print(" -",x)
  raise SystemExit(1)
-print("CB6 STATUS REPORTING V7 ACTIVE PASS: evidence-based normal-duration guard + ACTIVE v6 behavior preserved; registry v10+coverage+adoption enforced")
+print("CB6 STATUS REPORTING V7 ACTIVE PASS: evidence-based normal-duration guard + ACTIVE v6 behavior preserved; registry v11+coverage+adoption enforced")

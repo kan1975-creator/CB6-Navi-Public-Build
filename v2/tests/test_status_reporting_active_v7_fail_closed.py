@@ -9,8 +9,8 @@ cases=[
  ("fixed-threshold","v2/gates/status_reporting_contract_v7.json",lambda d:d["rules"]["待ち"]["wait_time_display"]["exceeded_normal_duration"].update({"fixed_or_unsubstantiated_threshold_forbidden":False}),"normal duration guard invalid"),
  ("wrong-basis","v2/gates/status_reporting_contract_v7.json",lambda d:d["rules"]["待ち"]["wait_time_display"]["exceeded_normal_duration"].update({"basis":"FIXED_MINUTES"}),"normal duration evidence basis missing"),
  ("change-v6-display","v2/gates/status_reporting_contract_v7.json",lambda d:d["final_summary_display"].update({"duplicate_information_forbidden":False}),"existing ACTIVE v6 contract changed"),
- ("registry-old","v2/gates/operational_rule_registry_v10.json",lambda d:[x.update({"contract":"v2/gates/status_reporting_contract_v6.json"}) for x in d["rules"] if x.get("id")=="OPS-STATUS-REPORTING-001"],"registry v10 active binding invalid"),
- ("coverage-old","v2/gates/rule_coverage.json",lambda d:d.update({"registry":"v2/gates/operational_rule_registry_v9.json"}),"machine coverage v10 missing")]
+ ("registry-old","v2/gates/operational_rule_registry_v11.json",lambda d:[x.update({"contract":"v2/gates/status_reporting_contract_v6.json"}) for x in d["rules"] if x.get("id")=="OPS-STATUS-REPORTING-001"],"registry v11 active binding invalid"),
+ ("coverage-old","v2/gates/rule_coverage.json",lambda d:d.update({"registry":"v2/gates/operational_rule_registry_v10.json"}),"machine coverage v11 missing")]
 for name,path,mut,needle in cases:
  with tempfile.TemporaryDirectory() as td:
   r=Path(td)/"repo"; shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))

@@ -70,6 +70,8 @@
     "v2/gates/operational_rule_registry_v11.json": "3f07a5b22fae8599b153fe7dc5e42f8c9d69c597",
     "v2/gates/development_efficiency_adoption_evidence.json": "dc4652ee2785352cd119219a065406e42945096c",
     "v2/gates/verify_development_efficiency_active.py": "11d2478d8d91f02f1892231a4e9ab994193327e2",
-    "v2/tests/test_development_efficiency_active_fail_closed.py": "19d961f9d65efcbdf5ce0995c369f65a5462037d"
+    "v2/tests/test_development_efficiency_active_fail_closed.py": "19d961f9d65efcbdf5ce0995c369f65a5462037d",
+    "v2/gates/verify_status_reporting_active_v7.py": "2763474c167e8b701fd041e0692fc52cfefb7558",
+    "v2/tests/test_status_reporting_active_v7_fail_closed.py": "10dffce9e72d9400f9fc80f519d8747509101f1b"
   }
 }
