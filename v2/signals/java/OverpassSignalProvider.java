@@ -205,6 +205,8 @@ public final class OverpassSignalProvider implements SignalProvider
         Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-elements");
 
       ArrayList<ArrayList<String>> roadWays = new ArrayList<>();
+      ArrayList<Long> roadWayIds = new ArrayList<>();
+      ArrayList<ArrayList<Long>> roadWayNodes = new ArrayList<>();
       for (int i = 0; i < nodeIds.size(); ++i) roadWays.add(new ArrayList<>());
 
       for (int i = 0; i < elements.length(); ++i)
@@ -219,6 +221,13 @@ public final class OverpassSignalProvider implements SignalProvider
         boolean roadWay = !"footway".equals(highway) && !"path".equals(highway)
             && !"pedestrian".equals(highway) && !"steps".equals(highway)
             && !"cycleway".equals(highway);
+        if (roadWay)
+        {
+          ArrayList<Long> wayNodes = new ArrayList<>();
+          for (int j = 0; j < nodes.length(); ++j) wayNodes.add(nodes.optLong(j, -1));
+          roadWayIds.add(wayId);
+          roadWayNodes.add(wayNodes);
+        }
         for (int j = 0; j < nodes.length(); ++j)
         {
           long nodeId = nodes.optLong(j, -1);
@@ -253,9 +262,30 @@ public final class OverpassSignalProvider implements SignalProvider
               if (aWayId.equals(bWayId)) shared = true;
             }
           }
+          ArrayList<Long> commonRoadNodes = new ArrayList<>();
+          for (String aWay : aWays)
+          {
+            long aWayId = Long.parseLong(aWay.substring(0, aWay.indexOf(':')));
+            int aWayIndex = roadWayIds.indexOf(aWayId);
+            if (aWayIndex < 0) continue;
+            for (String bWay : bWays)
+            {
+              long bWayId = Long.parseLong(bWay.substring(0, bWay.indexOf(':')));
+              int bWayIndex = roadWayIds.indexOf(bWayId);
+              if (bWayIndex < 0 || aWayId == bWayId) continue;
+              for (Long roadNode : roadWayNodes.get(aWayIndex))
+              {
+                if (roadNode > 0 && roadWayNodes.get(bWayIndex).contains(roadNode)
+                    && !commonRoadNodes.contains(roadNode))
+                  commonRoadNodes.add(roadNode);
+              }
+            }
+          }
           Log.i("CB6-SIGNAL-WAY-DIAG", "pair-a=" + a.id + " pair-b=" + b.id
               + " distance=" + pairDistance[0] + " a-road-ways=" + aWays
-              + " b-road-ways=" + bWays + " shared-road-way=" + shared);
+              + " b-road-ways=" + bWays + " shared-road-way=" + shared
+              + " connected-road-way=" + !commonRoadNodes.isEmpty()
+              + " common-road-nodes=" + commonRoadNodes);
         }
       }
     }
