@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "feature_id": "REPLACE_ME",
+  "build_commit": "REPLACE_WITH_40_HEX_COMMIT",
+  "apk_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "apk_checks": [
+    {
+      "id": "REPLACE_WITH_APK_CHECK_ID",
+      "result": "PENDING",
+      "evidence": "REPLACE_ME"
+    }
+  ],
+  "status": "PENDING",
+  "apk_path": "REPLACE_WITH_APK_PATH",
+  "feature_gate": "v2/gates/features/REPLACE_ME.json"
+}

@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "change_id": "OPS-USER-APPROVAL-BEFORE-FIX-001-PROPOSAL",
+  "status": "INDEPENDENTLY_REVIEWED_USER_ADOPTED",
+  "basis_head": "57cc022fe6237469f41515076dee683f776ff995",
+  "prechange_freeze_lock": "v2/gates/method_freeze_lock.json",
+  "affected_frozen_files": [
+    "v2/gates/operational_rule_registry_v2.json"
+  ],
+  "reason": "Require explicit, change-specific user approval before implementation-problem fixes and reject missing, post-hoc, or reused approval.",
+  "authority": "explicit_user_instruction_2026-09-30",
+  "candidate": "v2/gates/operational_rule_registry_v3.json",
+  "active_authority": "v2/gates/operational_rule_registry_v2.json",
+  "active_method_unchanged": true,
+  "freeze_lock_unchanged": true,
+  "next_required_evidence": [
+    "coverage_status_MACHINE_ENFORCED",
+    "registry_v3_ACTIVE",
+    "method_refreeze",
+    "root_certification_success",
+    "development_gate_success",
+    "postchange_evidence"
+  ],
+  "independent_review": {
+    "run_id": 36679577881,
+    "conclusion": "success",
+    "head_sha": "3bad16ee2c4fdadcbec8c9a7a92aa38492893e82",
+    "branch": "review/governance-adoption",
+    "job_id": 109771877898
+  },
+  "explicit_user_adoption": {
+    "recorded_at": "2026-09-30T16:29:00+09:00",
+    "decision": "OPS-USER-APPROVAL-BEFORE-FIX-001を採用して進めて",
+    "evidence": "v2/gates/user_approval_rule_adoption_evidence.json"
+  }
+}

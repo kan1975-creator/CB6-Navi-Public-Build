@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "method_version": 2,
+  "required": [
+    "cycle_id",
+    "started_at",
+    "basis_head",
+    "outcome",
+    "commit_sha",
+    "exception",
+    "evidence"
+  ],
+  "outcomes": [
+    "COMMIT",
+    "EXCEPTION"
+  ],
+  "exception_values": [
+    "ACTIONS_WAIT",
+    "DEVICE_EVIDENCE_WAIT",
+    "SPEC_DECISION_WAIT",
+    "PERMISSION_WAIT"
+  ],
+  "rule": "COMMIT requires a 40-hex commit_sha. EXCEPTION requires one allowed exception and non-empty objective evidence. Neither may be omitted."
+}

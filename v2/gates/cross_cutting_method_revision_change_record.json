@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "change_id": "CB6-CROSS-CUTTING-RULE-FOUNDATION-001-METHOD-REVISION",
+  "status": "ACTIVE_REFROZEN",
+  "basis_head": "851ce142d243adcdf3d5c3fde76ffbcd193ec9e6",
+  "reason": "Stage the explicitly adopted cross-cutting foundation for formal Registry and Feature Contract reflection while preserving current frozen ACTIVE authority.",
+  "prechange_freeze_lock": "v2/gates/method_freeze_lock.json",
+  "candidate_files": [
+    "v2/gates/operational_rule_registry_v4_candidate.json",
+    "v2/gates/features/TEMPLATE_cross_cutting_candidate.json"
+  ],
+  "adoption_evidence": "v2/gates/cross_cutting_rule_foundation_adoption_evidence.json",
+  "active_authority_unchanged": false,
+  "freeze_lock_unchanged": false,
+  "postchange_head": "2091cbd9a7fc3a42def681c38af6ea241a92eda5",
+  "postchange_development_gate": {
+    "run_id": 36852761532,
+    "conclusion": "success",
+    "head_sha": "2091cbd9a7fc3a42def681c38af6ea241a92eda5"
+  },
+  "root_certification": "PROVEN",
+  "method_freeze": {
+    "result": "PASS",
+    "frozen_files": 45
+  }
+}

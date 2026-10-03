@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-STATUS-REPORTING-001-ADOPTION",
+  "status": "USER_ADOPTED_PENDING_ACTIVE_REFREEZE",
+  "rule_id": "OPS-STATUS-REPORTING-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "OPS-STATUS-REPORTING-001を採用して進めて",
+    "recorded_at": "2026-10-01"
+  },
+  "evidence": {
+    "candidate_validation": {
+      "run_id": 36833973862,
+      "conclusion": "success",
+      "head_sha": "6da601fbda149b2164b796b56f0385c97a3cbdf3"
+    },
+    "independent_review": {
+      "run_id": 36838019914,
+      "conclusion": "success",
+      "head_sha": "2f4c9adc7d7e7a499512c18253a91868374dced8",
+      "branch": "review/governance-adoption",
+      "job_id": 110290067212
+    }
+  },
+  "next_required": [
+    "registry_ACTIVE",
+    "coverage_MACHINE_ENFORCED",
+    "method_refreeze",
+    "root_certification_success",
+    "development_gate_success",
+    "postchange_evidence"
+  ]
+}

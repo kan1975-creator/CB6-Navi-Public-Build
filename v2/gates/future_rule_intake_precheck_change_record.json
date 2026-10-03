@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "change_id": "OPS-FUTURE-RULE-INTAKE-PRECHECK-001-CANDIDATE",
+  "status": "IMPLEMENTED_UNVERIFIED",
+  "basis_head": "15a8aea604ddbb171ab93fbac842cfa41ed27933",
+  "target_rule": "OPS-FUTURE-RULE-INTAKE-001",
+  "overlap_result": "PARTIAL_OVERLAP",
+  "existing_coverage": [
+    "continuing_request_must_be_registered",
+    "chat_memory_is_not_authority",
+    "active_rule_requires_machine_verification",
+    "proposed_rule_must_not_enter_coverage"
+  ],
+  "missing_semantics": [
+    "mandatory pre-registration search across active/candidate/method/governance authority",
+    "exact duplicate blocks new rule creation",
+    "partial overlap permits only missing semantics"
+  ],
+  "candidate": "v2/gates/future_rule_intake_precheck_candidate.json",
+  "active_authority_unchanged": true,
+  "required_before_active": [
+    "successful candidate positive/destructive GitHub run",
+    "independent review",
+    "explicit user adoption",
+    "registry/coverage update",
+    "ACTIVE refreeze and full Development Gate"
+  ]
+}

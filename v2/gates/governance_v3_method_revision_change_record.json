@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "change_id": "GOVERNANCE-V3-ACTIVE-METHOD-REVISION",
+  "status": "IMPLEMENTED_UNVERIFIED",
+  "basis_head": "8a8479345457e3ffd695a05a8e86a6e07df909fb",
+  "prechange_freeze_lock": "v2/gates/method_freeze_lock.json",
+  "reason": "Activate explicitly adopted OPS-USER-APPROVAL-BEFORE-FIX-001 and move governance authority from registry v2 to v3 without direct frozen-authority overwrite.",
+  "affected_frozen_files": [
+    "v2/gates/development_method_contract.json",
+    "v2/gates/verify_operational_rule_registry.py",
+    "v2/gates/verify_rule_coverage.py",
+    "v2/gates/rule_coverage.json",
+    "v2/tests/test_operational_rule_registry_fail_closed.py",
+    "v2/tests/test_rule_coverage_fail_closed.py",
+    "v2/gates/method_freeze_lock.json"
+  ],
+  "active_authority_unchanged": true,
+  "freeze_lock_unchanged": true,
+  "candidate_files": [
+    "v2/gates/operational_rule_registry_v3_active_candidate.json",
+    "v2/gates/development_method_contract_v3_candidate.json",
+    "v2/gates/rule_coverage_v3_candidate.json",
+    "v2/gates/verify_operational_rule_registry_v3_candidate.py",
+    "v2/gates/verify_rule_coverage_v3_candidate.py",
+    "v2/tests/test_operational_rule_registry_v3_candidate_fail_closed.py",
+    "v2/tests/test_rule_coverage_v3_candidate_fail_closed.py"
+  ],
+  "prior_rule_adoption_evidence": "v2/gates/user_approval_rule_adoption_evidence.json",
+  "next_required_evidence": [
+    "candidate_positive_and_destructive_verification",
+    "successful_github_run_evidence",
+    "independent_review_against_prechange_authority",
+    "explicit_user_adoption_of_method_revision",
+    "active_authority_update",
+    "refreeze",
+    "root_certification",
+    "development_gate",
+    "postchange_evidence"
+  ]
+}

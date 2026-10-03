@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "rule_id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+  "status": "CANDIDATE",
+  "scope": "implementation_problem_fix_commits",
+  "requirement": "Explicit user approval for the exact proposed implementation-problem fix must predate implementation work.",
+  "approval_record": {
+    "required_fields": ["approval_id","approved_at","proposed_change_id","approved_change_summary"],
+    "github_reference_required": true,
+    "allowed_reference_locations": ["commit_message","pull_request_description"],
+    "change_binding": "exact_proposed_change_id"
+  },
+  "fail_closed": {
+    "missing_approval": true,
+    "post_hoc_approval": true,
+    "approval_reuse_for_different_change": true,
+    "missing_change_binding": true
+  }
+}

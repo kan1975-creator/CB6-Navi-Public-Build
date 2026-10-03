@@ -1,0 +1,665 @@
+{
+  "schema": 1,
+  "decisions": [
+    {
+      "id": "PROC-001",
+      "status": "active",
+      "kind": "process",
+      "requirement": "Every active user decision must be consumed by the current design or explicitly remain pending during design rebuild.",
+      "affected": [
+        "design",
+        "gates",
+        "audits",
+        "workflows"
+      ],
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
+      ],
+      "acceptance": [
+        "No active decision can disappear from traceability.",
+        "Superseded decisions cannot be authoritative."
+      ],
+      "spec_key": "process.traceability"
+    },
+    {
+      "id": "PROC-002",
+      "status": "active",
+      "kind": "process",
+      "requirement": "A V2 feature build must fail closed unless project and feature gates explicitly permit it.",
+      "affected": [
+        "gates",
+        "workflows"
+      ],
+      "evidence": [
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "acceptance": [
+        "Every cb6-v2-clean build workflow invokes the feature gate before build work.",
+        "Design-rebuild state rejects feature builds."
+      ],
+      "spec_key": "process.feature-build-gate"
+    },
+    {
+      "id": "SIG-200M-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "At 200 m, traffic-signal marks should be slim, approximately the same visual size as at 500 m.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols",
+        "audits",
+        "tests"
+      ],
+      "evidence": [
+        "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md"
+      ],
+      "acceptance": [
+        "Rebuilt design must consume this decision before signal implementation is enabled."
+      ],
+      "spec_key": "signal.display.200m",
+      "supersedes": [
+        "SIG-200M-LEGACY-001"
+      ]
+    },
+    {
+      "id": "SIG-COVERAGE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Traffic-signal coverage must include signals outside intersections and signals currently missing at some intersections.",
+      "affected": [
+        "signals",
+        "data-source",
+        "cache",
+        "audits",
+        "tests"
+      ],
+      "evidence": [
+        "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md"
+      ],
+      "acceptance": [
+        "Rebuilt design must address acquisition completeness and real-device verification."
+      ],
+      "spec_key": "sig.coverage"
+    },
+    {
+      "id": "SIG-UPGRADE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Signal behavior must be verified for update install as well as clean install; clean-install-only success is insufficient.",
+      "affected": [
+        "signals",
+        "cache",
+        "lifecycle",
+        "tests",
+        "real-device"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "acceptance": [
+        "Acceptance route contains both update-install and clean-install checks."
+      ],
+      "spec_key": "sig.upgrade"
+    },
+    {
+      "id": "PRODUCT-BASE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "CoMaps standard functionality is preserved unless a CB6 requirement explicitly extends it.",
+      "affected": [
+        "baseline",
+        "routing",
+        "search",
+        "favorites",
+        "offline-maps",
+        "poi"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design identifies upstream-owned behavior and prohibits collateral replacement."
+      ],
+      "spec_key": "product.base",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "MAP-CAMERA-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Map follows driving direction by default, supports north-lock toggle, and own-position presentation is lowered on screen without altering geographic GPS coordinates.",
+      "affected": [
+        "location",
+        "camera",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines follow/north-lock/offset ownership and regression route."
+      ],
+      "spec_key": "map.camera"
+    },
+    {
+      "id": "MAP-SCALE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Initial map scale is 200 m; no automatic scale is required and the previous user scale is remembered.",
+      "affected": [
+        "camera",
+        "settings",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines scale persistence and excludes unintended auto-scale behavior."
+      ],
+      "spec_key": "map.scale"
+    },
+    {
+      "id": "HUD-ROAD-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "A NAVITIME-like current-road-name bar is presented near the bottom with orientation behavior controlled by CB6 UI settings.",
+      "affected": [
+        "road-hud",
+        "ui",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design uses existing routing/address state and defines lifecycle/fallback."
+      ],
+      "spec_key": "hud.road"
+    },
+    {
+      "id": "POI-CONVENIENCE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Convenience stores are always available as brand-specific icons without cluttering convenience-store text; static POI data should prefer native MWM when proven sufficient.",
+      "affected": [
+        "poi",
+        "classifier",
+        "presentation",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design resolves native MWM evidence before any network duplicate path."
+      ],
+      "spec_key": "poi.convenience",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "POI-FUEL-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Fuel stations and required major facilities are presented through the CB6 POI strategy with scale-aware visibility and without unnecessary duplicate network POIs.",
+      "affected": [
+        "poi",
+        "presentation",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design assigns authoritative data source, presentation and regression checks."
+      ],
+      "spec_key": "poi.fuel"
+    },
+    {
+      "id": "STOP-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Stop signs are a dynamic road-control feature and should be shown only when relevant ahead of the vehicle.",
+      "affected": [
+        "road-controls",
+        "location",
+        "renderer"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines acquisition, direction/distance filtering and independent mark ownership."
+      ],
+      "spec_key": "stop"
+    },
+    {
+      "id": "SEARCH-VOICE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Japanese voice search feeds the stock CoMaps SearchEngine, with on-device recognition where available and a safe fallback; no parallel search database.",
+      "affected": [
+        "search",
+        "voice",
+        "android"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines speech lifecycle, normalization, fallback and stock-result preservation."
+      ],
+      "spec_key": "search.voice"
+    },
+    {
+      "id": "ROUTING-FREE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "CB6 routing may support a free-expressway-only policy inside native route calculation semantics; it must not post-filter an already calculated route.",
+      "affected": [
+        "routing",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design proves native toll/access semantics before implementation."
+      ],
+      "spec_key": "routing.free"
+    },
+    {
+      "id": "TOLL-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Toll-fee display must use a traceable authoritative fee source/model and must not fabricate an exact fee from road class.",
+      "affected": [
+        "routing",
+        "toll",
+        "ui",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design records source/version/update/offline policy before implementation."
+      ],
+      "spec_key": "toll"
+    },
+    {
+      "id": "FAVORITES-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "Favorites synchronization, if implemented, preserves BookmarkManager as authority and uses item-level identity/conflict handling rather than destructive collection replacement.",
+      "affected": [
+        "favorites",
+        "sync"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines identity, conflict and transport boundaries."
+      ],
+      "spec_key": "favorites"
+    },
+    {
+      "id": "LIFECYCLE-001",
+      "status": "active",
+      "kind": "product",
+      "requirement": "App startup and navigation lifecycle must restore correct current-location/follow presentation and preserve CB6 behavior across restart/return flows.",
+      "affected": [
+        "lifecycle",
+        "location",
+        "navigation",
+        "android"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design includes startup/restart/return state transitions and real-device acceptance."
+      ],
+      "spec_key": "lifecycle"
+    },
+    {
+      "id": "UI-LAYOUT-001",
+      "requirement": "CB6 driving UI keeps compass at upper left with north-lock toggle, scale below it with tap-to-show +/- controls, current-location at lower left, settings at lower right, and supports a tap-to-hide search/menu full-map presentation.",
+      "affected": [
+        "ui",
+        "camera",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design assigns ownership and preserves touch access to current-location control."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "ui.layout"
+    },
+    {
+      "id": "MAP-LABEL-001",
+      "requirement": "Map presentation suppresses unnecessary address clutter while retaining scale-appropriate road names and required major-facility labels without excessive overlap.",
+      "affected": [
+        "renderer",
+        "style",
+        "poi"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines style/label ownership and zoom/collision verification."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "map.label"
+    },
+    {
+      "id": "LOCATION-STABILITY-001",
+      "requirement": "Own-position/heading behavior must avoid rotation-axis offset, stationary jitter and false movement; stopped state must not present spurious driving motion.",
+      "affected": [
+        "location",
+        "camera",
+        "map-matching"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines raw GPS versus matched position, heading source, low-speed hysteresis and real-device regression."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "location.stability"
+    },
+    {
+      "id": "GOOGLE-MAPS-001",
+      "requirement": "CB6 Navi provides a Google Maps handoff/auxiliary launch path while keeping CB6 Navi as the intended return application after navigation/arrival/restart flows where technically supported.",
+      "affected": [
+        "android",
+        "navigation",
+        "lifecycle",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design separates supported Android lifecycle behavior from behavior that cannot be guaranteed and defines verification."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "google.maps"
+    },
+    {
+      "id": "POI-MAJOR-001",
+      "requirement": "Required major facilities such as airports, roadside stations, parks, public facilities, department stores and supermarkets support scale-aware icon/label presentation; important large facilities may use stronger labels while avoiding urban overlap.",
+      "affected": [
+        "poi",
+        "renderer",
+        "style"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines categories, source, zoom/priority and collision policy."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "poi.major"
+    },
+    {
+      "id": "CAMERA-FIXED-001",
+      "requirement": "CB6 retains the requested fixed driving-camera behavior; automatic camera changes must not be introduced as collateral behavior.",
+      "affected": [
+        "camera",
+        "navigation",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design identifies the accepted camera behavior and regression checks before implementation."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "camera.fixed",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "OFFLINE-FREE-001",
+      "requirement": "Core CB6 navigation remains usable without paid Google/Mapbox API registration and preserves CoMaps offline-map capability; external network supplementation cannot become the sole path for core static POIs.",
+      "affected": [
+        "baseline",
+        "offline",
+        "poi",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design documents offline/online ownership and no-paid-API dependency."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "offline.free",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "SIGNAL-ZOOM-001",
+      "requirement": "Traffic signals are not required at 1 km; close-range visibility and forward/near scaling must preserve accepted driving behavior while honoring the later slim 200 m preference.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design reconciles historical frozen signal behavior with the later explicit 200 m change."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "signal.zoom",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "CONVENIENCE-BRANDS-001",
+      "requirement": "Convenience-store classification covers 7-Eleven, FamilyMart, Lawson, Seicomart, MyBasket, Ministop and Daily Yamazaki, with generic fallback and CB6-specific brand presentation.",
+      "affected": [
+        "poi",
+        "classifier",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines evidence priority and fallback without relying on historical numeric implementation IDs."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "convenience.brands",
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "TOLL-ROUTE-001",
+      "requirement": "Each route candidate that includes toll roads should present the normal passenger-car toll; free sections/candidates present 0 yen, subject to an authoritative fee model being established.",
+      "affected": [
+        "routing",
+        "toll",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "acceptance": [
+        "Rebuilt design defines route-candidate association, passenger-car fee semantics, 0-yen handling and source/update policy."
+      ],
+      "status": "active",
+      "kind": "product",
+      "spec_key": "toll.route"
+    },
+    {
+      "id": "SIG-200M-LEGACY-001",
+      "status": "superseded",
+      "kind": "product",
+      "spec_key": "signal.display.200m",
+      "requirement": "Historical accepted signal behavior used the established standard-size presentation at about 200 m.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "Historical only; must not be consumed as current behavior after the later explicit 200 m slim-size decision."
+      ],
+      "superseded_by": "SIG-200M-001"
+    },
+    {
+      "id": "SEARCH-FUZZY-001",
+      "kind": "product",
+      "spec_key": "search.fuzzy",
+      "status": "active",
+      "requirement": "CB6 query normalization/aliases must feed the stock CoMaps SearchEngine consistently for keyboard, voice and show-on-map flows; do not create a parallel search behavior.",
+      "affected": [
+        "search/voice",
+        "normalization",
+        "history",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_COMAPS_ARCHITECTURE.md"
+      ],
+      "acceptance": [
+        "Alias/fuzzy input reaches normal CoMaps results and preserves stock history/result selection/routing behavior."
+      ]
+    },
+    {
+      "id": "ORIENTATION-001",
+      "kind": "product",
+      "spec_key": "ui.orientation",
+      "status": "active",
+      "requirement": "CB6 UI supports auto, portrait and landscape orientation modes without breaking the navigation HUD/control layout.",
+      "affected": [
+        "Android UI",
+        "layout",
+        "lifecycle"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md"
+      ],
+      "acceptance": [
+        "Auto/portrait/landscape modes preserve usable CB6 controls and road-name HUD."
+      ]
+    },
+    {
+      "id": "SEARCH-HISTORY-001",
+      "kind": "product",
+      "spec_key": "search.history-delete",
+      "status": "active",
+      "requirement": "Preserve stock search/history behavior and provide the required ability to delete search history/registered entries through the intended CoMaps-owned data path.",
+      "affected": [
+        "search",
+        "history",
+        "favorites UI"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md",
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "acceptance": [
+        "History/registered-item deletion works without replacing stock CoMaps search/bookmark ownership."
+      ],
+      "evidence_scopes": {
+        "docs/CB6_FROZEN_FEATURES.md": {
+          "scope": "requirement-specific accepted behavior only",
+          "supersession": "later active decision/spec_key owns conflicts"
+        }
+      }
+    },
+    {
+      "id": "VEHICLE-ICON-001",
+      "kind": "product",
+      "spec_key": "map.vehicle-icon",
+      "status": "active",
+      "requirement": "Do not change the accepted/original vehicle icon unless the user explicitly requests a new vehicle-icon change.",
+      "affected": [
+        "rendering",
+        "own-position"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md"
+      ],
+      "acceptance": [
+        "Unrelated feature work leaves the vehicle icon unchanged."
+      ]
+    },
+    {
+      "id": "SCOPE-HOKKAIDO-001",
+      "kind": "product",
+      "spec_key": "product.region-scope",
+      "status": "active",
+      "requirement": "Preserve the established Hokkaido-focused CB6 operating scope when making data-source, coverage and validation decisions; do not silently broaden or narrow it.",
+      "affected": [
+        "data coverage",
+        "validation",
+        "offline/network policy"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "acceptance": [
+        "Rebuilt design states the Hokkaido operating/validation scope and any wider behavior is treated as compatible extension rather than an unreviewed scope change."
+      ]
+    }
+  ]
+}

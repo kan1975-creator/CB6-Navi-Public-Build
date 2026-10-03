@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "stage": "IMPLEMENTATION_ENABLED",
+  "required_gate_scripts": [
+    "v2/gates/verify_method_freeze.py",
+    "v2/gates/verify_method_version_coverage.py",
+    "v2/gates/verify_root_invariants.py",
+    "v2/gates/verify_project_gate.py",
+    "v2/gates/verify_project_integrity.py",
+    "v2/gates/verify_evidence_inventory_v2.py",
+    "v2/gates/verify_design_coverage.py",
+    "v2/monitoring/verify_monitoring_policy.py",
+    "v2/gates/verify_operational_rule_registry.py",
+    "v2/gates/verify_rule_coverage.py",
+    "v2/gates/verify_workflow_meta.py",
+    "v2/gates/verify_verification_mechanisms.py",
+    "v2/gates/verify_rule_adoption_lifecycle.py",
+    "v2/gates/verify_method_revision_procedure.py",
+    "v2/gates/verify_governance_independent_review.py"
+  ],
+  "required_regression_tests": [
+    "v2/tests/test_method_freeze.py",
+    "v2/tests/test_method_version_coverage_fail_closed.py",
+    "v2/tests/test_root_invariants.py",
+    "v2/tests/test_repository_syntax.py",
+    "v2/tests/test_gate_fail_closed.py",
+    "v2/tests/test_feature_gate_contract.py",
+    "v2/tests/test_apk_evidence_fail_closed.py",
+    "v2/tests/test_device_evidence_fail_closed.py",
+    "v2/tests/test_gate_stamp_fail_closed.py",
+    "v2/tests/test_final_acceptance_fail_closed.py",
+    "v2/tests/test_monitoring_policy_fail_closed.py",
+    "v2/tests/test_operational_rule_registry_fail_closed.py",
+    "v2/tests/test_rule_coverage_fail_closed.py",
+    "v2/tests/test_notification_stale_state.py",
+    "v2/tests/test_workflow_meta_fail_closed.py",
+    "v2/tests/test_gate_result_classification.py",
+    "v2/tests/test_rule_adoption_lifecycle_fail_closed.py",
+    "v2/tests/test_method_revision_procedure_fail_closed.py",
+    "v2/tests/test_governance_independent_review_fail_closed.py"
+  ],
+  "acceptance_scripts": [
+    "v2/gates/verify_apk_evidence.py",
+    "v2/gates/verify_device_evidence.py",
+    "v2/gates/verify_final_acceptance.py"
+  ],
+  "post_gate_integrity_script": "v2/gates/create_gate_stamp.py",
+  "feature_contract_invariants": {
+    "restricted_evidence_cannot_be_direct_feature_authority": true,
+    "every_feature_audit_requires_specific_fail_closed_proof": true,
+    "audit_proof_must_execute_before_feature_build": true,
+    "impact_record_must_cover_audit_proof": true
+  },
+  "feature_development_pipeline": [
+    "internal_source_analysis",
+    "upstream_and_web_research_when_applicable",
+    "web_findings_revalidated_against_pinned_source",
+    "authority_and_evidence_classification",
+    "change_impact_before_implementation",
+    "implementation_and_audit_as_one_change_unit",
+    "positive_tests",
+    "audit_specific_destructive_tests",
+    "feature_gate",
+    "build_and_apk_evidence",
+    "real_device_evidence"
+  ],
+  "research_policy": {
+    "internal_analysis_required": true,
+    "upstream_web_research": "required_when_external_api_data_model_platform_or_upstream_behavior_is_material",
+    "web_is_authority": false,
+    "pinned_source_revalidation_required": true,
+    "research_evidence_must_be_recorded_before_implementation": true
+  },
+  "change_policy": {
+    "unrecorded_spec_change_forbidden": true,
+    "required_change_must_record_reason_impact_and_authority_update_before_implementation": true,
+    "unrelated_behavior_change_forbidden": true
+  },
+  "pinned_upstream_source_policy": {
+    "required_for_every_feature": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "concrete_source_paths_required": true,
+    "findings_required": true,
+    "analysis_must_precede_implementation": true,
+    "affected_domain_coverage_required": true
+  },
+  "method_document": "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+  "failure_return_policy": "return_to_earliest_affected_stage",
+  "completion_authority": {
+    "method": "development_gate_success",
+    "build": "verified_apk_evidence",
+    "behavior": "accepted_cb6_real_device_evidence"
+  },
+  "method_version": 2,
+  "governance_adoption": {
+    "registry": "v2/gates/operational_rule_registry_v3.json",
+    "evidence": "v2/gates/user_approval_rule_adoption_evidence.json",
+    "candidate_validation_run_id": 36684201308,
+    "independent_review_run_id": 36679577881,
+    "adopted": true
+  }
+}

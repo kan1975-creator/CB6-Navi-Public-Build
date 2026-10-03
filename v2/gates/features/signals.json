@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "feature_id": "signals",
+  "requirements": [
+    "SIG-200M-001",
+    "SIG-COVERAGE-001",
+    "SIG-UPGRADE-001",
+    "SIGNAL-ZOOM-001"
+  ],
+  "design_section": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#SIGNAL / #SIG",
+  "impact_checked": true,
+  "repo_sweep_required": true,
+  "source_paths": [
+    "v2/signals/apply_signals.py",
+    "v2/signals/java/SignalPolicy.java",
+    "v2/signals/java/SignalSnapshot.java",
+    "v2/signals/java/CompositeSignalProvider.java",
+    "v2/signals/java/VerifiedSignalProvider.java",
+    "v2/signals/java/OverpassSignalProvider.java"
+  ],
+  "audits": [
+    "v2/audits/audit_signals.py",
+    "v2/audits/preflight_gate1.py"
+  ],
+  "tests": [
+    "v2/tests/SignalPolicyTest.java",
+    "v2/tests/signals_audit_selftest.py",
+    "v2/tests/preflight_gate1_audit_selftest.py"
+  ],
+  "apk_checks": [
+    {
+      "id": "apk-arm64",
+      "description": "APK contains a valid AArch64 liborganicmaps.so"
+    },
+    {
+      "id": "apk-identity",
+      "description": "APK package is jp.cb6.navi and label is CB6 Navi"
+    },
+    {
+      "id": "apk-signals",
+      "description": "Signal source/symbol invariants are present in the packaged APK"
+    },
+    {
+      "id": "apk-signature",
+      "description": "APK signature verifies successfully"
+    }
+  ],
+  "device_checks": [
+    {
+      "id": "cb6-clean-install",
+      "description": "CB6 Android 13 clean install shows required signal coverage and zoom behavior"
+    },
+    {
+      "id": "cb6-update-install",
+      "description": "CB6 Android 13 update install preserves required signal coverage and zoom behavior"
+    },
+    {
+      "id": "cb6-200m-slim",
+      "description": "At 200 m signal marks remain slim and approximately accepted 500 m visual size"
+    },
+    {
+      "id": "cb6-1km-hidden",
+      "description": "At 1 km signal icons are not required/displayed by CB6 signal policy"
+    }
+  ],
+  "stage": "IMPLEMENTATION_ENABLED",
+  "affected_domains": [
+    "signals",
+    "renderer",
+    "symbols",
+    "audits",
+    "tests",
+    "data-source",
+    "cache",
+    "lifecycle",
+    "real-device"
+  ],
+  "domain_verification": {
+    "signals": [
+      "v2/signals/apply_signals.py"
+    ],
+    "renderer": [
+      "v2/signals/apply_signals.py",
+      "v2/audits/audit_signals.py",
+      "v2/tests/SignalPolicyTest.java"
+    ],
+    "symbols": [
+      "v2/signals/apply_signals.py",
+      "v2/audits/audit_signals.py"
+    ],
+    "audits": [
+      "v2/audits/audit_signals.py",
+      "v2/tests/signals_audit_selftest.py",
+      "v2/tests/preflight_gate1_audit_selftest.py"
+    ],
+    "tests": [
+      "v2/tests/SignalPolicyTest.java",
+      "v2/tests/signals_audit_selftest.py",
+      "v2/tests/preflight_gate1_audit_selftest.py"
+    ],
+    "data-source": [
+      "v2/signals/java/OverpassSignalProvider.java",
+      "v2/signals/java/CompositeSignalProvider.java",
+      "v2/signals/java/VerifiedSignalProvider.java",
+      "v2/audits/audit_signals.py",
+      "v2/tests/SignalPolicyTest.java"
+    ],
+    "cache": [
+      "v2/signals/apply_signals.py",
+      "v2/tests/SignalPolicyTest.java"
+    ],
+    "lifecycle": [
+      "v2/signals/apply_signals.py",
+      "v2/tests/SignalPolicyTest.java"
+    ],
+    "real-device": []
+  },
+  "impact_record": "v2/gates/impact_records/signals.json",
+  "device_evidence": "PENDING",
+  "research_record": "v2/gates/research_records/signals.json",
+  "method_version": 2,
+  "inherits_cross_cutting_rules": "ALL_ACTIVE_CROSS_CUTTING_RULES"
+}

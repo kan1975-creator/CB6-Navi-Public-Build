@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "review_id": "GOVERNANCE-ADOPTION-REVIEW-001",
+  "status": "PENDING_GITHUB_RUN",
+  "target_head": "be7cc0b3541be0040f165c92f68f055b3f8750b3",
+  "prechange_authority": "v2/gates/operational_rule_registry.json",
+  "candidates": [
+    "v2/gates/operational_rule_registry_v2.json",
+    "v2/gates/method_revision_procedure_v1.json"
+  ],
+  "candidate_validation_run_id": 36648375267,
+  "candidate_validation_conclusion": "success",
+  "review_workflow": ".github/workflows/cb6_governance_independent_review.yml",
+  "rule": "Review run must be separate from candidate validation run and must not itself activate or refreeze Method."
+}

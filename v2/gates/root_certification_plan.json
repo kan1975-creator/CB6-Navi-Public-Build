@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "UNDER_CONSTRUCTION",
+  "rule": "Root certification is derived only from executable proof commands. Boolean claims are never proof. Zero-omission source-to-atomic coverage must be COMPLETE and executable before certification.",
+  "proofs": {
+    "context_loss": {
+      "command": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    "missing_state": {
+      "command": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    "permission_fail_closed": {
+      "command": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    "repository_reconstruction": {
+      "command": [
+        "python3",
+        "v2/gates/verify_root_invariants.py"
+      ]
+    },
+    "historical_incidents": {
+      "command": [
+        "python3",
+        "v2/tests/test_gate_fail_closed.py"
+      ]
+    },
+    "unknown_change": {
+      "command": [
+        "python3",
+        "v2/tests/test_root_unknown_change.py"
+      ]
+    },
+    "independent_verification": {
+      "command": [
+        "python3",
+        "v2/tests/test_feature_gate_contract.py"
+      ]
+    },
+    "extensibility": {
+      "command": [
+        "python3",
+        "v2/tests/test_feature_gate_contract.py"
+      ]
+    },
+    "artifact_identity": {
+      "command": [
+        "python3",
+        "v2/tests/test_apk_evidence_fail_closed.py"
+      ]
+    },
+    "device_evidence": {
+      "command": [
+        "python3",
+        "v2/tests/test_device_evidence_fail_closed.py"
+      ]
+    },
+    "zero_omission": {
+      "command": [
+        "python3",
+        "v2/gates/verify_source_atomic_coverage.py"
+      ]
+    }
+  }
+}

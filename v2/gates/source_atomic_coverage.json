@@ -1,0 +1,5496 @@
+{
+  "schema": 16,
+  "status": "COMPLETE",
+  "purpose": "Machine-readable zero-omission bridge from repository source clauses to atomic requirements.",
+  "rules": {
+    "source_change_invalidates_coverage": true,
+    "every_active_requirement_clause_requires_atomic_ids": true,
+    "every_atomic_requirement_requires_provenance": true,
+    "historical_source_cannot_directly_authorize_current_implementation": true,
+    "unknown_or_unmapped_blocks": true
+  },
+  "sources": [
+    {
+      "path": "v2/gates/active_decisions.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/current_spec.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/traceability.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/root_invariants.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/project_state.json",
+      "classification": "ACTIVE_AUTHORITY",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/development_method_contract.json",
+      "classification": "METHOD_INPUT",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/root_certification_plan.json",
+      "classification": "ROOT_PROOF_PLAN",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/evidence_inventory.json",
+      "classification": "EVIDENCE_CLASSIFIER",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/authority_policy.json",
+      "classification": "AUTHORITY_CLASSIFIER",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/repository_state_manifest.json",
+      "classification": "RECONSTRUCTION_MANIFEST",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/historical_incidents.json",
+      "classification": "REGRESSION_CORPUS",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/features/signals.json",
+      "classification": "FEATURE_CONTRACT",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "coverage": "COMPLETE"
+    },
+    {
+      "path": "v2/gates/features/convenience-brands.json",
+      "classification": "REFERENCE_ONLY_RESTART",
+      "coverage": "COMPLETE"
+    }
+  ],
+  "clause_coverage": [
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:PROC-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-TRACE",
+        "PROC-FAIL-CLOSED",
+        "PROC-REPO-MEMORY",
+        "PROC-RESEARCH-FIRST",
+        "PROC-IMPACT-FIRST",
+        "PROC-AUDIT-UNIT",
+        "PROC-DESTRUCTIVE",
+        "PROC-NO-BUILD-COMPLETE",
+        "PROC-APK-IDENTITY",
+        "PROC-DEVICE-AUTHORITY",
+        "PROC-NO-RESTART",
+        "PROC-DEFER",
+        "PROC-RENDER-CROSSCUT",
+        "PROC-JNI-CROSSCUT",
+        "PROC-PATCH-ORDER",
+        "PROC-DATASOURCE-CROSSCUT",
+        "PROC-NO-LINE-FIX",
+        "PROC-OBSOLETE-SWEEP",
+        "PROC-FROZEN-REGRESSION",
+        "PROC-FINAL-GENERATED",
+        "PROC-MINIMIZE-BUILDS",
+        "PROC-NATIVE-FIRST",
+        "PROC-RESPONSIBILITY-OWNERSHIP",
+        "PROC-NO-STALE-VALIDATOR-FIX",
+        "PROC-AUTOMATION-NOT-PROGRESS",
+        "PROC-DURABLE-CHECKPOINT",
+        "PROC-FAILURE-LOOP",
+        "PROC-DOC-MAINT",
+        "PROC-SINGLE-SOURCE",
+        "PROC-BEHAVIORAL-FREEZE",
+        "PROC-APK-MINIMAL",
+        "PROC-EVIDENCE-STATUS",
+        "PROC-CROSS-PROJECT-REVALIDATE",
+        "PROC-AUTHORITY-ONLY",
+        "PROC-FORBIDDEN-HISTORICAL",
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-UNKNOWN-BLOCK",
+        "PROC-NO-SELF-COMPLETE",
+        "PROC-NO-BYPASS",
+        "PROC-METHOD-INVALIDATE",
+        "PROC-CLAIM-EVIDENCE",
+        "PROC-CLOSED-TRACE",
+        "PROC-ROOT-BLOCK-LOWER",
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-CONTEXT-NEWCHAT",
+        "PROC-CONTEXT-TIME",
+        "PROC-CONTEXT-FEATURESWITCH",
+        "PROC-CONTEXT-HANDOFF",
+        "PROC-CONTEXT-OPERATOR",
+        "PROC-CONTEXT-PARTIAL",
+        "PROC-CONTEXT-NOCONV",
+        "PROC-RECON-AUTH",
+        "PROC-RECON-REQ",
+        "PROC-RECON-METHOD",
+        "PROC-RECON-FEATURE",
+        "PROC-RECON-PENDING",
+        "PROC-RECON-FAILURES",
+        "PROC-RECON-RESEARCH",
+        "PROC-RECON-IMPACT",
+        "PROC-RECON-VERIFY",
+        "PROC-RECON-APK",
+        "PROC-RECON-DEVICE",
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-UNKNOWN-OPEN",
+        "PROC-STATE-MACHINE",
+        "PROC-FAIL-EARLIEST",
+        "PROC-CHANGE-PROPAGATION",
+        "PROC-WORKFLOW-GATE-FIRST",
+        "PROC-FEATURE-IDENTITY",
+        "PROC-LEGACY-NOT-V2",
+        "PROC-RETIRED-CROSSCHECK",
+        "PROC-EXTERNAL-REFRESH",
+        "PROC-OBJECTIVE-PROGRESS",
+        "PROC-GENERATED-HASH",
+        "PROC-ALL-V2-WORKFLOWS-SCAN",
+        "ARCH-POI-PIPELINE",
+        "ARCH-POI-NOTVISIBLE",
+        "ARCH-STOCK-VS-USERMARK",
+        "ARCH-SYMBOL-PIPELINE",
+        "ARCH-FRAMEWORK-ROOT",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META",
+        "ARCH-VEHICLE-CV-TEXT",
+        "ARCH-EXISTING-MWM-COMPAT",
+        "ARCH-SEARCH-STOCK",
+        "ARCH-ROUTING-NATIVE",
+        "ARCH-BOOKMARK-NATIVE",
+        "ARCH-LOCATION-SHARED",
+        "ARCH-CONVENIENCE-DIAGNOSTIC",
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "ARCH-CONVENIENCE-DECISION",
+        "ARCH-NO-WHOLESALE-GENERATOR",
+        "PROC-METHOD-GATES",
+        "PROC-METHOD-REGRESSIONS",
+        "PROC-AUDIT-SPECIFIC-PROOF",
+        "PROC-IMPACT-COVERS-AUDIT",
+        "PROC-INTERNAL-ANALYSIS",
+        "PROC-WEB-WHEN-MATERIAL",
+        "PROC-WEB-NOT-AUTH",
+        "PROC-PINNED-REVALIDATE",
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-NO-UNRECORDED-SPEC",
+        "PROC-CHANGE-REASON",
+        "PROC-NO-UNRELATED-CHANGE",
+        "PROC-PINNED-EVERY-FEATURE",
+        "PROC-PINNED-PATHS",
+        "PROC-PINNED-FINDINGS",
+        "PROC-DOMAIN-COVERAGE",
+        "PROC-COMPLETION-METHOD",
+        "PROC-COMPLETION-BUILD",
+        "PROC-COMPLETION-BEHAVIOR",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-WORKFLOW",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-CACHE",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-LIFECYCLE",
+        "PROC-DOMAIN-REALDEVICE",
+        "PROC-DOMAIN-GATES",
+        "PROC-DOMAIN-DESIGN",
+        "PROC-TRACE-CONSUMED",
+        "PROC-PROJECT-BRANCH",
+        "PROC-PROJECT-DESIGN-STATE",
+        "PROC-CANONICAL-DESIGN",
+        "PROC-RETIRED-DESIGN-PATH",
+        "PROC-METHOD-CURRENT-INVALID",
+        "PROC-METHOD-SAMEHEAD",
+        "PROC-METHOD-SEMANTIC-CLOSURE",
+        "PROC-METHOD-HISTORICAL-REPLAY",
+        "PROC-METHOD-INDEPENDENT",
+        "PROC-METHOD-EXTENSIBILITY",
+        "PROC-METHOD-ARTIFACT-CHAIN",
+        "PROC-METHOD-DEVICE-CHAIN",
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-ROOT-CONTEXT-PROOF",
+        "PROC-ROOT-MISSING-PROOF",
+        "PROC-ROOT-PERMISSION-PROOF",
+        "PROC-ROOT-HISTORY-PROOF",
+        "PROC-ROOT-UNKNOWN-PROOF",
+        "PROC-ROOT-INDEPENDENT-PROOF",
+        "PROC-ROOT-EXTENSIBILITY-PROOF",
+        "PROC-ROOT-ARTIFACT-PROOF",
+        "PROC-ROOT-DEVICE-PROOF",
+        "PROC-FEATURE-CONTRACT",
+        "PROC-FEATURE-REPO-SWEEP",
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-FEATURE-DEVICE-PENDING",
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-INTERNAL-PATHS",
+        "PROC-RESEARCH-APPLICABILITY",
+        "PROC-RESEARCH-SOURCES-FINDINGS",
+        "PROC-RESEARCH-AUTH-CLASS",
+        "PROC-RESEARCH-TEMPORAL",
+        "PROC-RESEARCH-DOMAIN-MAP",
+        "PROC-ACTIVE-NO-DISAPPEAR",
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-BUILD-GATE-DESIGN",
+        "PROC-IMPACT-REVIEWED-PATHS",
+        "PROC-IMPACT-DECISION",
+        "PROC-RESEARCH-PINNED-SHA",
+        "PROC-RESEARCH-FINDINGS-CONCRETE",
+        "PROC-RESEARCH-DOMAIN-FINDINGS",
+        "PROC-RESEARCH-WEB-PROVENANCE",
+        "PROC-RESEARCH-TIME-PROOF",
+        "PROC-EVIDENCE-CROSSPROJECT",
+        "PROC-EVIDENCE-FROZEN-LINK",
+        "PROC-EVIDENCE-BASELINE-HIST",
+        "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
+        "PROC-EVIDENCE-OLD-MODULES-RETIRED",
+        "PROC-EVIDENCE-OLD-POI-RETIRED",
+        "PROC-EVIDENCE-OLD-SIGNAL-HIST",
+        "PROC-EVIDENCE-HANDOVER-HIST",
+        "PROC-AUTH-ALLOWLIST",
+        "PROC-AUTH-FORBIDDEN-PHRASES",
+        "PROC-RECON-AUTHORITY",
+        "PROC-RECON-REQUIREMENTS",
+        "PROC-RECON-FEATURES",
+        "PROC-INC-RETIRED-REPROMOTION",
+        "PROC-INC-AUDIT-NOPROOF",
+        "PROC-INC-STALE-CONVENIENCE",
+        "PROC-INC-STALE-SIGNAL",
+        "PROC-INC-PREFLIGHT",
+        "PROC-INC-RESEARCH-SCOPE",
+        "PROC-INC-SYNTAX",
+        "PROC-INC-APK-ASSUMPTION",
+        "PROC-INC-CONTEXT-LOSS",
+        "PROC-STAGE-CONSISTENCY",
+        "PROC-CERT-HEAD-FRESHNESS"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:PROC-002",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-TRACE",
+        "PROC-FAIL-CLOSED",
+        "PROC-REPO-MEMORY",
+        "PROC-RESEARCH-FIRST",
+        "PROC-IMPACT-FIRST",
+        "PROC-AUDIT-UNIT",
+        "PROC-DESTRUCTIVE",
+        "PROC-NO-BUILD-COMPLETE",
+        "PROC-APK-IDENTITY",
+        "PROC-DEVICE-AUTHORITY",
+        "PROC-NO-RESTART",
+        "PROC-DEFER",
+        "PROC-RENDER-CROSSCUT",
+        "PROC-JNI-CROSSCUT",
+        "PROC-PATCH-ORDER",
+        "PROC-DATASOURCE-CROSSCUT",
+        "PROC-NO-LINE-FIX",
+        "PROC-OBSOLETE-SWEEP",
+        "PROC-FROZEN-REGRESSION",
+        "PROC-FINAL-GENERATED",
+        "PROC-MINIMIZE-BUILDS",
+        "PROC-NATIVE-FIRST",
+        "PROC-RESPONSIBILITY-OWNERSHIP",
+        "PROC-NO-STALE-VALIDATOR-FIX",
+        "PROC-AUTOMATION-NOT-PROGRESS",
+        "PROC-DURABLE-CHECKPOINT",
+        "PROC-FAILURE-LOOP",
+        "PROC-DOC-MAINT",
+        "PROC-SINGLE-SOURCE",
+        "PROC-BEHAVIORAL-FREEZE",
+        "PROC-APK-MINIMAL",
+        "PROC-EVIDENCE-STATUS",
+        "PROC-CROSS-PROJECT-REVALIDATE",
+        "PROC-AUTHORITY-ONLY",
+        "PROC-FORBIDDEN-HISTORICAL",
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-UNKNOWN-BLOCK",
+        "PROC-NO-SELF-COMPLETE",
+        "PROC-NO-BYPASS",
+        "PROC-METHOD-INVALIDATE",
+        "PROC-CLAIM-EVIDENCE",
+        "PROC-CLOSED-TRACE",
+        "PROC-ROOT-BLOCK-LOWER",
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-CONTEXT-NEWCHAT",
+        "PROC-CONTEXT-TIME",
+        "PROC-CONTEXT-FEATURESWITCH",
+        "PROC-CONTEXT-HANDOFF",
+        "PROC-CONTEXT-OPERATOR",
+        "PROC-CONTEXT-PARTIAL",
+        "PROC-CONTEXT-NOCONV",
+        "PROC-RECON-AUTH",
+        "PROC-RECON-REQ",
+        "PROC-RECON-METHOD",
+        "PROC-RECON-FEATURE",
+        "PROC-RECON-PENDING",
+        "PROC-RECON-FAILURES",
+        "PROC-RECON-RESEARCH",
+        "PROC-RECON-IMPACT",
+        "PROC-RECON-VERIFY",
+        "PROC-RECON-APK",
+        "PROC-RECON-DEVICE",
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-UNKNOWN-OPEN",
+        "PROC-STATE-MACHINE",
+        "PROC-FAIL-EARLIEST",
+        "PROC-CHANGE-PROPAGATION",
+        "PROC-WORKFLOW-GATE-FIRST",
+        "PROC-FEATURE-IDENTITY",
+        "PROC-LEGACY-NOT-V2",
+        "PROC-RETIRED-CROSSCHECK",
+        "PROC-EXTERNAL-REFRESH",
+        "PROC-OBJECTIVE-PROGRESS",
+        "PROC-GENERATED-HASH",
+        "PROC-ALL-V2-WORKFLOWS-SCAN",
+        "ARCH-POI-PIPELINE",
+        "ARCH-POI-NOTVISIBLE",
+        "ARCH-STOCK-VS-USERMARK",
+        "ARCH-SYMBOL-PIPELINE",
+        "ARCH-FRAMEWORK-ROOT",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META",
+        "ARCH-VEHICLE-CV-TEXT",
+        "ARCH-EXISTING-MWM-COMPAT",
+        "ARCH-SEARCH-STOCK",
+        "ARCH-ROUTING-NATIVE",
+        "ARCH-BOOKMARK-NATIVE",
+        "ARCH-LOCATION-SHARED",
+        "ARCH-CONVENIENCE-DIAGNOSTIC",
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "ARCH-CONVENIENCE-DECISION",
+        "ARCH-NO-WHOLESALE-GENERATOR",
+        "PROC-METHOD-GATES",
+        "PROC-METHOD-REGRESSIONS",
+        "PROC-AUDIT-SPECIFIC-PROOF",
+        "PROC-IMPACT-COVERS-AUDIT",
+        "PROC-INTERNAL-ANALYSIS",
+        "PROC-WEB-WHEN-MATERIAL",
+        "PROC-WEB-NOT-AUTH",
+        "PROC-PINNED-REVALIDATE",
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-NO-UNRECORDED-SPEC",
+        "PROC-CHANGE-REASON",
+        "PROC-NO-UNRELATED-CHANGE",
+        "PROC-PINNED-EVERY-FEATURE",
+        "PROC-PINNED-PATHS",
+        "PROC-PINNED-FINDINGS",
+        "PROC-DOMAIN-COVERAGE",
+        "PROC-COMPLETION-METHOD",
+        "PROC-COMPLETION-BUILD",
+        "PROC-COMPLETION-BEHAVIOR",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-WORKFLOW",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-CACHE",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-LIFECYCLE",
+        "PROC-DOMAIN-REALDEVICE",
+        "PROC-DOMAIN-GATES",
+        "PROC-DOMAIN-DESIGN",
+        "PROC-TRACE-CONSUMED",
+        "PROC-PROJECT-BRANCH",
+        "PROC-PROJECT-DESIGN-STATE",
+        "PROC-CANONICAL-DESIGN",
+        "PROC-RETIRED-DESIGN-PATH",
+        "PROC-METHOD-CURRENT-INVALID",
+        "PROC-METHOD-SAMEHEAD",
+        "PROC-METHOD-SEMANTIC-CLOSURE",
+        "PROC-METHOD-HISTORICAL-REPLAY",
+        "PROC-METHOD-INDEPENDENT",
+        "PROC-METHOD-EXTENSIBILITY",
+        "PROC-METHOD-ARTIFACT-CHAIN",
+        "PROC-METHOD-DEVICE-CHAIN",
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-ROOT-CONTEXT-PROOF",
+        "PROC-ROOT-MISSING-PROOF",
+        "PROC-ROOT-PERMISSION-PROOF",
+        "PROC-ROOT-HISTORY-PROOF",
+        "PROC-ROOT-UNKNOWN-PROOF",
+        "PROC-ROOT-INDEPENDENT-PROOF",
+        "PROC-ROOT-EXTENSIBILITY-PROOF",
+        "PROC-ROOT-ARTIFACT-PROOF",
+        "PROC-ROOT-DEVICE-PROOF",
+        "PROC-FEATURE-CONTRACT",
+        "PROC-FEATURE-REPO-SWEEP",
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-FEATURE-DEVICE-PENDING",
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-INTERNAL-PATHS",
+        "PROC-RESEARCH-APPLICABILITY",
+        "PROC-RESEARCH-SOURCES-FINDINGS",
+        "PROC-RESEARCH-AUTH-CLASS",
+        "PROC-RESEARCH-TEMPORAL",
+        "PROC-RESEARCH-DOMAIN-MAP",
+        "PROC-ACTIVE-NO-DISAPPEAR",
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-BUILD-GATE-DESIGN",
+        "PROC-IMPACT-REVIEWED-PATHS",
+        "PROC-IMPACT-DECISION",
+        "PROC-RESEARCH-PINNED-SHA",
+        "PROC-RESEARCH-FINDINGS-CONCRETE",
+        "PROC-RESEARCH-DOMAIN-FINDINGS",
+        "PROC-RESEARCH-WEB-PROVENANCE",
+        "PROC-RESEARCH-TIME-PROOF",
+        "PROC-EVIDENCE-CROSSPROJECT",
+        "PROC-EVIDENCE-FROZEN-LINK",
+        "PROC-EVIDENCE-BASELINE-HIST",
+        "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
+        "PROC-EVIDENCE-OLD-MODULES-RETIRED",
+        "PROC-EVIDENCE-OLD-POI-RETIRED",
+        "PROC-EVIDENCE-OLD-SIGNAL-HIST",
+        "PROC-EVIDENCE-HANDOVER-HIST",
+        "PROC-AUTH-ALLOWLIST",
+        "PROC-AUTH-FORBIDDEN-PHRASES",
+        "PROC-RECON-AUTHORITY",
+        "PROC-RECON-REQUIREMENTS",
+        "PROC-RECON-FEATURES",
+        "PROC-INC-RETIRED-REPROMOTION",
+        "PROC-INC-AUDIT-NOPROOF",
+        "PROC-INC-STALE-CONVENIENCE",
+        "PROC-INC-STALE-SIGNAL",
+        "PROC-INC-PREFLIGHT",
+        "PROC-INC-RESEARCH-SCOPE",
+        "PROC-INC-SYNTAX",
+        "PROC-INC-APK-ASSUMPTION",
+        "PROC-INC-CONTEXT-LOSS",
+        "PROC-STAGE-CONSISTENCY",
+        "PROC-CERT-HEAD-FRESHNESS"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-200M-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-COVERAGE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-UPGRADE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:PRODUCT-BASE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "BASE-COMAPS",
+        "BASE-OFFLINE",
+        "BASE-NO-PAID",
+        "BASE-STOCK-SEARCH",
+        "BASE-STOCK-HISTORY",
+        "BASE-STOCK-BOOKMARKS",
+        "BASE-STOCK-DOWNLOADS",
+        "BASE-STOCK-POI",
+        "BASE-UPSTREAM-OWNERSHIP",
+        "MAP-NORTH-LOCK",
+        "HUD-ORIENTATION",
+        "STOP-INDEPENDENT",
+        "VOICE-SAFE-FALLBACK",
+        "ROUTE-PROVE-TOLL",
+        "TOLL-SOURCE-VERSION",
+        "FAV-TRANSPORT-BOUNDARY",
+        "LIFE-STATE-TRANSITIONS",
+        "UI-CURRENT-TOUCH",
+        "MAJOR-POI-CATEGORIES",
+        "SEARCH-SHOWMAP-NORMALIZE",
+        "SCOPE-NO-SILENT-CHANGE",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:MAP-CAMERA-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON",
+        "MAP-RAW-SEPARATE",
+        "MAP-LOW-SPEED-HYSTERESIS"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:MAP-SCALE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:HUD-ROAD-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:POI-CONVENIENCE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "CV-ALWAYS",
+        "CV-MWM-FIRST",
+        "CV-BRAND-711",
+        "CV-BRAND-FM",
+        "CV-BRAND-LAWSON",
+        "CV-BRAND-SEICO",
+        "CV-BRAND-MYBASKET",
+        "CV-BRAND-MINISTOP",
+        "CV-BRAND-DAILY",
+        "CV-GENERIC",
+        "CV-NO-TEXT-URBAN",
+        "CV-SLIGHTLY-LARGER",
+        "CV-SCALE",
+        "CV-NO-DUPLICATE",
+        "CV-STOCK-DISTINGUISH",
+        "CV-DEVICE",
+        "CV-ZOOM-1KM",
+        "CV-ZOOM-500M",
+        "CV-ZOOM-200M",
+        "CV-GROUP",
+        "CV-METADATA-DIAGNOSTIC",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:POI-FUEL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "FUEL",
+        "FUEL-MWM-FIRST"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:STOP-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "STOP-FORWARD",
+        "STOP-DISTANCE",
+        "STOP-HEADING",
+        "STOP-OWNERSHIP"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SEARCH-VOICE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "VOICE-JA",
+        "VOICE-ONDEVICE",
+        "VOICE-FALLBACK"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:ROUTING-FREE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ROUTE-FREE",
+        "ROUTE-NO-POSTFILTER"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:TOLL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "TOLL-AUTH",
+        "TOLL-PASSENGER",
+        "TOLL-CANDIDATE",
+        "TOLL-ZERO",
+        "TOLL-OFFLINE"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:FAVORITES-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "FAV-AUTH",
+        "FAV-IDENTITY",
+        "FAV-CONFLICT",
+        "FAV-MERGE",
+        "FAV-WIFI"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:LIFECYCLE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "LIFE-START",
+        "LIFE-RESTART",
+        "LIFE-RETURN"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:UI-LAYOUT-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:MAP-LABEL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "LABEL-ADDRESS",
+        "LABEL-ROAD"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:LOCATION-STABILITY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON",
+        "MAP-RAW-SEPARATE",
+        "MAP-LOW-SPEED-HYSTERESIS"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:GOOGLE-MAPS-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "GMAPS-LAUNCH",
+        "GMAPS-RETURN"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:POI-MAJOR-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "POI-MAJOR",
+        "POI-AIRPORT",
+        "POI-ROADSIDE",
+        "POI-PARK",
+        "POI-PUBLIC",
+        "POI-DEPARTMENT",
+        "POI-SUPERMARKET",
+        "POI-LARGE-LABEL",
+        "POI-COLLISION"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:CAMERA-FIXED-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON",
+        "MAP-RAW-SEPARATE",
+        "MAP-LOW-SPEED-HYSTERESIS"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:OFFLINE-FREE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "BASE-COMAPS",
+        "BASE-OFFLINE",
+        "BASE-NO-PAID",
+        "BASE-STOCK-SEARCH",
+        "BASE-STOCK-HISTORY",
+        "BASE-STOCK-BOOKMARKS",
+        "BASE-STOCK-DOWNLOADS",
+        "BASE-STOCK-POI",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIGNAL-ZOOM-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:CONVENIENCE-BRANDS-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "CV-ALWAYS",
+        "CV-MWM-FIRST",
+        "CV-BRAND-711",
+        "CV-BRAND-FM",
+        "CV-BRAND-LAWSON",
+        "CV-BRAND-SEICO",
+        "CV-BRAND-MYBASKET",
+        "CV-BRAND-MINISTOP",
+        "CV-BRAND-DAILY",
+        "CV-GENERIC",
+        "CV-NO-TEXT-URBAN",
+        "CV-SLIGHTLY-LARGER",
+        "CV-SCALE",
+        "CV-NO-DUPLICATE",
+        "CV-STOCK-DISTINGUISH",
+        "CV-DEVICE",
+        "CV-ZOOM-1KM",
+        "CV-ZOOM-500M",
+        "CV-ZOOM-200M",
+        "CV-GROUP",
+        "CV-METADATA-DIAGNOSTIC",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:TOLL-ROUTE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "TOLL-AUTH",
+        "TOLL-PASSENGER",
+        "TOLL-CANDIDATE",
+        "TOLL-ZERO",
+        "TOLL-OFFLINE"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SIG-200M-LEGACY-001",
+      "classification": "SUPERSEDED",
+      "atomic_ids": [],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SEARCH-FUZZY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SEARCH-STOCK",
+        "SEARCH-FUZZY",
+        "SEARCH-HISTORY",
+        "SEARCH-HISTORY-DELETE"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:ORIENTATION-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ORIENT-AUTO",
+        "ORIENT-PORTRAIT",
+        "ORIENT-LANDSCAPE"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SEARCH-HISTORY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SEARCH-STOCK",
+        "SEARCH-FUZZY",
+        "SEARCH-HISTORY",
+        "SEARCH-HISTORY-DELETE"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:VEHICLE-ICON-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/active_decisions.json",
+      "clause_id": "decision:SCOPE-HOKKAIDO-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SCOPE-HOKKAIDO"
+      ],
+      "provenance": "decision.id"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.min_zoom",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 14
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.zoom_symbols",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": {
+        "14": "xs",
+        "15": "xs"
+      }
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.forward_zoom_symbols",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FORWARD-EMPHASIS"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": {
+        "17": "m",
+        "19": "l"
+      }
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": {
+        "xs": [
+          8,
+          14
+        ],
+        "s": [
+          12,
+          18
+        ],
+        "m": [
+          16,
+          31
+        ],
+        "l": [
+          18,
+          34
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.cluster_radius_m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 30
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.radius_m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 3000
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.max_points",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 1400
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.refresh_ms",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-RESUME-COVERAGE"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 45000
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.retry_ms",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-RESUME-COVERAGE"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 12000
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.movement_m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-RESUME-COVERAGE"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 250
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.forward_max_m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FORWARD-EMPHASIS"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 450
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.forward_cone_deg",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FORWARD-EMPHASIS"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 45
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.cache_max_ms",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-RESUME-COVERAGE"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 86400000
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": [
+        "highway=traffic_signals",
+        "crossing=traffic_signals",
+        "type=traffic_signals_set"
+      ]
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": [
+        "node",
+        "way",
+        "relation"
+      ]
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.source_dedup_m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": 12
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.sources",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-NO-SCREENSHOT-COORDS"
+      ],
+      "provenance": "current_spec semantic field",
+      "value_snapshot": [
+        "osm_overpass",
+        "verified_supplement"
+      ]
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.zoom_symbols.14",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-Z14-XS"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.zoom_symbols.15",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-Z15-XS"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.forward_zoom_symbols.17",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FWD-Z17-M"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.forward_zoom_symbols.19",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-FWD-Z19-L"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.xs",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-XS"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.s",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-S"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.m",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-M"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.display.svg_dimensions.l",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SVG-L"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries.highway=traffic_signals",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-HIGHWAY"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries.crossing=traffic_signals",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-CROSSING"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_queries.type=traffic_signals_set",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-SET"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types.node",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-NODE"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types.way",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-WAY"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.osm_element_types.relation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-RELATION"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.sources.osm_overpass",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/current_spec.json",
+      "clause_id": "signal.acquisition.sources.verified_supplement",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-SUPPLEMENT"
+      ],
+      "provenance": "current_spec semantic field"
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "traceability stage must equal project state",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:PROC-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-TRACE",
+        "PROC-FAIL-CLOSED",
+        "PROC-REPO-MEMORY",
+        "PROC-RESEARCH-FIRST",
+        "PROC-IMPACT-FIRST",
+        "PROC-AUDIT-UNIT",
+        "PROC-DESTRUCTIVE",
+        "PROC-NO-BUILD-COMPLETE",
+        "PROC-APK-IDENTITY",
+        "PROC-DEVICE-AUTHORITY",
+        "PROC-NO-RESTART",
+        "PROC-DEFER",
+        "PROC-RENDER-CROSSCUT",
+        "PROC-JNI-CROSSCUT",
+        "PROC-PATCH-ORDER",
+        "PROC-DATASOURCE-CROSSCUT",
+        "PROC-NO-LINE-FIX",
+        "PROC-OBSOLETE-SWEEP",
+        "PROC-FROZEN-REGRESSION",
+        "PROC-FINAL-GENERATED",
+        "PROC-MINIMIZE-BUILDS",
+        "PROC-NATIVE-FIRST",
+        "PROC-RESPONSIBILITY-OWNERSHIP",
+        "PROC-NO-STALE-VALIDATOR-FIX",
+        "PROC-AUTOMATION-NOT-PROGRESS",
+        "PROC-DURABLE-CHECKPOINT",
+        "PROC-FAILURE-LOOP",
+        "PROC-DOC-MAINT",
+        "PROC-SINGLE-SOURCE",
+        "PROC-BEHAVIORAL-FREEZE",
+        "PROC-APK-MINIMAL",
+        "PROC-EVIDENCE-STATUS",
+        "PROC-CROSS-PROJECT-REVALIDATE",
+        "PROC-AUTHORITY-ONLY",
+        "PROC-FORBIDDEN-HISTORICAL",
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-UNKNOWN-BLOCK",
+        "PROC-NO-SELF-COMPLETE",
+        "PROC-NO-BYPASS",
+        "PROC-METHOD-INVALIDATE",
+        "PROC-CLAIM-EVIDENCE",
+        "PROC-CLOSED-TRACE",
+        "PROC-ROOT-BLOCK-LOWER",
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-CONTEXT-NEWCHAT",
+        "PROC-CONTEXT-TIME",
+        "PROC-CONTEXT-FEATURESWITCH",
+        "PROC-CONTEXT-HANDOFF",
+        "PROC-CONTEXT-OPERATOR",
+        "PROC-CONTEXT-PARTIAL",
+        "PROC-CONTEXT-NOCONV",
+        "PROC-RECON-AUTH",
+        "PROC-RECON-REQ",
+        "PROC-RECON-METHOD",
+        "PROC-RECON-FEATURE",
+        "PROC-RECON-PENDING",
+        "PROC-RECON-FAILURES",
+        "PROC-RECON-RESEARCH",
+        "PROC-RECON-IMPACT",
+        "PROC-RECON-VERIFY",
+        "PROC-RECON-APK",
+        "PROC-RECON-DEVICE",
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-UNKNOWN-OPEN",
+        "PROC-STATE-MACHINE",
+        "PROC-FAIL-EARLIEST",
+        "PROC-CHANGE-PROPAGATION",
+        "PROC-WORKFLOW-GATE-FIRST",
+        "PROC-FEATURE-IDENTITY",
+        "PROC-LEGACY-NOT-V2",
+        "PROC-RETIRED-CROSSCHECK",
+        "PROC-EXTERNAL-REFRESH",
+        "PROC-OBJECTIVE-PROGRESS",
+        "PROC-GENERATED-HASH",
+        "PROC-ALL-V2-WORKFLOWS-SCAN",
+        "ARCH-POI-PIPELINE",
+        "ARCH-POI-NOTVISIBLE",
+        "ARCH-STOCK-VS-USERMARK",
+        "ARCH-SYMBOL-PIPELINE",
+        "ARCH-FRAMEWORK-ROOT",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META",
+        "ARCH-VEHICLE-CV-TEXT",
+        "ARCH-EXISTING-MWM-COMPAT",
+        "ARCH-SEARCH-STOCK",
+        "ARCH-ROUTING-NATIVE",
+        "ARCH-BOOKMARK-NATIVE",
+        "ARCH-LOCATION-SHARED",
+        "ARCH-CONVENIENCE-DIAGNOSTIC",
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "ARCH-CONVENIENCE-DECISION",
+        "ARCH-NO-WHOLESALE-GENERATOR",
+        "PROC-METHOD-GATES",
+        "PROC-METHOD-REGRESSIONS",
+        "PROC-AUDIT-SPECIFIC-PROOF",
+        "PROC-IMPACT-COVERS-AUDIT",
+        "PROC-INTERNAL-ANALYSIS",
+        "PROC-WEB-WHEN-MATERIAL",
+        "PROC-WEB-NOT-AUTH",
+        "PROC-PINNED-REVALIDATE",
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-NO-UNRECORDED-SPEC",
+        "PROC-CHANGE-REASON",
+        "PROC-NO-UNRELATED-CHANGE",
+        "PROC-PINNED-EVERY-FEATURE",
+        "PROC-PINNED-PATHS",
+        "PROC-PINNED-FINDINGS",
+        "PROC-DOMAIN-COVERAGE",
+        "PROC-COMPLETION-METHOD",
+        "PROC-COMPLETION-BUILD",
+        "PROC-COMPLETION-BEHAVIOR",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-WORKFLOW",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-CACHE",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-LIFECYCLE",
+        "PROC-DOMAIN-REALDEVICE",
+        "PROC-DOMAIN-GATES",
+        "PROC-DOMAIN-DESIGN",
+        "PROC-TRACE-CONSUMED",
+        "PROC-PROJECT-BRANCH",
+        "PROC-PROJECT-DESIGN-STATE",
+        "PROC-CANONICAL-DESIGN",
+        "PROC-RETIRED-DESIGN-PATH",
+        "PROC-METHOD-CURRENT-INVALID",
+        "PROC-METHOD-SAMEHEAD",
+        "PROC-METHOD-SEMANTIC-CLOSURE",
+        "PROC-METHOD-HISTORICAL-REPLAY",
+        "PROC-METHOD-INDEPENDENT",
+        "PROC-METHOD-EXTENSIBILITY",
+        "PROC-METHOD-ARTIFACT-CHAIN",
+        "PROC-METHOD-DEVICE-CHAIN",
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-ROOT-CONTEXT-PROOF",
+        "PROC-ROOT-MISSING-PROOF",
+        "PROC-ROOT-PERMISSION-PROOF",
+        "PROC-ROOT-HISTORY-PROOF",
+        "PROC-ROOT-UNKNOWN-PROOF",
+        "PROC-ROOT-INDEPENDENT-PROOF",
+        "PROC-ROOT-EXTENSIBILITY-PROOF",
+        "PROC-ROOT-ARTIFACT-PROOF",
+        "PROC-ROOT-DEVICE-PROOF",
+        "PROC-FEATURE-CONTRACT",
+        "PROC-FEATURE-REPO-SWEEP",
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-FEATURE-DEVICE-PENDING",
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-INTERNAL-PATHS",
+        "PROC-RESEARCH-APPLICABILITY",
+        "PROC-RESEARCH-SOURCES-FINDINGS",
+        "PROC-RESEARCH-AUTH-CLASS",
+        "PROC-RESEARCH-TEMPORAL",
+        "PROC-RESEARCH-DOMAIN-MAP",
+        "PROC-ACTIVE-NO-DISAPPEAR",
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-BUILD-GATE-DESIGN",
+        "PROC-IMPACT-REVIEWED-PATHS",
+        "PROC-IMPACT-DECISION",
+        "PROC-RESEARCH-PINNED-SHA",
+        "PROC-RESEARCH-FINDINGS-CONCRETE",
+        "PROC-RESEARCH-DOMAIN-FINDINGS",
+        "PROC-RESEARCH-WEB-PROVENANCE",
+        "PROC-RESEARCH-TIME-PROOF",
+        "PROC-EVIDENCE-CROSSPROJECT",
+        "PROC-EVIDENCE-FROZEN-LINK",
+        "PROC-EVIDENCE-BASELINE-HIST",
+        "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
+        "PROC-EVIDENCE-OLD-MODULES-RETIRED",
+        "PROC-EVIDENCE-OLD-POI-RETIRED",
+        "PROC-EVIDENCE-OLD-SIGNAL-HIST",
+        "PROC-EVIDENCE-HANDOVER-HIST",
+        "PROC-AUTH-ALLOWLIST",
+        "PROC-AUTH-FORBIDDEN-PHRASES",
+        "PROC-RECON-AUTHORITY",
+        "PROC-RECON-REQUIREMENTS",
+        "PROC-RECON-FEATURES",
+        "PROC-INC-RETIRED-REPROMOTION",
+        "PROC-INC-AUDIT-NOPROOF",
+        "PROC-INC-STALE-CONVENIENCE",
+        "PROC-INC-STALE-SIGNAL",
+        "PROC-INC-PREFLIGHT",
+        "PROC-INC-RESEARCH-SCOPE",
+        "PROC-INC-SYNTAX",
+        "PROC-INC-APK-ASSUMPTION",
+        "PROC-INC-CONTEXT-LOSS",
+        "PROC-STAGE-CONSISTENCY",
+        "PROC-CERT-HEAD-FRESHNESS"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_project_integrity.py",
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:PROC-002",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-TRACE",
+        "PROC-FAIL-CLOSED",
+        "PROC-REPO-MEMORY",
+        "PROC-RESEARCH-FIRST",
+        "PROC-IMPACT-FIRST",
+        "PROC-AUDIT-UNIT",
+        "PROC-DESTRUCTIVE",
+        "PROC-NO-BUILD-COMPLETE",
+        "PROC-APK-IDENTITY",
+        "PROC-DEVICE-AUTHORITY",
+        "PROC-NO-RESTART",
+        "PROC-DEFER",
+        "PROC-RENDER-CROSSCUT",
+        "PROC-JNI-CROSSCUT",
+        "PROC-PATCH-ORDER",
+        "PROC-DATASOURCE-CROSSCUT",
+        "PROC-NO-LINE-FIX",
+        "PROC-OBSOLETE-SWEEP",
+        "PROC-FROZEN-REGRESSION",
+        "PROC-FINAL-GENERATED",
+        "PROC-MINIMIZE-BUILDS",
+        "PROC-NATIVE-FIRST",
+        "PROC-RESPONSIBILITY-OWNERSHIP",
+        "PROC-NO-STALE-VALIDATOR-FIX",
+        "PROC-AUTOMATION-NOT-PROGRESS",
+        "PROC-DURABLE-CHECKPOINT",
+        "PROC-FAILURE-LOOP",
+        "PROC-DOC-MAINT",
+        "PROC-SINGLE-SOURCE",
+        "PROC-BEHAVIORAL-FREEZE",
+        "PROC-APK-MINIMAL",
+        "PROC-EVIDENCE-STATUS",
+        "PROC-CROSS-PROJECT-REVALIDATE",
+        "PROC-AUTHORITY-ONLY",
+        "PROC-FORBIDDEN-HISTORICAL",
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-UNKNOWN-BLOCK",
+        "PROC-NO-SELF-COMPLETE",
+        "PROC-NO-BYPASS",
+        "PROC-METHOD-INVALIDATE",
+        "PROC-CLAIM-EVIDENCE",
+        "PROC-CLOSED-TRACE",
+        "PROC-ROOT-BLOCK-LOWER",
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-CONTEXT-NEWCHAT",
+        "PROC-CONTEXT-TIME",
+        "PROC-CONTEXT-FEATURESWITCH",
+        "PROC-CONTEXT-HANDOFF",
+        "PROC-CONTEXT-OPERATOR",
+        "PROC-CONTEXT-PARTIAL",
+        "PROC-CONTEXT-NOCONV",
+        "PROC-RECON-AUTH",
+        "PROC-RECON-REQ",
+        "PROC-RECON-METHOD",
+        "PROC-RECON-FEATURE",
+        "PROC-RECON-PENDING",
+        "PROC-RECON-FAILURES",
+        "PROC-RECON-RESEARCH",
+        "PROC-RECON-IMPACT",
+        "PROC-RECON-VERIFY",
+        "PROC-RECON-APK",
+        "PROC-RECON-DEVICE",
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-UNKNOWN-OPEN",
+        "PROC-STATE-MACHINE",
+        "PROC-FAIL-EARLIEST",
+        "PROC-CHANGE-PROPAGATION",
+        "PROC-WORKFLOW-GATE-FIRST",
+        "PROC-FEATURE-IDENTITY",
+        "PROC-LEGACY-NOT-V2",
+        "PROC-RETIRED-CROSSCHECK",
+        "PROC-EXTERNAL-REFRESH",
+        "PROC-OBJECTIVE-PROGRESS",
+        "PROC-GENERATED-HASH",
+        "PROC-ALL-V2-WORKFLOWS-SCAN",
+        "ARCH-POI-PIPELINE",
+        "ARCH-POI-NOTVISIBLE",
+        "ARCH-STOCK-VS-USERMARK",
+        "ARCH-SYMBOL-PIPELINE",
+        "ARCH-FRAMEWORK-ROOT",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META",
+        "ARCH-VEHICLE-CV-TEXT",
+        "ARCH-EXISTING-MWM-COMPAT",
+        "ARCH-SEARCH-STOCK",
+        "ARCH-ROUTING-NATIVE",
+        "ARCH-BOOKMARK-NATIVE",
+        "ARCH-LOCATION-SHARED",
+        "ARCH-CONVENIENCE-DIAGNOSTIC",
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "ARCH-CONVENIENCE-DECISION",
+        "ARCH-NO-WHOLESALE-GENERATOR",
+        "PROC-METHOD-GATES",
+        "PROC-METHOD-REGRESSIONS",
+        "PROC-AUDIT-SPECIFIC-PROOF",
+        "PROC-IMPACT-COVERS-AUDIT",
+        "PROC-INTERNAL-ANALYSIS",
+        "PROC-WEB-WHEN-MATERIAL",
+        "PROC-WEB-NOT-AUTH",
+        "PROC-PINNED-REVALIDATE",
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-NO-UNRECORDED-SPEC",
+        "PROC-CHANGE-REASON",
+        "PROC-NO-UNRELATED-CHANGE",
+        "PROC-PINNED-EVERY-FEATURE",
+        "PROC-PINNED-PATHS",
+        "PROC-PINNED-FINDINGS",
+        "PROC-DOMAIN-COVERAGE",
+        "PROC-COMPLETION-METHOD",
+        "PROC-COMPLETION-BUILD",
+        "PROC-COMPLETION-BEHAVIOR",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-WORKFLOW",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-CACHE",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-LIFECYCLE",
+        "PROC-DOMAIN-REALDEVICE",
+        "PROC-DOMAIN-GATES",
+        "PROC-DOMAIN-DESIGN",
+        "PROC-TRACE-CONSUMED",
+        "PROC-PROJECT-BRANCH",
+        "PROC-PROJECT-DESIGN-STATE",
+        "PROC-CANONICAL-DESIGN",
+        "PROC-RETIRED-DESIGN-PATH",
+        "PROC-METHOD-CURRENT-INVALID",
+        "PROC-METHOD-SAMEHEAD",
+        "PROC-METHOD-SEMANTIC-CLOSURE",
+        "PROC-METHOD-HISTORICAL-REPLAY",
+        "PROC-METHOD-INDEPENDENT",
+        "PROC-METHOD-EXTENSIBILITY",
+        "PROC-METHOD-ARTIFACT-CHAIN",
+        "PROC-METHOD-DEVICE-CHAIN",
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-ROOT-CONTEXT-PROOF",
+        "PROC-ROOT-MISSING-PROOF",
+        "PROC-ROOT-PERMISSION-PROOF",
+        "PROC-ROOT-HISTORY-PROOF",
+        "PROC-ROOT-UNKNOWN-PROOF",
+        "PROC-ROOT-INDEPENDENT-PROOF",
+        "PROC-ROOT-EXTENSIBILITY-PROOF",
+        "PROC-ROOT-ARTIFACT-PROOF",
+        "PROC-ROOT-DEVICE-PROOF",
+        "PROC-FEATURE-CONTRACT",
+        "PROC-FEATURE-REPO-SWEEP",
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-FEATURE-DEVICE-PENDING",
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-INTERNAL-PATHS",
+        "PROC-RESEARCH-APPLICABILITY",
+        "PROC-RESEARCH-SOURCES-FINDINGS",
+        "PROC-RESEARCH-AUTH-CLASS",
+        "PROC-RESEARCH-TEMPORAL",
+        "PROC-RESEARCH-DOMAIN-MAP",
+        "PROC-ACTIVE-NO-DISAPPEAR",
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-BUILD-GATE-DESIGN",
+        "PROC-IMPACT-REVIEWED-PATHS",
+        "PROC-IMPACT-DECISION",
+        "PROC-RESEARCH-PINNED-SHA",
+        "PROC-RESEARCH-FINDINGS-CONCRETE",
+        "PROC-RESEARCH-DOMAIN-FINDINGS",
+        "PROC-RESEARCH-WEB-PROVENANCE",
+        "PROC-RESEARCH-TIME-PROOF",
+        "PROC-EVIDENCE-CROSSPROJECT",
+        "PROC-EVIDENCE-FROZEN-LINK",
+        "PROC-EVIDENCE-BASELINE-HIST",
+        "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
+        "PROC-EVIDENCE-OLD-MODULES-RETIRED",
+        "PROC-EVIDENCE-OLD-POI-RETIRED",
+        "PROC-EVIDENCE-OLD-SIGNAL-HIST",
+        "PROC-EVIDENCE-HANDOVER-HIST",
+        "PROC-AUTH-ALLOWLIST",
+        "PROC-AUTH-FORBIDDEN-PHRASES",
+        "PROC-RECON-AUTHORITY",
+        "PROC-RECON-REQUIREMENTS",
+        "PROC-RECON-FEATURES",
+        "PROC-INC-RETIRED-REPROMOTION",
+        "PROC-INC-AUDIT-NOPROOF",
+        "PROC-INC-STALE-CONVENIENCE",
+        "PROC-INC-STALE-SIGNAL",
+        "PROC-INC-PREFLIGHT",
+        "PROC-INC-RESEARCH-SCOPE",
+        "PROC-INC-SYNTAX",
+        "PROC-INC-APK-ASSUMPTION",
+        "PROC-INC-CONTEXT-LOSS",
+        "PROC-STAGE-CONSISTENCY",
+        "PROC-CERT-HEAD-FRESHNESS"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_project_integrity.py",
+          ".github/workflows/cb6_development_gate.yml",
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SIG-200M-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SIG-COVERAGE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SIG-UPGRADE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:PRODUCT-BASE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "BASE-COMAPS",
+        "BASE-OFFLINE",
+        "BASE-NO-PAID",
+        "BASE-STOCK-SEARCH",
+        "BASE-STOCK-HISTORY",
+        "BASE-STOCK-BOOKMARKS",
+        "BASE-STOCK-DOWNLOADS",
+        "BASE-STOCK-POI",
+        "BASE-UPSTREAM-OWNERSHIP",
+        "MAP-NORTH-LOCK",
+        "HUD-ORIENTATION",
+        "STOP-INDEPENDENT",
+        "VOICE-SAFE-FALLBACK",
+        "ROUTE-PROVE-TOLL",
+        "TOLL-SOURCE-VERSION",
+        "FAV-TRANSPORT-BOUNDARY",
+        "LIFE-STATE-TRANSITIONS",
+        "UI-CURRENT-TOUCH",
+        "MAJOR-POI-CATEGORIES",
+        "SEARCH-SHOWMAP-NORMALIZE",
+        "SCOPE-NO-SILENT-CHANGE",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:MAP-CAMERA-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON",
+        "MAP-RAW-SEPARATE",
+        "MAP-LOW-SPEED-HYSTERESIS"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:MAP-SCALE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:HUD-ROAD-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:POI-CONVENIENCE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "CV-ALWAYS",
+        "CV-MWM-FIRST",
+        "CV-BRAND-711",
+        "CV-BRAND-FM",
+        "CV-BRAND-LAWSON",
+        "CV-BRAND-SEICO",
+        "CV-BRAND-MYBASKET",
+        "CV-BRAND-MINISTOP",
+        "CV-BRAND-DAILY",
+        "CV-GENERIC",
+        "CV-NO-TEXT-URBAN",
+        "CV-SLIGHTLY-LARGER",
+        "CV-SCALE",
+        "CV-NO-DUPLICATE",
+        "CV-STOCK-DISTINGUISH",
+        "CV-DEVICE",
+        "CV-ZOOM-1KM",
+        "CV-ZOOM-500M",
+        "CV-ZOOM-200M",
+        "CV-GROUP",
+        "CV-METADATA-DIAGNOSTIC",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:POI-FUEL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "FUEL",
+        "FUEL-MWM-FIRST"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:STOP-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "STOP-FORWARD",
+        "STOP-DISTANCE",
+        "STOP-HEADING",
+        "STOP-OWNERSHIP"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SEARCH-VOICE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "VOICE-JA",
+        "VOICE-ONDEVICE",
+        "VOICE-FALLBACK"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:ROUTING-FREE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ROUTE-FREE",
+        "ROUTE-NO-POSTFILTER"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:TOLL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "TOLL-AUTH",
+        "TOLL-PASSENGER",
+        "TOLL-CANDIDATE",
+        "TOLL-ZERO",
+        "TOLL-OFFLINE"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:FAVORITES-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "FAV-AUTH",
+        "FAV-IDENTITY",
+        "FAV-CONFLICT",
+        "FAV-MERGE",
+        "FAV-WIFI"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:LIFECYCLE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "LIFE-START",
+        "LIFE-RESTART",
+        "LIFE-RETURN"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:UI-LAYOUT-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:MAP-LABEL-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "LABEL-ADDRESS",
+        "LABEL-ROAD"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:LOCATION-STABILITY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON",
+        "MAP-RAW-SEPARATE",
+        "MAP-LOW-SPEED-HYSTERESIS"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:GOOGLE-MAPS-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "GMAPS-LAUNCH",
+        "GMAPS-RETURN"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:POI-MAJOR-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "POI-MAJOR",
+        "POI-AIRPORT",
+        "POI-ROADSIDE",
+        "POI-PARK",
+        "POI-PUBLIC",
+        "POI-DEPARTMENT",
+        "POI-SUPERMARKET",
+        "POI-LARGE-LABEL",
+        "POI-COLLISION"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:CAMERA-FIXED-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON",
+        "MAP-RAW-SEPARATE",
+        "MAP-LOW-SPEED-HYSTERESIS"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:OFFLINE-FREE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "BASE-COMAPS",
+        "BASE-OFFLINE",
+        "BASE-NO-PAID",
+        "BASE-STOCK-SEARCH",
+        "BASE-STOCK-HISTORY",
+        "BASE-STOCK-BOOKMARKS",
+        "BASE-STOCK-DOWNLOADS",
+        "BASE-STOCK-POI",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SIGNAL-ZOOM-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-500M",
+        "SIG-1KM-OFF",
+        "SIG-FORWARD-EMPHASIS",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-INDEPENDENT-OWNERSHIP",
+        "SIG-NO-SCREENSHOT-COORDS",
+        "SIG-RESUME-COVERAGE",
+        "SIG-REFRESH-45",
+        "SIG-RETRY-12",
+        "SIG-MOVE-250",
+        "SIG-RADIUS-3000",
+        "SIG-RETENTION",
+        "SIG-MAX-1400",
+        "SIG-FORWARD-450",
+        "SIG-CONE-45",
+        "SIG-CLUSTER-30",
+        "SIG-DEDUP-12",
+        "SIG-CACHE-24H",
+        "SIG-OSM-HIGHWAY",
+        "SIG-OSM-CROSSING",
+        "SIG-OSM-SET",
+        "SIG-OSM-NODE",
+        "SIG-OSM-WAY",
+        "SIG-OSM-RELATION",
+        "SIG-SUPPLEMENT",
+        "SIG-SVG-XS",
+        "SIG-SVG-S",
+        "SIG-SVG-M",
+        "SIG-SVG-L",
+        "SIG-Z14-XS",
+        "SIG-Z15-XS",
+        "SIG-FWD-Z17-M",
+        "SIG-FWD-Z19-L",
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI",
+        "SIG-EXTERNAL-SEPARATE",
+        "SIG-CACHE-OUTSIDE-UPSTREAM"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:CONVENIENCE-BRANDS-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "CV-ALWAYS",
+        "CV-MWM-FIRST",
+        "CV-BRAND-711",
+        "CV-BRAND-FM",
+        "CV-BRAND-LAWSON",
+        "CV-BRAND-SEICO",
+        "CV-BRAND-MYBASKET",
+        "CV-BRAND-MINISTOP",
+        "CV-BRAND-DAILY",
+        "CV-GENERIC",
+        "CV-NO-TEXT-URBAN",
+        "CV-SLIGHTLY-LARGER",
+        "CV-SCALE",
+        "CV-NO-DUPLICATE",
+        "CV-STOCK-DISTINGUISH",
+        "CV-DEVICE",
+        "CV-ZOOM-1KM",
+        "CV-ZOOM-500M",
+        "CV-ZOOM-200M",
+        "CV-GROUP",
+        "CV-METADATA-DIAGNOSTIC",
+        "CV-DIAG-NO-NETWORK-FAB",
+        "CV-DEVICE-DETECTION",
+        "CV-DEVICE-BRANDS",
+        "CV-DEVICE-NO-TEXT",
+        "CV-DEVICE-OFFLINE",
+        "CV-RENDERER-OPEN",
+        "CV-SYMBOLS-OPEN",
+        "CV-OFFLINE-OPEN",
+        "CV-DATASOURCE-PUBLIC",
+        "CV-FEATURE-METADATA",
+        "CV-CLASSIFY-PRIORITY",
+        "CV-CLASSIFY-DETERMINISTIC",
+        "CV-DIAG-POSTRENDER",
+        "CV-DIAG-NOT-RENDERER",
+        "CV-NO-PERIODIC-OVERPASS",
+        "CV-NO-FABRICATED-MARKS",
+        "CV-PRESERVE-SIGNALS",
+        "CV-HISTORICAL-SCRIPTS-REVIEW",
+        "CV-MWM-PRIMARY",
+        "CV-BRAND-UPSTREAM-DATA"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:TOLL-ROUTE-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "TOLL-AUTH",
+        "TOLL-PASSENGER",
+        "TOLL-CANDIDATE",
+        "TOLL-ZERO",
+        "TOLL-OFFLINE"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SEARCH-FUZZY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SEARCH-STOCK",
+        "SEARCH-FUZZY",
+        "SEARCH-HISTORY",
+        "SEARCH-HISTORY-DELETE"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:ORIENTATION-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ORIENT-AUTO",
+        "ORIENT-PORTRAIT",
+        "ORIENT-LANDSCAPE"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SEARCH-HISTORY-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SEARCH-STOCK",
+        "SEARCH-FUZZY",
+        "SEARCH-HISTORY",
+        "SEARCH-HISTORY-DELETE"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:VEHICLE-ICON-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "MAP-HEADING-UP",
+        "MAP-NORTH-TOGGLE",
+        "MAP-INITIAL-200",
+        "MAP-NO-AUTOSCALE",
+        "MAP-REMEMBER-SCALE",
+        "MAP-OWN-LOWER",
+        "MAP-MATCH",
+        "MAP-ROAD-BEARING",
+        "MAP-STATIONARY-JITTER",
+        "MAP-FALSE-SPEED",
+        "MAP-PIVOT",
+        "UI-COMPASS",
+        "UI-NORTH-CONTROL",
+        "UI-SCALE",
+        "UI-ZOOM-CONTROLS",
+        "UI-ZOOM-STEP",
+        "UI-LOC-BUTTON",
+        "UI-SETTINGS",
+        "UI-FULLMAP",
+        "HUD-ROAD",
+        "HUD-ROAD-FALLBACK",
+        "VEHICLE-ICON"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/traceability.json",
+      "clause_id": "trace:SCOPE-HOKKAIDO-001",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SCOPE-HOKKAIDO"
+      ],
+      "provenance": "trace decision_id/design_ref/verification",
+      "value_snapshot": {
+        "state": "consumed",
+        "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "verification": [
+          "v2/gates/verify_design_coverage.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:repository_is_complete_operational_memory",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-REPO-MEMORY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:chat_memory_is_never_required_for_correctness",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-REPO-MEMORY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:fresh_context_must_reconstruct_same_state",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:unknown_or_unmapped_state_blocks_progress",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:no_completion_from_self_declared_flags",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-SELF-COMPLETE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:no_rule_may_be_silently_bypassed",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-BYPASS"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:method_change_invalidates_method_completion",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-INVALIDATE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:known_failure_recurrence_must_be_mechanically_blocked",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-HISTORICAL-REPLAY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:unverified_claims_cannot_be_promoted_to_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CLAIM-EVIDENCE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:all_changes_require_closed_traceability",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CLOSED-TRACE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:lower_layers_blocked_until_root_certified",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-BLOCK-LOWER"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "invariant:root_certification_cannot_be_self_asserted",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-NO-SELF-CERT"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:new_chat",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-NEWCHAT"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "new_chat"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:elapsed_time",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-TIME"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "elapsed_time"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:feature_switch",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-FEATURESWITCH"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "feature_switch"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:summary_or_handoff",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-HANDOFF"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "summary_or_handoff"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:operator_change",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-OPERATOR"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "operator_change"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:partial_prior_context",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-PARTIAL"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "partial_prior_context"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "context:no_prior_conversation_available",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CONTEXT-NOCONV"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "no_prior_conversation_available"
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "start_rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "BLOCK unless repository-only reconstruction proves every required output is present, internally consistent, and current."
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "completion_rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-METHOD-SEMANTIC-CLOSURE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "BLOCK unless the frozen method survives context-loss, historical-incident, unknown-change, independent-verification, extensibility, artifact-identity, and device-evidence tests without method modification."
+    },
+    {
+      "source": "v2/gates/root_invariants.json",
+      "clause_id": "certification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-CERT-HEAD-FRESHNESS"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "UNDER_CONSTRUCTION"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "branch",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PROJECT-BRANCH"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "cb6-v2-clean"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PROJECT-DESIGN-STATE",
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "feature_builds_allowed",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FAIL-CLOSED",
+        "PROC-BUILD-GATE-DESIGN"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": false
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "design_verified",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PROJECT-DESIGN-STATE"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": false
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "canonical_design",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CANONICAL-DESIGN"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "retired_design",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RETIRED-DESIGN-PATH"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"
+    },
+    {
+      "source": "v2/gates/project_state.json",
+      "clause_id": "entrypoint",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WORKFLOW-GATE-FIRST"
+      ],
+      "provenance": "structured root/project state field",
+      "value_snapshot": "v2/gates/verify_project_gate.py"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "required_gate_scripts",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": [
+        "v2/gates/verify_method_freeze.py",
+        "v2/gates/verify_root_invariants.py",
+        "v2/gates/verify_project_gate.py",
+        "v2/gates/verify_project_integrity.py",
+        "v2/gates/verify_evidence_inventory_v2.py",
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "required_regression_tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-REGRESSIONS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": [
+        "v2/tests/test_method_freeze.py",
+        "v2/tests/test_root_invariants.py",
+        "v2/tests/test_repository_syntax.py",
+        "v2/tests/test_gate_fail_closed.py",
+        "v2/tests/test_feature_gate_contract.py",
+        "v2/tests/test_apk_evidence_fail_closed.py",
+        "v2/tests/test_device_evidence_fail_closed.py",
+        "v2/tests/test_gate_stamp_fail_closed.py",
+        "v2/tests/test_final_acceptance_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "acceptance_scripts",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-ARTIFACT-CHAIN",
+        "PROC-METHOD-DEVICE-CHAIN"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": [
+        "v2/gates/verify_apk_evidence.py",
+        "v2/gates/verify_device_evidence.py",
+        "v2/gates/verify_final_acceptance.py"
+      ]
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "post_gate_integrity_script",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-SAMEHEAD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "v2/gates/create_gate_stamp.py"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.restricted_evidence_cannot_be_direct_feature_authority",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTHORITY-ONLY"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.every_feature_audit_requires_specific_fail_closed_proof",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUDIT-SPECIFIC-PROOF"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.audit_proof_must_execute_before_feature_build",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUDIT-SPECIFIC-PROOF"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_contract_invariants.impact_record_must_cover_audit_proof",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-COVERS-AUDIT"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.internal_source_analysis",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INTERNAL-ANALYSIS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "internal_source_analysis"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.upstream_and_web_research_when_applicable",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WEB-WHEN-MATERIAL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "upstream_and_web_research_when_applicable"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.web_findings_revalidated_against_pinned_source",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-REVALIDATE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "web_findings_revalidated_against_pinned_source"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.authority_and_evidence_classification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTHORITY-ONLY"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "authority_and_evidence_classification"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.change_impact_before_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "change_impact_before_implementation"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.implementation_and_audit_as_one_change_unit",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUDIT-UNIT"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "implementation_and_audit_as_one_change_unit"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.positive_tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-REGRESSIONS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "positive_tests"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.audit_specific_destructive_tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DESTRUCTIVE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "audit_specific_destructive_tests"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.feature_gate",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "feature_gate"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.build_and_apk_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BUILD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "build_and_apk_evidence"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "feature_development_pipeline.real_device_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BEHAVIOR"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "real_device_evidence"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.internal_analysis_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INTERNAL-ANALYSIS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.upstream_web_research",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WEB-WHEN-MATERIAL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "required_when_external_api_data_model_platform_or_upstream_behavior_is_material"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.web_is_authority",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-WEB-NOT-AUTH"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": false
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.pinned_source_revalidation_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-REVALIDATE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "research_policy.research_evidence_must_be_recorded_before_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "change_policy.unrecorded_spec_change_forbidden",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-UNRECORDED-SPEC"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "change_policy.required_change_must_record_reason_impact_and_authority_update_before_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CHANGE-REASON"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "change_policy.unrelated_behavior_change_forbidden",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-NO-UNRELATED-CHANGE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.required_for_every_feature",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-EVERY-FEATURE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.repository",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "comaps/comaps"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.commit",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "7113ccb5f086183f8884b2aa4e58c987466b6704"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.concrete_source_paths_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-PATHS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.findings_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-PINNED-FINDINGS"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.analysis_must_precede_implementation",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "pinned_upstream_source_policy.affected_domain_coverage_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "method_document",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "docs/CB6_V2_DEVELOPMENT_METHOD.md"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "failure_return_policy",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FAIL-EARLIEST"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "return_to_earliest_affected_stage"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "completion_authority.method",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-METHOD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "development_gate_success"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "completion_authority.build",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BUILD"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "verified_apk_evidence"
+    },
+    {
+      "source": "v2/gates/development_method_contract.json",
+      "clause_id": "completion_authority.behavior",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-COMPLETION-BEHAVIOR"
+      ],
+      "provenance": "structured method contract field",
+      "value_snapshot": "accepted_cb6_real_device_evidence"
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-PROOF-EXEC",
+        "PROC-ROOT-NO-SELF-CERT",
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": "Root certification is derived only from executable proof commands. Boolean claims are never proof. Zero-omission source-to-atomic coverage must be COMPLETE and executable before certification."
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.context_loss.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-CONTEXT-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.missing_state.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-MISSING-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.permission_fail_closed.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-PERMISSION-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.repository_reconstruction.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/gates/verify_root_invariants.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.historical_incidents.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_gate_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.unknown_change.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-UNKNOWN-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_root_unknown_change.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.independent_verification.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-INDEPENDENT-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_feature_gate_contract.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.extensibility.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-EXTENSIBILITY-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_feature_gate_contract.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.artifact_identity.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-ARTIFACT-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_apk_evidence_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.device_evidence.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-DEVICE-PROOF"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/tests/test_device_evidence_fail_closed.py"
+      ]
+    },
+    {
+      "source": "v2/gates/root_certification_plan.json",
+      "clause_id": "proofs.zero_omission.command",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-CLOSED-TRACE",
+        "PROC-UNKNOWN-BLOCK"
+      ],
+      "provenance": "structured root certification proof plan field",
+      "value_snapshot": [
+        "python3",
+        "v2/gates/verify_source_atomic_coverage.py"
+      ]
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured evidence inventory field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-PROCESS",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-PROCESS",
+        "type": "process",
+        "path": "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-IMPACT",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-IMPACT",
+        "type": "architecture",
+        "path": "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-KNOWN-FAILURES",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-FROZEN-REGRESSION"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-KNOWN-FAILURES",
+        "type": "regression",
+        "path": "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-COMAPS-ARCH",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-INTERNAL-ANALYSIS"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-COMAPS-ARCH",
+        "type": "architecture",
+        "path": "docs/CB6_COMAPS_ARCHITECTURE.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-COMAPS-PINNED",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-COMAPS-PINNED",
+        "type": "source-analysis",
+        "path": "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-FROZEN",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-FROZEN-LINK",
+        "PROC-ACTIVE-NO-DISAPPEAR"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-FROZEN",
+        "type": "device-history",
+        "path": "docs/CB6_FROZEN_FEATURES.md",
+        "status": "historical-mixed",
+        "clause_policy": {
+          "state": "requires-explicit-decision-link",
+          "note": "Historical accepted behavior may support an active requirement only through an explicit decision evidence link; later active requirements and supersession own current behavior."
+        }
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-CROSS-PROJECT",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CROSSPROJECT",
+        "PROC-CROSS-PROJECT-REVALIDATE"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-CROSS-PROJECT",
+        "type": "external-comparison",
+        "path": "docs/CB6_V2_CROSS_PROJECT_COMPARISON.md",
+        "status": "revalidation-required",
+        "revalidation": {
+          "state": "required",
+          "record": "",
+          "verification": []
+        }
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-BASELINE",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-BASELINE-HIST",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-BASELINE",
+        "type": "build-history",
+        "path": "docs/CB6_V2_BASELINE.md",
+        "status": "historical"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-OLD-DESIGN",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-OLD-DESIGN-RETIRED",
+        "PROC-RETIRED-DESIGN-PATH"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-OLD-DESIGN",
+        "type": "design-history",
+        "path": "docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md",
+        "status": "retired"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-OLD-MODULES",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-OLD-MODULES-RETIRED",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-OLD-MODULES",
+        "type": "design-history",
+        "path": "docs/CB6_V2_MODULE_CONTRACTS.md",
+        "status": "retired"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-OLD-POI",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-OLD-POI-RETIRED",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-OLD-POI",
+        "type": "design-history",
+        "path": "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+        "status": "retired"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-OLD-SIGNAL",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-OLD-SIGNAL-HIST",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-OLD-SIGNAL",
+        "type": "device/design-history",
+        "path": "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md",
+        "status": "historical"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-HANDOVER",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-HANDOVER-HIST",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-HANDOVER",
+        "type": "handover-history",
+        "path": "CLAUDE_HANDOVER.md",
+        "status": "historical"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-GATE-COVERAGE",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-CLOSED-TRACE"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-GATE-COVERAGE",
+        "type": "process-audit",
+        "path": "docs/CB6_GATE_COVERAGE_AUDIT.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-REBUILT-DESIGN",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-CANONICAL-DESIGN"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-REBUILT-DESIGN",
+        "type": "design",
+        "path": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-ROOT-INVARIANTS",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-ROOT-INVARIANTS",
+        "type": "root-process-authority",
+        "path": "v2/gates/root_invariants.json",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-REPOSITORY-STATE",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-RECON-AUTH"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-REPOSITORY-STATE",
+        "type": "state-reconstruction",
+        "path": "v2/gates/repository_state_manifest.json",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/evidence_inventory.json",
+      "clause_id": "evidence:EV-HISTORICAL-INCIDENTS",
+      "classification": "NON_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-EVIDENCE-CONSUME",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "evidence inventory entry including type/path/status and nested policy state",
+      "value_snapshot": {
+        "id": "EV-HISTORICAL-INCIDENTS",
+        "type": "regression-corpus",
+        "path": "v2/gates/historical_incidents.json",
+        "status": "active"
+      }
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "OVERALL_DESIGN_REBUILD"
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "current_authorities",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTH-ALLOWLIST",
+        "PROC-AUTHORITY-ONLY",
+        "PROC-RECON-AUTHORITY"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "10 current-authority paths"
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "historical_docs",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FORBIDDEN-HISTORICAL",
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-RETIRED-CROSSCHECK"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "11 historical-document paths"
+    },
+    {
+      "source": "v2/gates/authority_policy.json",
+      "clause_id": "forbidden_historical_authority_phrases",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-AUTH-FORBIDDEN-PHRASES",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "structured authority policy field",
+      "value_snapshot": "7 forbidden historical-authority phrases"
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "status",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT"
+      ],
+      "provenance": "structured reconstruction manifest field",
+      "value_snapshot": "ACTIVE"
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.current_authority",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-AUTH",
+        "PROC-RECON-AUTHORITY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/authority_policy.json",
+        "v2/gates/evidence_inventory.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.active_requirements",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-REQ",
+        "PROC-RECON-REQUIREMENTS"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/active_decisions.json",
+        "v2/gates/current_spec.json",
+        "v2/gates/traceability.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.method_contract",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-METHOD",
+        "PROC-METHOD-GATES"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/root_invariants.json",
+        "v2/gates/development_method_contract.json",
+        "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+        "v2/gates/root_certification_plan.json",
+        "v2/gates/run_root_certification.py"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.current_feature_state",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-FEATURE",
+        "PROC-RECON-FEATURES"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/features/signals.json",
+        "v2/gates/features/convenience-mwm-diagnostic.json",
+        "v2/gates/features/convenience-brands.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.pending_work",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-PENDING",
+        "PROC-UNKNOWN-OPEN"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/cb6_master_progress.json",
+        "v2/gates/project_state.json",
+        "v2/gates/development_method_completion.json",
+        "v2/gates/source_atomic_coverage.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.known_failures",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-FAILURES",
+        "PROC-FROZEN-REGRESSION"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.historical_incidents",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-FAILURES",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/historical_incidents.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.research_and_pinned_upstream_basis",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-RESEARCH",
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/research_records/signals.json",
+        "v2/gates/research_records/convenience-mwm-diagnostic.json",
+        "v2/gates/research_records/convenience-brands.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.change_impact",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-IMPACT",
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/impact_records/signals.json",
+        "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+        "v2/gates/impact_records/convenience-brands.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.verification_obligations",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-VERIFY",
+        "PROC-FEATURE-DOMAIN-VERIFY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/domain_verification_policy.json",
+        "v2/gates/features/TEMPLATE.json",
+        "v2/gates/research_records/TEMPLATE.json"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.build_and_apk_identity",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-APK",
+        "PROC-APK-IDENTITY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/verify_apk_evidence.py",
+        "v2/gates/create_gate_stamp.py"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "outputs.device_evidence_state",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RECON-DEVICE",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured reconstruction manifest output",
+      "value_snapshot": [
+        "v2/gates/verify_device_evidence.py",
+        "v2/gates/verify_final_acceptance.py"
+      ]
+    },
+    {
+      "source": "v2/gates/repository_state_manifest.json",
+      "clause_id": "rule",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-RECONSTRUCT",
+        "PROC-CLOSED-TRACE",
+        "PROC-CONTEXT-NOCONV"
+      ],
+      "provenance": "structured reconstruction manifest rule",
+      "value_snapshot": "Every root_invariants.required_reconstruction_outputs entry must map to existing repository files; zero-omission source-to-atomic coverage must also be present and complete before Root certification; no chat or external memory may be required."
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "status",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical regression corpus status",
+      "value_snapshot": "ACTIVE"
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-RETIRED-EVIDENCE-REPROMOTION",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-RETIRED-REPROMOTION",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-RETIRED-EVIDENCE-REPROMOTION",
+        "cause": "retired evidence directly re-promoted by a feature contract",
+        "proof": "v2/tests/test_feature_gate_contract.py",
+        "expected_block": "restricted evidence"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-AUDIT-EXISTS-WITHOUT-FAIL-CLOSED-PROOF",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-AUDIT-NOPROOF",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-AUDIT-EXISTS-WITHOUT-FAIL-CLOSED-PROOF",
+        "cause": "audit file existence treated as assurance",
+        "proof": "v2/tests/test_feature_gate_contract.py",
+        "expected_block": "audit"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-STALE-CONVENIENCE",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION",
+        "cause": "Convenience audit required historical FeaturesFetcher after implementation moved to DataSource",
+        "proof": "v2/tests/convenience_audit_selftest.py",
+        "expected_block": "DataSource"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-STALE-HARDCODED-SIGNAL-SPEC",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-STALE-SIGNAL",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-STALE-HARDCODED-SIGNAL-SPEC",
+        "cause": "signal destructive test used stale hardcoded zoom instead of current spec",
+        "proof": "v2/tests/test_gate_fail_closed.py",
+        "expected_block": "current spec"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-PREFLIGHT-WITHOUT-DESTRUCTIVE-PROOF",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-PREFLIGHT",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-PREFLIGHT-WITHOUT-DESTRUCTIVE-PROOF",
+        "cause": "signal preflight audit lacked feature-specific fail-closed proof",
+        "proof": "v2/tests/preflight_gate1_audit_selftest.py",
+        "expected_block": "Post-configure source changed"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-RESEARCH-SCOPE",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE",
+        "cause": "research record presence passed without affected-domain source coverage",
+        "proof": "v2/tests/test_feature_gate_contract.py",
+        "expected_block": "analysis coverage"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-PYTHON-ESCAPED-NEWLINE-SYNTAX",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-SYNTAX",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-PYTHON-ESCAPED-NEWLINE-SYNTAX",
+        "cause": "literal escaped newline reached integrity verifier",
+        "proof": "v2/tests/test_repository_syntax.py",
+        "expected_block": "syntax"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-APK-EVIDENCE-FEATURE-ASSUMPTION",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-APK-ASSUMPTION",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-APK-EVIDENCE-FEATURE-ASSUMPTION",
+        "cause": "APK evidence generation contained signal-specific assumptions",
+        "proof": "v2/tests/test_apk_evidence_fail_closed.py",
+        "expected_block": "APK evidence"
+      }
+    },
+    {
+      "source": "v2/gates/historical_incidents.json",
+      "clause_id": "incident:INC-CONTEXT-LOSS",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-INC-CONTEXT-LOSS",
+        "PROC-ROOT-HISTORY-PROOF"
+      ],
+      "provenance": "historical incident cause/proof/expected_block tuple",
+      "value_snapshot": {
+        "id": "INC-CONTEXT-LOSS",
+        "cause": "mandatory decisions can disappear across time, task or chat context",
+        "proof": "v2/tests/test_root_invariants.py",
+        "expected_block": "repository-only reconstruction"
+      }
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "feature_id",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-IDENTITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "signals"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "requirements",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT",
+        "SIG-DISPLAY",
+        "SIG-200M-SLIM",
+        "SIG-COVERAGE-INTERSECTION",
+        "SIG-COVERAGE-NONINTERSECTION",
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-1KM-OFF"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "design_section",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-DESIGN"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#SIGNAL / #SIG"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "impact_checked",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "repo_sweep_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-REPO-SWEEP"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "source_paths",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "v2/signals/apply_signals.py",
+        "v2/signals/java/SignalPolicy.java",
+        "v2/signals/java/SignalSnapshot.java",
+        "v2/signals/java/CompositeSignalProvider.java",
+        "v2/signals/java/VerifiedSignalProvider.java",
+        "v2/signals/java/OverpassSignalProvider.java"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "audits",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-AUDITS"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "v2/audits/audit_signals.py",
+        "v2/audits/preflight_gate1.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-TESTS"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "v2/tests/SignalPolicyTest.java",
+        "v2/tests/signals_audit_selftest.py",
+        "v2/tests/preflight_gate1_audit_selftest.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "apk_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-APK-ARM64",
+        "SIG-APK-IDENTITY",
+        "SIG-APK-SIGNATURE",
+        "PROC-APK-IDENTITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        {
+          "id": "apk-arm64",
+          "description": "APK contains a valid AArch64 liborganicmaps.so"
+        },
+        {
+          "id": "apk-identity",
+          "description": "APK package is jp.cb6.navi and label is CB6 Navi"
+        },
+        {
+          "id": "apk-signals",
+          "description": "Signal source/symbol invariants are present in the packaged APK"
+        },
+        {
+          "id": "apk-signature",
+          "description": "APK signature verifies successfully"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "device_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "SIG-CLEAN-INSTALL",
+        "SIG-UPDATE-INSTALL",
+        "SIG-200M-SLIM",
+        "SIG-1KM-OFF",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        {
+          "id": "cb6-clean-install",
+          "description": "CB6 Android 13 clean install shows required signal coverage and zoom behavior"
+        },
+        {
+          "id": "cb6-update-install",
+          "description": "CB6 Android 13 update install preserves required signal coverage and zoom behavior"
+        },
+        {
+          "id": "cb6-200m-slim",
+          "description": "At 200 m signal marks remain slim and approximately accepted 500 m visual size"
+        },
+        {
+          "id": "cb6-1km-hidden",
+          "description": "At 1 km signal icons are not required/displayed by CB6 signal policy"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-STAGE-CONSISTENCY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "IMPLEMENTATION_ENABLED"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "affected_domains",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": [
+        "signals",
+        "renderer",
+        "symbols",
+        "audits",
+        "tests",
+        "data-source",
+        "cache",
+        "lifecycle",
+        "real-device"
+      ]
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "domain_verification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-CACHE",
+        "PROC-DOMAIN-LIFECYCLE",
+        "PROC-DOMAIN-REALDEVICE"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": {
+        "signals": [
+          "v2/signals/apply_signals.py"
+        ],
+        "renderer": [
+          "v2/signals/apply_signals.py",
+          "v2/audits/audit_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "symbols": [
+          "v2/signals/apply_signals.py",
+          "v2/audits/audit_signals.py"
+        ],
+        "audits": [
+          "v2/audits/audit_signals.py",
+          "v2/tests/signals_audit_selftest.py",
+          "v2/tests/preflight_gate1_audit_selftest.py"
+        ],
+        "tests": [
+          "v2/tests/SignalPolicyTest.java",
+          "v2/tests/signals_audit_selftest.py",
+          "v2/tests/preflight_gate1_audit_selftest.py"
+        ],
+        "data-source": [
+          "v2/signals/java/OverpassSignalProvider.java",
+          "v2/signals/java/CompositeSignalProvider.java",
+          "v2/signals/java/VerifiedSignalProvider.java",
+          "v2/audits/audit_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "cache": [
+          "v2/signals/apply_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "lifecycle": [
+          "v2/signals/apply_signals.py",
+          "v2/tests/SignalPolicyTest.java"
+        ],
+        "real-device": []
+      }
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "impact_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-REVIEWED-PATHS",
+        "PROC-IMPACT-DECISION"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "v2/gates/impact_records/signals.json"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "device_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DEVICE-PENDING",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "PENDING"
+    },
+    {
+      "source": "v2/gates/features/signals.json",
+      "clause_id": "research_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "SIG-RESEARCH-FRAMEWORK",
+        "SIG-RESEARCH-USERMARK",
+        "SIG-RESEARCH-JNI"
+      ],
+      "provenance": "structured signal feature contract field",
+      "value_snapshot": "v2/gates/research_records/signals.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "feature_id",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-IDENTITY"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "convenience-mwm-diagnostic"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "requirements",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT",
+        "ARCH-CONVENIENCE-DIAGNOSTIC"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        "POI-CONVENIENCE-001"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "design_section",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-DESIGN"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#POI"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "impact_checked",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "repo_sweep_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-REPO-SWEEP"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "source_paths",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ARCH-CONVENIENCE-DIAGNOSTIC",
+        "ARCH-CONVENIENCE-TYPE"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        "v2/poi/native/convenience_brand_classifier.hpp",
+        "v2/poi/native/convenience_brand_classifier.cpp",
+        "v2/poi/native/convenience_mwm_collector.hpp",
+        "v2/poi/native/convenience_mwm_collector.cpp",
+        "v2/poi/apply_convenience_mwm_diagnostic.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "audits",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-AUDITS",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        "v2/audits/audit_convenience.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-TESTS"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        "v2/tests/convenience_brand_classifier_test.cpp",
+        "v2/tests/convenience_audit_selftest.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "apk_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-APK-IDENTITY",
+        "ARCH-CONVENIENCE-DIAGNOSTIC",
+        "ARCH-NO-WHOLESALE-GENERATOR"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        {
+          "id": "apk-arm64",
+          "description": "Diagnostic APK contains a valid AArch64 liborganicmaps.so"
+        },
+        {
+          "id": "apk-identity",
+          "description": "Diagnostic APK preserves jp.cb6.navi and CB6 Navi identity"
+        },
+        {
+          "id": "apk-native-mwm-diagnostic",
+          "description": "Diagnostic build contains native MWM convenience collector without network or fabricated POI acquisition"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "device_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        {
+          "id": "cb6-mwm-convenience-diagnostic",
+          "description": "Installed-map shop=convenience records can be observed on CB6 without adding final convenience rendering"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "RESEARCH_REQUIRED_RESTART"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "affected_domains",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": [
+        "poi",
+        "classifier",
+        "presentation",
+        "offline",
+        "audits",
+        "tests",
+        "data-source",
+        "real-device"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "domain_verification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-REALDEVICE"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": {
+        "poi": [
+          "v2/poi/native/convenience_mwm_collector.cpp",
+          "v2/poi/apply_convenience_mwm_diagnostic.py"
+        ],
+        "classifier": [
+          "v2/poi/native/convenience_brand_classifier.cpp",
+          "v2/tests/convenience_brand_classifier_test.cpp"
+        ],
+        "data-source": [
+          "v2/poi/native/convenience_mwm_collector.cpp",
+          "v2/audits/audit_convenience.py",
+          "v2/tests/convenience_brand_classifier_test.cpp",
+          "v2/poi/apply_convenience_mwm_diagnostic.py"
+        ],
+        "offline": [
+          "v2/poi/native/convenience_mwm_collector.cpp",
+          "v2/poi/apply_convenience_mwm_diagnostic.py"
+        ],
+        "audits": [
+          "v2/audits/audit_convenience.py",
+          "v2/tests/convenience_audit_selftest.py"
+        ],
+        "tests": [
+          "v2/tests/convenience_brand_classifier_test.cpp",
+          "v2/tests/convenience_audit_selftest.py"
+        ],
+        "real-device": [],
+        "presentation": [
+          "v2/audits/audit_convenience.py",
+          "v2/poi/apply_convenience_mwm_diagnostic.py"
+        ]
+      }
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "impact_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-REVIEWED-PATHS"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "v2/gates/impact_records/convenience-mwm-diagnostic.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "device_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DEVICE-PENDING"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "NOT_ELIGIBLE"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "research_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "v2/gates/research_records/convenience-mwm-diagnostic.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "restart_from_zero",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "prior_work_policy",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "REFERENCE_ONLY_UNTIL_FRESH_SOURCE_RESEARCH_REVALIDATES_IT"
+    },
+    {
+      "source": "v2/gates/features/convenience-mwm-diagnostic.json",
+      "clause_id": "restart_reason",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience diagnostic restart contract field",
+      "value_snapshot": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "feature_id",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-IDENTITY"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "convenience-brands"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "requirements",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-CONTRACT",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META",
+        "BASE-OFFLINE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001",
+        "OFFLINE-FREE-001",
+        "PRODUCT-BASE-001"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "design_section",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-DESIGN"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md#POI"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "impact_checked",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-FIRST"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "repo_sweep_required",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-REPO-SWEEP"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "source_paths",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-BRAND-META"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "v2/poi/native/convenience_brand_classifier.hpp",
+        "v2/poi/native/convenience_brand_classifier.cpp",
+        "v2/poi/native/convenience_mwm_collector.hpp",
+        "v2/poi/native/convenience_mwm_collector.cpp"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "audits",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-AUDITS",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "v2/audits/audit_convenience.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "tests",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-TESTS"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "v2/tests/convenience_brand_classifier_test.cpp",
+        "v2/tests/convenience_audit_selftest.py"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "apk_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-APK-IDENTITY",
+        "ARCH-CONVENIENCE-TYPE",
+        "ARCH-NO-WHOLESALE-GENERATOR"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        {
+          "id": "apk-arm64",
+          "description": "APK contains a valid AArch64 liborganicmaps.so"
+        },
+        {
+          "id": "apk-identity",
+          "description": "APK package remains jp.cb6.navi and label remains CB6 Navi"
+        },
+        {
+          "id": "apk-convenience-native",
+          "description": "Packaged implementation uses native MWM convenience POIs and contains no fabricated diagnostic POI"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "device_checks",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "ARCH-CONVENIENCE-REPRESENTATIVE",
+        "ARCH-BRAND-META",
+        "CV-DEVICE-OFFLINE",
+        "PROC-DEVICE-AUTHORITY"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        {
+          "id": "cb6-convenience-detection",
+          "description": "CB6 detects representative installed-map shop=convenience features around the device"
+        },
+        {
+          "id": "cb6-convenience-brands",
+          "description": "Known convenience stores render with the correct CB6 brand identity and unknown stores remain generic"
+        },
+        {
+          "id": "cb6-convenience-no-text-clutter",
+          "description": "Convenience-store presentation does not add unwanted store-name clutter"
+        },
+        {
+          "id": "cb6-convenience-offline",
+          "description": "Convenience POIs remain available from installed MWM without a network-only dependency"
+        }
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "stage",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-STATUS",
+        "PROC-RESEARCH-BEFORE-IMPL"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "RESEARCH_REQUIRED_RESTART"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "affected_domains",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-DOMAIN-COVERAGE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": [
+        "poi",
+        "classifier",
+        "renderer",
+        "symbols",
+        "data-source",
+        "offline",
+        "audits",
+        "tests",
+        "real-device"
+      ]
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "domain_verification",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DOMAIN-VERIFY",
+        "PROC-DOMAIN-RENDERER",
+        "PROC-DOMAIN-SYMBOLS",
+        "PROC-DOMAIN-DATASOURCE",
+        "PROC-DOMAIN-AUDITS",
+        "PROC-DOMAIN-TESTS",
+        "PROC-DOMAIN-REALDEVICE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": {
+        "poi": [
+          "v2/poi/native/convenience_brand_classifier.cpp",
+          "v2/poi/native/convenience_mwm_collector.cpp"
+        ],
+        "classifier": [
+          "v2/poi/native/convenience_brand_classifier.cpp",
+          "v2/tests/convenience_brand_classifier_test.cpp"
+        ],
+        "renderer": [],
+        "symbols": [],
+        "data-source": [
+          "v2/poi/native/convenience_mwm_collector.cpp",
+          "v2/tests/convenience_brand_classifier_test.cpp"
+        ],
+        "offline": [],
+        "audits": [
+          "v2/audits/audit_convenience.py",
+          "v2/tests/convenience_audit_selftest.py"
+        ],
+        "tests": [
+          "v2/tests/convenience_brand_classifier_test.cpp",
+          "v2/tests/convenience_audit_selftest.py"
+        ],
+        "real-device": []
+      }
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "impact_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-IMPACT-REVIEWED-PATHS"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "v2/gates/impact_records/convenience-brands.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "device_evidence",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-FEATURE-DEVICE-PENDING"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "NOT_ELIGIBLE"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "research_record",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-RESEARCH-PINNED-SHA"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "v2/gates/research_records/convenience-brands.json"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "restart_from_zero",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": true
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "prior_work_policy",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-SUPERSEDED-NO-AUTH",
+        "PROC-FORBIDDEN-HISTORICAL"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "REFERENCE_ONLY_UNTIL_FRESH_SOURCE_RESEARCH_REVALIDATES_IT"
+    },
+    {
+      "source": "v2/gates/features/convenience-brands.json",
+      "clause_id": "restart_reason",
+      "classification": "ACTIVE_REQUIREMENT",
+      "atomic_ids": [
+        "PROC-RESEARCH-BEFORE-IMPL",
+        "PROC-INC-STALE-CONVENIENCE"
+      ],
+      "provenance": "structured convenience brand restart contract field",
+      "value_snapshot": "User-directed restart: prior Convenience work proceeded without the required source-first verification. Existing implementation, diagnostics, audits and research claims are not accepted as current development basis until fresh source-first analysis is completed."
+    }
+  ],
+  "blocking": []
+}

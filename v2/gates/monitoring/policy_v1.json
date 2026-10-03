@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "policy_id": "cb6-development-monitoring",
+  "version": 1,
+  "status": "ACTIVE",
+  "method_version": 2,
+  "cadence": "HOURLY",
+  "rule": "Every monitoring cycle must produce a substantive verified commit unless exactly one allowed externally-verifiable blocker applies.",
+  "allowed_exceptions": [
+    "ACTIONS_WAIT",
+    "DEVICE_EVIDENCE_WAIT",
+    "SPEC_DECISION_WAIT",
+    "PERMISSION_WAIT"
+  ],
+  "forbidden": [
+    "STATUS_ONLY",
+    "PLAN_ONLY",
+    "EMPTY_COMMIT",
+    "COMMENT_ONLY_TRIGGER",
+    "TIMESTAMP_ONLY",
+    "UNSUPPORTED_PASS_REWRITE"
+  ],
+  "cycle_record_required": true,
+  "cycle_record_schema": "v2/gates/monitoring/cycle_schema.json",
+  "revision_policy": {
+    "in_place_change_forbidden": true,
+    "new_version_required": true,
+    "reason_required": true,
+    "independent_reapproval_required": true
+  }
+}

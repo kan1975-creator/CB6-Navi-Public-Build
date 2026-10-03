@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "review_entry": {
+    "trigger": "push",
+    "branch": "review/governance-adoption",
+    "normal_development_branch": "cb6-v2-clean",
+    "normal_development_push_must_not_trigger": true,
+    "target_identity": "GITHUB_SHA must equal checked-out HEAD"
+  },
+  "independence": {
+    "candidate_validation_run_must_be_separate": true,
+    "review_verifier": "v2/gates/verify_governance_independent_review.py",
+    "review_destructive_test": "v2/tests/test_governance_independent_review_fail_closed.py"
+  },
+  "authority_effect": "NONE_UNTIL_REVIEW_EVIDENCE_RECORDED_AND_USER_ADOPTION"
+}

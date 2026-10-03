@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Repository-wide CB6 V2 structural/traceability gate."""
+import json, re, sys
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2]
+def fail(m): raise SystemExit("CB6 INTEGRITY FAIL: "+m)
+def load(p): return json.loads((ROOT/p).read_text(encoding="utf-8"))
+
+state=load("v2/gates/project_state.json")
+reg=load("v2/gates/active_decisions.json")
+trace=load("v2/gates/traceability.json")
+spec=load("v2/gates/current_spec.json")
+authority=load("v2/gates/authority_policy.json")
+evidence=load("v2/gates/evidence_inventory.json")
+if trace.get("schema")!=1 or trace.get("stage")!=state.get("stage"): fail("traceability stage/schema mismatch")
+if evidence.get("schema")!=1 or evidence.get("stage")!=state.get("stage"): fail("evidence inventory stage/schema mismatch")
+items=evidence.get("evidence",[])
+eids=[x.get("id") for x in items]
+epaths=[x.get("path") for x in items]
+if not items or None in eids or len(eids)!=len(set(eids)): fail("evidence IDs missing/duplicated")
+if None in epaths or len(epaths)!=len(set(epaths)): fail("evidence paths missing/duplicated")
+valid_evidence_status={"active","historical","historical-mixed","retired","revalidation-required"}
+for x in items:
+ for k in ("id","type","path","status"):
+  if not x.get(k): fail(f"evidence item missing {k}: {x.get('id')}")
+ if x["status"] not in valid_evidence_status: fail("invalid evidence status: "+x["id"])
+ if not (ROOT/x["path"]).is_file(): fail("evidence inventory path missing: "+x["path"])
+ if x["status"]=="historical-mixed":
+  cp=x.get("clause_policy",{})
+  if cp.get("state")!="requires-explicit-decision-link" or not cp.get("note"): fail("historical-mixed evidence lacks clause policy: "+x["id"])
+ if x["status"]=="revalidation-required":
+  rv=x.get("revalidation",{})
+  if rv.get("state") not in {"required","validated"}: fail("invalid evidence revalidation state: "+x["id"])
+  if rv["state"]=="validated":
+   if not rv.get("record") or not (ROOT/rv["record"]).is_file() or not rv.get("verification"): fail("validated evidence lacks revalidation record/verification: "+x["id"])
+active_evidence_paths={x["path"] for x in items if x["status"]=="active"}
+restricted_evidence_paths={x["path"] for x in items if x["status"]!="active"}
+evidence_by_path={x["path"]:x for x in items}
+if authority.get("schema")!=1 or authority.get("stage")!=state.get("stage"): fail("authority policy stage/schema mismatch")
+for rel in authority.get("current_authorities",[]):
+ if not (ROOT/rel).is_file(): fail("current authority missing: "+rel)
+for rel in authority.get("historical_docs",[]):
+ p=ROOT/rel
+ if not p.is_file(): fail("historical authority document missing: "+rel)
+ txt=p.read_text(encoding="utf-8")
+ for phrase in authority.get("forbidden_historical_authority_phrases",[]):
+  if phrase in txt: fail("historical document regained authority: "+rel+" -> "+phrase)
+if reg.get("schema")!=1 or trace.get("schema")!=1: fail("unsupported registry schema")
+decisions=reg.get("decisions",[])
+ids=[d.get("id") for d in decisions]
+if None in ids or len(ids)!=len(set(ids)): fail("decision IDs missing/duplicated")
+valid_status={"active","superseded","retired"}
+for d in decisions:
+ if d.get("status") not in valid_status: fail("invalid decision status "+str(d.get("id")))
+ for k in ("kind","spec_key","requirement","affected","evidence","acceptance"):
+  if not d.get(k): fail(f"{d.get('id')} missing {k}")
+# Evidence references are executable integrity inputs, not unchecked prose.
+# Every repository evidence path used by a decision must be inventoried, so evidence authority/status cannot bypass the inventory.
+inventory_paths={x["path"] for x in items}
+for d in decisions:
+ for ev in d["evidence"]:
+  if ev.startswith(("docs/","v2/","AGENTS.md")):
+   if not (ROOT/ev).is_file(): fail(f"{d['id']} evidence path missing: {ev}")
+   if ev not in inventory_paths: fail(f"{d['id']} evidence absent from inventory: {ev}")
+   if d["status"]=="active" and evidence_by_path[ev]["status"]=="retired": fail(f"{d['id']} active decision relies directly on retired evidence: {ev}")
+   if d["status"]=="active" and evidence_by_path[ev]["status"]=="revalidation-required": fail(f"{d['id']} active decision relies on revalidation-required evidence: {ev}")
+   if d["status"]=="active" and evidence_by_path[ev]["status"]=="historical-mixed":
+    sc=d.get("evidence_scopes",{}).get(ev,{})
+    if not sc.get("scope") or not sc.get("supersession"): fail(f"{d['id']} historical-mixed evidence lacks requirement scope: {ev}")
+
+# One current owner per single-valued specification key; supersession must be reciprocal.
+active_by_key={}
+by_id={d["id"]:d for d in decisions}
+for d in decisions:
+ if d["status"]=="active":
+  key=d["spec_key"]
+  if key in active_by_key: fail(f"multiple active owners for spec_key {key}: {active_by_key[key]},{d['id']}")
+  active_by_key[key]=d["id"]
+ for old in d.get("supersedes",[]):
+  if old not in by_id: fail(f"{d['id']} supersedes unknown decision: {old}")
+  if by_id[old]["status"]!="superseded" or by_id[old].get("superseded_by")!=d["id"]:
+   fail(f"non-reciprocal supersession: {d['id']} -> {old}")
+ if d["status"]=="superseded":
+  newer=d.get("superseded_by")
+  if not newer or newer not in by_id or by_id[newer]["status"]!="active" or d["id"] not in by_id[newer].get("supersedes",[]):
+   fail(f"superseded decision lacks active reciprocal replacement: {d['id']}")
+
+traces=trace.get("traces",[])
+tids=[t.get("decision_id") for t in traces]
+if len(tids)!=len(set(tids)): fail("duplicate trace rows")
+active={d["id"] for d in decisions if d["status"]=="active"}
+missing=active-set(tids)
+if missing: fail("active decisions absent from traceability: "+",".join(sorted(missing)))
+unknown=set(tids)-set(ids)
+if unknown: fail("trace references unknown decisions: "+",".join(sorted(unknown)))
+allowed={"consumed","pending-redesign","superseded"}
+for t in traces:
+ if t.get("state") not in allowed: fail("invalid trace state "+str(t.get("decision_id")))
+ d=next(d for d in decisions if d["id"]==t["decision_id"])
+ if d["status"]=="superseded" and t["state"]=="consumed": fail("superseded decision consumed: "+d["id"])
+ if t["state"]=="consumed":
+  for ev in d["evidence"]:
+   if ev in restricted_evidence_paths and not t.get("verification"):
+    fail("consumed decision relies on restricted evidence without verification: "+d["id"])
+  ref=t.get("design_ref","")
+  if not ref or not (ROOT/ref).is_file(): fail("consumed decision lacks valid design ref: "+d["id"])
+  if not t.get("verification"): fail("consumed decision lacks verification: "+d["id"])
+if state["stage"]=="IMPLEMENTATION_ENABLED":
+ pending=[t["decision_id"] for t in traces if t["decision_id"] in active and t["state"]!="consumed"]
+ if pending: fail("implementation enabled with unconsumed active decisions: "+",".join(sorted(pending)))
+
+domain_policy=load("v2/gates/domain_verification_policy.json")
+if domain_policy.get("schema")!=1 or not isinstance(domain_policy.get("rules"),dict) or not domain_policy["rules"] or not domain_policy.get("default_required_kinds"):
+ fail("domain verification policy invalid")
+valid_kinds={"source","audit","test","device"}
+for domain,kinds in domain_policy["rules"].items():
+ if not isinstance(kinds,list) or not kinds or set(kinds)-valid_kinds: fail("domain verification policy has invalid kinds: "+domain)
+
+# Feature-gate template is part of the development method and must remain fail-closed.
+template=load("v2/gates/features/TEMPLATE.json")
+required_feature_fields={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage","method_version","inherits_cross_cutting_rules"}
+if set(template) != required_feature_fields: fail("feature gate template fields drifted")
+if template.get("inherits_cross_cutting_rules")!="ALL_ACTIVE_CROSS_CUTTING_RULES": fail("feature gate template cross-cutting inheritance drifted")
+if template.get("schema")!=1 or template.get("impact_checked") is not False or template.get("repo_sweep_required") is not True or template.get("device_evidence")!="PENDING" or template.get("stage")!="DESIGN" or template.get("method_version")!=2:
+ fail("feature gate template is not fail-closed")
+tdc=template.get("device_checks")
+if not isinstance(tdc,list) or len(tdc)!=1 or not isinstance(tdc[0],dict) or set(tdc[0])!={"id","description"} or tdc[0].get("id")!="REPLACE_WITH_CHECK_ID" or tdc[0].get("description")!="REPLACE_WITH_EXPLICIT_CB6_REAL_DEVICE_ACCEPTANCE":
+ fail("feature gate template device check contract drifted")
+
+research_template=load("v2/gates/research_records/TEMPLATE.json")
+required_research_fields={"schema","feature_id","status","internal_analysis","upstream_web_research","pinned_source_revalidation","authority_classification","completed_before_implementation","pinned_upstream_source_analysis","upstream_domain_coverage"}
+if set(research_template)!=required_research_fields: fail("research record template fields drifted")
+if research_template.get("schema")!=1 or research_template.get("status")!="PENDING" or research_template.get("completed_before_implementation") is not False: fail("research record template is not fail-closed")
+rtu=research_template.get("pinned_upstream_source_analysis",{})
+if rtu.get("required") is not True or rtu.get("repository")!="comaps/comaps" or rtu.get("commit")!="7113ccb5f086183f8884b2aa4e58c987466b6704": fail("research template pinned CoMaps contract drifted")
+if rtu.get("source_paths")!=["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"] or rtu.get("findings")!=["REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"]: fail("research template original-source placeholders drifted")
+if research_template.get("upstream_domain_coverage")!={"REPLACE_WITH_TECHNICAL_AFFECTED_DOMAIN":{"source_paths":["REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"],"findings":["REPLACE_WITH_DOMAIN_SPECIFIC_FINDING"]}}: fail("research template domain coverage contract drifted")
+
+signal_selftest=(ROOT/"v2/tests/signals_audit_selftest.py").read_text(encoding="utf-8")
+for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(encoding="utf-8"))','SIGNAL_SPEC=SPEC["signal"]','MIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])','f"return {MIN_ZOOM};", f"return {MIN_ZOOM-1};"']:
+ if token not in signal_selftest: fail("signal audit selftest not derived from current spec")
+if '"return 12;", "return 11;"' in signal_selftest: fail("signal audit selftest contains stale hardcoded zoom")
+
+# Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
+wfdir=ROOT/".github/workflows"
+for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
+ s=p.read_text(encoding="utf-8")
+ if p.name=="cb6_development_gate.yml": continue
+ # Branch-name matching is not sufficient: a workflow_dispatch build can be
+ # manually run from cb6-v2-clean even when its push branches are legacy-only.
+ dispatchable=bool(re.search(r"(?m)^\s*workflow_dispatch\s*:",s))
+ targets_v2="cb6-v2-clean" in s or dispatchable
+ if not targets_v2: continue
+ buildish=bool(re.search(r"(gradlew|assemble|apply_identity\.py|apply_signals\.py)",s))
+ if buildish:
+  # GitHub owns GITHUB_SHA. Build workflows must not shadow, clear or rewrite it.
+  if any(line.strip().startswith("GITHUB_SHA:") or line.strip().startswith("GITHUB_SHA=") for line in s.splitlines()) or "unset GITHUB_SHA" in s:
+   fail("build workflow overrides GITHUB_SHA: "+p.name)
+  token="verify_project_gate.py --require-feature-build --feature="
+  if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
+  freeze_token="verify_method_freeze.py"
+  if freeze_token not in s or s.index(freeze_token)>s.index(token): fail("V2 build workflow bypasses method freeze: "+p.name)
+  if s.index(token)>min([i for i in [s.find("gradlew"),s.find("apply_identity.py"),s.find("apply_signals.py")] if i>=0]):
+   fail("feature gate occurs after build/transform work: "+p.name)
+  gate_pos=s.index(token)
+  post_gate=s[gate_pos:]
+  # A successful feature gate must be sealed immediately and rechecked before build/transform.
+  stamp_create=post_gate.find("create_gate_stamp.py")
+  stamp_verify=post_gate.find("create_gate_stamp.py --verify")
+  feature_match=re.search(r"--require-feature-build --feature=([A-Za-z0-9_.-]+)",post_gate)
+  gated_feature=feature_match.group(1) if feature_match else ""
+  work_positions=[i-gate_pos for i in [s.find("apply_identity.py",gate_pos),s.find("apply_signals.py",gate_pos)] if i>=0] if gated_feature not in {"baseline","identity"} else []
+  if gated_feature=="signals" and not work_positions: fail("signal build workflow lacks implementation transform: "+p.name)
+  first_work=min(work_positions) if work_positions else -1
+  if state.get("stage")=="IMPLEMENTATION_ENABLED" and first_work>=0 and (stamp_create<0 or stamp_verify<0 or stamp_create>first_work or stamp_verify>first_work): fail("build workflow lacks post-gate control stamp enforcement: "+p.name)
+  # After the control repository has been gated, do not replace/reset it. Commands
+  # explicitly scoped to the separate comaps/ checkout are allowed.
+  dangerous=[]
+  for line in post_gate.splitlines():
+   stripped=line.strip()
+   if "uses:" in stripped and "actions/checkout@" in stripped: dangerous.append(stripped)
+   parts=stripped.split()
+   if len(parts)>=2 and parts[0]=="git" and parts[1] in {"checkout","reset","switch","pull","fetch"}: dangerous.append(stripped)
+  if dangerous: fail("control repo can change after feature gate: "+p.name+" -> "+" | ".join(dangerous))
+
+# APK-evidence template is part of the development method and must remain fail-closed.
+apk_template=load("v2/gates/apk_evidence/TEMPLATE.json")
+required_apk_template_fields={"schema","feature_id","build_commit","feature_gate","apk_path","apk_sha256","apk_checks","status"}
+if set(apk_template)!=required_apk_template_fields: fail("APK evidence template fields drifted")
+if apk_template.get("schema")!=1 or apk_template.get("status")!="PENDING": fail("APK evidence template is not fail-closed")
+atc=apk_template.get("apk_checks")
+if not isinstance(atc,list) or len(atc)!=1 or not isinstance(atc[0],dict) or set(atc[0])!={"id","result","evidence"} or atc[0].get("id")!="REPLACE_WITH_APK_CHECK_ID" or atc[0].get("result")!="PENDING" or atc[0].get("evidence")!="REPLACE_ME":
+ fail("APK evidence template check contract drifted")
+
+# Device-evidence template is part of the development method and must remain fail-closed.
+device_template=load("v2/gates/device_evidence/TEMPLATE.json")
+required_device_template_fields={"schema","feature_id","build_commit","feature_gate","apk_evidence","apk_sha256","device","android_version","checks","status"}
+if set(device_template)!=required_device_template_fields: fail("device evidence template fields drifted")
+if device_template.get("schema")!=1 or device_template.get("status")!="PENDING" or device_template.get("device")!="CB6" or device_template.get("android_version")!="13": fail("device evidence template is not fail-closed")
+dtc=device_template.get("checks")
+if not isinstance(dtc,list) or len(dtc)!=1 or not isinstance(dtc[0],dict) or set(dtc[0])!={"id","result","evidence"} or dtc[0].get("id")!="REPLACE_ME" or dtc[0].get("result")!="PENDING" or dtc[0].get("evidence")!="REPLACE_ME":
+ fail("device evidence template check contract drifted")
+
+# APK artifacts may never be published before APK evidence verification once implementation is enabled.
+if state.get("stage")=="IMPLEMENTATION_ENABLED":
+ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
+  s=p.read_text(encoding="utf-8")
+  upload=s.find("actions/upload-artifact@")
+  if upload<0: continue
+  # Only workflows publishing a CB6 feature APK are subject to APK Evidence. Historical baseline/identity evidence workflows are not implementation release paths.
+  publishes_apk=".apk" in s or "out/*" in s
+  fm=re.search(r"--require-feature-build --feature=([A-Za-z0-9_.-]+)",s)
+  gated_feature=fm.group(1) if fm else ""
+  if gated_feature in {"baseline","identity","voice"}: continue
+  if not (publishes_apk and gated_feature): continue
+  verify=s.find("verify_apk_evidence.py")
+  if verify<0 or verify>upload: fail("APK artifact upload is not preceded by APK evidence verification: "+p.name)
+
+# All build workflows must consume the single pinned CoMaps authority.
+upstream=load("v2/gates/upstream_lock.json")
+if set(upstream)!={"schema","upstream","repository","commit","policy","consumer_contract"} or upstream.get("schema")!=1 or upstream.get("upstream")!="CoMaps" or upstream.get("policy")!="exact": fail("upstream lock invalid")
+pinned=upstream.get("commit","")
+if len(pinned)!=40 or any(ch not in "0123456789abcdef" for ch in pinned): fail("upstream lock commit invalid")
+contract=upstream.get("consumer_contract",{})
+if set(contract)!={"fetch_command","head_assertion"}: fail("upstream consumer contract invalid")
+fetch_required=contract["fetch_command"].replace("{commit}",pinned)
+head_required=contract["head_assertion"].replace("{commit}",pinned)
+for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
+ s=p.read_text(encoding="utf-8")
+ if "git -C comaps fetch" in s and (fetch_required not in s or head_required not in s): fail("build workflow does not enforce pinned CoMaps checkout: "+p.name)
+
+# The development gate must continuously execute every required method regression test.
+method=load("v2/gates/development_method_contract.json")
+expected_method_fields={"schema","stage","required_gate_scripts","required_regression_tests","acceptance_scripts","post_gate_integrity_script","feature_contract_invariants","feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy","method_document","failure_return_policy","completion_authority","method_version","governance_adoption"}
+if set(method)!=expected_method_fields or method.get("schema")!=1 or method.get("stage")!=state.get("stage"): fail("development method contract invalid")
+ga=method.get("governance_adoption",{})
+if ga.get("registry")!="v2/gates/operational_rule_registry_v3.json" or ga.get("evidence")!="v2/gates/user_approval_rule_adoption_evidence.json" or ga.get("candidate_validation_run_id")!=36684201308 or ga.get("independent_review_run_id")!=36679577881 or ga.get("adopted") is not True: fail("development method governance adoption invalid")
+expected_invariants={"restricted_evidence_cannot_be_direct_feature_authority":True,"every_feature_audit_requires_specific_fail_closed_proof":True,"audit_proof_must_execute_before_feature_build":True,"impact_record_must_cover_audit_proof":True}
+if method.get("feature_contract_invariants")!=expected_invariants: fail("development method feature invariants drifted")
+expected_pipeline=["internal_source_analysis","upstream_and_web_research_when_applicable","web_findings_revalidated_against_pinned_source","authority_and_evidence_classification","change_impact_before_implementation","implementation_and_audit_as_one_change_unit","positive_tests","audit_specific_destructive_tests","feature_gate","build_and_apk_evidence","real_device_evidence"]
+if method.get("feature_development_pipeline")!=expected_pipeline: fail("development method pipeline drifted")
+rp=method.get("research_policy",{})
+if rp!={"internal_analysis_required":True,"upstream_web_research":"required_when_external_api_data_model_platform_or_upstream_behavior_is_material","web_is_authority":False,"pinned_source_revalidation_required":True,"research_evidence_must_be_recorded_before_implementation":True}: fail("development method research policy drifted")
+cpol=method.get("change_policy",{})
+if cpol!={"unrecorded_spec_change_forbidden":True,"required_change_must_record_reason_impact_and_authority_update_before_implementation":True,"unrelated_behavior_change_forbidden":True}: fail("development method change policy drifted")
+pup=method.get("pinned_upstream_source_policy",{})
+if pup!={"required_for_every_feature":True,"repository":"comaps/comaps","commit":"7113ccb5f086183f8884b2aa4e58c987466b6704","concrete_source_paths_required":True,"findings_required":True,"analysis_must_precede_implementation":True,"affected_domain_coverage_required":True}: fail("pinned upstream source policy drifted")
+if method.get("method_document")!="docs/CB6_V2_DEVELOPMENT_METHOD.md" or not (ROOT/method["method_document"]).is_file(): fail("development method document missing/drifted")
+if method.get("failure_return_policy")!="return_to_earliest_affected_stage": fail("development method failure return policy drifted")
+if method.get("completion_authority")!={"method":"development_gate_success","build":"verified_apk_evidence","behavior":"accepted_cb6_real_device_evidence"}: fail("development method completion authority drifted")
+if method.get("method_version")!=2: fail("development method version drifted")
+for rel in method["required_gate_scripts"]+method["required_regression_tests"]+method["acceptance_scripts"]+[method["post_gate_integrity_script"]]:
+ if not (ROOT/rel).is_file(): fail("development method component missing: "+rel)
+devwf=(ROOT/".github/workflows/cb6_development_gate.yml").read_text(encoding="utf-8")
+for rel in method["required_regression_tests"]:
+ if rel not in devwf: fail("development gate omits required regression test: "+rel)
+
+# Machine-readable current specification must be internally complete.
+sig=spec.get("signal",{})
+disp=sig.get("display",{})
+acq=sig.get("acquisition",{})
+if not disp.get("zoom_symbols") or not disp.get("svg_dimensions"): fail("signal display spec incomplete")
+if set(disp.get("zoom_symbols",{})) & set(disp.get("forward_zoom_symbols",{})): fail("signal zoom ownership overlaps")
+used=set(disp.get("zoom_symbols",{}).values()) | set(disp.get("forward_zoom_symbols",{}).values())
+if not used <= set(disp["svg_dimensions"]): fail("signal zoom references symbol without dimensions")
+for k in ("radius_m","max_points","refresh_ms","retry_ms","movement_m","forward_max_m","forward_cone_deg","cache_max_ms","osm_queries"):
+ if k not in acq: fail("signal acquisition spec missing "+k)
+# Audits must consume current_spec rather than hard-code current display mapping.
+audit=(ROOT/"v2/audits/audit_signals.py").read_text(encoding="utf-8")
+if "gates/current_spec.json" not in audit: fail("signal audit does not consume current_spec")
+for stale in ('[(14,\'xs\'), (15,\'xs\'), (17,\'m\'), (19,\'l\')]', "spec['display']['symbols']"):
+ if stale in audit: fail("signal audit duplicates or requires historical resource inventory")
+
+# Retired overall design may not silently become canonical.
+ret=(ROOT/state["retired_design"]).read_text(encoding="utf-8")
+if "RETIRED AS CANONICAL" not in ret: fail("retired design lost retirement marker")
+print(f"CB6 INTEGRITY PASS: {len(active)} active decisions traced; V2 workflow bypass scan clean")

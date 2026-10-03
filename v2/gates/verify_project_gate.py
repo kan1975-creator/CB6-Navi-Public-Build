@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+import json, pathlib, sys, os, subprocess
+ROOT=pathlib.Path(__file__).resolve().parents[2]
+STATE=ROOT/"v2/gates/project_state.json"
+EXEC=ROOT/"docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
+OLD=ROOT/"docs/CB6_V2_OVERALL_SYSTEM_DESIGN.md"
+def fail(msg):
+ print("CB6 DEVELOPMENT GATE FAIL:",msg); raise SystemExit(1)
+for p in (STATE,EXEC,OLD):
+ if not p.exists(): fail("required gate input missing: "+str(p.relative_to(ROOT)))
+s=json.loads(STATE.read_text(encoding="utf-8"))
+root_state=json.loads((ROOT/"v2/gates/root_invariants.json").read_text(encoding="utf-8"))
+root_cert=root_state.get("certification",{})
+ci_sha=os.environ.get("GITHUB_SHA","").strip()
+if ci_sha:
+ cp=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True)
+ if cp.returncode!=0: fail("cannot resolve control repo HEAD in CI")
+ head=cp.stdout.strip()
+ if head!=ci_sha: fail("CI control repo HEAD does not match GITHUB_SHA")
+if s.get("schema")!=1: fail("unsupported project_state schema")
+if s.get("branch")!="cb6-v2-clean": fail("wrong branch authority")
+stage=s.get("stage")
+if stage not in {"OVERALL_DESIGN_REBUILD","IMPLEMENTATION_ENABLED"}: fail("unknown stage: "+str(stage))
+old=OLD.read_text(encoding="utf-8")
+if "RETIRED AS CANONICAL" not in old: fail("retired overall design became canonical again")
+if "--require-feature-build" in sys.argv:
+ if root_cert.get("status")!="CERTIFIED" or root_cert.get("feature_execution_permitted") is not True:
+  fail("feature build requested before root certification")
+if stage=="OVERALL_DESIGN_REBUILD":
+ if s.get("feature_builds_allowed") is not False: fail("feature builds must be disabled during design rebuild")
+ print("CB6 DEVELOPMENT GATE PASS: overall-design rebuild; feature builds BLOCKED")
+ if "--require-feature-build" in sys.argv: fail("feature build requested while overall design rebuild is active")
+ raise SystemExit(0)
+# Implementation enablement must be independently proven by the repository-wide
+# integrity gate. Do not trust project_state booleans as sufficient authority.
+cp=subprocess.run([sys.executable, str(ROOT/"v2/gates/verify_project_integrity.py")], cwd=ROOT, text=True, capture_output=True)
+if cp.returncode != 0:
+ fail("implementation enablement lacks integrity proof: "+(cp.stdout+cp.stderr).strip())
+canonical_rel=s.get("canonical_design","")
+canonical=ROOT/canonical_rel
+if not canonical.is_file(): fail("canonical rebuilt design missing")
+authority=json.loads((ROOT/"v2/gates/authority_policy.json").read_text(encoding="utf-8"))
+evidence=json.loads((ROOT/"v2/gates/evidence_inventory.json").read_text(encoding="utf-8"))
+if canonical_rel not in authority.get("current_authorities",[]): fail("canonical design is not a current authority")
+active_evidence={x.get("path") for x in evidence.get("evidence",[]) if x.get("status")=="active"}
+if canonical_rel not in active_evidence: fail("canonical design is not active evidence")
+if not s.get("design_verified"): fail("rebuilt design not verified")
+if s.get("feature_builds_allowed") is not True: fail("feature builds not authorized")
+# Feature builds additionally require a per-feature gate record.
+if "--require-feature-build" in sys.argv:
+ feature=None
+ for arg in sys.argv:
+  if arg.startswith("--feature="): feature=arg.split("=",1)[1]
+ if not feature: fail("feature build requires --feature=<gate-id>")
+ fp=ROOT/"v2/gates/features"/(feature+".json")
+ if not fp.is_file(): fail("missing per-feature gate record: "+feature)
+ f=json.loads(fp.read_text(encoding="utf-8"))
+ required={"schema","feature_id","requirements","affected_domains","domain_verification","design_section","impact_checked","impact_record","research_record","repo_sweep_required","source_paths","audits","tests","apk_checks","device_checks","device_evidence","stage"}
+ missing=sorted(required-set(f))
+ if missing: fail("feature gate fields missing: "+",".join(missing))
+ if f.get("schema")!=1 or f.get("feature_id")!=feature: fail("feature gate identity invalid")
+ if not f.get("impact_checked"): fail("feature impact check incomplete")
+ research_rel=f.get("research_record","")
+ research_path=ROOT/research_rel
+ if not research_path.is_file(): fail("feature research record missing")
+ research=json.loads(research_path.read_text(encoding="utf-8"))
+ if research.get("schema")!=1 or research.get("feature_id")!=feature: fail("feature research record identity invalid")
+ if research.get("status")!="COMPLETE" or research.get("completed_before_implementation") is not True: fail("feature research incomplete before implementation")
+ ia=research.get("internal_analysis",{})
+ if ia.get("required") is not True or not ia.get("paths") or not ia.get("findings"): fail("feature internal analysis incomplete")
+ uw=research.get("upstream_web_research",{})
+ if uw.get("applicable") not in {True,False}: fail("feature upstream/web applicability undecided")
+ if uw.get("applicable") is True and (not uw.get("sources") or not uw.get("findings")): fail("applicable upstream/web research incomplete")
+ rv=research.get("pinned_source_revalidation",{})
+ if rv.get("required") is not True or not rv.get("evidence"): fail("feature pinned-source revalidation incomplete")
+ acp=research.get("authority_classification",{})
+ if acp.get("web_is_authority") is not False or not acp.get("current_authority"): fail("feature research authority classification invalid")
+ upstream=research.get("pinned_upstream_source_analysis",{})
+ if upstream.get("required") is not True: fail("pinned CoMaps source analysis not required")
+ if upstream.get("repository")!="comaps/comaps": fail("pinned CoMaps source repository mismatch")
+ if upstream.get("commit")!="7113ccb5f086183f8884b2aa4e58c987466b6704": fail("pinned CoMaps source SHA mismatch")
+ source_paths=upstream.get("source_paths",[])
+ if not isinstance(source_paths,list) or not source_paths or any(not isinstance(x,str) or not x or x.startswith("REPLACE_") or x.startswith("v2/") or x.startswith("docs/") for x in source_paths): fail("concrete original CoMaps source paths not recorded")
+ findings=upstream.get("findings",[])
+ if not isinstance(findings,list) or not findings or any(not isinstance(x,str) or not x.strip() or x.startswith("REPLACE_") for x in findings): fail("pinned CoMaps source findings not recorded")
+ impact_rel=f.get("impact_record","")
+ impact_path=ROOT/impact_rel
+ if not impact_path.is_file(): fail("feature impact record missing")
+ impact=json.loads(impact_path.read_text(encoding="utf-8"))
+ if impact.get("schema")!=1 or impact.get("feature_id")!=f.get("feature_id"): fail("feature impact record identity mismatch")
+ if set(impact.get("requirements",[]))!=set(f.get("requirements",[])): fail("feature impact record requirements mismatch")
+ if set(impact.get("affected_domains",[]))!=set(f.get("affected_domains",[])): fail("feature impact record domains mismatch")
+ if not impact.get("reviewed_paths"): fail("feature impact record lacks reviewed paths")
+ expected_impact_fields={"schema","feature_id","requirements","affected_domains","reviewed_paths"}
+ if set(impact)!=expected_impact_fields: fail("feature impact record fields drifted")
+ for rel in impact["reviewed_paths"]:
+  if not isinstance(rel,str) or not rel or not (ROOT/rel).exists(): fail("feature impact reviewed path missing")
+ if f.get("repo_sweep_required") is not True: fail("feature repo-wide sweep not required")
+ if f.get("stage")!="IMPLEMENTATION_ENABLED": fail("feature implementation not enabled")
+ if f.get("device_evidence")!="PENDING": fail("device evidence must remain pending before build")
+ ac=f.get("apk_checks")
+ if not isinstance(ac,list) or not ac or any(not isinstance(x,dict) or set(x)!={"id","description"} or not x.get("id") or not x.get("description") for x in ac): fail("apk_checks must use id/description records")
+ if len({x["id"] for x in ac})!=len(ac): fail("apk_checks contain duplicate ids")
+ dc=f.get("device_checks")
+ if not isinstance(dc,list) or not dc or any(not isinstance(x,dict) or set(x)!={"id","description"} or not x.get("id") or not x.get("description") for x in dc): fail("device_checks must use id/description records")
+ if len({x["id"] for x in dc})!=len(dc): fail("device_checks contain duplicate ids")
+ for key in ("requirements","source_paths","audits","tests","apk_checks","device_checks"):
+  if not isinstance(f.get(key),list) or not f[key]: fail("feature gate "+key+" not declared")
+ decisions=json.loads((ROOT/"v2/gates/active_decisions.json").read_text(encoding="utf-8")).get("decisions",[])
+ active={d["id"] for d in decisions if d.get("status")=="active"}
+ active_by_id={d["id"]:d for d in decisions if d.get("status")=="active"}
+ unknown=sorted(set(f["requirements"])-active)
+ if unknown: fail("feature gate references non-active requirements: "+",".join(unknown))
+ # A feature contract must declare the affected domains of every requirement it owns.
+ # This prevents a narrow source list from silently ignoring renderer/cache/UI/etc impact.
+ declared_domains=set(f.get("affected_domains",[]))
+ if not declared_domains: fail("feature gate affected_domains not declared")
+ required_domains=set().union(*(set(active_by_id[r].get("affected",[])) for r in f["requirements"]))
+ missing_domains=sorted(required_domains-declared_domains)
+ if missing_domains: fail("feature gate omits affected domains: "+",".join(missing_domains))
+ coverage=research.get("upstream_domain_coverage",{})
+ technical_domains=set(f.get("affected_domains",[]))-{"audits","tests","real-device"}
+ if not isinstance(coverage,dict) or set(coverage)!=technical_domains: fail("pinned CoMaps analysis coverage does not match technical affected domains")
+ for domain in sorted(technical_domains):
+  item=coverage.get(domain)
+  if not isinstance(item,dict) or set(item)!={"source_paths","findings"}: fail("pinned CoMaps domain analysis record invalid: "+domain)
+  paths=item.get("source_paths",[]); domain_findings=item.get("findings",[])
+  if not paths or any(x not in source_paths for x in paths): fail("pinned CoMaps domain lacks analyzed source path: "+domain)
+  if not domain_findings or any(not isinstance(x,str) or not x.strip() for x in domain_findings): fail("pinned CoMaps domain lacks findings: "+domain)
+ # Every declared impact domain needs an explicit verification route. A domain name
+ # alone is not evidence that its source/regression surface was actually checked.
+ dv=f.get("domain_verification")
+ if not isinstance(dv,dict): fail("feature gate domain_verification not declared")
+ missing_verification=sorted(d for d in declared_domains if not isinstance(dv.get(d),list) or (not dv[d] and d!="real-device"))
+ if missing_verification: fail("feature gate domains lack verification: "+",".join(missing_verification))
+ allowed_refs=set(f["source_paths"]+f["audits"]+f["tests"])
+ policy=json.loads((ROOT/"v2/gates/domain_verification_policy.json").read_text(encoding="utf-8"))
+ kind_paths={"source":set(f["source_paths"]),"audit":set(f["audits"]),"test":set(f["tests"]),"device":set()}
+ for domain,refs in dv.items():
+  if domain not in declared_domains: fail("feature gate verification references undeclared domain: "+domain)
+  unknown_refs=sorted(set(refs)-allowed_refs)
+  if unknown_refs: fail("feature gate domain verification uses undeclared paths: "+domain+" -> "+",".join(unknown_refs))
+  required_kinds=policy.get("rules",{}).get(domain,policy.get("default_required_kinds",["source"]))
+  for kind in required_kinds:
+   if kind=="device" and domain=="real-device" and f.get("device_evidence")=="PENDING" and f.get("device_checks"): continue
+   if not any(ref in kind_paths.get(kind,set()) for ref in refs): fail("feature gate domain lacks required verification kind: "+domain+" -> "+kind)
+ traces=json.loads((ROOT/"v2/gates/traceability.json").read_text(encoding="utf-8")).get("traces",[])
+ trace_by_id={t["decision_id"]:t for t in traces}
+ for rid in f["requirements"]:
+  t=trace_by_id.get(rid)
+  if not t or t.get("state")!="consumed": fail("feature requirement not consumed by rebuilt design: "+rid)
+  if not t.get("design_ref") or not t.get("verification"): fail("feature requirement lacks design/verification trace: "+rid)
+ for key in ("source_paths","audits","tests"):
+  for rel in f[key]:
+   if not (ROOT/rel).exists(): fail("feature gate "+key+" path missing: "+rel)
+ # Historical/retired evidence may inform active decisions only through the evidence/traceability layer.
+ # A feature implementation contract must not directly promote such documents back into current source authority.
+ restricted_feature_refs=set()
+ for item in evidence.get("evidence",[]):
+  if item.get("status")!="active": restricted_feature_refs.add(item.get("path"))
+ direct_refs=set(f["source_paths"]+f["audits"]+f["tests"])
+ bad_authority=sorted(x for x in direct_refs if x in restricted_feature_refs)
+ if bad_authority: fail("feature gate directly promotes restricted evidence: "+",".join(bad_authority))
+ # An audit is not evidence merely because its file exists. Each feature audit must have
+ # an explicitly registered executable fail-closed proof in the test set.
+ for audit_rel in f["audits"]:
+  audit_key=pathlib.Path(audit_rel).stem
+  if audit_key.startswith("audit_"): audit_key=audit_key[len("audit_"):]
+  candidates=[t for t in f["tests"] if audit_key in pathlib.Path(t).stem and ("selftest" in pathlib.Path(t).stem or "fail_closed" in pathlib.Path(t).stem)]
+  if not candidates: fail("feature audit lacks registered fail-closed proof: "+audit_rel)
+print("CB6 DEVELOPMENT GATE PASS: implementation enabled")

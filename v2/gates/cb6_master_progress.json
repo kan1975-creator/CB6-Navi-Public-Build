@@ -1,0 +1,1164 @@
+{
+  "schema": 14,
+  "id": "CB6-MASTER-DEVELOPMENT-LEDGER",
+  "purpose": "Single repository entrypoint covering root invariants, development method, every active CB6 specification, development basis, progress, dependencies and evidence.",
+  "status_vocabulary": [
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "PARTIAL_ACCEPTED",
+    "DEFERRED_WITH_EVIDENCE",
+    "BLOCKED",
+    "PENDING_RECERTIFICATION",
+    "PROVEN",
+    "DEVICE_ACCEPTED"
+  ],
+  "authority_rule": "This ledger is an index. Requirements originate in active_decisions/current_spec; technical truth and completion are established only by referenced evidence and executable verification.",
+  "root": {
+    "status": "PROVEN",
+    "authority": [
+      "v2/gates/root_invariants.json",
+      "v2/gates/root_certification_plan.json",
+      "v2/gates/run_root_certification.py"
+    ],
+    "rule": "No lower-layer implementation/build may be authoritative until executable Root Certification succeeds."
+  },
+  "development_method": {
+    "status": "PROVEN",
+    "sequence": [
+      "active requirement and authority",
+      "exact pinned CoMaps source analysis",
+      "external/upstream research when material",
+      "revalidate findings against pinned source",
+      "record research evidence",
+      "change-impact/repository sweep",
+      "implementation and audit as one change unit",
+      "positive tests",
+      "audit-specific destructive tests",
+      "feature gate",
+      "build exact pinned CoMaps",
+      "APK identity/evidence",
+      "CB6 real-device evidence",
+      "final acceptance"
+    ],
+    "failure_policy": "return_to_earliest_affected_stage",
+    "change_rules": [
+      "unrecorded spec change forbidden",
+      "required change records reason/impact/authority before implementation",
+      "unrelated behavior change forbidden",
+      "web research is not authority",
+      "pinned CoMaps source analysis required for every feature",
+      "method changes invalidate certification"
+    ],
+    "pinned_upstream": {
+      "repository": "comaps/comaps",
+      "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704"
+    },
+    "authority": [
+      "v2/gates/development_method_contract.json",
+      "docs/CB6_V2_DEVELOPMENT_METHOD.md",
+      "v2/gates/development_method_completion.json",
+      "v2/gates/method_freeze_lock.json"
+    ]
+  },
+  "progress_pipeline": [
+    {
+      "id": "ROOT",
+      "status": "PROVEN",
+      "depends_on": []
+    },
+    {
+      "id": "METHOD",
+      "status": "PROVEN",
+      "depends_on": [
+        "ROOT"
+      ]
+    },
+    {
+      "id": "FEATURES",
+      "status": "IN_PROGRESS",
+      "depends_on": [
+        "ROOT",
+        "METHOD"
+      ]
+    },
+    {
+      "id": "APK",
+      "status": "BLOCKED",
+      "depends_on": [
+        "ROOT",
+        "METHOD",
+        "FEATURES"
+      ]
+    },
+    {
+      "id": "DEVICE",
+      "status": "BLOCKED",
+      "depends_on": [
+        "APK"
+      ]
+    },
+    {
+      "id": "FINAL",
+      "status": "BLOCKED",
+      "depends_on": [
+        "ROOT",
+        "METHOD",
+        "FEATURES",
+        "APK",
+        "DEVICE"
+      ]
+    }
+  ],
+  "specifications": [
+    {
+      "id": "PROC-001",
+      "spec_key": "process.traceability",
+      "requirement": "Every active user decision must be consumed by the current design or explicitly remain pending during design rebuild.",
+      "affected": [
+        "design",
+        "gates",
+        "audits",
+        "workflows"
+      ],
+      "evidence": [
+        "docs/CB6_DEVELOPMENT_EXECUTION_GATE.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "PROC-002",
+      "spec_key": "process.feature-build-gate",
+      "requirement": "A V2 feature build must fail closed unless project and feature gates explicitly permit it.",
+      "affected": [
+        "gates",
+        "workflows"
+      ],
+      "evidence": [
+        "docs/CB6_GATE_COVERAGE_AUDIT.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SIG-200M-001",
+      "spec_key": "signal.display.200m",
+      "requirement": "At 200 m, traffic-signal marks should be slim, approximately the same visual size as at 500 m.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols",
+        "audits",
+        "tests"
+      ],
+      "evidence": [
+        "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SIG-COVERAGE-001",
+      "spec_key": "sig.coverage",
+      "requirement": "Traffic-signal coverage must include signals outside intersections and signals currently missing at some intersections.",
+      "affected": [
+        "signals",
+        "data-source",
+        "cache",
+        "audits",
+        "tests"
+      ],
+      "evidence": [
+        "docs/CB6_V2_TRAFFIC_SIGNAL_MIGRATION.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SIG-UPGRADE-001",
+      "spec_key": "sig.upgrade",
+      "requirement": "Signal behavior must be verified for update install as well as clean install; clean-install-only success is insufficient.",
+      "affected": [
+        "signals",
+        "cache",
+        "lifecycle",
+        "tests",
+        "real-device"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "PRODUCT-BASE-001",
+      "spec_key": "product.base",
+      "requirement": "CoMaps standard functionality is preserved unless a CB6 requirement explicitly extends it.",
+      "affected": [
+        "baseline",
+        "routing",
+        "search",
+        "favorites",
+        "offline-maps",
+        "poi"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "MAP-CAMERA-001",
+      "spec_key": "map.camera",
+      "requirement": "Map follows driving direction by default, supports north-lock toggle, and own-position presentation is lowered on screen without altering geographic GPS coordinates.",
+      "affected": [
+        "location",
+        "camera",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "MAP-SCALE-001",
+      "spec_key": "map.scale",
+      "requirement": "Initial map scale is 200 m; no automatic scale is required and the previous user scale is remembered.",
+      "affected": [
+        "camera",
+        "settings",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "HUD-ROAD-001",
+      "spec_key": "hud.road",
+      "requirement": "A NAVITIME-like current-road-name bar is presented near the bottom with orientation behavior controlled by CB6 UI settings.",
+      "affected": [
+        "road-hud",
+        "ui",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "POI-CONVENIENCE-001",
+      "spec_key": "poi.convenience",
+      "requirement": "Convenience stores are always available as brand-specific icons without cluttering convenience-store text; static POI data should prefer native MWM when proven sufficient.",
+      "affected": [
+        "poi",
+        "classifier",
+        "presentation",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "POI-FUEL-001",
+      "spec_key": "poi.fuel",
+      "requirement": "Fuel stations and required major facilities are presented through the CB6 POI strategy with scale-aware visibility and without unnecessary duplicate network POIs.",
+      "affected": [
+        "poi",
+        "presentation",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "STOP-001",
+      "spec_key": "stop",
+      "requirement": "Stop signs are a dynamic road-control feature and should be shown only when relevant ahead of the vehicle.",
+      "affected": [
+        "road-controls",
+        "location",
+        "renderer"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SEARCH-VOICE-001",
+      "spec_key": "search.voice",
+      "requirement": "Japanese voice search feeds the stock CoMaps SearchEngine, with on-device recognition where available and a safe fallback; no parallel search database.",
+      "affected": [
+        "search",
+        "voice",
+        "android"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "ROUTING-FREE-001",
+      "spec_key": "routing.free",
+      "requirement": "CB6 routing may support a free-expressway-only policy inside native route calculation semantics; it must not post-filter an already calculated route.",
+      "affected": [
+        "routing",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "TOLL-001",
+      "spec_key": "toll",
+      "requirement": "Toll-fee display must use a traceable authoritative fee source/model and must not fabricate an exact fee from road class.",
+      "affected": [
+        "routing",
+        "toll",
+        "ui",
+        "offline"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "FAVORITES-001",
+      "spec_key": "favorites",
+      "requirement": "Favorites synchronization, if implemented, preserves BookmarkManager as authority and uses item-level identity/conflict handling rather than destructive collection replacement.",
+      "affected": [
+        "favorites",
+        "sync"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "LIFECYCLE-001",
+      "spec_key": "lifecycle",
+      "requirement": "App startup and navigation lifecycle must restore correct current-location/follow presentation and preserve CB6 behavior across restart/return flows.",
+      "affected": [
+        "lifecycle",
+        "location",
+        "navigation",
+        "android"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "UI-LAYOUT-001",
+      "spec_key": "ui.layout",
+      "requirement": "CB6 driving UI keeps compass at upper left with north-lock toggle, scale below it with tap-to-show +/- controls, current-location at lower left, settings at lower right, and supports a tap-to-hide search/menu full-map presentation.",
+      "affected": [
+        "ui",
+        "camera",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "MAP-LABEL-001",
+      "spec_key": "map.label",
+      "requirement": "Map presentation suppresses unnecessary address clutter while retaining scale-appropriate road names and required major-facility labels without excessive overlap.",
+      "affected": [
+        "renderer",
+        "style",
+        "poi"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "LOCATION-STABILITY-001",
+      "spec_key": "location.stability",
+      "requirement": "Own-position/heading behavior must avoid rotation-axis offset, stationary jitter and false movement; stopped state must not present spurious driving motion.",
+      "affected": [
+        "location",
+        "camera",
+        "map-matching"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "GOOGLE-MAPS-001",
+      "spec_key": "google.maps",
+      "requirement": "CB6 Navi provides a Google Maps handoff/auxiliary launch path while keeping CB6 Navi as the intended return application after navigation/arrival/restart flows where technically supported.",
+      "affected": [
+        "android",
+        "navigation",
+        "lifecycle",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "POI-MAJOR-001",
+      "spec_key": "poi.major",
+      "requirement": "Required major facilities such as airports, roadside stations, parks, public facilities, department stores and supermarkets support scale-aware icon/label presentation; important large facilities may use stronger labels while avoiding urban overlap.",
+      "affected": [
+        "poi",
+        "renderer",
+        "style"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "CAMERA-FIXED-001",
+      "spec_key": "camera.fixed",
+      "requirement": "CB6 retains the requested fixed driving-camera behavior; automatic camera changes must not be introduced as collateral behavior.",
+      "affected": [
+        "camera",
+        "navigation",
+        "settings"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "OFFLINE-FREE-001",
+      "spec_key": "offline.free",
+      "requirement": "Core CB6 navigation remains usable without paid Google/Mapbox API registration and preserves CoMaps offline-map capability; external network supplementation cannot become the sole path for core static POIs.",
+      "affected": [
+        "baseline",
+        "offline",
+        "poi",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md",
+        "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SIGNAL-ZOOM-001",
+      "spec_key": "signal.zoom",
+      "requirement": "Traffic signals are not required at 1 km; close-range visibility and forward/near scaling must preserve accepted driving behavior while honoring the later slim 200 m preference.",
+      "affected": [
+        "signals",
+        "renderer",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "CONVENIENCE-BRANDS-001",
+      "spec_key": "convenience.brands",
+      "requirement": "Convenience-store classification covers 7-Eleven, FamilyMart, Lawson, Seicomart, MyBasket, Ministop and Daily Yamazaki, with generic fallback and CB6-specific brand presentation.",
+      "affected": [
+        "poi",
+        "classifier",
+        "symbols"
+      ],
+      "evidence": [
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "TOLL-ROUTE-001",
+      "spec_key": "toll.route",
+      "requirement": "Each route candidate that includes toll roads should present the normal passenger-car toll; free sections/candidates present 0 yen, subject to an authoritative fee model being established.",
+      "affected": [
+        "routing",
+        "toll",
+        "ui"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SEARCH-FUZZY-001",
+      "spec_key": "search.fuzzy",
+      "requirement": "CB6 query normalization/aliases must feed the stock CoMaps SearchEngine consistently for keyboard, voice and show-on-map flows; do not create a parallel search behavior.",
+      "affected": [
+        "search/voice",
+        "normalization",
+        "history",
+        "routing"
+      ],
+      "evidence": [
+        "docs/CB6_CHANGE_IMPACT_MAP.md",
+        "docs/CB6_COMAPS_ARCHITECTURE.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "ORIENTATION-001",
+      "spec_key": "ui.orientation",
+      "requirement": "CB6 UI supports auto, portrait and landscape orientation modes without breaking the navigation HUD/control layout.",
+      "affected": [
+        "Android UI",
+        "layout",
+        "lifecycle"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SEARCH-HISTORY-001",
+      "spec_key": "search.history-delete",
+      "requirement": "Preserve stock search/history behavior and provide the required ability to delete search history/registered entries through the intended CoMaps-owned data path.",
+      "affected": [
+        "search",
+        "history",
+        "favorites UI"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md",
+        "docs/CB6_FROZEN_FEATURES.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "VEHICLE-ICON-001",
+      "spec_key": "map.vehicle-icon",
+      "requirement": "Do not change the accepted/original vehicle icon unless the user explicitly requests a new vehicle-icon change.",
+      "affected": [
+        "rendering",
+        "own-position"
+      ],
+      "evidence": [
+        "CLAUDE_HANDOVER.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    },
+    {
+      "id": "SCOPE-HOKKAIDO-001",
+      "spec_key": "product.region-scope",
+      "requirement": "Preserve the established Hokkaido-focused CB6 operating scope when making data-source, coverage and validation decisions; do not silently broaden or narrow it.",
+      "affected": [
+        "data coverage",
+        "validation",
+        "offline/network policy"
+      ],
+      "evidence": [
+        "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md"
+      ],
+      "status": "PENDING_RECERTIFICATION",
+      "progress_authority": "derived from executable gates/evidence; never self-certified"
+    }
+  ],
+  "detailed_feature_evidence": {
+    "signals": [
+      "v2/gates/features/signals.json",
+      "v2/gates/research_records/signals.json",
+      "v2/gates/impact_records/signals.json",
+      "v2/audits/audit_signals.py"
+    ],
+    "convenience": [
+      "v2/gates/features/convenience-mwm-diagnostic.json",
+      "v2/gates/features/convenience-brands.json",
+      "v2/gates/research_records/convenience-mwm-diagnostic.json",
+      "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+      "v2/audits/audit_convenience.py"
+    ]
+  },
+  "current_blockers": [
+    "Convenience restart requires fresh authority confirmation and pinned CoMaps source analysis before implementation.",
+    "Device evidence cannot be inferred from build success."
+  ],
+  "reconstruction": [
+    "v2/gates/repository_state_manifest.json",
+    "v2/gates/project_state.json",
+    "v2/gates/current_spec.json",
+    "v2/gates/active_decisions.json",
+    "v2/gates/traceability.json"
+  ],
+  "status_semantics": {
+    "PENDING_RECERTIFICATION": "Existing work is preserved. Revalidate it under the certified Root/Method; do not restart implementation unless evidence proves it invalid.",
+    "PARTIAL_ACCEPTED": "A bounded part has been demonstrated/accepted, but unresolved work remains.",
+    "DEFERRED_WITH_EVIDENCE": "Unresolved work was intentionally deferred and must retain achieved state, reason, restart point and completion condition."
+  },
+  "development_order": [
+    {
+      "order": 0,
+      "id": "ROOT",
+      "title": "Root完成・認証",
+      "state": "PROVEN",
+      "resume_from": "Executable Root Certification",
+      "restart_from_zero": false
+    },
+    {
+      "order": 1,
+      "id": "METHOD",
+      "title": "開発Method完成・Freeze",
+      "state": "PROVEN",
+      "resume_from": "Root認証後に既存Methodを再認証・Freeze",
+      "restart_from_zero": false
+    },
+    {
+      "order": 2,
+      "id": "CONVENIENCE",
+      "title": "コンビニ表示完成",
+      "state": "IN_PROGRESS_RESTART_SOURCE_FIRST",
+      "requirements": [
+        "POI-CONVENIENCE-001",
+        "CONVENIENCE-BRANDS-001"
+      ],
+      "resume_from": "Root/Method認証後、要求/Authority→Pinned CoMaps元ソース解析から仕切り直し",
+      "restart_from_zero": true,
+      "prior_work": "REFERENCE_ONLY_UNTIL_REVALIDATED"
+    },
+    {
+      "order": 3,
+      "id": "SIGNALS",
+      "title": "信号機取りこぼし解消・最終回帰",
+      "state": "BLOCKED",
+      "requirements": [
+        "SIG-200M-001",
+        "SIG-COVERAGE-001",
+        "SIG-UPGRADE-001",
+        "SIGNAL-ZOOM-001"
+      ],
+      "achieved": "基本表示、200m/500m実機表示は既存成果として保持",
+      "resume_from": "取得網羅性→dedup/cluster→filter→rendererを追跡",
+      "restart_from_zero": false
+    },
+    {
+      "order": 4,
+      "id": "LOCATION_CAMERA",
+      "title": "自車位置・地図回転・停止時ふらつき・方位",
+      "state": "BLOCKED",
+      "requirements": [
+        "MAP-CAMERA-001",
+        "LOCATION-STABILITY-001",
+        "CAMERA-FIXED-001",
+        "VEHICLE-ICON-001"
+      ],
+      "resume_from": "既存成果を保持し記録済み不具合から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 5,
+      "id": "UI_HUD_SCALE",
+      "title": "画面UI配置・走行道路名バー・縮尺操作",
+      "state": "BLOCKED",
+      "requirements": [
+        "UI-LAYOUT-001",
+        "HUD-ROAD-001",
+        "MAP-SCALE-001"
+      ],
+      "resume_from": "既存UIを基準に要求差分から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 6,
+      "id": "MAP_LABELS",
+      "title": "地図ラベル・住所抑制・道路名表示",
+      "state": "BLOCKED",
+      "requirements": [
+        "MAP-LABEL-001"
+      ],
+      "resume_from": "現行style/label挙動の解析から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 7,
+      "id": "FUEL",
+      "title": "GS表示",
+      "state": "BLOCKED",
+      "requirements": [
+        "POI-FUEL-001"
+      ],
+      "resume_from": "Native MWM/classificator/style優先で検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 8,
+      "id": "MAJOR_POI",
+      "title": "主要施設・空港・道の駅・公園・公共施設",
+      "state": "BLOCKED",
+      "requirements": [
+        "POI-MAJOR-001"
+      ],
+      "resume_from": "Native MWM/styleと縮尺・collision検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 9,
+      "id": "STOP_SIGNS",
+      "title": "一時停止標識",
+      "state": "BLOCKED",
+      "requirements": [
+        "STOP-001"
+      ],
+      "resume_from": "前方距離・方位filterを独立publisherで検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 10,
+      "id": "SEARCH",
+      "title": "検索・検索履歴・曖昧検索",
+      "state": "BLOCKED",
+      "requirements": [
+        "SEARCH-FUZZY-001",
+        "SEARCH-HISTORY-001"
+      ],
+      "resume_from": "Stock CoMaps SearchEngineをAuthorityとして拡張",
+      "restart_from_zero": false
+    },
+    {
+      "order": 11,
+      "id": "VOICE_SEARCH",
+      "title": "音声検索",
+      "state": "BLOCKED",
+      "requirements": [
+        "SEARCH-VOICE-001"
+      ],
+      "resume_from": "日本語音声入力→共通normalization→SearchEngine",
+      "restart_from_zero": false
+    },
+    {
+      "order": 12,
+      "id": "GOOGLE_MAPS",
+      "title": "Google Maps起動・CB6復帰",
+      "state": "BLOCKED",
+      "requirements": [
+        "GOOGLE-MAPS-001"
+      ],
+      "resume_from": "Android handoff/return lifecycle実機検証",
+      "restart_from_zero": false
+    },
+    {
+      "order": 13,
+      "id": "ORIENTATION_LIFECYCLE",
+      "title": "画面縦横・起動/再起動/Lifecycle",
+      "state": "BLOCKED",
+      "requirements": [
+        "ORIENTATION-001",
+        "LIFECYCLE-001"
+      ],
+      "resume_from": "Activity/theme/orientation restart時の状態復元から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 14,
+      "id": "FAVORITES_SYNC",
+      "title": "お気に入り・スマホ↔CB6同期",
+      "state": "BLOCKED",
+      "requirements": [
+        "FAVORITES-001"
+      ],
+      "resume_from": "BookmarkManager authority・非破壊merge設計から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 15,
+      "id": "FREE_EXPRESSWAY_ROUTING",
+      "title": "高速無料区間ルーティング",
+      "state": "BLOCKED",
+      "requirements": [
+        "ROUTING-FREE-001"
+      ],
+      "resume_from": "Pinned CoMaps routing/toll/access属性解析から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 16,
+      "id": "TOLL_DISPLAY",
+      "title": "ルート別料金表示",
+      "state": "BLOCKED",
+      "requirements": [
+        "TOLL-001",
+        "TOLL-ROUTE-001"
+      ],
+      "resume_from": "Authorityある料金モデル確立から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 17,
+      "id": "ROAD_INFO",
+      "title": "固定カメラ等の追加道路情報",
+      "state": "BLOCKED",
+      "requirements": [],
+      "note": "候補機能。Active requirement登録・Authority確定前は実装不可。",
+      "resume_from": "正式Requirement登録から",
+      "restart_from_zero": false
+    },
+    {
+      "order": 18,
+      "id": "INTEGRATED_REGRESSION",
+      "title": "全機能統合回帰試験",
+      "state": "BLOCKED",
+      "resume_from": "全対象Feature Gate成立後",
+      "restart_from_zero": false
+    },
+    {
+      "order": 19,
+      "id": "FINAL_APK",
+      "title": "最終arm64 APK生成・APK同一性検証",
+      "state": "BLOCKED",
+      "requirements": [
+        "OFFLINE-FREE-001",
+        "PRODUCT-BASE-001",
+        "SCOPE-HOKKAIDO-001"
+      ],
+      "resume_from": "同一HEAD Build→ABI/package/label/SHA/artifact chain",
+      "restart_from_zero": false
+    },
+    {
+      "order": 20,
+      "id": "DEVICE_REGRESSION",
+      "title": "CB6実機総合試験",
+      "state": "BLOCKED",
+      "resume_from": "最終APK SHA固定後",
+      "restart_from_zero": false
+    },
+    {
+      "order": 21,
+      "id": "FINAL_ACCEPTANCE",
+      "title": "Final Acceptance",
+      "state": "BLOCKED",
+      "resume_from": "全Active requirement・deferred blocker・device evidence閉鎖後",
+      "restart_from_zero": false
+    }
+  ],
+  "progress_overrides": {
+    "SIG-200M-001": {
+      "implementation_state": "PARTIAL_ACCEPTED",
+      "achieved": [
+        "Signal display path implemented",
+        "200 m display observed on CB6",
+        "500 m display observed on CB6",
+        "Slimmer signal presentation requested/iterated"
+      ],
+      "unresolved": [
+        "Some real traffic signals remain missing"
+      ],
+      "deferred_reason": "Basic display path was established; acquisition/coverage completeness remained for later investigation.",
+      "resume_from": "Trace missing real signals through source acquisition -> dedup/cluster -> filtering -> renderer; preserve working display path.",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "SIG-COVERAGE-001": {
+      "implementation_state": "DEFERRED_WITH_EVIDENCE",
+      "achieved": [
+        "OSM/verified-supplement acquisition path exists",
+        "Basic signal display works at observed locations"
+      ],
+      "unresolved": [
+        "Intersection and non-intersection signal omissions remain",
+        "NAVITIME-observed locations may be absent in CB6"
+      ],
+      "resume_from": "Acquisition completeness and exact missing-location trace",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "SIGNAL-ZOOM-001": {
+      "implementation_state": "PARTIAL_ACCEPTED",
+      "achieved": [
+        "200 m and 500 m display observed",
+        "1 km signal display not required by accepted policy"
+      ],
+      "unresolved": [
+        "Final regression after coverage fixes"
+      ],
+      "resume_from": "Regression only unless evidence invalidates current behavior",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "POI-CONVENIENCE-001": {
+      "implementation_state": "IN_PROGRESS",
+      "achieved": [
+        "Native MWM/DataSource collector path implemented",
+        "Convenience classifier exists",
+        "7-Eleven stock-map POI observed on CB6"
+      ],
+      "unresolved": [
+        "CB6 collector acquisition must be distinguished from stock renderer",
+        "Brand-specific final presentation not yet device-proven"
+      ],
+      "resume_from": "Existing diagnostic collector-to-presentation verification",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    },
+    "CONVENIENCE-BRANDS-001": {
+      "implementation_state": "IN_PROGRESS",
+      "achieved": [
+        "Brand classifier work exists"
+      ],
+      "unresolved": [
+        "Final brand-specific icon presentation/device proof"
+      ],
+      "resume_from": "Existing classifier and presentation path",
+      "restart_from_zero": false,
+      "recertification": "PENDING_RECERTIFICATION"
+    }
+  },
+  "defer_policy": {
+    "required_fields": [
+      "achieved",
+      "unresolved",
+      "deferred_reason",
+      "resume_from",
+      "restart_from_zero"
+    ],
+    "final_rule": "No FINAL acceptance while a deferred item is unresolved unless the active requirement explicitly permits that item to remain deferred.",
+    "no_restart_rule": "Recertification never means restart from zero. Preserve valid implementation/evidence and restart at the earliest affected unresolved stage."
+  },
+  "completeness": {
+    "status": "COMPLETE",
+    "claim": "Master is incomplete until atomic requirement reconstruction and repository/history coverage both pass zero-omission verification.",
+    "zero_omission_required": true,
+    "atomic_specification_coverage": "COMPLETE"
+  },
+  "source_inventory": [
+    {
+      "path": "v2/gates/atomic_requirements.json",
+      "role": "atomic detailed CB6 specification registry",
+      "coverage": "machine-checked and zero-omission reconstruction required"
+    },
+    {
+      "path": "v2/gates/active_decisions.json",
+      "role": "all active/superseded requirement decisions",
+      "coverage": "machine-checked"
+    },
+    {
+      "path": "v2/gates/current_spec.json",
+      "role": "machine-readable current values",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "role": "current architecture ownership",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_KNOWN_FAILURES_AND_PROCESS.md",
+      "role": "known failure classes, mandatory process and recurrence history",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_FROZEN_FEATURES.md",
+      "role": "real-device accepted/historical behavior with supersession rules",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_CHANGE_IMPACT_MAP.md",
+      "role": "feature impact and real-device acceptance map",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_COMAPS_ARCHITECTURE.md",
+      "role": "CoMaps architecture basis",
+      "coverage": "required"
+    },
+    {
+      "path": "docs/CB6_PINNED_COMAPS_INTERNAL_ANALYSIS.md",
+      "role": "pinned upstream internal analysis",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/evidence_inventory.json",
+      "role": "active/historical/retired evidence classification",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/historical_incidents.json",
+      "role": "historical recurrence corpus",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/features",
+      "role": "per-feature implementation/audit/test/APK/device contracts",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/research_records",
+      "role": "research and pinned-source basis",
+      "coverage": "required"
+    },
+    {
+      "path": "v2/gates/impact_records",
+      "role": "change impact records",
+      "coverage": "required"
+    }
+  ],
+  "known_failure_classes": [
+    {
+      "id": "STALE_VALIDATOR",
+      "state": "MUST_REGRESS",
+      "summary": "Renamed/changed flow leaves stale audit/test/workflow/APK expectations."
+    },
+    {
+      "id": "ESCAPED_NEWLINE",
+      "state": "MUST_REGRESS",
+      "summary": "Literal escaped newline contaminates generated/validator source."
+    },
+    {
+      "id": "LATER_PATCH_RESTORE",
+      "state": "MUST_REGRESS",
+      "summary": "Later apply/configure step restores obsolete behavior."
+    },
+    {
+      "id": "USERMARK_GROUP_MISMATCH",
+      "state": "MUST_REGRESS",
+      "summary": "Mark constructor group differs from clear/show/publish group."
+    },
+    {
+      "id": "GROUP_REPLACEMENT",
+      "state": "MUST_REGRESS",
+      "summary": "Whole-group replacement erases unrelated marks."
+    },
+    {
+      "id": "BUILD_NOT_FEATURE_SUCCESS",
+      "state": "MUST_REGRESS",
+      "summary": "Successful APK is not behavioral/device acceptance."
+    },
+    {
+      "id": "MWM_DUPLICATED_BY_NETWORK",
+      "state": "MUST_REGRESS",
+      "summary": "Network supplementation added where native MWM already owns data."
+    },
+    {
+      "id": "CONTEXT_CONTINUITY",
+      "state": "MUST_REGRESS",
+      "summary": "Time/chat/task change must not drop mandatory rules or state."
+    },
+    {
+      "id": "REPEATED_STALE_AUDIT",
+      "state": "MUST_REGRESS",
+      "summary": "Changed behavior and validator diverge despite earlier process rule."
+    }
+  ],
+  "accepted_and_historical_state": {
+    "signals": {
+      "state": "PARTIAL_ACCEPTED_WITH_SUPERSESSION",
+      "accepted": [
+        "Signal renderer observed working on CB6",
+        "200m/500m display observations exist",
+        "1km display not required"
+      ],
+      "superseded": [
+        "Historical 200m standard-size clause is superseded by SIG-200M-001 slim requirement"
+      ],
+      "unresolved": [
+        "Missing real signals/coverage completeness",
+        "V2 clean/update device acceptance"
+      ],
+      "resume": "Preserve working renderer; investigate acquisition completeness."
+    },
+    "convenience": {
+      "state": "IN_PROGRESS_NOT_FROZEN",
+      "accepted": [
+        "Stock CoMaps convenience POI/text observed on CB6"
+      ],
+      "implemented": [
+        "Native MWM/DataSource collector and brand classifier work exist"
+      ],
+      "unresolved": [
+        "CB6-specific brand icon path not device-proven",
+        "Collector result must be distinguished from stock renderer",
+        "Text suppression/final scaling not accepted"
+      ],
+      "resume": "Continue diagnostic collector-to-presentation path; do not restart."
+    }
+  },
+  "detail_dimensions": [
+    "requirement",
+    "current values",
+    "development order",
+    "implementation state",
+    "achieved",
+    "unresolved",
+    "deferred reason",
+    "resume point",
+    "authority/evidence",
+    "pinned CoMaps basis",
+    "research",
+    "impact",
+    "source implementation",
+    "audit",
+    "positive test",
+    "destructive test",
+    "feature gate",
+    "APK evidence",
+    "device evidence",
+    "regression obligations",
+    "supersession/history"
+  ],
+  "order_rules": {
+    "no_catch_all_bucket": true,
+    "requirement_mapping_required": "Every active product requirement must map to one or more explicit development-order rows; process requirements may govern the whole pipeline.",
+    "partial_work_preserved": true,
+    "deferred_work_requires_resume_point": true,
+    "dependency_override": "Order may change only with recorded reason/impact/dependency evidence; silent reordering is forbidden."
+  },
+  "atomic_requirement_registry": {
+    "path": "v2/gates/atomic_requirements.json",
+    "status": "COMPLETE",
+    "current_count": 367,
+    "completion_rule": "Every valid detailed CB6 specification must be represented atomically and mapped to a development stage, parent active decision/authority, progress/evidence and acceptance route. Count alone never proves completeness."
+  }
+}

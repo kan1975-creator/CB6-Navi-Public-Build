@@ -1,0 +1,265 @@
+{
+  "schema": 1,
+  "stage": "IMPLEMENTATION_ENABLED",
+  "traces": [
+    {
+      "decision_id": "PROC-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_project_integrity.py",
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "PROC-002",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_project_integrity.py",
+        ".github/workflows/cb6_development_gate.yml",
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SIG-200M-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SIG-COVERAGE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SIG-UPGRADE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "PRODUCT-BASE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "MAP-CAMERA-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "MAP-SCALE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "HUD-ROAD-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "POI-CONVENIENCE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "POI-FUEL-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "STOP-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SEARCH-VOICE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "ROUTING-FREE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "TOLL-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "FAVORITES-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "LIFECYCLE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "UI-LAYOUT-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "MAP-LABEL-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "LOCATION-STABILITY-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "GOOGLE-MAPS-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "POI-MAJOR-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "CAMERA-FIXED-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "OFFLINE-FREE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SIGNAL-ZOOM-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "CONVENIENCE-BRANDS-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "TOLL-ROUTE-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SEARCH-FUZZY-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "ORIENTATION-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SEARCH-HISTORY-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "VEHICLE-ICON-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    },
+    {
+      "decision_id": "SCOPE-HOKKAIDO-001",
+      "state": "consumed",
+      "design_ref": "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "verification": [
+        "v2/gates/verify_design_coverage.py"
+      ]
+    }
+  ]
+}

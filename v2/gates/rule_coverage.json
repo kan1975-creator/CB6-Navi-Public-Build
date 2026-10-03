@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "coverage_id": "cb6-continuing-rule-coverage",
+  "method_version": 2,
+  "registry": "v2/gates/operational_rule_registry_v7.json",
+  "entries": [
+    {
+      "rule_id": "OPS-MONITOR-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-METHOD-VERSION-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-FUTURE-RULE-INTAKE-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "NOTIFICATION-STALE-STATE",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-WORKFLOW-META-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-FAIL-CLASSIFY-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-DAILY-SCAN-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-MECHANISM-CATALOG-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-INDEPENDENT-ACCEPTANCE-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    },
+    {
+      "rule_id": "OPS-STATUS-REPORTING-001",
+      "coverage_status": "MACHINE_ENFORCED"
+    }
+  ]
+}

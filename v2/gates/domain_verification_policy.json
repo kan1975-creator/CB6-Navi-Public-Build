@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "rules": {
+    "audits": ["audit"],
+    "tests": ["test"],
+    "workflows": ["audit"],
+    "renderer": ["source", "audit", "test"],
+    "symbols": ["source", "audit"],
+    "cache": ["source", "test"],
+    "data-source": ["source", "test"],
+    "lifecycle": ["source", "test"],
+    "real-device": ["device"],
+    "gates": ["test"],
+    "design": ["audit"]
+  },
+  "default_required_kinds": ["source"]
+}

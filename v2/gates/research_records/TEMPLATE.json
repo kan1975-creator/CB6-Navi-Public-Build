@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "feature_id": "REPLACE_ME",
+  "status": "PENDING",
+  "internal_analysis": {
+    "required": true,
+    "paths": [
+      "REPLACE_WITH_PINNED_SOURCE_OR_INTERNAL_PATH"
+    ],
+    "findings": [
+      "REPLACE_WITH_FINDING"
+    ]
+  },
+  "upstream_web_research": {
+    "applicable": "REPLACE_WITH_TRUE_OR_FALSE",
+    "sources": [],
+    "findings": []
+  },
+  "pinned_source_revalidation": {
+    "required": true,
+    "evidence": [
+      "REPLACE_WITH_REVALIDATION_EVIDENCE"
+    ]
+  },
+  "authority_classification": {
+    "web_is_authority": false,
+    "current_authority": [
+      "REPLACE_WITH_CURRENT_AUTHORITY"
+    ]
+  },
+  "completed_before_implementation": false,
+  "pinned_upstream_source_analysis": {
+    "required": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "source_paths": [
+      "REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"
+    ],
+    "findings": [
+      "REPLACE_WITH_FINDING_FROM_PINNED_COMAPS_SOURCE"
+    ]
+  },
+  "upstream_domain_coverage": {
+    "REPLACE_WITH_TECHNICAL_AFFECTED_DOMAIN": {
+      "source_paths": [
+        "REPLACE_WITH_CONCRETE_COMAPS_SOURCE_PATH"
+      ],
+      "findings": [
+        "REPLACE_WITH_DOMAIN_SPECIFIC_FINDING"
+      ]
+    }
+  }
+}

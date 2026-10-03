@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "feature_id": "convenience-brands",
+  "requirements": [
+    "POI-CONVENIENCE-001",
+    "CONVENIENCE-BRANDS-001",
+    "OFFLINE-FREE-001",
+    "PRODUCT-BASE-001"
+  ],
+  "affected_domains": [
+    "poi",
+    "classifier",
+    "renderer",
+    "symbols",
+    "data-source",
+    "offline",
+    "audits",
+    "tests",
+    "real-device",
+    "baseline",
+    "routing",
+    "search",
+    "favorites",
+    "offline-maps",
+    "presentation"
+  ],
+  "reviewed_paths": [
+    "docs/CB6_V2_NATIVE_POI_DESIGN.md",
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+    "CB6_CONVENIENCE_AUDIT.py",
+    "scripts/apply_cb6_independent_convenience.py",
+    "scripts/apply_cb6_proven_convenience_render.py",
+    "scripts/apply_cb6_device_poi_fallback.py",
+    "v2/gates/active_decisions.json",
+    "v2/gates/domain_verification_policy.json",
+    "v2/gates/current_spec.json",
+    "v2/gates/research_records/convenience-brands.json",
+    "v2/tests/convenience_audit_selftest.py"
+  ]
+}

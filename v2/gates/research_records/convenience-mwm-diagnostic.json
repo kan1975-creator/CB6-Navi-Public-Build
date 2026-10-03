@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "feature_id": "convenience-mwm-diagnostic",
+  "status": "COMPLETE",
+  "internal_analysis": {
+    "required": true,
+    "paths": [
+      "v2/poi/native/convenience_brand_classifier.hpp",
+      "v2/poi/native/convenience_brand_classifier.cpp",
+      "v2/poi/native/convenience_mwm_collector.hpp",
+      "v2/poi/native/convenience_mwm_collector.cpp",
+      "v2/poi/apply_convenience_mwm_diagnostic.py",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_brand_classifier_test.cpp",
+      "v2/tests/convenience_audit_selftest.py"
+    ],
+    "findings": [
+      "Fresh restart revalidates the diagnostic collector against pinned public DataSource/Feature APIs instead of accepting the historical collector by existence.",
+      "Diagnostic scope is acquisition evidence only: identify installed-MWM shop/convenience features and their metadata without promoting final renderer behavior.",
+      "Presentation evidence must remain diagnostic-only; stock vehicle style z17/z18 behavior is recorded separately from CB6 final presentation."
+    ]
+  },
+  "upstream_web_research": {
+    "applicable": false,
+    "sources": [],
+    "findings": [
+      "No external web source is implementation authority; exact pinned CoMaps source is sufficient for this diagnostic revalidation."
+    ]
+  },
+  "pinned_source_revalidation": {
+    "required": true,
+    "evidence": [
+      "v2/gates/research_records/convenience-mwm-diagnostic.json",
+      "v2/gates/impact_records/convenience-mwm-diagnostic.json",
+      "v2/audits/audit_convenience.py",
+      "v2/tests/convenience_audit_selftest.py"
+    ]
+  },
+  "authority_classification": {
+    "web_is_authority": false,
+    "current_authority": [
+      "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+      "v2/gates/active_decisions.json",
+      "v2/gates/current_spec.json"
+    ]
+  },
+  "completed_before_implementation": true,
+  "pinned_upstream_source_analysis": {
+    "required": true,
+    "repository": "comaps/comaps",
+    "commit": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "source_paths": [
+      "libs/indexer/feature.hpp",
+      "libs/indexer/feature_meta.hpp",
+      "libs/indexer/feature_meta.cpp",
+      "libs/indexer/classificator.hpp",
+      "libs/indexer/data_source.hpp",
+      "libs/indexer/data_source.cpp",
+      "generator/feature_builder.cpp",
+      "data/styles/vehicle/include/Icons.mapcss",
+      "data/styles/default/light/symbols/convenience-m.svg",
+      "data/styles/default/dark/symbols/convenience-m.svg",
+      "libs/map/framework.hpp",
+      "android/app/src/main/java/app/organicmaps/MwmActivity.java"
+    ],
+    "findings": [
+      "DataSource::ForEachInRect iterates features from registered local MWM indexes at a requested scale.",
+      "FeatureType exposes type iteration, center, names and FMD_BRAND/FMD_OPERATOR metadata needed by the diagnostic collector.",
+      "brand metadata can be dropped when equal to a feature name, so diagnostic output must not treat missing FMD_BRAND as missing POI.",
+      "Pinned vehicle style presents shop=convenience generically from z17 and text from z18; this is a presentation limitation, not proof of missing MWM data.",
+      "MwmActivity provides a post-render Android boundary suitable only for visible diagnostic evidence."
+    ]
+  },
+  "upstream_domain_coverage": {
+    "poi": {
+      "source_paths": [
+        "libs/indexer/feature.hpp",
+        "libs/indexer/feature_meta.hpp",
+        "libs/indexer/feature_meta.cpp"
+      ],
+      "findings": [
+        "Native Feature type, center, names and metadata are sufficient to observe convenience POIs in installed MWM data."
+      ]
+    },
+    "classifier": {
+      "source_paths": [
+        "libs/indexer/classificator.hpp",
+        "libs/indexer/feature_meta.cpp",
+        "generator/feature_builder.cpp"
+      ],
+      "findings": [
+        "shop/convenience type is the acquisition gate; brand/operator/name are diagnostic identity inputs and brand metadata may legitimately be absent."
+      ]
+    },
+    "presentation": {
+      "source_paths": [
+        "data/styles/vehicle/include/Icons.mapcss",
+        "data/styles/default/light/symbols/convenience-m.svg",
+        "data/styles/default/dark/symbols/convenience-m.svg",
+        "android/app/src/main/java/app/organicmaps/MwmActivity.java"
+      ],
+      "findings": [
+        "Stock map presentation begins at z17; diagnostic UI may expose count after rendering without being accepted as final renderer implementation."
+      ]
+    },
+    "offline": {
+      "source_paths": [
+        "libs/indexer/data_source.cpp"
+      ],
+      "findings": [
+        "Feature acquisition reads registered local MWM indexes and metadata, preserving offline operation."
+      ]
+    },
+    "data-source": {
+      "source_paths": [
+        "libs/indexer/data_source.hpp",
+        "libs/indexer/data_source.cpp",
+        "libs/map/framework.hpp"
+      ],
+      "findings": [
+        "Public DataSource iteration is the pinned installed-MWM acquisition boundary used by the diagnostic."
+      ]
+    }
+  }
+}
