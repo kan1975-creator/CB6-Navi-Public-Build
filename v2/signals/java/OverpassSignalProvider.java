@@ -163,11 +163,13 @@ public final class OverpassSignalProvider implements SignalProvider
 
   private static void logSignalNodeWays(String endpoint, SignalSnapshot snapshot)
   {
+    ArrayList<SignalSnapshot.Point> diagnosticPoints = new ArrayList<>();
     ArrayList<Long> nodeIds = new ArrayList<>();
     for (SignalSnapshot.Point point : snapshot.points)
     {
       // Way/relation ids are namespaced above the raw OSM node-id range.
       if (point.id >= WAY_ID_NAMESPACE) continue;
+      diagnosticPoints.add(point);
       nodeIds.add(point.id);
       Log.i("CB6-SIGNAL-WAY-DIAG", "node=" + point.id
           + " lat=" + point.lat + " lon=" + point.lon + " distance=" + point.distance);
@@ -201,6 +203,10 @@ public final class OverpassSignalProvider implements SignalProvider
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=elements count=" + elements.length());
       if (elements.length() == 0)
         Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-elements");
+
+      ArrayList<ArrayList<String>> roadWays = new ArrayList<>();
+      for (int i = 0; i < nodeIds.size(); ++i) roadWays.add(new ArrayList<>());
+
       for (int i = 0; i < elements.length(); ++i)
       {
         JSONObject way = elements.optJSONObject(i);
@@ -210,12 +216,46 @@ public final class OverpassSignalProvider implements SignalProvider
         if (tags == null || nodes == null) continue;
         long wayId = way.optLong("id", -1);
         String highway = tags.optString("highway");
+        boolean roadWay = !"footway".equals(highway) && !"path".equals(highway)
+            && !"pedestrian".equals(highway) && !"steps".equals(highway)
+            && !"cycleway".equals(highway);
         for (int j = 0; j < nodes.length(); ++j)
         {
           long nodeId = nodes.optLong(j, -1);
-          if (nodeId <= 0 || !nodeIds.contains(nodeId)) continue;
+          int nodeIndex = nodeIds.indexOf(nodeId);
+          if (nodeIndex < 0) continue;
           Log.i("CB6-SIGNAL-WAY-DIAG", "way=" + wayId + " highway=" + highway
               + " node=" + nodeId + " index=" + j);
+          if (roadWay) roadWays.get(nodeIndex).add(wayId + ":" + highway);
+        }
+      }
+
+      float[] pairDistance = new float[1];
+      for (int i = 0; i < diagnosticPoints.size(); ++i)
+      {
+        SignalSnapshot.Point a = diagnosticPoints.get(i);
+        for (int j = i + 1; j < diagnosticPoints.size(); ++j)
+        {
+          SignalSnapshot.Point b = diagnosticPoints.get(j);
+          Location.distanceBetween(a.lat, a.lon, b.lat, b.lon, pairDistance);
+          if (pairDistance[0] > 30.0f) continue;
+          ArrayList<String> aWays = roadWays.get(i);
+          ArrayList<String> bWays = roadWays.get(j);
+          boolean shared = false;
+          for (String aWay : aWays)
+          {
+            int separator = aWay.indexOf(':');
+            String aWayId = separator >= 0 ? aWay.substring(0, separator) : aWay;
+            for (String bWay : bWays)
+            {
+              int bSeparator = bWay.indexOf(':');
+              String bWayId = bSeparator >= 0 ? bWay.substring(0, bSeparator) : bWay;
+              if (aWayId.equals(bWayId)) shared = true;
+            }
+          }
+          Log.i("CB6-SIGNAL-WAY-DIAG", "pair-a=" + a.id + " pair-b=" + b.id
+              + " distance=" + pairDistance[0] + " a-road-ways=" + aWays
+              + " b-road-ways=" + bWays + " shared-road-way=" + shared);
         }
       }
     }
