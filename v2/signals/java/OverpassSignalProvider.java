@@ -255,6 +255,10 @@ public final class OverpassSignalProvider implements SignalProvider
 
       float[] pairDistance = new float[1];
       boolean[][] groupLinks = new boolean[diagnosticPoints.size()][diagnosticPoints.size()];
+      ArrayList<Long> centerCandidateIds = new ArrayList<>();
+      ArrayList<ArrayList<Integer>> centerCandidateMembers = new ArrayList<>();
+      boolean[][] separatedParallelLinks =
+          new boolean[diagnosticPoints.size()][diagnosticPoints.size()];
       for (int i = 0; i < diagnosticPoints.size(); ++i)
       {
         SignalSnapshot.Point a = diagnosticPoints.get(i);
@@ -306,6 +310,17 @@ public final class OverpassSignalProvider implements SignalProvider
             float[] bToCommon = new float[1];
             Location.distanceBetween(a.lat, a.lon, commonLat, commonLon, aToCommon);
             Location.distanceBetween(b.lat, b.lon, commonLat, commonLon, bToCommon);
+            int centerCandidateIndex = centerCandidateIds.indexOf(commonRoadNode);
+            if (centerCandidateIndex < 0)
+            {
+              centerCandidateIds.add(commonRoadNode);
+              centerCandidateMembers.add(new ArrayList<Integer>());
+              centerCandidateIndex = centerCandidateIds.size() - 1;
+            }
+            if (!centerCandidateMembers.get(centerCandidateIndex).contains(i))
+              centerCandidateMembers.get(centerCandidateIndex).add(i);
+            if (!centerCandidateMembers.get(centerCandidateIndex).contains(j))
+              centerCandidateMembers.get(centerCandidateIndex).add(j);
             Log.i("CB6-SIGNAL-WAY-DIAG", "common-road-node=" + commonRoadNode
                 + " lat=" + commonLat + " lon=" + commonLon
                 + " pair-a=" + a.id + " a-distance=" + aToCommon[0]
@@ -403,6 +418,8 @@ public final class OverpassSignalProvider implements SignalProvider
                     bNearSpan += roadNodeDistance[0];
                   }
                 }
+                if (aNearSpan >= 100.0f && bNearSpan >= 100.0f)
+                  separatedParallelLinks[i][j] = separatedParallelLinks[j][i] = true;
                 Log.i("CB6-SIGNAL-WAY-DIAG", "separate-way-span pair-a=" + a.id
                     + " pair-b=" + b.id + " a-way=" + nearAWayId + " b-way=" + nearBWayId
                     + " a-near-nodes=" + nearANodes + " b-near-nodes=" + nearBNodes
@@ -425,6 +442,54 @@ public final class OverpassSignalProvider implements SignalProvider
               + " connected-road-way=" + !commonRoadNodes.isEmpty()
               + " common-road-nodes=" + commonRoadNodes
               + " group-link=" + groupLink);
+        }
+      }
+
+      boolean[] centerAssigned = new boolean[diagnosticPoints.size()];
+      int centerClusterId = 0;
+      for (int center = 0; center < centerCandidateIds.size(); ++center)
+      {
+        ArrayList<Integer> members = centerCandidateMembers.get(center);
+        if (members.isEmpty()) continue;
+        ArrayList<Long> memberIds = new ArrayList<>();
+        float maxDiameter = 0.0f;
+        for (int m = 0; m < members.size(); ++m)
+        {
+          int member = members.get(m);
+          centerAssigned[member] = true;
+          SignalSnapshot.Point a = diagnosticPoints.get(member);
+          memberIds.add(a.id);
+          for (int n = m + 1; n < members.size(); ++n)
+          {
+            SignalSnapshot.Point b = diagnosticPoints.get(members.get(n));
+            Location.distanceBetween(a.lat, a.lon, b.lat, b.lon, pairDistance);
+            if (pairDistance[0] > maxDiameter) maxDiameter = pairDistance[0];
+          }
+        }
+        Log.i("CB6-SIGNAL-WAY-DIAG", "center-cluster=" + centerClusterId
+            + " center-node=" + centerCandidateIds.get(center) + " members=" + memberIds
+            + " member-count=" + members.size() + " max-diameter=" + maxDiameter);
+        ++centerClusterId;
+      }
+      for (int i = 0; i < diagnosticPoints.size(); ++i)
+      {
+        if (centerAssigned[i]) continue;
+        for (int j = i + 1; j < diagnosticPoints.size(); ++j)
+        {
+          if (centerAssigned[j] || !separatedParallelLinks[i][j]) continue;
+          ArrayList<Long> memberIds = new ArrayList<>();
+          memberIds.add(diagnosticPoints.get(i).id);
+          memberIds.add(diagnosticPoints.get(j).id);
+          Location.distanceBetween(diagnosticPoints.get(i).lat, diagnosticPoints.get(i).lon,
+              diagnosticPoints.get(j).lat, diagnosticPoints.get(j).lon, pairDistance);
+          Log.i("CB6-SIGNAL-WAY-DIAG", "center-cluster=" + centerClusterId
+              + " center-node=-1 members=" + memberIds
+              + " member-count=2 max-diameter=" + pairDistance[0]
+              + " supplement=separated-parallel-way");
+          centerAssigned[i] = true;
+          centerAssigned[j] = true;
+          ++centerClusterId;
+          break;
         }
       }
 
