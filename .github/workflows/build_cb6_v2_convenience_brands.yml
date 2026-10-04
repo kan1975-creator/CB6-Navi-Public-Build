@@ -44,6 +44,8 @@ jobs:
           python3 v2/gates/create_gate_stamp.py --verify
       - name: Audit native MWM convenience ownership
         run: python3 v2/audits/audit_convenience.py
+      - name: Prove exact six-file raster SVG allowlist fail-closed
+        run: python3 v2/tests/test_convenience_raster_svg_allowlist.py
       - name: Prove convenience audit fail-closed behavior
         run: python3 v2/tests/convenience_audit_selftest.py
       - name: Compile and run brand classifier tests
