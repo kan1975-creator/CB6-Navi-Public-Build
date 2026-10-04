@@ -79,7 +79,7 @@
     "v2/tests/test_status_reporting_active_v8_fail_closed.py": "73b6521a2e21d2025dfc1472a8e87d1d9acb6176",
     "v2/gates/rule_consistency_preflight_active.json": "8a365b7dd183e11d494d5fd7b5bf57e50cbdbd73",
     "v2/gates/verify_rule_consistency_preflight_active.py": "0389de99a35bcac9951fd349aac157b3063fd30b",
-    "v2/tests/test_rule_consistency_preflight_active_fail_closed.py": "c88d948be3710ec5b3c64c094e2dce129cb55abb",
+    "v2/tests/test_rule_consistency_preflight_active_fail_closed.py": "49ef255e1f08bb2f4f20678645453a6869bcb14e",
     "v2/governance/status_reporting_protocol.md": "3132dda9d727d9cc804540a0e8a49f26ed12c7f0",
     "v2/gates/status_reporting_adoption_evidence_v8.json": "837941182b243baa630e0b54f2718ded224bb8d3",
     "v2/gates/rule_consistency_preflight_adoption_evidence.json": "543ab4948df89c65914608761d165d3905dd1a78",
