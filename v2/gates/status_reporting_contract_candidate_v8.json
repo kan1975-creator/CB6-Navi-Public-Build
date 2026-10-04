@@ -131,7 +131,10 @@
             "unsupported_guess_forbidden": true,
             "display_condition": "ONLY_WHEN_OFFICIAL_NEXT_CHECK_GUIDANCE_IS_DURATION_UNKNOWN",
             "forbidden_when_official_guidance_is_evidence_based": true,
-            "display_required_when_duration_unknown_and_supported_basis_available": true
+            "display_required_when_duration_unknown_and_supported_basis_available": true,
+            "basis_detail_normally_hidden": true,
+            "show_basis_detail_when_user_asks": true,
+            "normal_display_format": "所要時間不明（参考推測：約○〜○分）"
           }
         }
       }
@@ -195,7 +198,7 @@
   },
   "revision": {
     "from": "v2/gates/status_reporting_contract_v7.json",
-    "reason": "Extend ACTIVE v7 wait evidence rules to every CB6 waiting process. Evidence-based official guidance never shows a reference estimate. Only when official guidance is 所要時間不明 may a separately labeled reference estimate be shown, and it is required when concrete GitHub evidence supports one; unsupported guesses remain forbidden.",
+    "reason": "Extend ACTIVE v7 wait evidence rules to every CB6 waiting process. Evidence-based official guidance never shows a reference estimate. Only when official guidance is 所要時間不明 may a separately labeled reference estimate be shown; its evidence basis is retained but normally hidden and shown only when the user asks.",
     "supersedes": "v2/gates/status_reporting_contract_v7.json"
   },
   "adoption": {
