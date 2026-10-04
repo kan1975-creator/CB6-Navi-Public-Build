@@ -187,16 +187,15 @@ def cb6_validate_svg_raster_policy(filename, svg):
         raise ValueError("Raster embedding is forbidden outside exact CB6 allowlist: " + filename)
     return True
 
-brand_svg = {
-    # User-approved 2026-10-04 reference sheet. Pure-vector reproduction only;
-    # preserve the approved six-brand composition without raster embedding.
-    "cb6-seven": """<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="8" fill="#fff" stroke="#00843d" stroke-width="3.5"/><path d="M10 9h26L24 21h-8l8-8H10z" fill="#f58220"/><path d="M30 9h8L26 24v17h-9V27z" fill="#e5002b"/><path d="M13 25h22" stroke="#00843d" stroke-width="2.2"/><text x="24" y="34" text-anchor="middle" font-family="sans-serif" font-size="6.8" font-weight="900" letter-spacing=".15" fill="#00843d">ELEVEN</text></svg>""",
-    "cb6-familymart": """<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="8" fill="#fff" stroke="#009b58" stroke-width="3.5"/><rect x="8" y="10" width="32" height="9" rx="1.5" fill="#00a040"/><rect x="8" y="21" width="32" height="8" rx="1" fill="#008bd2"/><text x="24" y="39" text-anchor="middle" font-family="sans-serif" font-size="7.2" font-weight="700" fill="#0079c2">FamilyMart</text></svg>""",
-    "cb6-lawson": """<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="8" fill="#fff" stroke="#1683c9" stroke-width="3.5"/><path d="M10 11Q24 6 38 11L35 39Q24 44 13 39z" fill="#1683c9"/><path d="M13 11Q24 8 35 11" fill="none" stroke="#fff" stroke-width="1.7"/><text x="24" y="17" text-anchor="middle" font-family="serif" font-size="6.5" font-weight="900" fill="#fff">LAWSON</text><path d="M20 23h8v3h2v12H18V26h2z" fill="#fff"/><path d="M21 22h6v4h-6zM20 29h8" fill="none" stroke="#1683c9" stroke-width="1"/></svg>""",
-    "cb6-seicomart": """<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="8" fill="#f36c21"/><path d="M9 17c6 2 11-1 17-10-1 8 2 13 7 14 3 1 6 0 8-2-4 8-12 13-21 12-4 0-7-2-10-5 6 1 10-1 13-5-5 2-10 1-14-4z" fill="#fff"/><path d="M27 12c3 3 6 4 10 3-3 3-6 5-10 5z" fill="#fff"/><text x="24" y="40" text-anchor="middle" font-family="sans-serif" font-size="7.5" font-weight="900" fill="#fff">Seicomart</text></svg>""",
-    "cb6-ministop": """<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="8" fill="#fff" stroke="#c00068" stroke-width="3.5"/><path d="M8 24L23 9l8 8v-5h5v10c4 1 7 4 7 8 0 5-4 9-10 9H10V24z" fill="#fff" stroke="#17358b" stroke-width="2.5" stroke-linejoin="round"/><text x="25" y="28" text-anchor="middle" font-family="sans-serif" font-size="7.5" font-weight="900" fill="#17358b">MINI</text><text x="25" y="36" text-anchor="middle" font-family="sans-serif" font-size="7.5" font-weight="900" fill="#17358b">STOP</text></svg>""",
-    "cb6-mybasket": """<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="8" fill="#c6006f"/><text x="24" y="20" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" font-weight="500" fill="#fff">AEON</text><path d="M11 24h26" stroke="#fff" stroke-width=".8" opacity=".9"/><text x="24" y="34" text-anchor="middle" font-family="sans-serif" font-size="6.5" font-weight="800" fill="#fff">まいばすけっと</text></svg>""",
-}
+brand_svg = {}
+for filename in sorted(CB6_RASTER_SVG_ALLOWLIST):
+    source = Path(__file__).resolve().parent / filename
+    if not source.is_file():
+        raise FileNotFoundError("Approved CB6 convenience SVG missing: " + filename)
+    svg = source.read_text()
+    cb6_validate_svg_raster_policy(filename, svg)
+    brand_svg[filename[:-4]] = svg
+
 fallback = {
     "cb6-convenience": ("CV", "#555555"),
     "cb6-daily": ("D", "#C62828"),
