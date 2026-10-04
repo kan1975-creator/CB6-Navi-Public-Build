@@ -1,0 +1,22 @@
+name: CB6 Rule Consistency Preflight Candidate Gate
+on:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/rule_consistency_preflight_candidate.json'
+      - 'v2/gates/verify_rule_consistency_preflight_candidate.py'
+      - 'v2/tests/test_rule_consistency_preflight_candidate_fail_closed.py'
+      - '.github/workflows/cb6_rule_consistency_preflight_candidate_gate.yml'
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify rule consistency preflight candidate
+        run: python3 v2/gates/verify_rule_consistency_preflight_candidate.py
+      - name: Destructive test rule consistency preflight candidate
+        run: python3 v2/tests/test_rule_consistency_preflight_candidate_fail_closed.py
+      - name: Verify active Development Gate remains frozen
+        run: python3 v2/gates/verify_method_freeze.py
