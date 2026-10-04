@@ -1,0 +1,245 @@
+{
+  "schema": 9,
+  "rule_id": "OPS-STATUS-REPORTING-001",
+  "status": "CANDIDATE",
+  "source": "explicit_user_approval_2026-10-04_response_preflight_candidate",
+  "scope": {
+    "type": "CB6_PROJECT_WIDE_CROSS_CUTTING",
+    "consolidated_worklist": "v2/governance/consolidated_worklist_2026-09-30.md",
+    "consolidated_worklist_required_item_count": 33,
+    "all_33_items_mandatory": true,
+    "applies_to_all_derivative_work": true,
+    "applies_to_all_future_work": true,
+    "applies_to_unknown_future_features_without_enumeration": true,
+    "feature_specific_override_may_weaken_or_disable": false,
+    "new_feature_requires_explicit_opt_in": false
+  },
+  "allowed_classifications": [
+    "進めて推奨",
+    "待ち",
+    "スマホ操作が必要"
+  ],
+  "exactly_one_classification_required": true,
+  "required_report_fields": [
+    "分類",
+    "次にユーザーがすること",
+    "ChatGPTアプリ",
+    "スマホ操作"
+  ],
+  "four_line_template": {
+    "required": true,
+    "classification_field": "分類",
+    "next_user_action_field": "次にユーザーがすること",
+    "chatgpt_app_field": "ChatGPTアプリ",
+    "smartphone_action_field": "スマホ操作",
+    "no_user_operation_form": {
+      "分類": "進めて推奨",
+      "次にユーザーがすること": "「進めて」",
+      "ChatGPTアプリ": "閉じてOK",
+      "スマホ操作": "不要。再試行もしなくて大丈夫です。"
+    },
+    "state_consistency_required": true,
+    "placement": "FINAL_FOUR_LINES",
+    "final_four_lines_required": true,
+    "order_exactly_required": [
+      "分類",
+      "次にユーザーがすること",
+      "ChatGPTアプリ",
+      "スマホ操作"
+    ],
+    "content_after_four_lines_forbidden": true
+  },
+  "rules": {
+    "進めて推奨": {
+      "chat_instruction_wait_alone_forbidden": true
+    },
+    "待ち": {
+      "required_fields": [
+        "approximate_wait_time",
+        "next_check_timing",
+        "parallel_work_available",
+        "post_wait_user_instruction"
+      ],
+      "parallel_read_only_work_allowed": true,
+      "post_wait_user_instruction": {
+        "required": true,
+        "when_user_instruction_needed": "state the concrete instruction the user should send after the wait, e.g. 進めて",
+        "when_automatic_monitoring_active": "指示不要・自動モニタリング継続"
+      },
+      "wait_time_display": {
+        "run_start_basis": "IMMUTABLE_ORIGINAL_RUN_START",
+        "first_wait": {
+          "show_run_start_time_jst": true,
+          "next_check_basis": "RECENT_ACTUAL_SAME_WORKFLOW_DURATION"
+        },
+        "later_wait": {
+          "show_cumulative_elapsed_from_original_run_start": true,
+          "intermediate_check_must_not_reset_basis": true,
+          "next_check_is_remaining_interval": true,
+          "recalculate_from_original_start_and_recent_actual_duration": true
+        },
+        "exceeded_normal_duration": {
+          "basis": "RECENT_SUCCESSFUL_SAME_WORKFLOW_ACTUAL_DURATIONS",
+          "recent_successful_same_workflow_actual_durations_required_when_available": true,
+          "fixed_or_unsubstantiated_threshold_forbidden": true,
+          "may_classify_exceeded_only_after_evidence_based_normal_duration_range_exceeded": true,
+          "use_shorter_reasonable_next_check_interval": true,
+          "restart_original_interval_forbidden": true
+        },
+        "completed_run": {
+          "report_completed_result_instead_of_wait": true
+        },
+        "history": {
+          "same_workflow_recent_actual_duration_required_when_available": true,
+          "user_check_delay_must_not_distort_duration": true,
+          "calculation_detail_normally_hidden": true,
+          "show_detail_when_user_asks_basis": true
+        },
+        "evidence_based_estimate": {
+          "applies_to_all_waiting_processes": true,
+          "estimate_or_next_check_requires_evidence": true,
+          "required_evidence": [
+            "current_run_or_step_start_time",
+            "current_elapsed_time",
+            "same_or_reasonably_comparable_historical_actual_duration_when_available"
+          ],
+          "no_comparable_history_behavior": "DISPLAY_DURATION_UNKNOWN",
+          "duration_unknown_text": "所要時間不明",
+          "fixed_or_unsubstantiated_estimate_forbidden": true,
+          "applies_to": [
+            "GitHub Actions runs",
+            "workflow steps",
+            "gates",
+            "builds",
+            "audits",
+            "artifact_or_APK_generation",
+            "independent_reviews",
+            "diagnostics",
+            "all_future_CB6_waiting_processes"
+          ],
+          "reference_estimate_when_no_comparable_actual_history": {
+            "allowed": true,
+            "must_be_labeled_as_reference_estimate": true,
+            "must_be_separate_from_official_next_check_guidance": true,
+            "official_next_check_guidance_remains": "所要時間不明",
+            "basis_required": true,
+            "allowed_basis": [
+              "measured durations of reasonably similar workflows or steps",
+              "known workflow step composition plus measured component durations",
+              "other concrete GitHub execution evidence"
+            ],
+            "unsupported_guess_forbidden": true,
+            "display_condition": "ONLY_WHEN_OFFICIAL_NEXT_CHECK_GUIDANCE_IS_DURATION_UNKNOWN",
+            "forbidden_when_official_guidance_is_evidence_based": true,
+            "display_required_when_duration_unknown_and_supported_basis_available": true,
+            "basis_detail_normally_hidden": true,
+            "show_basis_detail_when_user_asks": true,
+            "normal_display_format": "所要時間不明（参考推測：約○〜○分）"
+          }
+        }
+      }
+    },
+    "スマホ操作が必要": {
+      "required_fields": [
+        "required_device_action",
+        "required_evidence",
+        "final_user_action_section"
+      ],
+      "final_user_action_section": {
+        "required": true,
+        "heading": "あなたが今すること",
+        "placement": "REPORT_END",
+        "concrete_steps_required": true,
+        "include_when_known": [
+          "target_apk_or_build",
+          "operation_target",
+          "location_and_zoom_or_equivalent_test_condition",
+          "what_to_verify",
+          "evidence_to_return"
+        ],
+        "generic_device_instruction_forbidden": true
+      },
+      "fail_closed": {
+        "required": true,
+        "if_concrete_operation_not_identified": "DO_NOT_CLASSIFY_AS_SMARTPHONE_ACTION_REQUIRED",
+        "assistant_must_identify_operation_first": true
+      }
+    }
+  },
+  "freshness_rule": {
+    "progress_query_requires_current_head": true,
+    "progress_query_requires_relevant_run": true,
+    "material_log_evidence_requires_fresh_raw_log": true,
+    "delegates_stale_state_authority_to": "v2/gates/notification_stale_state.json"
+  },
+  "fix_approval_boundary": {
+    "delegates_to": "OPS-USER-APPROVAL-BEFORE-FIX-001"
+  },
+  "activation": {
+    "direct_active_forbidden": true,
+    "requires": [
+      "positive_verification",
+      "destructive_test",
+      "successful_github_run_evidence",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_coverage"
+    ]
+  },
+  "report_tags": {
+    "required_at_report_start": true,
+    "allowed": [
+      "ガバナンス",
+      "信号機",
+      "コンビニ",
+      "その他"
+    ],
+    "tag_presence_does_not_replace_status_classification": true
+  },
+  "revision": {
+    "from": "v2/gates/status_reporting_contract_v8.json",
+    "supersedes": "v2/gates/status_reporting_contract_v8.json",
+    "reason": "Candidate extension: require a fail-closed Response Preflight before every CB6 progress response so applicable ACTIVE continuing rules are checked at response time."
+  },
+  "adoption": {
+    "status": "NOT_ADOPTED",
+    "requires": [
+      "positive_verification",
+      "destructive_test",
+      "successful_github_run_evidence",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_coverage"
+    ]
+  },
+  "final_summary_display": {
+    "placement": "REPORT_END",
+    "markdown_bullet_and_bold_required": true,
+    "duplicate_information_forbidden": true,
+    "non_wait_fields": [
+      "分類",
+      "次にユーザーがすること",
+      "ChatGPTアプリ",
+      "スマホ操作"
+    ],
+    "wait_additional_fields": [
+      "累積経過時間",
+      "次回確認目安"
+    ],
+    "wait_additional_fields_only_when_classification": "待ち",
+    "preserve_v5_wait_time_calculation_rules": true,
+    "content_after_final_summary_forbidden": true
+  },
+  "response_preflight": {
+    "required_before_every_cb6_progress_response": true,
+    "github_current_authority_check_required": true,
+    "applicable_active_rules_must_be_selected": true,
+    "response_must_be_checked_against_selected_active_rules": true,
+    "contradiction_must_fail_closed": true,
+    "normal_hidden_detail_policy_must_be_enforced": true,
+    "final_summary_format_must_be_checked": true,
+    "chat_memory_alone_forbidden": true,
+    "preflight_result_required": "PASS_BEFORE_RESPONSE",
+    "scope": "all_CB6_progress_status_responses"
+  }
+}
