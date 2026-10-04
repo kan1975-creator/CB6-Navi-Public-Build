@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "rule_id": "OPS-RULE-CONSISTENCY-PREFLIGHT-001",
+  "status": "ACTIVE",
+  "source": "explicit_user_adoption_2026-10-04",
+  "scope": "all_new_or_revised_CB6_continuing_rules_before_candidate_or_active_transition",
+  "requirements": {
+    "github_current_authority_must_be_checked": true,
+    "required_preflight_sources": [
+      "current ACTIVE operational rule registry",
+      "applicable prior rule versions",
+      "related contracts",
+      "related verifier and destructive tests",
+      "rule coverage",
+      "method freeze when relevant"
+    ],
+    "required_decisions": [
+      "already_governed",
+      "duplicate",
+      "conflict",
+      "extension_needed",
+      "new_rule_needed"
+    ],
+    "existing_rule_reuse_or_extension_preferred_when_sufficient": true,
+    "unresolved_conflict_blocks_rule_progression": true,
+    "chat_memory_alone_forbidden": true
+  },
+  "activation": {
+    "direct_active_forbidden": true,
+    "requires": [
+      "positive_verification",
+      "destructive_test",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_coverage"
+    ]
+  },
+  "adoption": {
+    "status": "ADOPTED",
+    "candidate_validation_run_id": 37167574378,
+    "independent_review_run_id": 37168260221,
+    "independent_review_head": "424f0cdb4b107760f70374d6181981903292fa03",
+    "explicit_user_adoption": "Status Reporting v8とRule Consistency Preflightを正式採用して進めて",
+    "adopted_on": "2026-10-04"
+  }
+}

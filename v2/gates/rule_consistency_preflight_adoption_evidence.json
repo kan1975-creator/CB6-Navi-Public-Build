@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-RULE-CONSISTENCY-PREFLIGHT-001-ADOPTION",
+  "status": "ACTIVE_PENDING_REFREEZE",
+  "subject": "OPS-RULE-CONSISTENCY-PREFLIGHT-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Status Reporting v8とRule Consistency Preflightを正式採用して進めて",
+    "recorded_at": "2026-10-04"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37167574378,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37168260221,
+      "conclusion": "success",
+      "head": "424f0cdb4b107760f70374d6181981903292fa03"
+    }
+  },
+  "next_required": [
+    "ACTIVE verifier PASS",
+    "Method Freeze refreeze",
+    "Development Gate SUCCESS"
+  ]
+}
