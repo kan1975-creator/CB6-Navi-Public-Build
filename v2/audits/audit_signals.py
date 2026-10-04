@@ -96,6 +96,10 @@ require('RectByCenterXYAndSizeInMeters(center, 3000.0)' in jni and 'mwmCreated' 
         'MWM traffic-signal anchors are not published as CB6_SIGNAL')
 require('kDirectDuplicateM = 0.5' in jni and 'direct-duplicate-suppressed' in jni,
         'MWM anchor priority/direct duplicate suppression missing')
+require('normalizedMwmSignals' in jni and 'memberLats' in jni and 'centerLats' in jni,
+        'confirmed topology mapping is not applied to MWM anchors')
+require('distanceMeters(mwm.m_lat, mwm.m_lon, memberLats[t], memberLons[t]) > kDirectDuplicateM' in jni,
+        'MWM topology mapping must use only the existing direct-match threshold')
 require('TOPOLOGY_BATCH_SIZE = 64' in provider and 'nodeIds.size() == 12' not in provider,
         'topology normalization is still limited to the legacy 12-node diagnostic window')
 require('applySignalNodeCenterClusterBatch' in provider and 'if (pairDistance[0] > 30.0f) continue;' in provider,
@@ -103,7 +107,7 @@ require('applySignalNodeCenterClusterBatch' in provider and 'if (pairDistance[0]
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
     require(activity.count(hook) == 1, 'lifecycle hook ' + hook)
-require('nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
+require('nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward, double[] memberLat, double[] memberLon, double[] centerLat, double[] centerLon)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
 require('#include "cb6_signal_jni.inc"' in read('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp'), 'JNI translation unit')
 require('CB6_SIGNAL,' in read('libs/map/user_mark.hpp'), 'type registration')
 require('DebugMarkPoint(m2::PointD const & ptOrg, UserMark::Type type);' in read('libs/map/user_mark.hpp'), 'typed constructor declaration')
