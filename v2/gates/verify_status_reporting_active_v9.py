@@ -18,6 +18,10 @@ for k in ("contract_fields_and_scope","candidate_and_active_verifier_behavior","
 for k in ("perform_preflight_before_each_CB6_progress_response","use_current_GitHub_authority","select_applicable_ACTIVE_rules","check_response_against_selected_rules","withhold_or_correct_response_when_preflight_does_not_pass"):
  if k not in m.get("chatgpt_runtime_responsibility",[]): e.append("runtime responsibility missing: "+k)
 if d.get("adoption",{}).get("candidate_validation_run_id")!=37170357405 or d.get("adoption",{}).get("independent_review_run_id")!=37170358868: e.append("v9 adoption evidence invalid")
+if d.get("activation",{}).get("status")!="ACTIVE": e.append("v9 activation lifecycle not finalized")
+if d.get("adoption",{}).get("status")!="ADOPTED": e.append("v9 adoption lifecycle not finalized")
+ev=json.loads((R/"v2/gates/status_reporting_adoption_evidence_v9.json").read_text(encoding="utf-8"))
+if ev.get("status")!="ACTIVE" or ev.get("next_required")!=[]: e.append("v9 adoption evidence still pending")
 if e:
  print("CB6 STATUS REPORTING V9 ACTIVE FAIL:"); [print(" -",x) for x in e]; raise SystemExit(1)
 print("CB6 STATUS REPORTING V9 ACTIVE PASS: ACTIVE v8 preserved; repository verification and ChatGPT runtime responsibility explicitly separated")
