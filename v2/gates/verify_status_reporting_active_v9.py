@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[2]; e=[]
 d=json.loads((R/"v2/gates/status_reporting_contract_v9.json").read_text(encoding="utf-8")); a=json.loads((R/"v2/gates/status_reporting_contract_v8.json").read_text(encoding="utf-8"))
 if d.get("schema")!=9 or d.get("rule_id")!="OPS-STATUS-REPORTING-001" or d.get("status")!="ACTIVE": e.append("active v9 identity/status invalid")
 for k in a:
- if k not in ("schema","status","source","revision","adoption") and d.get(k)!=a.get(k): e.append("existing ACTIVE v8 contract changed: "+k)
+ if k not in ("schema","status","source","revision","adoption","activation") and d.get(k)!=a.get(k): e.append("existing ACTIVE v8 contract changed: "+k)
 p=d.get("response_preflight",{})
 for k in ("required_before_every_cb6_progress_response","github_current_authority_check_required","applicable_active_rules_must_be_selected","response_must_be_checked_against_selected_active_rules","contradiction_must_fail_closed","normal_hidden_detail_policy_must_be_enforced","final_summary_format_must_be_checked","chat_memory_alone_forbidden"):
  if p.get(k) is not True: e.append("response preflight guard invalid: "+k)
@@ -19,5 +19,5 @@ for k in ("perform_preflight_before_each_CB6_progress_response","use_current_Git
  if k not in m.get("chatgpt_runtime_responsibility",[]): e.append("runtime responsibility missing: "+k)
 if d.get("adoption",{}).get("candidate_validation_run_id")!=37170357405 or d.get("adoption",{}).get("independent_review_run_id")!=37170358868: e.append("v9 adoption evidence invalid")
 if e:
- print("CB6 STATUS REPORTING V9 INDEPENDENT REVIEW FAIL:"); [print(" -",x) for x in e]; raise SystemExit(1)
+ print("CB6 STATUS REPORTING V9 ACTIVE FAIL:"); [print(" -",x) for x in e]; raise SystemExit(1)
 print("CB6 STATUS REPORTING V9 ACTIVE PASS: ACTIVE v8 preserved; repository verification and ChatGPT runtime responsibility explicitly separated")
