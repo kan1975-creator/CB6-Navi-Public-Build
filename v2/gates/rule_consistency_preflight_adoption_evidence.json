@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "adoption_id": "OPS-RULE-CONSISTENCY-PREFLIGHT-001-ADOPTION",
-  "status": "ACTIVE_PENDING_REFREEZE",
+  "status": "ACTIVE",
   "subject": "OPS-RULE-CONSISTENCY-PREFLIGHT-001",
   "authority": {
     "type": "explicit_user_adoption",
@@ -19,9 +19,5 @@
       "head": "424f0cdb4b107760f70374d6181981903292fa03"
     }
   },
-  "next_required": [
-    "ACTIVE verifier PASS",
-    "Method Freeze refreeze",
-    "Development Gate SUCCESS"
-  ]
+  "next_required": []
 }
