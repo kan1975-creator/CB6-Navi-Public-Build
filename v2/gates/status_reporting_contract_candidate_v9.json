@@ -199,7 +199,7 @@
   "revision": {
     "from": "v2/gates/status_reporting_contract_v8.json",
     "supersedes": "v2/gates/status_reporting_contract_v8.json",
-    "reason": "Candidate extension: require a fail-closed Response Preflight before every CB6 progress response so applicable ACTIVE continuing rules are checked at response time."
+    "reason": "Candidate extension: require a Response Preflight before every CB6 progress response, separating GitHub-machine-verifiable contract integrity from the ChatGPT runtime execution responsibility; GitHub does not claim to intercept or block response transmission."
   },
   "adoption": {
     "status": "NOT_ADOPTED",
@@ -240,6 +240,24 @@
     "final_summary_format_must_be_checked": true,
     "chat_memory_alone_forbidden": true,
     "preflight_result_required": "PASS_BEFORE_RESPONSE",
-    "scope": "all_CB6_progress_status_responses"
+    "scope": "all_CB6_progress_status_responses",
+    "enforcement_model": {
+      "github_machine_verifiable": [
+        "contract_fields_and_scope",
+        "candidate_and_active_verifier_behavior",
+        "destructive_fail_closed_cases",
+        "registry_and_coverage_linkage"
+      ],
+      "chatgpt_runtime_responsibility": [
+        "perform_preflight_before_each_CB6_progress_response",
+        "use_current_GitHub_authority",
+        "select_applicable_ACTIVE_rules",
+        "check_response_against_selected_rules",
+        "withhold_or_correct_response_when_preflight_does_not_pass"
+      ],
+      "github_does_not_guarantee_response_transmission_interception": true,
+      "machine_enforced_claim_limited_to_repository_contract_and_verification": true,
+      "runtime_execution_is_operational_responsibility": true
+    }
   }
 }

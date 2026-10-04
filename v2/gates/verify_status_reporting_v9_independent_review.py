@@ -10,7 +10,14 @@ p=d.get("response_preflight",{})
 for k in ("required_before_every_cb6_progress_response","github_current_authority_check_required","applicable_active_rules_must_be_selected","response_must_be_checked_against_selected_active_rules","contradiction_must_fail_closed","normal_hidden_detail_policy_must_be_enforced","final_summary_format_must_be_checked","chat_memory_alone_forbidden"):
  if p.get(k) is not True: e.append("response preflight guard invalid: "+k)
 if p.get("preflight_result_required")!="PASS_BEFORE_RESPONSE" or p.get("scope")!="all_CB6_progress_status_responses": e.append("response preflight scope/result invalid")
+m=p.get("enforcement_model",{})
+for k in ("github_does_not_guarantee_response_transmission_interception","machine_enforced_claim_limited_to_repository_contract_and_verification","runtime_execution_is_operational_responsibility"):
+ if m.get(k) is not True: e.append("response preflight enforcement boundary invalid: "+k)
+for k in ("contract_fields_and_scope","candidate_and_active_verifier_behavior","destructive_fail_closed_cases","registry_and_coverage_linkage"):
+ if k not in m.get("github_machine_verifiable",[]): e.append("github-verifiable boundary missing: "+k)
+for k in ("perform_preflight_before_each_CB6_progress_response","use_current_GitHub_authority","select_applicable_ACTIVE_rules","check_response_against_selected_rules","withhold_or_correct_response_when_preflight_does_not_pass"):
+ if k not in m.get("chatgpt_runtime_responsibility",[]): e.append("runtime responsibility missing: "+k)
 if d.get("adoption",{}).get("status")!="NOT_ADOPTED": e.append("candidate self-activation allowed")
 if e:
- print("CB6 STATUS REPORTING V9 CANDIDATE FAIL:"); [print(" -",x) for x in e]; raise SystemExit(1)
-print("CB6 STATUS REPORTING V9 INDEPENDENT REVIEW PASS: ACTIVE v8 preserved; fail-closed response preflight required")
+ print("CB6 STATUS REPORTING V9 INDEPENDENT REVIEW FAIL:"); [print(" -",x) for x in e]; raise SystemExit(1)
+print("CB6 STATUS REPORTING V9 INDEPENDENT REVIEW PASS: ACTIVE v8 preserved; repository verification and ChatGPT runtime responsibility explicitly separated")
