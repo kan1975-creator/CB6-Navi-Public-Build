@@ -59,7 +59,15 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
-  size_t created = 0, suppressed = 0, mwmCreated = 0;\n  for (auto const & mwm : mwmSignals)\n  {\n    auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));\n    mark->SetForward(false);\n    ++created;\n    ++mwmCreated;\n  }\n  constexpr jlong kWayIdNamespace = (static_cast<jlong>(1) << 62);
+  size_t created = 0, suppressed = 0, mwmCreated = 0;
+  for (auto const & mwm : mwmSignals)
+  {
+    auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));
+    mark->SetForward(false);
+    ++created;
+    ++mwmCreated;
+  }
+  constexpr jlong kWayIdNamespace = (static_cast<jlong>(1) << 62);
   for (jsize i = 0; i < n; ++i)
   {
     bool directDuplicate = false;
