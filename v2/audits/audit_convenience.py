@@ -71,7 +71,23 @@ for token in (
     'if "shop=convenience" in style:',
 ):
     require(final, token, "final renderer missing " + token)
-for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6DrivingMarks", "CB6_SIGNAL"):
+for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6DrivingMarks"):
     if forbidden in final:
         raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: final renderer ownership crossing: " + forbidden)
+
+# Integrated build may preserve the already-applied Signal UserMark enum while adding
+# CONVENIENCE. CB6_SIGNAL is permitted only in these exact coexistence anchors; any
+# other Signal dependency in the convenience renderer remains fail-closed.
+allowed_signal_anchors = (
+    'signal_old = "    TRAFFIC_LIGHT,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT."'.replace("COUNT.", "COUNT"),
+    'signal_new = "    TRAFFIC_LIGHT,\\n    CONVENIENCE,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT."'.replace("COUNT.", "COUNT"),
+)
+signal_scrubbed = final
+for anchor in allowed_signal_anchors:
+    require(final, anchor, "integrated Signal/Convenience coexistence anchor missing")
+    if final.count(anchor) != 1:
+        raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: coexistence anchor count changed")
+    signal_scrubbed = signal_scrubbed.replace(anchor, "")
+if "CB6_SIGNAL" in signal_scrubbed:
+    raise SystemExit("CB6 CONVENIENCE AUDIT FAIL: final renderer Signal dependency outside coexistence anchor")
 print("CB6 CONVENIENCE FINAL RENDER AUDIT PASS: dedicated MWM-backed group, symbols and refresh are signal-independent")
