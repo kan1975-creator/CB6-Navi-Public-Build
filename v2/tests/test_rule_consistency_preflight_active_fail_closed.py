@@ -10,7 +10,8 @@ cases=[
  ("drop-prior",lambda d:d["requirements"]["required_preflight_sources"].remove("applicable prior rule versions"),"preflight source missing"),
  ("drop-conflict-decision",lambda d:d["requirements"]["required_decisions"].remove("conflict"),"preflight decision missing"),
  ("allow-conflict",lambda d:d["requirements"].update({"unresolved_conflict_blocks_rule_progression":False}),"preflight guard invalid"),
- ("self-active",lambda d:d.update({"status":"CANDIDATE"}),"active identity/status invalid")]
+ ("self-active",lambda d:d.update({"status":"CANDIDATE"}),"active identity/status invalid"),
+ ("pending-adoption",lambda d:d["adoption"].update({"status":"ADOPTED_PENDING_REFREEZE"}),"adoption not finalized")]
 for name,mut,needle in cases:
  with tempfile.TemporaryDirectory() as td:
   r=Path(td)/"repo"; shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))
