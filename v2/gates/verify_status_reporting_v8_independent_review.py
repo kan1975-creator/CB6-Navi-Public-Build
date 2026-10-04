@@ -21,7 +21,7 @@ req=x.get("required_evidence",[])
 for k in ("current_run_or_step_start_time","current_elapsed_time","same_or_reasonably_comparable_historical_actual_duration_when_available"):
  if k not in req: e.append("required wait evidence missing: "+k)
 if x.get("no_comparable_history_behavior")!="DISPLAY_DURATION_UNKNOWN" or x.get("duration_unknown_text")!="所要時間不明": e.append("unknown-duration fallback invalid")
-if "all future CB6 waiting processes" not in x.get("applies_to",[]): e.append("future wait-process coverage missing")
+if "all_future_CB6_waiting_processes" not in x.get("applies_to",[]): e.append("future wait-process coverage missing")
 q=x.get("reference_estimate_when_no_comparable_actual_history",{})
 for k in ("allowed","must_be_labeled_as_reference_estimate","must_be_separate_from_official_next_check_guidance","basis_required","unsupported_guess_forbidden"):
  if q.get(k) is not True: e.append("reference estimate guard invalid: "+k)
