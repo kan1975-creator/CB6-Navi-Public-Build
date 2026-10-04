@@ -48,6 +48,16 @@ public final class SignalPolicyTest
           && nearby.displayPoints().get(1).lat == nearby.points.get(1).lat
           && nearby.displayPoints().get(2).lat == nearby.points.get(2).lat,
           "proximity-only layer preserves original signal coordinates");
+    ArrayList<SignalSnapshot.Point> topologyMembers = new ArrayList<>();
+    ArrayList<SignalSnapshot.Point> topologyCenters = new ArrayList<>();
+    topologyMembers.add(new SignalSnapshot.Point(10, 43.0, 141.0, 10));
+    topologyCenters.add(new SignalSnapshot.Point(10, 43.0001, 141.0001, 11));
+    SignalSnapshot topology = new SignalSnapshot(nearbyInput, topologyMembers, topologyCenters);
+    check(topology.topologyMembers.size() == 1 && topology.topologyCenters.size() == 1, "confirmed topology mapping retained");
+    boolean topologyMismatch = false;
+    try { new SignalSnapshot(nearbyInput, topologyMembers, new ArrayList<>()); }
+    catch (IllegalArgumentException e) { topologyMismatch = true; }
+    check(topologyMismatch, "topology mapping mismatch rejected");
     boolean immutable = false;
     try { snapshot.points.clear(); } catch (UnsupportedOperationException e) { immutable = true; }
     check(immutable, "immutable signal registry");
