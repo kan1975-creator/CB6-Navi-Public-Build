@@ -115,7 +115,7 @@ for theme in ('light','dark'):
 # Stock MWM traffic-signal feature remains mapped, but CB6_SIGNAL owns visible rendering.
 icons_path = 'data/styles/default/include/Icons.mapcss'
 icons_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+icons_path]).decode()
-stock_signal_rule = 'node|z19-[highway=traffic_signals],\\n{icon-image: traffic_signals.svg}\\n'
+stock_signal_rule = 'node|z19-[highway=traffic_signals],\n{icon-image: traffic_signals.svg}\n'
 icons_expected = icons_original.replace(stock_signal_rule, '', 1)
 require(icons_expected != icons_original, 'stock traffic_signals style anchor missing')
 require((root/icons_path).read_text() == icons_expected, 'stock traffic_signals icon suppression is not exact')
