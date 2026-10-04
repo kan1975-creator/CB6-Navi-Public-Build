@@ -180,7 +180,16 @@ public final class SignalController
     }
     Log.i("CB6-SIGNAL-DIAG", "jni-send acquired=" + snapshot.points.size()
         + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
-    Framework.nativeSetCb6Signals(location.getLatitude(), location.getLongitude(), ids, lats, lons, forward);
+    int t = snapshot.topologyMembers.size();
+    double[] memberLats = new double[t], memberLons = new double[t], centerLats = new double[t], centerLons = new double[t];
+    for (int i = 0; i < t; ++i)
+    {
+      SignalSnapshot.Point member = snapshot.topologyMembers.get(i), center = snapshot.topologyCenters.get(i);
+      memberLats[i] = member.lat; memberLons[i] = member.lon;
+      centerLats[i] = center.lat; centerLons[i] = center.lon;
+    }
+    Framework.nativeSetCb6Signals(location.getLatitude(), location.getLongitude(), ids, lats, lons, forward,
+        memberLats, memberLons, centerLats, centerLons);
     published = snapshot;
     publishedForward = forward;
   }
