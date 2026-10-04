@@ -8,6 +8,8 @@ add("scope","v2/gates/operational_rule_registry_v13.json",lambda d:[x.update({"s
 add("coverage","v2/gates/rule_coverage.json",lambda d:[x.update({"coverage_status":"DOCUMENTED_ONLY"}) for x in d["entries"] if x["rule_id"]=="OPS-DEVELOPMENT-EFFICIENCY-001"])
 add("adoption","v2/gates/development_efficiency_adoption_evidence.json",lambda d:d["authority"].update({"decision":"missing"}))
 add("old-rule","v2/gates/operational_rule_registry_v13.json",lambda d:d["rules"][0].update({"status":"PROPOSED"}))
+add("pending-contract","v2/gates/development_efficiency_rule_candidate.json",lambda d:d.update({"status":"PROPOSED"}))
+add("pending-adoption","v2/gates/development_efficiency_adoption_evidence.json",lambda d:d.update({"status":"ACTIVE_PENDING_REFREEZE"}))
 for name,p,d in cases:
  with tempfile.TemporaryDirectory() as td:
   t=Path(td);shutil.copytree(R/"v2",t/"v2");(t/p).write_text(json.dumps(d,ensure_ascii=False,indent=2))
