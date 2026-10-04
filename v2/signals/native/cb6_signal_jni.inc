@@ -1,9 +1,9 @@
 // Included inside Framework.cpp's existing extern "C" section.
 // Caller: Android main thread, matching BookmarkManager's thread contract.
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
-    JNIEnv * env, jclass, jdouble originLat, jdouble originLon, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray)
+    JNIEnv * env, jclass, jdouble originLat, jdouble originLon, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray, jdoubleArray memberLatArray, jdoubleArray memberLonArray, jdoubleArray centerLatArray, jdoubleArray centerLonArray)
 {
-  if (!idArray || !latArray || !lonArray || !forwardArray)
+  if (!idArray || !latArray || !lonArray || !forwardArray || !memberLatArray || !memberLonArray || !centerLatArray || !centerLonArray)
   {
     LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-reject-null"));
     return;
@@ -11,6 +11,16 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
   jsize const n = env->GetArrayLength(latArray);
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-enter", n));
   if (n > 1400 || env->GetArrayLength(idArray) != n || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
+  jsize const topologyN = env->GetArrayLength(memberLatArray);
+  if (topologyN > 1400 || env->GetArrayLength(memberLonArray) != topologyN || env->GetArrayLength(centerLatArray) != topologyN || env->GetArrayLength(centerLonArray) != topologyN) return;
+  std::vector<jdouble> memberLats(topologyN), memberLons(topologyN), centerLats(topologyN), centerLons(topologyN);
+  if (topologyN > 0)
+  {
+    env->GetDoubleArrayRegion(memberLatArray, 0, topologyN, memberLats.data()); if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(memberLonArray, 0, topologyN, memberLons.data()); if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(centerLatArray, 0, topologyN, centerLats.data()); if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(centerLonArray, 0, topologyN, centerLons.data()); if (env->ExceptionCheck()) return;
+  }
   std::vector<jlong> ids(n);
   std::vector<jdouble> lats(n), lons(n);
   std::vector<jboolean> forward(n);
@@ -56,11 +66,29 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     return 2.0 * kEarthRadiusM * std::asin(std::sqrt(a));
   };
 
+  std::vector<ms::LatLon> normalizedMwmSignals;
+  for (auto const & mwm : mwmSignals)
+  {
+    bool mapped = false;
+    for (jsize t = 0; t < topologyN; ++t)
+    {
+      if (distanceMeters(mwm.m_lat, mwm.m_lon, memberLats[t], memberLons[t]) > kDirectDuplicateM) continue;
+      ms::LatLon const candidate(centerLats[t], centerLons[t]);
+      bool centerExists = false;
+      for (auto const & existing : normalizedMwmSignals)
+        if (distanceMeters(existing.m_lat, existing.m_lon, candidate.m_lat, candidate.m_lon) <= kDirectDuplicateM) { centerExists = true; break; }
+      if (!centerExists) normalizedMwmSignals.push_back(candidate);
+      mapped = true;
+      break;
+    }
+    if (!mapped) normalizedMwmSignals.push_back(mwm);
+  }
+
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
   size_t created = 0, suppressed = 0, mwmCreated = 0;
-  for (auto const & mwm : mwmSignals)
+  for (auto const & mwm : normalizedMwmSignals)
   {
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));
     mark->SetForward(false);
@@ -73,7 +101,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     bool directDuplicate = false;
     if (ids[i] > 0 && ids[i] < kWayIdNamespace)
     {
-      for (auto const & mwm : mwmSignals)
+      for (auto const & mwm : normalizedMwmSignals)
       {
         if (distanceMeters(mwm.m_lat, mwm.m_lon, lats[i], lons[i]) <= kDirectDuplicateM)
         {
@@ -92,7 +120,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     mark->SetForward(forward[i] == JNI_TRUE);
     ++created;
   }
-  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "mwm-created", mwmCreated, "suppressed", suppressed));
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "mwm-raw", mwmSignals.size(), "mwm-created", mwmCreated, "suppressed", suppressed));
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "marks-created", created));
   session.NotifyChanges();
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "notify-complete", n));
