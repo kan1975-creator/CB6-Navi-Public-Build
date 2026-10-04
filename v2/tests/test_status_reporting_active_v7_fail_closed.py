@@ -18,4 +18,14 @@ for name,path,mut,needle in cases:
   cp=run(r); out=cp.stdout+cp.stderr
   if cp.returncode==0 or needle not in out: raise SystemExit(name+" not rejected\n"+out)
   print("PASS expected status-reporting-v7-active rejection:",name)
+protocol_cases=[
+ ("protocol-demoted",lambda s:s.replace("Status: ACTIVE (Status Reporting v7)","Status: PROPOSED",1),"status reporting protocol is not ACTIVE v7"),
+ ("protocol-wait-field-missing",lambda s:s.replace("parallel_work_available","parallel-work-available",1),"status reporting protocol wait field missing: parallel_work_available")]
+for name,mut,needle in protocol_cases:
+ with tempfile.TemporaryDirectory() as td:
+  r=Path(td)/"repo"; shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))
+  p=r/"v2/governance/status_reporting_protocol.md"; p.write_text(mut(p.read_text(encoding="utf-8")),encoding="utf-8")
+  cp=run(r); out=cp.stdout+cp.stderr
+  if cp.returncode==0 or needle not in out: raise SystemExit(name+" not rejected\\n"+out)
+  print("PASS expected status-reporting-v7 protocol rejection:",name)
 print("PASS status reporting v7 active destructive cases rejected")

@@ -22,6 +22,11 @@ reg=json.loads((R/"v2/gates/operational_rule_registry_v11.json").read_text()); s
 if reg.get("version")!=11 or sr.get("status")!="ACTIVE" or sr.get("contract")!="v2/gates/status_reporting_contract_v7.json": e.append("registry v11 active binding invalid")
 cov=json.loads((R/"v2/gates/rule_coverage.json").read_text()); ce={x.get("rule_id"):x for x in cov["entries"]}
 if cov.get("registry")!="v2/gates/operational_rule_registry_v11.json" or ce.get("OPS-STATUS-REPORTING-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("machine coverage v11 missing")
+p=(R/"v2/governance/status_reporting_protocol.md").read_text(encoding="utf-8")
+if "Status: ACTIVE (Status Reporting v7)" not in p: e.append("status reporting protocol is not ACTIVE v7")
+for marker in ("approximate_wait_time", "next_check_timing", "parallel_work_available", "post_wait_user_instruction"):
+ if marker not in p: e.append("status reporting protocol wait field missing: "+marker)
+if "MACHINE_ENFORCED" not in p or "status_reporting_contract_v7.json" not in p: e.append("status reporting protocol authority binding missing")
 ad=d.get("adoption",{})
 if ad.get("candidate_validation_run_id")!=37128623188 or ad.get("independent_review_run_id")!=37128782100 or ad.get("independent_review_head")!="b016f9d10b549b3b0dd907c5cf32dffb1c073173": e.append("v7 adoption evidence invalid")
 if e:

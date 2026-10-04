@@ -1,6 +1,6 @@
 # CB6 Status Reporting Protocol
 
-Status: PROPOSED  
+Status: ACTIVE (Status Reporting v7)  
 Rule ID: `OPS-STATUS-REPORTING-001`  
 Source: explicit user continuing instruction, 2026-09-30; four-line reporting extension explicitly requested 2026-10-02
 
@@ -28,7 +28,7 @@ Canonical no-user-operation form:
 - **ChatGPTアプリ：閉じてOK**
 - **スマホ操作：不要。再試行もしなくて大丈夫です。**
 
-For `待ち`, the same four-line structure MUST be retained and the classification line or immediately adjacent status text MUST identify the awaited Run/result, approximate wait time, and next-check timing as required below. For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
+For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all existing ACTIVE v7 required wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
 
 ## Wait-time display
 
@@ -78,8 +78,8 @@ Out of scope for this change. Record only as a future candidate: if later requir
 
 ## Adoption and verification
 
-This protocol enters the existing lifecycle as `PROPOSED`. It MUST NOT be treated as ACTIVE or enter MACHINE_ENFORCED coverage until required lifecycle evidence exists.
+This protocol documents the currently adopted `OPS-STATUS-REPORTING-001` authority. Status Reporting v7 is `ACTIVE`, is bound by `v2/gates/status_reporting_contract_v7.json`, is registered by `v2/gates/operational_rule_registry_v11.json`, and has `MACHINE_ENFORCED` coverage in `v2/gates/rule_coverage.json`.
 
-Use the existing adoption lifecycle without creating a new mechanism: **Verifier → destructive test → independent review → explicit adoption**.
+The existing adoption lifecycle remains authoritative for future revisions: **candidate verification → destructive test → independent review → explicit adoption → MACHINE_ENFORCED coverage**. This synchronization does not create or change any Status Reporting v7 rule; it keeps this protocol consistent with the already adopted ACTIVE authority.
 
-The intended machine-verification source is the latest progress-report message. The existing lifecycle's verifier candidate MUST verify all four required template fields and their state-consistent values, including exactly one of the three required classifications. For `待ち`, it MUST also verify that the awaited external result, approximate wait time, and next-check time are present. Destructive tests MUST demonstrate rejection when any required template field is absent or inconsistent. Until the existing lifecycle completes verifier proof, destructive proof, independent review, and explicit adoption, this rule remains non-ACTIVE.
+`v2/gates/verify_status_reporting_active_v7.py` MUST fail closed if this protocol is demoted from ACTIVE or loses the four existing required `待ち` fields. Its destructive test MUST demonstrate those protocol inconsistencies are rejected.
