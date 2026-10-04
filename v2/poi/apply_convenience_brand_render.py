@@ -170,9 +170,23 @@ if "nativeSetCb6ConvenienceMarks" not in s:
     s = s[:pos+1] + decl + s[pos+1:]
 java.write_text(s)
 
-# Pure SVG convenience-brand symbols based on the user-approved reference artwork.
-# Deliberately avoid <image>, data:image and embedded raster content because those
-# did not render reliably through the CoMaps symbol pipeline.
+# Raster embedding remains fail-closed for every SVG except the six exact
+# user-approved CB6 convenience filenames below.
+CB6_RASTER_SVG_ALLOWLIST = frozenset({
+    "cb6-seven.svg",
+    "cb6-familymart.svg",
+    "cb6-lawson.svg",
+    "cb6-seicomart.svg",
+    "cb6-ministop.svg",
+    "cb6-mybasket.svg",
+})
+
+def cb6_validate_svg_raster_policy(filename, svg):
+    has_raster = "<image" in svg or "data:image" in svg
+    if has_raster and filename not in CB6_RASTER_SVG_ALLOWLIST:
+        raise ValueError("Raster embedding is forbidden outside exact CB6 allowlist: " + filename)
+    return True
+
 brand_svg = {
     # User-approved 2026-10-04 reference sheet. Pure-vector reproduction only;
     # preserve the approved six-brand composition without raster embedding.
@@ -190,12 +204,14 @@ fallback = {
 for theme in ("light", "dark"):
     d = ROOT / "data/styles/default" / theme / "symbols"
     for name, svg in brand_svg.items():
-        if "<image" in svg or "data:image" in svg:
-            raise SystemExit("Raster embedding is forbidden in CB6 convenience SVG symbols")
-        (d / (name + ".svg")).write_text(svg)
+        filename = name + ".svg"
+        cb6_validate_svg_raster_policy(filename, svg)
+        (d / filename).write_text(svg)
     for name, (label, color) in fallback.items():
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="{color}" stroke-width="3"/><text x="14" y="18" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="{color}">{label}</text></svg>'''
-        (d / (name + ".svg")).write_text(svg)
+        filename = name + ".svg"
+        cb6_validate_svg_raster_policy(filename, svg)
+        (d / filename).write_text(svg)
 
 
 activity = ROOT / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
