@@ -170,24 +170,22 @@ if "nativeSetCb6ConvenienceMarks" not in s:
     s = s[:pos+1] + decl + s[pos+1:]
 java.write_text(s)
 
-# Generate simple original CB6 symbols. No third-party logo artwork is embedded.
-brands = {
- "cb6-convenience": ("CV", "#555555"),
- "cb6-seven": ("7", "#2E7D32"),
- "cb6-familymart": ("F", "#1683C4"),
- "cb6-lawson": ("L", "#1976D2"),
- "cb6-seicomart": ("S", "#F57C00"),
- "cb6-mybasket": ("M", "#8E24AA"),
- "cb6-ministop": ("Mi", "#1565C0"),
- "cb6-daily": ("D", "#C62828"),
+# Generate original CB6 brand-image symbols.  Keep the existing 28x28 footprint and
+# symbol names; use simple colour/shape cues instead of third-party logo artwork.
+brand_svgs = {
+ "cb6-convenience": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="#555555" stroke-width="3"/><path d="M7 9h14v10H7z" fill="#777"/><path d="M9 7h10v3H9z" fill="#aaa"/>''',
+ "cb6-seven": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="#2E7D32" stroke-width="3"/><path d="M6 7h16v4H6z" fill="#F57C00"/><path d="M6 11h16v3H6z" fill="#D32F2F"/><path d="M8 17h12v4H8z" fill="#2E7D32"/>''',
+ "cb6-familymart": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="#1683C4" stroke-width="2"/><path d="M4 7h20v5H4z" fill="#2E7D32"/><path d="M4 14h20v6H4z" fill="#1683C4"/>''',
+ "cb6-lawson": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="#1976D2" stroke="white" stroke-width="2"/><path d="M9 8h10l-1 4H10z" fill="white"/><path d="M11 12h6v9h-6z" fill="white"/><path d="M10 7h8" stroke="white" stroke-width="2"/>''',
+ "cb6-seicomart": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="#F57C00" stroke="white" stroke-width="2"/><path d="M7 16c5 1 9-2 13-8-1 7-5 12-12 13z" fill="white"/><circle cx="10" cy="10" r="3" fill="white"/>''',
+ "cb6-mybasket": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="#B0005A" stroke="white" stroke-width="2"/><path d="M7 11h14l-2 10H9z" fill="white"/><path d="M10 11c0-5 8-5 8 0" fill="none" stroke="white" stroke-width="2"/><path d="M11 15h6" stroke="#B0005A" stroke-width="2"/>''',
+ "cb6-ministop": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="#7B1FA2" stroke-width="3"/><path d="M6 13l8-7 8 7v9H6z" fill="none" stroke="#1565C0" stroke-width="2"/><circle cx="18" cy="9" r="3" fill="#F9A825"/>''',
+ "cb6-daily": '''<rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="#C62828" stroke-width="3"/><path d="M6 18h16" stroke="#1565C0" stroke-width="3"/><path d="M8 15l4-8 3 5 2-3 3 6z" fill="#C62828"/>''',
 }
 for theme in ("light", "dark"):
     d = ROOT / "data/styles/default" / theme / "symbols"
-    for name, (label, color) in brands.items():
-        svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
-<rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="{color}" stroke-width="3"/>
-<text x="14" y="18" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="{color}">{label}</text>
-</svg>"""
+    for name, body in brand_svgs.items():
+        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">{body}</svg>'''
         (d / (name + ".svg")).write_text(svg)
 
 
