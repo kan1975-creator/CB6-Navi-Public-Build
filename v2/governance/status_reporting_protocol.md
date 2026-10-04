@@ -1,6 +1,6 @@
 # CB6 Status Reporting Protocol
 
-Status: ACTIVE (Status Reporting v8)  
+Status: ACTIVE (Status Reporting v9)  
 Rule ID: `OPS-STATUS-REPORTING-001`  
 Source: explicit user continuing instruction, 2026-09-30; four-line reporting extension explicitly requested 2026-10-02
 
@@ -28,7 +28,7 @@ Canonical no-user-operation form:
 - **ChatGPTアプリ：閉じてOK**
 - **スマホ操作：不要。再試行もしなくて大丈夫です。**
 
-For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all existing ACTIVE v8 required wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
+For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all existing ACTIVE v9 required wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
 
 ## Wait-time display
 
@@ -76,10 +76,14 @@ Before beginning an implementation-problem fix commit, follow `OPS-USER-APPROVAL
 
 Out of scope for this change. Record only as a future candidate: if later required, consider a mechanism that checks at new-chat/session start whether confirmed continuing rules have been durably incorporated into GitHub authority. Do not design, implement, verify, or adopt that mechanism as part of `OPS-STATUS-REPORTING-001`.
 
+## Response Preflight
+
+Before every CB6 progress/status response, ChatGPT MUST use current GitHub authority, select applicable ACTIVE rules, check the intended response against those rules, and correct or withhold a response when the preflight does not pass. Chat memory alone is not authority.
+
+GitHub machine verification covers repository contract, verifier/destructive-test behavior, Registry/Coverage linkage, and fail-closed specification. It does not claim to intercept or mechanically block ChatGPT response transmission. Runtime preflight execution is a ChatGPT operational responsibility.
+
 ## Adoption and verification
 
-This protocol documents the currently adopted `OPS-STATUS-REPORTING-001` authority. Status Reporting v7 is `ACTIVE`, is bound by `v2/gates/status_reporting_contract_v8.json`, is registered by `v2/gates/operational_rule_registry_v11.json`, and has `MACHINE_ENFORCED` coverage in `v2/gates/rule_coverage.json`.
+Status Reporting v9 is `ACTIVE`, bound by `v2/gates/status_reporting_contract_v9.json`, registered by `v2/gates/operational_rule_registry_v13.json`, with `MACHINE_ENFORCED` repository-contract coverage in `v2/gates/rule_coverage.json`.
 
-The existing adoption lifecycle remains authoritative for future revisions: **candidate verification → destructive test → independent review → explicit adoption → MACHINE_ENFORCED coverage**. This synchronization does not create or change any Status Reporting v7 rule; it keeps this protocol consistent with the already adopted ACTIVE authority.
-
-`v2/gates/verify_status_reporting_active_v8.py` MUST fail closed if this protocol is demoted from ACTIVE or loses the four existing required `待ち` fields. Its destructive test MUST demonstrate those protocol inconsistencies are rejected.
+The adoption lifecycle remains: **candidate verification → destructive test → independent review → explicit adoption → MACHINE_ENFORCED coverage**.
