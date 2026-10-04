@@ -79,8 +79,8 @@ for forbidden in ("overpass-api.de", "overpass.kumi.systems", "nativeSetCb6Drivi
 # CONVENIENCE. CB6_SIGNAL is permitted only in these exact coexistence anchors; any
 # other Signal dependency in the convenience renderer remains fail-closed.
 allowed_signal_anchors = (
-    'signal_old = "    TRAFFIC_LIGHT,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT."'.replace("COUNT.", "COUNT"),
-    'signal_new = "    TRAFFIC_LIGHT,\\n    CONVENIENCE,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT."'.replace("COUNT.", "COUNT"),
+    'signal_old = "    TRAFFIC_LIGHT,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT,"',
+    'signal_new = "    TRAFFIC_LIGHT,\\n    CONVENIENCE,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT,"',
 )
 signal_scrubbed = final
 for anchor in allowed_signal_anchors:
