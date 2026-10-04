@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "adoption_id": "OPS-DEVELOPMENT-EFFICIENCY-001-ADOPTION",
-  "status": "ACTIVE_PENDING_REFREEZE",
+  "status": "ACTIVE",
   "subject": "OPS-DEVELOPMENT-EFFICIENCY-001",
   "authority": {
     "type": "explicit_user_adoption",
@@ -20,9 +20,5 @@
     "candidate": "v2/gates/development_efficiency_rule_candidate.json",
     "review": "v2/gates/development_efficiency_independent_review.json"
   },
-  "next_required": [
-    "ACTIVE verifier PASS",
-    "Method Freeze refreeze",
-    "Development Gate SUCCESS"
-  ]
+  "next_required": []
 }
