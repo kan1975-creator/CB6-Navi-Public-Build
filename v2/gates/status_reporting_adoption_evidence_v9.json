@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "adoption_id": "OPS-STATUS-REPORTING-001-V9-ADOPTION",
-  "status": "ACTIVE_PENDING_REFREEZE",
+  "status": "ACTIVE",
   "subject": "OPS-STATUS-REPORTING-001",
   "authority": {
     "type": "explicit_user_adoption",
@@ -24,9 +24,5 @@
     "chatgpt_runtime_execution_operational_responsibility": true,
     "response_transmission_interception_claimed": false
   },
-  "next_required": [
-    "ACTIVE verifier PASS",
-    "Method Freeze refreeze",
-    "Development Gate SUCCESS"
-  ]
+  "next_required": []
 }
