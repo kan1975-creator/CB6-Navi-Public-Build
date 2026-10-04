@@ -39,7 +39,7 @@ cases=[
 ]
 if a.allow_convenience_style:
  cases.append(("integrated-convenience-style-extra", "data/styles/vehicle/include/Icons.mapcss",
-               "{icon-image: parking-m.svg;}", "{icon-image: parking-m.svg;}\n/* unauthorized integrated style change */",
+               "{icon-image: ford-m.svg; icon-min-distance: 20;}", "{icon-image: ford-m.svg; icon-min-distance: 20;}\n/* unauthorized integrated style change */",
                "integrated convenience vehicle style change is not exact"))
 for name,rel,old,new,needle in cases:
  with tempfile.TemporaryDirectory() as td:
