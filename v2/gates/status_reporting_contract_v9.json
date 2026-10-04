@@ -176,7 +176,7 @@
     "delegates_to": "OPS-USER-APPROVAL-BEFORE-FIX-001"
   },
   "activation": {
-    "status": "ACTIVE_PENDING_REFREEZE",
+    "status": "ACTIVE",
     "candidate_validation_run_id": 37170357405,
     "independent_review_run_id": 37170358868
   },
@@ -196,7 +196,7 @@
     "reason": "Candidate extension: require a Response Preflight before every CB6 progress response, separating GitHub-machine-verifiable contract integrity from the ChatGPT runtime execution responsibility; GitHub does not claim to intercept or block response transmission."
   },
   "adoption": {
-    "status": "ADOPTED_PENDING_REFREEZE",
+    "status": "ADOPTED",
     "candidate_validation_run_id": 37170357405,
     "independent_review_run_id": 37170358868,
     "explicit_user_adoption": "Response Preflight v9を正式採用して進めて"
