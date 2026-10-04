@@ -13,10 +13,10 @@ for x in ("already_governed","duplicate","conflict","extension_needed","new_rule
  if x not in r.get("required_decisions",[]): e.append("preflight decision missing: "+x)
 reg=json.loads((R/"v2/gates/operational_rule_registry_v11.json").read_text(encoding="utf-8"))
 if reg.get("status")!="ACTIVE" or reg.get("revision_policy",{}).get("in_place_change_forbidden") is not True: e.append("existing registry revision authority not preserved")
-rr=json.loads((R/"v2/gates/operational_rule_registry_v12.json").read_text()); row={x.get("id"):x for x in rr["rules"]}.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{})
-if rr.get("version")!=12 or row.get("contract")!="v2/gates/rule_consistency_preflight_active.json": e.append("registry v12 rule-consistency binding invalid")
+rr=json.loads((R/"v2/gates/operational_rule_registry_v13.json").read_text()); row={x.get("id"):x for x in rr["rules"]}.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{})
+if rr.get("version")!=13 or row.get("contract")!="v2/gates/rule_consistency_preflight_active.json": e.append("registry v13 rule-consistency binding invalid")
 cov=json.loads((R/"v2/gates/rule_coverage.json").read_text()); ce={x.get("rule_id"):x for x in cov["entries"]}
-if cov.get("registry")!="v2/gates/operational_rule_registry_v12.json" or ce.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("rule-consistency machine coverage missing")
+if cov.get("registry")!="v2/gates/operational_rule_registry_v13.json" or ce.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("rule-consistency machine coverage missing")
 if e:
  print("CB6 RULE CONSISTENCY PREFLIGHT ACTIVE FAIL:")
  for x in e: print(" -",x)
