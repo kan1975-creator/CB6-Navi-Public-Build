@@ -13,6 +13,7 @@ P = argparse.ArgumentParser()
 P.add_argument('root', type=Path)
 P.add_argument('--atlases', action='store_true')
 P.add_argument('--apk', type=Path)
+P.add_argument('--allow-convenience-style', action='store_true')
 args = P.parse_args()
 root = args.root.resolve()
 v2 = Path(__file__).resolve().parents[1]
@@ -127,9 +128,29 @@ mapping_path = 'data/mapcss-mapping.csv'
 require(subprocess.check_output(['git','-C',str(root),'show','HEAD:'+mapping_path]) == (root/mapping_path).read_bytes(),
         'stock traffic_signals MWM mapping modified')
 
-# All other protected stock functionality remains byte-identical.
-for path in ['data/styles/vehicle/include/Icons.mapcss',
-             'libs/map/bookmark_manager.cpp', 'libs/map/routing_manager.cpp',
+# All other protected stock functionality remains byte-identical. In the integrated
+# Signal+Convenience build, permit only the exact Convenience-owned removal of the
+# three pinned shop=convenience vehicle-style rules.
+vehicle_icons_path = 'data/styles/vehicle/include/Icons.mapcss'
+vehicle_original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+vehicle_icons_path]).decode()
+if args.allow_convenience_style:
+    caption_selector = "node|z18-[shop=convenience],\n"
+    icon_rule = """node|z17-[shop=convenience],
+{icon-image: convenience-m.svg; font-size: 13.25;}
+"""
+    size_rule = """node|z18-[shop=convenience],
+{font-size: 14.5;}
+"""
+    require(vehicle_original.count(caption_selector) == 2, 'convenience vehicle caption anchor changed')
+    require(vehicle_original.count(icon_rule) == 1, 'convenience vehicle icon anchor changed')
+    require(vehicle_original.count(size_rule) == 1, 'convenience vehicle size anchor changed')
+    vehicle_expected = vehicle_original.replace(caption_selector, '', 1).replace(icon_rule, '', 1).replace(size_rule, '', 1)
+    require('shop=convenience' not in vehicle_expected, 'unexpected convenience vehicle style remains after exact transform')
+    require(read(vehicle_icons_path) == vehicle_expected, 'integrated convenience vehicle style change is not exact')
+else:
+    require(read(vehicle_icons_path) == vehicle_original, 'stock subsystem modified: ' + vehicle_icons_path)
+
+for path in ['libs/map/bookmark_manager.cpp', 'libs/map/routing_manager.cpp',
              'android/app/src/main/java/app/organicmaps/search/SearchFragment.java']:
     original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+path])
     require(original == (root/path).read_bytes(), 'stock subsystem modified: ' + path)

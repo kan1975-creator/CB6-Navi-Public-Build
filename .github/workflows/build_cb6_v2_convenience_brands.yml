@@ -87,8 +87,8 @@ jobs:
           python3 v2/signals/apply_signals.py comaps
           python3 v2/poi/apply_convenience_brand_render.py comaps
           python3 v2/audits/audit_identity.py comaps
-          python3 v2/audits/audit_signals.py comaps | tee out/SIGNAL_SOURCE_AUDIT.txt
-          python3 v2/tests/signals_audit_selftest.py comaps | tee out/SIGNAL_AUDIT_SELFTEST.txt
+          python3 v2/audits/audit_signals.py comaps --allow-convenience-style | tee out/SIGNAL_SOURCE_AUDIT.txt
+          python3 v2/tests/signals_audit_selftest.py comaps --allow-convenience-style | tee out/SIGNAL_AUDIT_SELFTEST.txt
           python3 v2/audits/audit_convenience.py
           git -C comaps diff --check
           git -C comaps diff --name-only | tee out/DIFF_FILES.txt
@@ -124,7 +124,7 @@ jobs:
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'cb6-seven'
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'cb6-lawson'
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'nativeSetCb6Signals'
-          python3 v2/audits/audit_signals.py comaps --apk out/CB6-V2-Signal-Convenience-arm64.apk | tee out/APK_SIGNAL_AUDIT.txt
+          python3 v2/audits/audit_signals.py comaps --allow-convenience-style --apk out/CB6-V2-Signal-Convenience-arm64.apk | tee out/APK_SIGNAL_AUDIT.txt
           AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt2 | sort -V | tail -1)"
           "$AAPT" dump badging out/CB6-V2-Signal-Convenience-arm64.apk | tee out/APK_BADGING.txt
           grep -F "package: name='jp.cb6.navi'" out/APK_BADGING.txt

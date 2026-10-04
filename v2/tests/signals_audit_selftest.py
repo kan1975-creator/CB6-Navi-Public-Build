@@ -5,6 +5,7 @@ from pathlib import Path
 
 P=argparse.ArgumentParser()
 P.add_argument("transformed_root",type=Path)
+P.add_argument("--allow-convenience-style",action="store_true")
 a=P.parse_args()
 ROOT=Path(__file__).resolve().parents[2]
 AUDIT=ROOT/"v2/audits/audit_signals.py"
@@ -13,7 +14,9 @@ SIGNAL_SPEC=SPEC["signal"]
 MIN_ZOOM=int(SIGNAL_SPEC["display"]["min_zoom"])
 
 def run(root):
- return subprocess.run(["python3",str(AUDIT),str(root)],cwd=ROOT,text=True,capture_output=True)
+ cmd=["python3",str(AUDIT),str(root)]
+ if a.allow_convenience_style: cmd.append("--allow-convenience-style")
+ return subprocess.run(cmd,cwd=ROOT,text=True,capture_output=True)
 
 base=a.transformed_root.resolve()
 ok=run(base)
@@ -34,6 +37,10 @@ cases=[
  ("mwm-topology-normalization", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
   "normalizedMwmSignals", "untrustedMwmSignals", "confirmed topology mapping is not applied to MWM anchors"),
 ]
+if a.allow_convenience_style:
+ cases.append(("integrated-convenience-style-extra", "data/styles/vehicle/include/Icons.mapcss",
+               "{icon-image: parking-m.svg;}", "{icon-image: parking-m.svg;}\n/* unauthorized integrated style change */",
+               "integrated convenience vehicle style change is not exact"))
 for name,rel,old,new,needle in cases:
  with tempfile.TemporaryDirectory() as td:
   mutant=Path(td)/"comaps"
