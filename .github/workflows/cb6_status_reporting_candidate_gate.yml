@@ -23,7 +23,10 @@ on:
       - 'v2/gates/status_reporting_contract_candidate_v7.json'
       - 'v2/gates/verify_status_reporting_candidate_v7.py'
       - 'v2/tests/test_status_reporting_candidate_v7_fail_closed.py'
-      - 'v2/gates/status_reporting_contract_candidate_v8.json'\n      - 'v2/gates/verify_status_reporting_candidate_v8.py'\n      - 'v2/tests/test_status_reporting_candidate_v8_fail_closed.py'\n      - '.github/workflows/cb6_status_reporting_candidate_gate.yml'
+      - 'v2/gates/status_reporting_contract_candidate_v8.json'
+      - 'v2/gates/verify_status_reporting_candidate_v8.py'
+      - 'v2/tests/test_status_reporting_candidate_v8_fail_closed.py'
+      - '.github/workflows/cb6_status_reporting_candidate_gate.yml'
 permissions:
   contents: read
 jobs:
@@ -55,7 +58,11 @@ jobs:
         run: python3 v2/gates/verify_status_reporting_candidate_v7.py
       - name: Destructive status-reporting v7 normal-duration test
         run: python3 v2/tests/test_status_reporting_candidate_v7_fail_closed.py
-      - name: Verify status-reporting v8 all-process wait-evidence candidate\n        run: python3 v2/gates/verify_status_reporting_candidate_v8.py\n      - name: Destructive status-reporting v8 all-process wait-evidence test\n        run: python3 v2/tests/test_status_reporting_candidate_v8_fail_closed.py\n      - name: Verify active Development Gate remains frozen
+      - name: Verify status-reporting v8 all-process wait-evidence candidate
+        run: python3 v2/gates/verify_status_reporting_candidate_v8.py
+      - name: Destructive status-reporting v8 all-process wait-evidence test
+        run: python3 v2/tests/test_status_reporting_candidate_v8_fail_closed.py
+      - name: Verify active Development Gate remains frozen
         run: python3 v2/gates/verify_method_freeze.py
       - name: Verify active method revision procedure
         run: python3 v2/gates/verify_method_revision_procedure.py
