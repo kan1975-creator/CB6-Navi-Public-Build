@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-STATUS-REPORTING-001-V9-ADOPTION",
+  "status": "ACTIVE_PENDING_REFREEZE",
+  "subject": "OPS-STATUS-REPORTING-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Response Preflight v9を正式採用して進めて",
+    "recorded_at": "2026-10-04"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37170357405,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37170358868,
+      "conclusion": "success",
+      "candidate_head": "385e577cbb1b358865ccaad737c232f097a9053d"
+    }
+  },
+  "enforcement_boundary": {
+    "repository_contract_machine_verified": true,
+    "chatgpt_runtime_execution_operational_responsibility": true,
+    "response_transmission_interception_claimed": false
+  },
+  "next_required": [
+    "ACTIVE verifier PASS",
+    "Method Freeze refreeze",
+    "Development Gate SUCCESS"
+  ]
+}
