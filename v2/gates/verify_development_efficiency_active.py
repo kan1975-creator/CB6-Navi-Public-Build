@@ -17,6 +17,8 @@ x=a13.get("OPS-DEVELOPMENT-EFFICIENCY-001",{})
 if x.get("status")!="ACTIVE" or x.get("scope")!="all_current_features_all_future_features_all_33_items_and_derivative_work":e.append("efficiency rule not ACTIVE cross-cutting")
 if cov.get("registry")!="v2/gates/operational_rule_registry_v13.json" or not any(z.get("rule_id")=="OPS-DEVELOPMENT-EFFICIENCY-001" and z.get("coverage_status")=="MACHINE_ENFORCED" for z in cov.get("entries",[])):e.append("coverage")
 if ad.get("authority",{}).get("decision")!="OPS-DEVELOPMENT-EFFICIENCY-001を採用して進めて" or ad.get("evidence",{}).get("candidate_gate",{}).get("run_id")!=37135315388 or ad.get("evidence",{}).get("independent_review",{}).get("run_id")!=37135558644:e.append("adoption evidence")
+if cand.get("status")!="ACTIVE":e.append("efficiency contract lifecycle not finalized")
+if ad.get("status")!="ACTIVE" or ad.get("next_required")!=[]:e.append("efficiency adoption evidence still pending")
 for k,v in cand.get("requirements",{}).items():
  if v is not True:e.append("candidate requirement weakened:"+k)
 if e:
