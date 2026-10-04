@@ -116,7 +116,20 @@
             "independent_reviews",
             "diagnostics",
             "all_future_CB6_waiting_processes"
-          ]
+          ],
+          "reference_estimate_when_no_comparable_actual_history": {
+            "allowed": true,
+            "must_be_labeled_as_reference_estimate": true,
+            "must_be_separate_from_official_next_check_guidance": true,
+            "official_next_check_guidance_remains": "所要時間不明",
+            "basis_required": true,
+            "allowed_basis": [
+              "measured durations of reasonably similar workflows or steps",
+              "known workflow step composition plus measured component durations",
+              "other concrete GitHub execution evidence"
+            ],
+            "unsupported_guess_forbidden": true
+          }
         }
       }
     },
@@ -179,7 +192,7 @@
   },
   "revision": {
     "from": "v2/gates/status_reporting_contract_v7.json",
-    "reason": "Require evidence-based wait-time and next-check guidance for every CB6 waiting process; when comparable actual-duration evidence is unavailable, display 所要時間不明 and never invent a fixed estimate.",
+    "reason": "Extend ACTIVE v7 wait evidence rules to every CB6 waiting process. When comparable actual history is unavailable, official guidance remains 所要時間不明; a separately labeled reference estimate is allowed only with explicit concrete GitHub evidence/basis and must never be presented as measured or official guidance.",
     "supersedes": "v2/gates/status_reporting_contract_v7.json"
   },
   "adoption": {

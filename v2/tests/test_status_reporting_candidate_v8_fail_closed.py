@@ -11,6 +11,9 @@ cases=[
  ("drop-history",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["required_evidence"].remove("same_or_reasonably_comparable_historical_actual_duration_when_available"),"required wait evidence missing"),
  ("invent-unknown",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"].update({"no_comparable_history_behavior":"FIXED_5_MINUTES"}),"unknown-duration fallback invalid"),
  ("drop-future",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["applies_to"].remove("all future CB6 waiting processes"),"future wait-process coverage missing"),
+ ("unlabeled-reference",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"must_be_labeled_as_reference_estimate":False}),"reference estimate guard invalid"),
+ ("reference-replaces-unknown",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"official_next_check_guidance_remains":"5分"}),"reference estimate replaced official unknown-duration guidance"),
+ ("unsupported-reference",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"unsupported_guess_forbidden":False}),"reference estimate guard invalid"),
  ("change-v7",lambda d:d["final_summary_display"].update({"duplicate_information_forbidden":False}),"existing ACTIVE v7 contract changed"),
  ("self-active",lambda d:d.update({"status":"ACTIVE"}),"candidate v8 identity/status invalid")]
 for name,mut,needle in cases:
