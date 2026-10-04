@@ -545,6 +545,8 @@ public final class OverpassSignalProvider implements SignalProvider
       // Each cluster is anchored to its base center; merged centers never become new anchors.
       boolean[] displayMemberAssigned = new boolean[diagnosticPoints.size()];
       ArrayList<SignalSnapshot.Point> displayPoints = new ArrayList<>(snapshot.points);
+      ArrayList<SignalSnapshot.Point> topologyMembers = new ArrayList<>();
+      ArrayList<SignalSnapshot.Point> topologyCenters = new ArrayList<>();
       for (int cluster = 0; cluster < mergedCenterBases.size(); ++cluster)
       {
         int base = mergedCenterBases.get(cluster);
@@ -565,14 +567,20 @@ public final class OverpassSignalProvider implements SignalProvider
         double centerLat = responseNodeLats.get(baseNodeIndex);
         double centerLon = responseNodeLons.get(baseNodeIndex);
         Location.distanceBetween(originLat, originLon, centerLat, centerLon, centerDistance);
-        displayPoints.add(new SignalSnapshot.Point(representative.id, centerLat, centerLon,
-            centerDistance[0]));
+        SignalSnapshot.Point centerPoint = new SignalSnapshot.Point(representative.id, centerLat, centerLon,
+            centerDistance[0]);
+        displayPoints.add(centerPoint);
+        for (Integer member : unassignedMembers)
+        {
+          topologyMembers.add(diagnosticPoints.get(member));
+          topologyCenters.add(centerPoint);
+        }
         Log.i("CB6-SIGNAL-WAY-DIAG", "display-center-node=" + centerCandidateIds.get(base)
             + " representative-signal=" + representative.id
             + " replaced-member-count=" + unassignedMembers.size());
       }
 
-      SignalSnapshot displaySnapshot = new SignalSnapshot(displayPoints);
+      SignalSnapshot displaySnapshot = new SignalSnapshot(displayPoints, topologyMembers, topologyCenters);
 
       boolean[] centerAssigned = new boolean[diagnosticPoints.size()];
       int centerClusterId = 0;
