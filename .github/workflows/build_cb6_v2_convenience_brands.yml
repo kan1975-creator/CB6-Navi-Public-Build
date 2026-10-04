@@ -79,15 +79,20 @@ jobs:
           test -f comaps/3party/protobuf/protobuf/src/google/protobuf/arena.cc
           mkdir -p out
           git -C comaps rev-parse HEAD | tee out/UPSTREAM_SHA.txt
-      - name: Apply CB6 identity and dedicated convenience brands
+      - name: Apply CB6 identity, Signal and dedicated convenience brands
         run: |
           set -euxo pipefail
+          test -z "$(git -C comaps status --porcelain --untracked-files=no)"
           python3 v2/baseline/apply_identity.py comaps
+          python3 v2/signals/apply_signals.py comaps
           python3 v2/poi/apply_convenience_brand_render.py comaps
           python3 v2/audits/audit_identity.py comaps
+          python3 v2/audits/audit_signals.py comaps | tee out/SIGNAL_SOURCE_AUDIT.txt
+          python3 v2/tests/signals_audit_selftest.py comaps | tee out/SIGNAL_AUDIT_SELFTEST.txt
           python3 v2/audits/audit_convenience.py
+          git -C comaps diff --check
           git -C comaps diff --name-only | tee out/DIFF_FILES.txt
-          ! grep -E 'Cb6Supplement|Overpass|nativeSetCb6DrivingMarks|CB6_SIGNAL' out/DIFF_FILES.txt
+          ! grep -E 'Cb6Supplement|nativeSetCb6DrivingMarks' out/DIFF_FILES.txt
       - name: Configure resources
         run: |
           set -euxo pipefail
@@ -99,40 +104,42 @@ jobs:
         run: |
           set -euxo pipefail
           nl -ba comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp | sed -n '920,1030p'
-      - name: Build convenience brands arm64 release
+      - name: Build integrated Signal and convenience brands arm64 release
         run: |
           set -euxo pipefail
           cd comaps/android
           ./gradlew -Parm64 app:assembleWebRelease --no-daemon --stacktrace 2>&1 | tee ../../out/GRADLE.log
-      - name: Verify convenience brands APK
+      - name: Verify integrated Signal and convenience brands APK
         run: |
           set -euxo pipefail
           mkdir -p verify-apk
           APK="$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | head -1)"
           test -n "$APK"
-          cp "$APK" out/CB6-V2-Convenience-Brands-arm64.apk
-          unzip -q out/CB6-V2-Convenience-Brands-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
+          cp "$APK" out/CB6-V2-Signal-Convenience-arm64.apk
+          unzip -q out/CB6-V2-Signal-Convenience-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
           file verify-apk/lib/arm64-v8a/liborganicmaps.so | tee out/NATIVE_VERIFY.txt
           readelf -h verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -E 'AArch64|ARM aarch64'
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'nativeCb6CollectConvenienceMarks'
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'nativeSetCb6ConvenienceMarks'
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'cb6-seven'
           strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'cb6-lawson'
+          strings verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -F 'nativeSetCb6Signals'
+          python3 v2/audits/audit_signals.py comaps --apk out/CB6-V2-Signal-Convenience-arm64.apk | tee out/APK_SIGNAL_AUDIT.txt
           AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt2 | sort -V | tail -1)"
-          "$AAPT" dump badging out/CB6-V2-Convenience-Brands-arm64.apk | tee out/APK_BADGING.txt
+          "$AAPT" dump badging out/CB6-V2-Signal-Convenience-arm64.apk | tee out/APK_BADGING.txt
           grep -F "package: name='jp.cb6.navi'" out/APK_BADGING.txt
           grep -F "application-label:'CB6 Navi'" out/APK_BADGING.txt
-          sha256sum out/CB6-V2-Convenience-Brands-arm64.apk | tee out/SHA256SUMS.txt
-          sha256sum out/CB6-V2-Convenience-Brands-arm64.apk > out/APK_SHA256.txt
-          python3 v2/gates/create_apk_evidence.py convenience-brands out/CB6-V2-Convenience-Brands-arm64.apk out/APK_SHA256.txt
+          sha256sum out/CB6-V2-Signal-Convenience-arm64.apk | tee out/SHA256SUMS.txt
+          sha256sum out/CB6-V2-Signal-Convenience-arm64.apk > out/APK_SHA256.txt
+          python3 v2/gates/create_apk_evidence.py convenience-brands out/CB6-V2-Signal-Convenience-arm64.apk out/APK_SHA256.txt
           python3 v2/gates/verify_apk_evidence.py v2/gates/apk_evidence/convenience-brands.json
           cp v2/gates/apk_evidence/convenience-brands.json out/APK_EVIDENCE.json
       - name: Upload convenience brands evidence
         uses: actions/upload-artifact@v4
         with:
-          name: CB6-V2-Convenience-Brands-arm64
+          name: CB6-V2-Signal-Convenience-arm64
           path: |
-            out/CB6-V2-Convenience-Brands-arm64.apk
+            out/CB6-V2-Signal-Convenience-arm64.apk
             out/UPSTREAM_SHA.txt
             out/DIFF_FILES.txt
             out/APK_BADGING.txt

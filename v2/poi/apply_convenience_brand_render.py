@@ -22,10 +22,16 @@ cmake.write_text(cm)
 uh = ROOT / "libs/map/user_mark.hpp"
 s = uh.read_text()
 old = "    TRAFFIC_LIGHT,\n    USER_MARK_TYPES_COUNT,"
+signal_old = "    TRAFFIC_LIGHT,\n    CB6_SIGNAL,\n    USER_MARK_TYPES_COUNT,"
 new = "    TRAFFIC_LIGHT,\n    CONVENIENCE,\n    USER_MARK_TYPES_COUNT,"
+signal_new = "    TRAFFIC_LIGHT,\n    CONVENIENCE,\n    CB6_SIGNAL,\n    USER_MARK_TYPES_COUNT,"
 if "    CONVENIENCE," not in s:
-    if old not in s: raise SystemExit("UserMark type anchor missing")
-    s = s.replace(old, new, 1)
+    if signal_old in s:
+        s = s.replace(signal_old, signal_new, 1)
+    elif old in s:
+        s = s.replace(old, new, 1)
+    else:
+        raise SystemExit("UserMark type anchor missing")
 uh.write_text(s)
 
 # Keep DebugPrint exhaustive after adding the dedicated mark type.
