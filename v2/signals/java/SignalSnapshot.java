@@ -27,11 +27,18 @@ public final class SignalSnapshot
 
   public static final SignalSnapshot EMPTY = new SignalSnapshot(Collections.emptyList());
   public final List<Point> points;
+  public final List<Point> topologyMembers;
+  public final List<Point> topologyCenters;
 
   /** Counts acquired points hidden only by renderer clustering; acquisition/cache remain unchanged. */
   public int clusteredPointCount() { return points.size() - displayPoints().size(); }
 
   public SignalSnapshot(List<Point> candidates)
+  {
+    this(candidates, Collections.emptyList(), Collections.emptyList());
+  }
+
+  public SignalSnapshot(List<Point> candidates, List<Point> members, List<Point> centers)
   {
     ArrayList<Point> sorted = new ArrayList<>();
     for (Point p : candidates)
@@ -47,6 +54,9 @@ public final class SignalSnapshot
       if (retained.size() == SignalPolicy.MAX_POINTS) break;
     }
     points = Collections.unmodifiableList(retained);
+    topologyMembers = Collections.unmodifiableList(new ArrayList<>(members));
+    topologyCenters = Collections.unmodifiableList(new ArrayList<>(centers));
+    if (topologyMembers.size() != topologyCenters.size()) throw new IllegalArgumentException("topology mapping mismatch");
   }
 
   /** Renderer receives every acquired signal at its original geographic coordinate. */
