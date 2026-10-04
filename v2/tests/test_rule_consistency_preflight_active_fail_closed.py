@@ -19,4 +19,10 @@ for name,mut,needle in cases:
   cp=run(r); out=cp.stdout+cp.stderr
   if cp.returncode==0 or needle not in out: raise SystemExit(name+" not rejected\n"+out)
   print("PASS expected rule-consistency rejection:",name)
+with tempfile.TemporaryDirectory() as td:
+ r=Path(td)/"repo"; shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))
+ p=r/"v2/gates/rule_consistency_preflight_adoption_evidence.json"; d=json.loads(p.read_text()); d.update({"status":"ACTIVE_PENDING_REFREEZE"}); p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+ cp=run(r); out=cp.stdout+cp.stderr
+ if cp.returncode==0 or "adoption evidence still pending" not in out: raise SystemExit("pending-adoption-evidence not rejected\n"+out)
+ print("PASS expected rule-consistency rejection: pending-adoption-evidence")
 print("PASS rule consistency preflight destructive cases rejected")
