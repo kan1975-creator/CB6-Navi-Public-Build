@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+R=Path(__file__).resolve().parents[2]; e=[]
+d=json.loads((R/"v2/gates/status_reporting_contract_candidate_v8.json").read_text(encoding="utf-8"))
+a=json.loads((R/"v2/gates/status_reporting_contract_v7.json").read_text(encoding="utf-8"))
+if d.get("schema")!=8 or d.get("rule_id")!="OPS-STATUS-REPORTING-001" or d.get("status")!="CANDIDATE": e.append("candidate v8 identity/status invalid")
+for k in ("allowed_classifications","exactly_one_classification_required","required_report_fields","four_line_template","scope","freshness_rule","fix_approval_boundary","report_tags","final_summary_display"):
+ if d.get(k)!=a.get(k): e.append("existing ACTIVE v7 contract changed: "+k)
+for k in ("進めて推奨","スマホ操作が必要"):
+ if d["rules"].get(k)!=a["rules"].get(k): e.append("existing ACTIVE v7 rule changed: "+k)
+dw=d["rules"]["待ち"]; aw=a["rules"]["待ち"]
+for k in ("required_fields","parallel_read_only_work_allowed","post_wait_user_instruction"):
+ if dw.get(k)!=aw.get(k): e.append("existing ACTIVE v7 wait rule changed: "+k)
+for k in ("run_start_basis","first_wait","later_wait","exceeded_normal_duration","completed_run","history"):
+ if dw["wait_time_display"].get(k)!=aw["wait_time_display"].get(k): e.append("existing ACTIVE v7 wait timing changed: "+k)
+x=dw["wait_time_display"].get("evidence_based_estimate",{})
+for k in ("applies_to_all_waiting_processes","estimate_or_next_check_requires_evidence","fixed_or_unsubstantiated_estimate_forbidden"):
+ if x.get(k) is not True: e.append("all-process wait evidence guard invalid: "+k)
+req=x.get("required_evidence",[])
+for k in ("current_run_or_step_start_time","current_elapsed_time","same_or_reasonably_comparable_historical_actual_duration_when_available"):
+ if k not in req: e.append("required wait evidence missing: "+k)
+if x.get("no_comparable_history_behavior")!="DISPLAY_DURATION_UNKNOWN" or x.get("duration_unknown_text")!="所要時間不明": e.append("unknown-duration fallback invalid")
+if "all future CB6 waiting processes" not in x.get("applies_to",[]): e.append("future wait-process coverage missing")
+if d.get("activation",{}).get("direct_active_forbidden") is not True or d.get("adoption",{}).get("status")!="NOT_ADOPTED": e.append("candidate self-activation allowed")
+if e:
+ print("CB6 STATUS REPORTING V8 CANDIDATE FAIL:")
+ for x in e: print(" -",x)
+ raise SystemExit(1)
+print("CB6 STATUS REPORTING V8 CANDIDATE PASS: all waiting-process estimates require actual evidence; unknown history displays 所要時間不明; ACTIVE v7 preserved")
