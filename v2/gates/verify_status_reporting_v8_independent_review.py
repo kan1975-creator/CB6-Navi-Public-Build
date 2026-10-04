@@ -26,6 +26,9 @@ q=x.get("reference_estimate_when_no_comparable_actual_history",{})
 for k in ("allowed","must_be_labeled_as_reference_estimate","must_be_separate_from_official_next_check_guidance","basis_required","unsupported_guess_forbidden"):
  if q.get(k) is not True: e.append("reference estimate guard invalid: "+k)
 if q.get("official_next_check_guidance_remains")!="所要時間不明": e.append("reference estimate replaced official unknown-duration guidance")
+if q.get("display_condition")!="ONLY_WHEN_OFFICIAL_NEXT_CHECK_GUIDANCE_IS_DURATION_UNKNOWN": e.append("reference estimate display condition invalid")
+for k in ("forbidden_when_official_guidance_is_evidence_based","display_required_when_duration_unknown_and_supported_basis_available"):
+ if q.get(k) is not True: e.append("reference estimate conditional display guard invalid: "+k)
 if len(q.get("allowed_basis",[]))<3: e.append("reference estimate concrete basis missing")
 if d.get("activation",{}).get("direct_active_forbidden") is not True or d.get("adoption",{}).get("status")!="NOT_ADOPTED": e.append("candidate self-activation allowed")
 if e:

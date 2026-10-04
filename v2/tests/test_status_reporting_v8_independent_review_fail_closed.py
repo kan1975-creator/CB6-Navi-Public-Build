@@ -14,6 +14,9 @@ cases=[
  ("unlabeled-reference",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"must_be_labeled_as_reference_estimate":False}),"reference estimate guard invalid"),
  ("reference-replaces-unknown",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"official_next_check_guidance_remains":"5分"}),"reference estimate replaced official unknown-duration guidance"),
  ("unsupported-reference",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"unsupported_guess_forbidden":False}),"reference estimate guard invalid"),
+ ("reference-always-visible",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"display_condition":"ALWAYS"}),"reference estimate display condition invalid"),
+ ("reference-with-official",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"forbidden_when_official_guidance_is_evidence_based":False}),"reference estimate conditional display guard invalid"),
+ ("omit-supported-reference",lambda d:d["rules"]["待ち"]["wait_time_display"]["evidence_based_estimate"]["reference_estimate_when_no_comparable_actual_history"].update({"display_required_when_duration_unknown_and_supported_basis_available":False}),"reference estimate conditional display guard invalid"),
  ("change-v7",lambda d:d["final_summary_display"].update({"duplicate_information_forbidden":False}),"existing ACTIVE v7 contract changed"),
  ("self-active",lambda d:d.update({"status":"ACTIVE"}),"candidate v8 identity/status invalid")]
 for name,mut,needle in cases:
