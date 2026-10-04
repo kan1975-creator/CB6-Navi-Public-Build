@@ -67,8 +67,8 @@ with tempfile.TemporaryDirectory() as d:
         raise SystemExit("CB6 CONVENIENCE AUDIT SELFTEST FAIL: extra Signal dependency was accepted")
 
     final.write_text(final_original.replace(
-        'signal_old = "    TRAFFIC_LIGHT,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT"',
-        'signal_old = "    TRAFFIC_LIGHT,\\n    USER_MARK_TYPES_COUNT"'), encoding="utf-8")
+        'signal_old = "    TRAFFIC_LIGHT,\\n    CB6_SIGNAL,\\n    USER_MARK_TYPES_COUNT,"',
+        'signal_old = "    TRAFFIC_LIGHT,\\n    USER_MARK_TYPES_COUNT,"'), encoding="utf-8")
     rc, _ = run(tmp)
     if rc == 0:
         raise SystemExit("CB6 CONVENIENCE AUDIT SELFTEST FAIL: missing coexistence anchor was accepted")
