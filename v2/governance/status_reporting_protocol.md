@@ -1,6 +1,6 @@
 # CB6 Status Reporting Protocol
 
-Status: ACTIVE (Status Reporting v7)  
+Status: ACTIVE (Status Reporting v8)  
 Rule ID: `OPS-STATUS-REPORTING-001`  
 Source: explicit user continuing instruction, 2026-09-30; four-line reporting extension explicitly requested 2026-10-02
 
@@ -28,7 +28,7 @@ Canonical no-user-operation form:
 - **ChatGPTアプリ：閉じてOK**
 - **スマホ操作：不要。再試行もしなくて大丈夫です。**
 
-For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all existing ACTIVE v7 required wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
+For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all existing ACTIVE v8 required wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
 
 ## Wait-time display
 
@@ -42,7 +42,7 @@ Intermediate progress checks MUST NOT reset the Run start-time basis. When the a
 
 For the first `待ち` report of a newly awaited Run, the recommended next-check interval MUST use the actual execution duration of the most recent completed Run of the same workflow when that observation is available and reasonably representative. Do not substitute a fixed default interval such as 15 minutes merely because this is the first check. For example, if the immediately preceding comparable Run completed in approximately 19 minutes, the initial next-check guidance for the new Run should be approximately 19 minutes.
 
-If no comparable completed Run is available, use the best available same-workflow history or a reasonable fallback estimate.
+If no same or reasonably comparable actual-duration evidence is available, the official next-check guidance MUST be `所要時間不明`; unsupported fixed estimates are forbidden. Only when official guidance is `所要時間不明` and concrete GitHub execution evidence supports a reference estimate, display `所要時間不明（参考推測：約○〜○分）`. The estimate basis is normally hidden and is shown when the user asks for the basis.
 
 ### Historical duration reference for future wait estimates
 
@@ -78,8 +78,8 @@ Out of scope for this change. Record only as a future candidate: if later requir
 
 ## Adoption and verification
 
-This protocol documents the currently adopted `OPS-STATUS-REPORTING-001` authority. Status Reporting v7 is `ACTIVE`, is bound by `v2/gates/status_reporting_contract_v7.json`, is registered by `v2/gates/operational_rule_registry_v11.json`, and has `MACHINE_ENFORCED` coverage in `v2/gates/rule_coverage.json`.
+This protocol documents the currently adopted `OPS-STATUS-REPORTING-001` authority. Status Reporting v7 is `ACTIVE`, is bound by `v2/gates/status_reporting_contract_v8.json`, is registered by `v2/gates/operational_rule_registry_v11.json`, and has `MACHINE_ENFORCED` coverage in `v2/gates/rule_coverage.json`.
 
 The existing adoption lifecycle remains authoritative for future revisions: **candidate verification → destructive test → independent review → explicit adoption → MACHINE_ENFORCED coverage**. This synchronization does not create or change any Status Reporting v7 rule; it keeps this protocol consistent with the already adopted ACTIVE authority.
 
-`v2/gates/verify_status_reporting_active_v7.py` MUST fail closed if this protocol is demoted from ACTIVE or loses the four existing required `待ち` fields. Its destructive test MUST demonstrate those protocol inconsistencies are rejected.
+`v2/gates/verify_status_reporting_active_v8.py` MUST fail closed if this protocol is demoted from ACTIVE or loses the four existing required `待ち` fields. Its destructive test MUST demonstrate those protocol inconsistencies are rejected.
