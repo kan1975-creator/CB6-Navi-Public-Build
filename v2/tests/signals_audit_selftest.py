@@ -31,6 +31,8 @@ cases=[
   "[highway=traffic_signals]", "[highway=traffic_lights]", "current-spec query highway=traffic_signals"),
  ("topology-batch", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
   "TOPOLOGY_BATCH_SIZE = 64", "TOPOLOGY_BATCH_SIZE = 12", "topology normalization is still limited to the legacy 12-node diagnostic window"),
+ ("mwm-topology-normalization", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+  "normalizedMwmSignals", "untrustedMwmSignals", "confirmed topology mapping is not applied to MWM anchors"),
 ]
 for name,rel,old,new,needle in cases:
  with tempfile.TemporaryDirectory() as td:
