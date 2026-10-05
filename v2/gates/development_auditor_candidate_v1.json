@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V1",
+  "status": "CANDIDATE",
+  "purpose": "Minimal third-party development-process audit layer that reuses existing CB6 authority and verification mechanisms without changing application behavior.",
+  "approval": {
+    "change_id": "CB6-DEVELOPMENT-AUDITOR-V1",
+    "scope": "candidate contract, verifier, destructive tests, Development Gate candidate wiring; no application behavior change and no ACTIVE adoption"
+  },
+  "freshness": {
+    "latest_head_required_each_audit": true,
+    "active_authority_refetch_required_each_audit": true,
+    "chat_memory_is_not_authority": true,
+    "head_change_requires_resynchronization": true
+  },
+  "reuse": {
+    "existing_mechanisms_preferred": true,
+    "must_not_replace": [
+      "development_method_contract",
+      "operational_rule_registry_and_coverage",
+      "development_efficiency",
+      "independent_acceptance_review",
+      "rule_consistency_preflight",
+      "apk_build_preflight",
+      "root_certification",
+      "feature_contracts",
+      "atomic_and_traceability",
+      "evidence_inventory"
+    ],
+    "duplicate_mechanism_forbidden_when_existing_mechanism_is_sufficient": true
+  },
+  "audit_dimensions": [
+    "rules",
+    "specifications",
+    "lists_and_worklists",
+    "change_bound_approval",
+    "multidirectional_research",
+    "change_impact",
+    "implementation_and_validation_scope",
+    "atomic_and_traceability",
+    "evidence",
+    "known_failures_and_regressions"
+  ],
+  "required_existing_sources": [
+    "v2/gates/development_method_contract.json",
+    "v2/gates/operational_rule_registry_v16.json",
+    "v2/gates/rule_coverage.json",
+    "v2/gates/development_efficiency_rule_candidate_v2.json",
+    "v2/gates/rule_consistency_preflight_active.json",
+    "v2/gates/evidence_inventory.json",
+    "v2/gates/repository_state_manifest.json",
+    "v2/gates/current_spec.json",
+    "v2/gates/traceability.json",
+    "v2/gates/source_atomic_coverage.json",
+    "docs/CB6_CHANGE_IMPACT_MAP.md"
+  ],
+  "approval_boundary": {
+    "rule_id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+    "unknown_future_change_may_reuse_prior_approval": false,
+    "post_hoc_approval_forbidden": true,
+    "read_only_research_and_design_may_continue_without_change_approval": true,
+    "specific_change_requires_change_bound_approval_before_implementation": true
+  },
+  "outcomes": {
+    "STOP": "A blocking authority, approval, safety, traceability, evidence, or unresolved-conflict omission exists; do not advance the affected change.",
+    "CORRECT": "A concrete correctable defect exists; return to the earliest affected stage and require change-bound approval before any fix commit when applicable.",
+    "FOLLOW-UP": "A non-blocking item remains and must be explicitly tracked without falsely stopping unrelated valid application development.",
+    "PASS": "Required audit dimensions are covered by current authority/evidence and no blocking omission is found."
+  },
+  "non_interference": {
+    "application_source_change_forbidden": true,
+    "signal_behavior_change_forbidden": true,
+    "convenience_behavior_change_forbidden": true,
+    "search_routing_renderer_change_forbidden": true,
+    "existing_independent_review_weaken_forbidden": true,
+    "existing_gate_or_evidence_weaken_forbidden": true
+  },
+  "activation": {
+    "self_activation_forbidden": true,
+    "direct_active_forbidden": true,
+    "candidate_must_not_enter_active_rule_coverage": true,
+    "requires_before_active": [
+      "positive_candidate_verification",
+      "destructive_test",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_registry_coverage"
+    ]
+  }
+}
