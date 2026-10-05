@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-DEVELOPMENT-EFFICIENCY-001-V2-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "OPS-DEVELOPMENT-EFFICIENCY-001 revision 2",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Development Efficiency v2を正式採用してACTIVE化を承認して進めて",
+    "recorded_at": "2026-10-05"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37300321689,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37300704726,
+      "conclusion": "success"
+    },
+    "development_gate": {
+      "run_id": 37300704617,
+      "conclusion": "success"
+    },
+    "candidate": "v2/gates/development_efficiency_rule_candidate_v2.json",
+    "registry": "v2/gates/operational_rule_registry_v15.json"
+  },
+  "next_required": [
+    "coverage_v15",
+    "active_verifier_and_destructive_test",
+    "method_refreeze",
+    "final_development_gate"
+  ]
+}
