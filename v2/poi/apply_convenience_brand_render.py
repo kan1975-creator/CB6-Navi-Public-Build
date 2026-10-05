@@ -259,7 +259,9 @@ if field not in a:
     pos = a.find("{", a.find("public class MwmActivity extends BaseMwmFragmentActivity"))
     if pos < 0: raise SystemExit("MwmActivity class anchor missing")
     a = a[:pos+1] + "\n" + field + a[pos+1:]
-hook = """    if (mCb6ConvenienceLastLocation == null ||
+hook = """    android.util.Log.i("CB6-CONVENIENCE-SCALE-DIAG",
+        "drawScale=" + Framework.nativeGetDrawScale());
+    if (mCb6ConvenienceLastLocation == null ||
         location.distanceTo(mCb6ConvenienceLastLocation) >= 800.0f)
     {
       final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(
