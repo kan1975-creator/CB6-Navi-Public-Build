@@ -280,6 +280,11 @@ hook = """    if (mCb6ConvenienceLastLocation == null ||
     }
 
 """
+anchor2 = "    final RoutingController routing = RoutingController.get();\n"
+if "nativeCb6CollectConvenienceMarks(" not in a:
+    if anchor2 not in a: raise SystemExit("MwmActivity location routing anchor missing")
+    a = a.replace(anchor2, hook + anchor2, 1)
+
 zoom_hook = """      mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6ConvenienceZoomDiag);
       mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);
 
@@ -289,10 +294,6 @@ if "mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);" not in a:
     if zoom_anchor not in a: raise SystemExit("MwmActivity convenience refresh anchor missing")
     a = a.replace(zoom_anchor, zoom_hook + zoom_anchor, 1)
 
-anchor2 = "    final RoutingController routing = RoutingController.get();\n"
-if "nativeCb6CollectConvenienceMarks(" not in a:
-    if anchor2 not in a: raise SystemExit("MwmActivity location routing anchor missing")
-    a = a.replace(anchor2, hook + anchor2, 1)
 activity.write_text(a)
 
 # Suppress only stock vehicle-map convenience presentation. Keep the MWM
