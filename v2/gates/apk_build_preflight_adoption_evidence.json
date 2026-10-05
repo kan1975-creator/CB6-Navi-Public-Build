@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-APK-BUILD-PREFLIGHT-001-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "OPS-APK-BUILD-PREFLIGHT-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "OPS-APK-BUILD-PREFLIGHT-001を正式採用してACTIVE化を承認して進めて",
+    "recorded_at": "2026-10-05"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37277837844,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37283457168,
+      "conclusion": "success"
+    },
+    "development_gate": {
+      "run_id": 37283457047,
+      "conclusion": "success"
+    },
+    "candidate": "v2/gates/apk_build_preflight_candidate.json",
+    "review": "v2/gates/apk_build_preflight_independent_review.json"
+  },
+  "next_required": []
+}
