@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "rule_id": "OPS-APK-BUILD-PREFLIGHT-001",
+  "status": "PROPOSED",
+  "source": "explicit_user_approval_2026-10-05",
+  "scope": "apk_builds_for_current_and_future_CB6_features",
+  "purpose": "Block APK compilation until broad source, governance, integration and non-regression consistency checks pass.",
+  "requirements": {
+    "latest_authority_checked": true,
+    "pinned_upstream_revalidated": true,
+    "feature_gate_passed": true,
+    "impact_and_research_records_present": true,
+    "generated_source_integration_checked": true,
+    "change_allowlist_checked": true,
+    "frozen_assets_checked": true,
+    "cross_feature_integration_checked": true,
+    "routing_search_favorites_offline_non_regression_checked": true,
+    "diagnostic_path_checked_when_present": true,
+    "audits_and_destructive_tests_passed": true,
+    "diff_check_passed": true,
+    "method_registry_coverage_checked": true,
+    "temporary_diagnostic_separated_from_production": true
+  },
+  "fail_closed": true,
+  "placement": "immediately_before_gradle_apk_build",
+  "non_weakening": [
+    "Method Freeze",
+    "Development Gate",
+    "Feature Gate",
+    "APK Evidence",
+    "Device Evidence",
+    "OPS-USER-APPROVAL-BEFORE-FIX-001",
+    "OPS-DEVELOPMENT-EFFICIENCY-001"
+  ],
+  "activation": "candidate_only_until_independent_review_and_explicit_user_adoption"
+}
