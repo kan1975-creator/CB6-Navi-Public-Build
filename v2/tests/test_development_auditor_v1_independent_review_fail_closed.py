@@ -5,7 +5,7 @@ S=Path(__file__).resolve().parents[2]; CMD=["python3","v2/gates/verify_developme
 def run(r): return subprocess.run(CMD,cwd=r,text=True,capture_output=True)
 if run(S).returncode: raise SystemExit("auditor independent baseline failed")
 cases=[
- ("allow-stale-head",lambda d:d["freshness_guards"].update({"head_change_requires_resynchronization":False}),"auditor freshness invalid"),
+ ("allow-stale-head",lambda d:d["freshness"].update({"head_change_requires_resynchronization":False}),"auditor freshness invalid"),
  ("drop-research",lambda d:d["audit_dimensions"].remove("multidirectional_research"),"audit dimension missing"),
  ("reuse-future-approval",lambda d:d["approval_boundary"].update({"unknown_future_change_may_reuse_prior_approval":True}),"approval boundary invalid"),
  ("allow-app-change",lambda d:d["non_interference"].update({"application_source_change_forbidden":False}),"non-interference invalid"),
