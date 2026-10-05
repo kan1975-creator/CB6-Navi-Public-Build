@@ -90,6 +90,16 @@ jobs:
           python3 v2/baseline/apply_identity.py comaps
           python3 v2/signals/apply_signals.py comaps
           python3 v2/poi/apply_convenience_brand_render.py comaps
+          python3 v2/tests/test_convenience_zoom_generated_source_fail_closed.py
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java")
+          s = p.read_text(encoding="utf-8")
+          assert s.count("final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(") == 1
+          assert s.count("mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);") == 1
+          assert "nativeCb6CollectConvenienceMarks(\\n" not in s
+          print("CONVENIENCE ZOOM GENERATED MwmActivity PASS")
+          PY
           python3 v2/audits/audit_identity.py comaps
           python3 v2/audits/audit_signals.py comaps --allow-convenience-style | tee out/SIGNAL_SOURCE_AUDIT.txt
           python3 v2/tests/signals_audit_selftest.py comaps --allow-convenience-style | tee out/SIGNAL_AUDIT_SELFTEST.txt
