@@ -96,6 +96,28 @@ jobs:
           git -C comaps diff --check
           git -C comaps diff --name-only | tee out/DIFF_FILES.txt
           ! grep -E 'Cb6Supplement|nativeSetCb6DrivingMarks' out/DIFF_FILES.txt
+      - name: Diagnose Qt SVG external-file image reference for exact six icons
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+          import re
+          names = ["cb6-seven.svg","cb6-familymart.svg","cb6-lawson.svg","cb6-seicomart.svg","cb6-ministop.svg","cb6-mybasket.svg"]
+          for theme in ("light","dark"):
+              d = Path("comaps/data/styles/default") / theme / "symbols"
+              for name in names:
+                  p = d / name
+                  text = p.read_text()
+                  m = re.search(r'href="data:image/png;base64,([^"]+)"', text)
+                  if not m:
+                      raise SystemExit(f"missing approved embedded PNG: {p}")
+                  png = base64.b64decode(m.group(1), validate=True)
+                  sidecar = p.with_suffix(".cb6-diag.png")
+                  sidecar.write_bytes(png)
+                  p.write_text(re.sub(r'href="data:image/png;base64,[^"]+"', f'href="{sidecar.name}"', text, count=1))
+                  print(f"CB6-QT-SVG-DIAG theme={theme} svg={name} sidecar={sidecar.name} bytes={len(png)}")
+          PY
       - name: Configure resources
         run: |
           set -euxo pipefail
