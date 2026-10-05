@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 from pathlib import Path
+from io import BytesIO
 import shutil, sys
+
+from PIL import Image
 
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path("comaps").resolve()
 REPO = Path(__file__).resolve().parents[2]
@@ -206,11 +209,26 @@ fallback = {"cb6-convenience": ("CV", "#555555"), "cb6-daily": ("D", "#C62828")}
 for theme in ("light", "dark"):
     style_root = ROOT / "data/styles/default" / theme
     symbols = style_root / "symbols"
+    density_long_edges = {
+        "mdpi": 22, "hdpi": 32, "xhdpi": 43,
+        "6plus": 52, "xxhdpi": 65, "xxxhdpi": 77,
+    }
     for png_filename, png in brand_png.items():
-        for density in ("mdpi", "hdpi", "xhdpi", "6plus", "xxhdpi", "xxxhdpi"):
-            density_dir = style_root / density
-            density_dir.mkdir(parents=True, exist_ok=True)
-            (density_dir / png_filename).write_bytes(png)
+        with Image.open(BytesIO(png)) as source_image:
+            source_image.load()
+            source_width, source_height = source_image.size
+            source_long_edge = max(source_width, source_height)
+            for density, target_long_edge in density_long_edges.items():
+                scale = target_long_edge / source_long_edge
+                target_size = (
+                    max(1, round(source_width * scale)),
+                    max(1, round(source_height * scale)),
+                )
+                density_dir = style_root / density
+                density_dir.mkdir(parents=True, exist_ok=True)
+                output = BytesIO()
+                source_image.resize(target_size, Image.Resampling.LANCZOS).save(output, format="PNG")
+                (density_dir / png_filename).write_bytes(output.getvalue())
     for name, (label, color) in fallback.items():
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="{color}" stroke-width="3"/><text x="14" y="18" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="{color}">{label}</text></svg>'''
         (symbols / (name + ".svg")).write_text(svg)
