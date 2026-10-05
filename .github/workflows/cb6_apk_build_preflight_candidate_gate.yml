@@ -1,0 +1,37 @@
+name: CB6 APK Build Preflight Candidate Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cb6-v2-clean
+    paths:
+      - 'v2/gates/apk_build_preflight_candidate.json'
+      - 'v2/gates/verify_apk_build_preflight_candidate.py'
+      - 'v2/tests/test_apk_build_preflight_candidate_fail_closed.py'
+      - '.github/workflows/cb6_apk_build_preflight_candidate_gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  candidate:
+    name: APK Build Preflight candidate validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify candidate contract
+        run: python3 v2/gates/verify_apk_build_preflight_candidate.py
+      - name: Destructive candidate fail-closed tests
+        run: python3 v2/tests/test_apk_build_preflight_candidate_fail_closed.py
+      - name: Confirm candidate cannot self-activate
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("v2/gates/apk_build_preflight_candidate.json")
+          d=json.loads(p.read_text())
+          assert d["status"] == "PROPOSED"
+          assert d["activation"] == "candidate_only_until_independent_review_and_explicit_user_adoption"
+          print("candidate lifecycle boundary: PASS")
+          PY
