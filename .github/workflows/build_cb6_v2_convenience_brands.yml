@@ -13,6 +13,7 @@ on:
       - 'v2/tests/convenience_brand_classifier_test.cpp'
       - 'v2/tests/test_convenience_raster_svg_allowlist.py'
       - 'v2/tests/convenience_audit_selftest.py'
+      - 'v2/tests/test_apk_build_preflight_runtime_fail_closed.py'
       - 'v2/tests/signals_audit_selftest.py'
       - 'v2/gates/features/convenience-brands.json'
       - 'v2/gates/impact_records/convenience-brands.json'
