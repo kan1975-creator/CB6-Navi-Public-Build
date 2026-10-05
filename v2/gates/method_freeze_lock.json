@@ -91,7 +91,7 @@
     "v2/gates/operational_rule_registry_v15.json": "bef8e708193959468c2844a3a3b344fae2ac0771",
     "v2/gates/development_efficiency_rule_candidate_v2.json": "da58c39f2ef20879f597e99d29ae9138238afdd5",
     "v2/gates/development_efficiency_adoption_evidence_v2.json": "1e06ebea14c0e2f7915d21869ce6c46022d4abce",
-    "v2/gates/verify_development_efficiency_active_v2.py": "d8a690532dfce2a5e7ac83d9c450befc71a81b51",
+    "v2/gates/verify_development_efficiency_active_v2.py": "41b819891bc6e4ea3438a627130f5079332bbd1a",
     "v2/tests/test_development_efficiency_active_v2_fail_closed.py": "81cca382ce903ac272d9e46428d14af6183a0ad6",
     "v2/gates/verify_apk_build_preflight_active.py": "58496aa2600861be6774c96b0f2a2464c51d4d4e",
     "v2/tests/test_apk_build_preflight_active_fail_closed.py": "067a5ee341a43b891b0930ed04ccfced2881b27a"
