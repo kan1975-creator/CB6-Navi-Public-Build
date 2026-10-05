@@ -289,7 +289,7 @@ render_hook = """    mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6Convenie
 
 """
 render_anchor = "    ThemeSwitcher.INSTANCE.restart(true);\n"
-if "CB6-CONVENIENCE-ZOOM-DIAG" not in a:
+if "mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);" not in a:
     if render_anchor not in a: raise SystemExit("MwmActivity rendering-init anchor missing")
     a = a.replace(render_anchor, render_hook + render_anchor, 1)
 activity.write_text(a)
