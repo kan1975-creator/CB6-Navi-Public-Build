@@ -14,3 +14,13 @@ for key in m.REQS:
  else: raise SystemExit("missing fail-closed rejection for "+key)
  print("PASS expected executable preflight rejection:",key)
 print("PASS executable APK build preflight destructive cases rejected")
+
+# Positive composition semantics: real Signal integration is split across generated include,
+# Framework include and MwmActivity lifecycle connection; all three are required.
+def signal_present(fw, sigjni, mwm):
+ return ("nativeSetCb6Signals" in sigjni and '#include "cb6_signal_jni.inc"' in fw and "mCb6Signals" in mwm)
+assert signal_present('#include "cb6_signal_jni.inc"', "nativeSetCb6Signals", "mCb6Signals")
+assert not signal_present("", "nativeSetCb6Signals", "mCb6Signals")
+assert not signal_present('#include "cb6_signal_jni.inc"', "", "mCb6Signals")
+assert not signal_present('#include "cb6_signal_jni.inc"', "nativeSetCb6Signals", "")
+print("PASS positive Signal composition semantics and fail-closed missing-part cases")
