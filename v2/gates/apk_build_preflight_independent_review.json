@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "review_id": "APK-BUILD-PREFLIGHT-INDEPENDENT-REVIEW-001",
+  "candidate": "v2/gates/apk_build_preflight_candidate.json",
+  "status": "INDEPENDENT_REVIEW_CANDIDATE",
+  "basis_head": "0e18d5939be70b66bc0e11d6a0cacd1406477703",
+  "checks": {
+    "candidate_gate_run": 37277837844,
+    "candidate_gate_result": "SUCCESS",
+    "development_gate_run": 37277837703,
+    "development_gate_result": "SUCCESS",
+    "existing_active_authority_unchanged": true,
+    "no_apk_workflow_connection": true,
+    "no_method_weakening": true,
+    "no_feature_gate_weakening": true,
+    "no_apk_or_device_evidence_weakening": true,
+    "explicit_user_adoption_still_required": true
+  }
+}
