@@ -2,7 +2,7 @@
   "schema": 1,
   "rule_id": "OPS-DEVELOPMENT-EFFICIENCY-001",
   "revision": 2,
-  "status": "PROPOSED",
+  "status": "ACTIVE",
   "source": "explicit_user_continuing_instruction_2026-10-05",
   "scope": "all_current_features_all_future_features_all_33_items_and_derivative_work",
   "extends": "v2/gates/development_efficiency_rule_candidate.json",
@@ -64,5 +64,12 @@
       "EXPLICIT_USER_ADOPTED",
       "ACTIVE_REFROZEN"
     ]
+  },
+  "activation": {
+    "candidate_gate_run": 37300321689,
+    "independent_review_run": 37300704726,
+    "development_gate_run": 37300704617,
+    "explicit_user_adoption": "Development Efficiency v2を正式採用してACTIVE化を承認して進めて",
+    "adopted_at": "2026-10-05"
   }
 }
