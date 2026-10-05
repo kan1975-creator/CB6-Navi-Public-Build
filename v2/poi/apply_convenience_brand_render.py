@@ -77,14 +77,14 @@ public:
     default: break;
     }
     LOG(LINFO, ("CB6-CONVENIENCE-DIAG symbol-selected", "kind", m_kind, "symbol", symbol));
-    // CoMaps standard UserMark zoom selection: z17+ near, z16 ~200 m,
-    // z15 ~500 m. z14 and farther are hidden by GetMinZoom().
-    symbols->insert({15, std::string(symbol) + "-50"});
-    symbols->insert({16, std::string(symbol) + "-85"});
-    symbols->insert({17, symbol});
+    // CB6 relative boundary adjustment: keep the proven CoMaps UserMark
+    // selection mechanism and move the existing size stages one zoom farther out.
+    symbols->insert({14, std::string(symbol) + "-50"});
+    symbols->insert({15, std::string(symbol) + "-85"});
+    symbols->insert({16, symbol});
     return symbols;
   }
-  int GetMinZoom() const override { return 15; }
+  int GetMinZoom() const override { return 14; }
   bool SymbolIsPOI() const override { return false; }
   bool IsNonDisplaceable() const override { return true; }
   bool IsMarkAboveText() const override { return true; }
@@ -259,9 +259,7 @@ if field not in a:
     pos = a.find("{", a.find("public class MwmActivity extends BaseMwmFragmentActivity"))
     if pos < 0: raise SystemExit("MwmActivity class anchor missing")
     a = a[:pos+1] + "\n" + field + a[pos+1:]
-hook = """    android.util.Log.i("CB6-CONVENIENCE-SCALE-DIAG",
-        "drawScale=" + Framework.nativeGetDrawScale());
-    if (mCb6ConvenienceLastLocation == null ||
+hook = """    if (mCb6ConvenienceLastLocation == null ||
         location.distanceTo(mCb6ConvenienceLastLocation) >= 800.0f)
     {
       final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(
