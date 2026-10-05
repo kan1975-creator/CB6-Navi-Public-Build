@@ -136,7 +136,7 @@ jobs:
         run: |
           set -euxo pipefail
           python3 v2/tests/test_apk_build_preflight_runtime_fail_closed.py
-          python3 v2/gates/verify_apk_build_preflight_runtime.py --feature convenience-brands --tree comaps --mode production-diagnostic
+          python3 v2/gates/verify_apk_build_preflight_runtime.py --feature convenience-brands --tree comaps --mode production
 
       - name: Build integrated Signal and convenience brands arm64 release
         run: |
