@@ -28,10 +28,10 @@
     "v2/gates/verify_method_completion.py": "7e3f583055cd47b7bc6ff69d0b27d5de35d07f36",
     "v2/tests/test_method_completion.py": "2ac729de719edb2fa243e4c26b354dc0e226ed6e",
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
-    "v2/gates/verify_operational_rule_registry.py": "57cdd2dce1b47ee2788010d3a316ad1225a8c4a8",
+    "v2/gates/verify_operational_rule_registry.py": "df6f22fe4f9c653e7252bf0e757a4ce0a9abc717",
     "v2/gates/verify_rule_coverage.py": "b97e005569b6da0b332cca8fb49ab6883b5135ac",
     "v2/gates/rule_coverage.json": "f9b89a7940d1b6f730c20a6eac1dbe3395d27309",
-    "v2/tests/test_operational_rule_registry_fail_closed.py": "d55e27b394c0b35682a19f5f9e27abf4a12cfb41",
+    "v2/tests/test_operational_rule_registry_fail_closed.py": "b87653e50fc53dbe8ad6340433ca802094fbfb8b",
     "v2/tests/test_rule_coverage_fail_closed.py": "dc8ca57c4dfc31fc0ad0669184b01969a5ff6a95",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
     "v2/gates/method_revision_procedure_v1.json": "86b2f69734ed61873f9ab205e04619b04e57b72d",
@@ -78,7 +78,7 @@
     "v2/gates/verify_status_reporting_active_v8.py": "800ef10cf80d59ad443d43ae7ed30eda60eec3ee",
     "v2/tests/test_status_reporting_active_v8_fail_closed.py": "73b6521a2e21d2025dfc1472a8e87d1d9acb6176",
     "v2/gates/rule_consistency_preflight_active.json": "8a365b7dd183e11d494d5fd7b5bf57e50cbdbd73",
-    "v2/gates/verify_rule_consistency_preflight_active.py": "5a6b2745e51bc3072fb271dfe52d4e374195d83f",
+    "v2/gates/verify_rule_consistency_preflight_active.py": "d0743e796b68ace706a3301a664514a347ae2932",
     "v2/tests/test_rule_consistency_preflight_active_fail_closed.py": "49ef255e1f08bb2f4f20678645453a6869bcb14e",
     "v2/governance/status_reporting_protocol.md": "3132dda9d727d9cc804540a0e8a49f26ed12c7f0",
     "v2/gates/status_reporting_adoption_evidence_v8.json": "837941182b243baa630e0b54f2718ded224bb8d3",
@@ -92,6 +92,8 @@
     "v2/gates/development_efficiency_rule_candidate_v2.json": "da58c39f2ef20879f597e99d29ae9138238afdd5",
     "v2/gates/development_efficiency_adoption_evidence_v2.json": "1e06ebea14c0e2f7915d21869ce6c46022d4abce",
     "v2/gates/verify_development_efficiency_active_v2.py": "d8a690532dfce2a5e7ac83d9c450befc71a81b51",
-    "v2/tests/test_development_efficiency_active_v2_fail_closed.py": "81cca382ce903ac272d9e46428d14af6183a0ad6"
+    "v2/tests/test_development_efficiency_active_v2_fail_closed.py": "81cca382ce903ac272d9e46428d14af6183a0ad6",
+    "v2/gates/verify_apk_build_preflight_active.py": "58496aa2600861be6774c96b0f2a2464c51d4d4e",
+    "v2/tests/test_apk_build_preflight_active_fail_closed.py": "067a5ee341a43b891b0930ed04ccfced2881b27a"
   }
 }
