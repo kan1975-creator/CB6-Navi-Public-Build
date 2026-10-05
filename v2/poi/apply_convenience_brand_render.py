@@ -236,7 +236,7 @@ for theme in ("light", "dark"):
 
 activity = ROOT / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
 a = activity.read_text()
-field = "  private Location mCb6ConvenienceLastLocation;
+field = """  private Location mCb6ConvenienceLastLocation;
   private final android.os.Handler mCb6ConvenienceZoomDiagHandler =
       new android.os.Handler(android.os.Looper.getMainLooper());
   private int mCb6ConvenienceLastDrawScale = Integer.MIN_VALUE;
@@ -255,7 +255,7 @@ field = "  private Location mCb6ConvenienceLastLocation;
         mCb6ConvenienceZoomDiagHandler.postDelayed(this, 1000L);
     }
   };
-"
+"""
 if field not in a:
     pos = a.find("{", a.find("public class MwmActivity extends BaseMwmFragmentActivity"))
     if pos < 0: raise SystemExit("MwmActivity class anchor missing")
