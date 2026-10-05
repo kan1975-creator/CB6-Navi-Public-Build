@@ -77,10 +77,14 @@ public:
     default: break;
     }
     LOG(LINFO, ("CB6-CONVENIENCE-DIAG symbol-selected", "kind", m_kind, "symbol", symbol));
-    symbols->insert({12, symbol});
+    // CoMaps standard UserMark zoom selection: z17+ near, z16 ~200 m,
+    // z15 ~500 m. z14 and farther are hidden by GetMinZoom().
+    symbols->insert({15, std::string(symbol) + "-50"});
+    symbols->insert({16, std::string(symbol) + "-85"});
+    symbols->insert({17, symbol});
     return symbols;
   }
-  int GetMinZoom() const override { return 12; }
+  int GetMinZoom() const override { return 15; }
   bool SymbolIsPOI() const override { return false; }
   bool IsNonDisplaceable() const override { return true; }
   bool IsMarkAboveText() const override { return true; }
@@ -229,32 +233,27 @@ for theme in ("light", "dark"):
                 output = BytesIO()
                 source_image.resize(target_size, Image.Resampling.LANCZOS).save(output, format="PNG")
                 (density_dir / png_filename).write_bytes(output.getvalue())
+                for suffix, ratio in (("-85", 0.85), ("-50", 0.50)):
+                    variant_size = (
+                        max(1, round(target_size[0] * ratio)),
+                        max(1, round(target_size[1] * ratio)),
+                    )
+                    variant = BytesIO()
+                    source_image.resize(variant_size, Image.Resampling.LANCZOS).save(variant, format="PNG")
+                    variant_name = png_filename[:-4] + suffix + ".png"
+                    (density_dir / variant_name).write_bytes(variant.getvalue())
     for name, (label, color) in fallback.items():
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="{color}" stroke-width="3"/><text x="14" y="18" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="{color}">{label}</text></svg>'''
         (symbols / (name + ".svg")).write_text(svg)
+        for suffix, ratio in (("-85", 0.85), ("-50", 0.50)):
+            side = max(1, round(28 * ratio))
+            scaled = svg.replace('width="28" height="28"', f'width="{side}" height="{side}"')
+            (symbols / (name + suffix + ".svg")).write_text(scaled)
 
 
 activity = ROOT / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
 a = activity.read_text()
 field = """  private Location mCb6ConvenienceLastLocation;
-  private final android.os.Handler mCb6ConvenienceZoomDiagHandler =
-      new android.os.Handler(android.os.Looper.getMainLooper());
-  private int mCb6ConvenienceLastDrawScale = Integer.MIN_VALUE;
-  private final Runnable mCb6ConvenienceZoomDiag = new Runnable()
-  {
-    @Override
-    public void run()
-    {
-      final int drawScale = Framework.nativeGetDrawScale();
-      if (drawScale != mCb6ConvenienceLastDrawScale)
-      {
-        android.util.Log.i("CB6-CONVENIENCE-ZOOM-DIAG", "drawScale=" + drawScale);
-        mCb6ConvenienceLastDrawScale = drawScale;
-      }
-      if (!isFinishing() && !isDestroyed())
-        mCb6ConvenienceZoomDiagHandler.postDelayed(this, 1000L);
-    }
-  };
 """
 if field not in a:
     pos = a.find("{", a.find("public class MwmActivity extends BaseMwmFragmentActivity"))
@@ -263,9 +262,6 @@ if field not in a:
 hook = """    if (mCb6ConvenienceLastLocation == null ||
         location.distanceTo(mCb6ConvenienceLastLocation) >= 800.0f)
     {
-      mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6ConvenienceZoomDiag);
-      mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);
-
       final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(
           location.getLatitude(), location.getLongitude(), 3000, 17);
       if (cb6 != null && cb6.length == 3 && cb6[0] != null && cb6[1] != null && cb6[2] != null)
