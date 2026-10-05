@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "rule_id": "OPS-DEVELOPMENT-EFFICIENCY-001",
+  "revision": 2,
+  "status": "PROPOSED",
+  "source": "explicit_user_continuing_instruction_2026-10-05",
+  "scope": "all_current_features_all_future_features_all_33_items_and_derivative_work",
+  "extends": "v2/gates/development_efficiency_rule_candidate.json",
+  "change_reason": "Require multi-angle error-origin and missed-detection analysis before proposing fixes, and generalize prevention when appropriate.",
+  "requirements": {
+    "acceptance_criteria_fixed_before_implementation_or_diagnostic_apk": true,
+    "broad_read_only_investigation_precedes_device_only_checks": true,
+    "observation_points_bundled_across_relevant_execution_path_when_practical": true,
+    "actions_wait_allows_non_conflicting_read_only_parallel_work": true,
+    "unnecessary_additional_diagnostics_after_fixed_criteria_pass_forbidden": true,
+    "multiple_diagnostic_iterations_allowed_when_required_for_cause_isolation": true,
+    "error_fix_proposal_requires_multi_angle_read_only_analysis": true,
+    "direct_cause_must_be_identified": true,
+    "error_introduction_cause_must_be_identified": true,
+    "missed_detection_cause_must_be_identified": true,
+    "impact_scope_must_be_checked": true,
+    "alternative_implementation_must_be_considered": true,
+    "recurrence_prevention_must_be_considered": true,
+    "minimum_fix_scope_must_be_defined": true,
+    "insufficient_cause_analysis_blocks_fix_proposal": true,
+    "analogous_current_and_future_feature_prevention_must_be_considered": true
+  },
+  "analysis_dimensions": [
+    "requirements_understanding",
+    "pinned_original_source",
+    "implementation_method",
+    "generation_and_application_order",
+    "string_or_data_transformation",
+    "cross_feature_composition",
+    "actual_workflow_execution_path",
+    "verifiers_and_destructive_tests",
+    "review_and_preflight_gaps",
+    "similar_prior_failures"
+  ],
+  "required_fix_proposal_evidence": [
+    "direct_cause",
+    "error_introduction_cause",
+    "missed_detection_cause",
+    "impact_scope",
+    "alternative_implementation",
+    "recurrence_prevention",
+    "minimum_fix_scope"
+  ],
+  "non_weakening": [
+    "OPS-USER-APPROVAL-BEFORE-FIX-001",
+    "OPS-INDEPENDENT-ACCEPTANCE-001",
+    "OPS-APK-BUILD-PREFLIGHT-001",
+    "Device Evidence",
+    "Method Freeze",
+    "Root Certification",
+    "existing Acceptance criteria"
+  ],
+  "lifecycle": {
+    "direct_active_forbidden": true,
+    "sequence": [
+      "PROPOSED",
+      "CANDIDATE_VERIFIED",
+      "INDEPENDENTLY_REVIEWED",
+      "EXPLICIT_USER_ADOPTED",
+      "ACTIVE_REFROZEN"
+    ]
+  }
+}
