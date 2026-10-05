@@ -36,6 +36,8 @@ These notes preserve current user-agreed operating context without claiming new 
 4. Do not interrupt feature development merely to improve governance that is currently passing. Propose governance change only when a concrete gap not adequately covered by existing authority is demonstrated, and follow the existing rule-consistency/adoption process if such a change is actually needed.
 5. Do not reopen settled decisions without new conflicting evidence, a changed requirement, or a verified authority conflict.
 6. When an APK is ready for user/device work, provide a direct download route/link to the relevant APK/Artifact when technically available, alongside the build identity required by ACTIVE evidence rules.
+7. When a confirmed product specification changes, keep the atomic requirement list and the product specification/decision authorities consistent with that change. Reuse the existing atomic/specification system rather than creating a competing specification list in this note.
+8. Specification-list synchronization must not obstruct application development. Perform the synchronization as a small accompanying maintenance task when practical; if it is non-conflicting and tooling permits, progress it in parallel/background while the primary application-development target continues. Do not delay or stop application development solely to polish or comprehensively reorganize the lists unless a concrete authority/traceability conflict makes the application change unsafe.
 
 ## Current work state — replace when the target changes
 
