@@ -2,7 +2,12 @@
 from pathlib import Path
 src = Path("v2/poi/apply_convenience_brand_render.py").read_text(encoding="utf-8")
 assert src.count("final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(") == 1
-assert src.count("mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);") == 1
+assert "mCb6ConvenienceZoomDiag" not in src
+assert 'symbols->insert({15, std::string(symbol) + "-50"});' in src
+assert 'symbols->insert({16, std::string(symbol) + "-85"});' in src
+assert "symbols->insert({17, symbol});" in src
+assert "GetMinZoom() const override { return 15; }" in src
+assert '("-85", 0.85)' in src and '("-50", 0.50)' in src
 assert "zoom_anchor =" not in src
 assert "nativeCb6CollectConvenienceMarks(\\\\n" not in src
 print("CONVENIENCE ZOOM GENERATED-SOURCE FAIL-CLOSED PASS")
