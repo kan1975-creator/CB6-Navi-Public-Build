@@ -14,7 +14,7 @@ def test_allowlist_is_exactly_six_png_files():
 def test_exact_allowed_source_extracts_png_bytes_unchanged():
  _,extract=load_policy(); payload="iVBORw0KGgo="
  for png in EXPECTED:
-  name,raw=extract(png[:-4]+".svg",'<svg><image href="data:image/png;base64,'+payload+'"/></svg>'); assert name==png; assert raw==b"\\x89PNG\\r\\n\\x1a\\n"
+  name,raw=extract(png[:-4]+".svg",'<svg><image href="data:image/png;base64,'+payload+'"/></svg>'); assert name==png; assert raw==b"\x89PNG\r\n\x1a\n"
 def test_non_allowlisted_png_rejected():
  _,extract=load_policy()
  try: extract("cb6-daily.svg",'<svg><image href="data:image/png;base64,iVBORw0KGgo="/></svg>')
