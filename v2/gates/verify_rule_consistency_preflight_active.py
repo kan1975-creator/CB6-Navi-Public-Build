@@ -16,7 +16,7 @@ if reg.get("status")!="ACTIVE" or reg.get("revision_policy",{}).get("in_place_ch
 rr=json.loads((R/"v2/gates/operational_rule_registry_v13.json").read_text()); row={x.get("id"):x for x in rr["rules"]}.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{})
 if rr.get("version")!=13 or row.get("contract")!="v2/gates/rule_consistency_preflight_active.json": e.append("registry v13 rule-consistency binding invalid")
 cov=json.loads((R/"v2/gates/rule_coverage.json").read_text()); ce={x.get("rule_id"):x for x in cov["entries"]}
-if cov.get("registry")!="v2/gates/operational_rule_registry_v13.json" or ce.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("rule-consistency machine coverage missing")
+if cov.get("registry")!="v2/gates/operational_rule_registry_v14.json" or ce.get("OPS-RULE-CONSISTENCY-PREFLIGHT-001",{}).get("coverage_status")!="MACHINE_ENFORCED": e.append("rule-consistency machine coverage missing")
 ad=json.loads((R/"v2/gates/rule_consistency_preflight_adoption_evidence.json").read_text(encoding="utf-8"))
 if d.get("adoption",{}).get("status")!="ADOPTED": e.append("rule-consistency adoption not finalized")
 if ad.get("status")!="ACTIVE" or ad.get("next_required")!=[]: e.append("rule-consistency adoption evidence still pending")
