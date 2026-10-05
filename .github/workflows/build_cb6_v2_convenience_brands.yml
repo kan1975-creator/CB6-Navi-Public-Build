@@ -44,7 +44,7 @@ jobs:
           python3 v2/gates/create_gate_stamp.py --verify
       - name: Audit native MWM convenience ownership
         run: python3 v2/audits/audit_convenience.py
-      - name: Prove exact six-file raster SVG allowlist fail-closed
+      - name: Prove exact six-file direct PNG allowlist fail-closed
         run: python3 v2/tests/test_convenience_raster_svg_allowlist.py
       - name: Prove convenience audit fail-closed behavior
         run: python3 v2/tests/convenience_audit_selftest.py
@@ -96,28 +96,17 @@ jobs:
           git -C comaps diff --check
           git -C comaps diff --name-only | tee out/DIFF_FILES.txt
           ! grep -E 'Cb6Supplement|nativeSetCb6DrivingMarks' out/DIFF_FILES.txt
-      - name: Diagnose Qt SVG external-file image reference for exact six icons
+      - name: Prove exact six brand PNGs use CoMaps direct symbol path
         run: |
           set -euxo pipefail
-          python3 - <<'PY'
-          import base64
-          from pathlib import Path
-          import re
-          names = ["cb6-seven.svg","cb6-familymart.svg","cb6-lawson.svg","cb6-seicomart.svg","cb6-ministop.svg","cb6-mybasket.svg"]
-          for theme in ("light","dark"):
-              d = Path("comaps/data/styles/default") / theme / "symbols"
-              for name in names:
-                  p = d / name
-                  text = p.read_text()
-                  m = re.search(r'href="data:image/png;base64,([^"]+)"', text)
-                  if not m:
-                      raise SystemExit(f"missing approved embedded PNG: {p}")
-                  png = base64.b64decode(m.group(1), validate=True)
-                  sidecar = p.with_suffix(".cb6-diag.png")
-                  sidecar.write_bytes(png)
-                  p.write_text(re.sub(r'href="data:image/png;base64,[^"]+"', f'href="{sidecar.name}"', text, count=1))
-                  print(f"CB6-QT-SVG-DIAG theme={theme} svg={name} sidecar={sidecar.name} bytes={len(png)}")
-          PY
+          for theme in light dark; do
+            for density in mdpi hdpi xhdpi 6plus xxhdpi xxxhdpi; do
+              for name in cb6-seven cb6-familymart cb6-lawson cb6-seicomart cb6-ministop cb6-mybasket; do
+                test -s "comaps/data/styles/default/$theme/$density/$name.png"
+                test ! -e "comaps/data/styles/default/$theme/symbols/$name.svg"
+              done
+            done
+          done
       - name: Configure resources
         run: |
           set -euxo pipefail
