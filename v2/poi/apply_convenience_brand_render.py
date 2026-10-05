@@ -170,47 +170,48 @@ if "nativeSetCb6ConvenienceMarks" not in s:
     s = s[:pos+1] + decl + s[pos+1:]
 java.write_text(s)
 
-# Raster embedding remains fail-closed for every SVG except the six exact
-# user-approved CB6 convenience filenames below.
-CB6_RASTER_SVG_ALLOWLIST = frozenset({
-    "cb6-seven.svg",
-    "cb6-familymart.svg",
-    "cb6-lawson.svg",
-    "cb6-seicomart.svg",
-    "cb6-ministop.svg",
-    "cb6-mybasket.svg",
+# Exact six approved brand assets keep their original embedded PNG bytes, but
+# CoMaps' stock skin_generator consumes those bytes through its native PNG path.
+# No SVG <image> rendering is used for these six symbols.
+CB6_DIRECT_PNG_ALLOWLIST = frozenset({
+    "cb6-seven.png", "cb6-familymart.png", "cb6-lawson.png",
+    "cb6-seicomart.png", "cb6-ministop.png", "cb6-mybasket.png",
 })
 
-def cb6_validate_svg_raster_policy(filename, svg):
-    has_raster = "<image" in svg or "data:image" in svg
-    if has_raster and filename not in CB6_RASTER_SVG_ALLOWLIST:
-        raise ValueError("Raster embedding is forbidden outside exact CB6 allowlist: " + filename)
-    return True
+def cb6_extract_approved_png(svg_filename, svg):
+    import base64, re
+    png_filename = svg_filename[:-4] + ".png"
+    if png_filename not in CB6_DIRECT_PNG_ALLOWLIST:
+        raise ValueError("Direct PNG is forbidden outside exact CB6 allowlist: " + png_filename)
+    matches = re.findall(r'href="data:image/png;base64,([^"]+)"', svg)
+    if len(matches) != 1:
+        raise ValueError("Approved CB6 source must contain exactly one embedded PNG: " + svg_filename)
+    png = base64.b64decode(matches[0], validate=True)
+    if not png.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+        raise ValueError("Approved CB6 payload is not PNG: " + svg_filename)
+    return png_filename, png
 
-brand_svg = {}
-for filename in sorted(CB6_RASTER_SVG_ALLOWLIST):
-    source = Path(__file__).resolve().parent / filename
+brand_png = {}
+for png_filename in sorted(CB6_DIRECT_PNG_ALLOWLIST):
+    svg_filename = png_filename[:-4] + ".svg"
+    source = Path(__file__).resolve().parent / svg_filename
     if not source.is_file():
-        raise FileNotFoundError("Approved CB6 convenience SVG missing: " + filename)
-    svg = source.read_text()
-    cb6_validate_svg_raster_policy(filename, svg)
-    brand_svg[filename[:-4]] = svg
+        raise FileNotFoundError("Approved CB6 convenience source missing: " + svg_filename)
+    extracted_name, png = cb6_extract_approved_png(svg_filename, source.read_text())
+    if extracted_name != png_filename:
+        raise ValueError("Approved CB6 PNG name changed: " + svg_filename)
+    brand_png[png_filename] = png
 
-fallback = {
-    "cb6-convenience": ("CV", "#555555"),
-    "cb6-daily": ("D", "#C62828"),
-}
+fallback = {"cb6-convenience": ("CV", "#555555"), "cb6-daily": ("D", "#C62828")}
 for theme in ("light", "dark"):
-    d = ROOT / "data/styles/default" / theme / "symbols"
-    for name, svg in brand_svg.items():
-        filename = name + ".svg"
-        cb6_validate_svg_raster_policy(filename, svg)
-        (d / filename).write_text(svg)
+    style_root = ROOT / "data/styles/default" / theme
+    symbols = style_root / "symbols"
+    for png_filename, png in brand_png.items():
+        for density in ("mdpi", "hdpi", "xhdpi", "6plus", "xxhdpi", "xxxhdpi"):
+            (style_root / density / png_filename).write_bytes(png)
     for name, (label, color) in fallback.items():
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="{color}" stroke-width="3"/><text x="14" y="18" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="{color}">{label}</text></svg>'''
-        filename = name + ".svg"
-        cb6_validate_svg_raster_policy(filename, svg)
-        (d / filename).write_text(svg)
+        (symbols / (name + ".svg")).write_text(svg)
 
 
 activity = ROOT / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
