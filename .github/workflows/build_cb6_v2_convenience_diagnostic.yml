@@ -97,7 +97,13 @@ jobs:
           bash -x ./configure.sh --skip-map-download 2>&1 | tee ../out/CONFIGURE.log
       - name: Reverify gated control state before build
         run: python3 v2/gates/create_gate_stamp.py --verify
-      - name: Executable APK Build Preflight\n        run: |\n          set -euxo pipefail\n          python3 v2/tests/test_apk_build_preflight_runtime_fail_closed.py\n          python3 v2/gates/verify_apk_build_preflight_runtime.py --feature convenience-mwm-diagnostic --tree comaps --mode diagnostic\n\n      - name: Build diagnostic arm64 release
+      - name: Executable APK Build Preflight
+        run: |
+          set -euxo pipefail
+          python3 v2/tests/test_apk_build_preflight_runtime_fail_closed.py
+          python3 v2/gates/verify_apk_build_preflight_runtime.py --feature convenience-mwm-diagnostic --tree comaps --mode diagnostic
+
+      - name: Build diagnostic arm64 release
         run: |
           set -euxo pipefail
           cd comaps/android
