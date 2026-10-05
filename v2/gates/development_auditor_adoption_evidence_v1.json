@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "adoption_id": "CB6-DEVELOPMENT-AUDITOR-V1-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "CB6-DEVELOPMENT-AUDITOR-V1",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Status Reporting v11およびCB6-DEVELOPMENT-AUDITOR-V1を正式採用して進めて",
+    "recorded_at": "2026-10-06"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37383341351,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37384389316,
+      "conclusion": "success",
+      "candidate_head": "fca0e867054dc7e5e13a59ac4d51fedd6fe48b18"
+    }
+  },
+  "next_required": []
+}
