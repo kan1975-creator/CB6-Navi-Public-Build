@@ -39,21 +39,6 @@ These notes preserve current user-agreed operating context without claiming new 
 7. When a confirmed product specification changes, keep the atomic requirement list and the product specification/decision authorities consistent with that change. Reuse the existing atomic/specification system rather than creating a competing specification list in this note.
 8. Specification-list synchronization must not obstruct application development. Perform the synchronization as a small accompanying maintenance task when practical; if it is non-conflicting and tooling permits, progress it in parallel/background while the primary application-development target continues. Do not delay or stop application development solely to polish or comprehensively reorganize the lists unless a concrete authority/traceability conflict makes the application change unsafe.
 
-## Current work state — replace when the target changes
-
-Current implementation target: Convenience scale-boundary alignment.
-
-Current real-device observation to preserve: Convenience icons are displayed and scale-dependent size changes are functioning; the remaining issue is that the switching boundaries do not align with the requested 200 m / 500 m / 1 km behavior. Do not regress this into a generic "Convenience is not displayed" diagnosis without new evidence.
-
-Requested Convenience behavior:
-- 200 m-equivalent: approximately 85% size.
-- 500 m-equivalent: approximately 50% size.
-- 1 km-equivalent and farther: hidden.
-- Generic/CV follows the same scale behavior.
-- Brand design, MWM acquisition/classification, Signal, search, routing and common renderer are outside this current change target.
-
-This current-work section is state, not a permanent rule. Update or replace it when the active development target changes.
-
 ## Historical note
 
 `v2/governance/session_summary_2026-09-30.md` remains a dated historical handoff. Do not treat its then-current feature priority as current merely because it is recorded there.
