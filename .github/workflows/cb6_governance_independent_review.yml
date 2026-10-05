@@ -84,6 +84,10 @@ jobs:
         run: python3 v2/gates/verify_status_reporting_v9_independent_review.py
       - name: Destructive test Status Reporting v9 independent review
         run: python3 v2/tests/test_status_reporting_v9_independent_review_fail_closed.py
+      - name: Review Status Reporting v10 known-run direct-refresh candidate
+        run: python3 v2/gates/verify_status_reporting_v10_independent_review.py
+      - name: Destructive test Status Reporting v10 independent review
+        run: python3 v2/tests/test_status_reporting_v10_independent_review_fail_closed.py
       - name: Review Rule Consistency Preflight candidate
         run: python3 v2/gates/verify_rule_consistency_preflight_independent_review.py
       - name: Destructive test Rule Consistency Preflight independent review
