@@ -119,7 +119,7 @@ jobs:
         run: |
           set -euxo pipefail
           nl -ba comaps/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp | sed -n '920,1030p'
-      - name: Build integrated Signal and convenience brands arm64 release
+      - name: Executable APK Build Preflight\n        run: |\n          set -euxo pipefail\n          python3 v2/tests/test_apk_build_preflight_runtime_fail_closed.py\n          python3 v2/gates/verify_apk_build_preflight_runtime.py --feature convenience-brands --tree comaps --mode production-diagnostic\n\n      - name: Build integrated Signal and convenience brands arm64 release
         run: |
           set -euxo pipefail
           cd comaps/android
