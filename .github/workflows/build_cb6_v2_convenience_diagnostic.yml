@@ -84,6 +84,8 @@ jobs:
           set -euxo pipefail
           python3 v2/baseline/apply_identity.py comaps
           python3 v2/poi/apply_convenience_mwm_diagnostic.py comaps
+          grep -F 'CB6-CONVENIENCE-ZOOM-DIAG' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
+          grep -F 'mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
           python3 v2/audits/audit_identity.py comaps
           python3 v2/audits/audit_convenience.py
           git -C comaps diff --name-only | tee out/DIFF_FILES.txt
