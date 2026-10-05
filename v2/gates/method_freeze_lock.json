@@ -94,6 +94,6 @@
     "v2/gates/verify_development_efficiency_active_v2.py": "41b819891bc6e4ea3438a627130f5079332bbd1a",
     "v2/tests/test_development_efficiency_active_v2_fail_closed.py": "81cca382ce903ac272d9e46428d14af6183a0ad6",
     "v2/gates/verify_apk_build_preflight_active.py": "b7af75d624aab95f742350c2b72576ab9bdfd044",
-    "v2/tests/test_apk_build_preflight_active_fail_closed.py": "067a5ee341a43b891b0930ed04ccfced2881b27a"
+    "v2/tests/test_apk_build_preflight_active_fail_closed.py": "e55fcba1ddb2ffbf019988d3080feb2ed92e0274"
   }
 }
