@@ -208,7 +208,9 @@ for theme in ("light", "dark"):
     symbols = style_root / "symbols"
     for png_filename, png in brand_png.items():
         for density in ("mdpi", "hdpi", "xhdpi", "6plus", "xxhdpi", "xxxhdpi"):
-            (style_root / density / png_filename).write_bytes(png)
+            density_dir = style_root / density
+            density_dir.mkdir(parents=True, exist_ok=True)
+            (density_dir / png_filename).write_bytes(png)
     for name, (label, color) in fallback.items():
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><rect x="1" y="1" width="26" height="26" rx="6" fill="white" stroke="{color}" stroke-width="3"/><text x="14" y="18" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="{color}">{label}</text></svg>'''
         (symbols / (name + ".svg")).write_text(svg)
