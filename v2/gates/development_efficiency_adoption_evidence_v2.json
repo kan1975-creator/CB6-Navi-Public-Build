@@ -25,8 +25,6 @@
     "registry": "v2/gates/operational_rule_registry_v15.json"
   },
   "next_required": [
-    "coverage_v15",
-    "active_verifier_and_destructive_test",
     "method_refreeze",
     "final_development_gate"
   ]
