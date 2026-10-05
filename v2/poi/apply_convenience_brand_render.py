@@ -236,7 +236,26 @@ for theme in ("light", "dark"):
 
 activity = ROOT / "android/app/src/main/java/app/organicmaps/MwmActivity.java"
 a = activity.read_text()
-field = "  private Location mCb6ConvenienceLastLocation;\n"
+field = "  private Location mCb6ConvenienceLastLocation;
+  private final android.os.Handler mCb6ConvenienceZoomDiagHandler =
+      new android.os.Handler(android.os.Looper.getMainLooper());
+  private int mCb6ConvenienceLastDrawScale = Integer.MIN_VALUE;
+  private final Runnable mCb6ConvenienceZoomDiag = new Runnable()
+  {
+    @Override
+    public void run()
+    {
+      final int drawScale = Framework.nativeGetDrawScale();
+      if (drawScale != mCb6ConvenienceLastDrawScale)
+      {
+        android.util.Log.i("CB6-CONVENIENCE-ZOOM-DIAG", "drawScale=" + drawScale);
+        mCb6ConvenienceLastDrawScale = drawScale;
+      }
+      if (!isFinishing() && !isDestroyed())
+        mCb6ConvenienceZoomDiagHandler.postDelayed(this, 1000L);
+    }
+  };
+"
 if field not in a:
     pos = a.find("{", a.find("public class MwmActivity extends BaseMwmFragmentActivity"))
     if pos < 0: raise SystemExit("MwmActivity class anchor missing")
@@ -265,6 +284,14 @@ anchor2 = "    final RoutingController routing = RoutingController.get();\n"
 if "nativeCb6CollectConvenienceMarks(" not in a:
     if anchor2 not in a: raise SystemExit("MwmActivity location routing anchor missing")
     a = a.replace(anchor2, hook + anchor2, 1)
+render_hook = """    mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6ConvenienceZoomDiag);
+    mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);
+
+"""
+render_anchor = "    ThemeSwitcher.INSTANCE.restart(true);\n"
+if "CB6-CONVENIENCE-ZOOM-DIAG" not in a:
+    if render_anchor not in a: raise SystemExit("MwmActivity rendering-init anchor missing")
+    a = a.replace(render_anchor, render_hook + render_anchor, 1)
 activity.write_text(a)
 
 # Suppress only stock vehicle-map convenience presentation. Keep the MWM
