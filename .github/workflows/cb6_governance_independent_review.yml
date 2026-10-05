@@ -92,3 +92,11 @@ jobs:
         run: python3 v2/gates/verify_rule_consistency_preflight_independent_review.py
       - name: Destructive test Rule Consistency Preflight independent review
         run: python3 v2/tests/test_rule_consistency_preflight_independent_review_fail_closed.py
+      - name: Review Status Reporting v11 unknown-Run discovery candidate
+        run: python3 v2/gates/verify_status_reporting_v11_independent_review.py
+      - name: Destructive test Status Reporting v11 independent review
+        run: python3 v2/tests/test_status_reporting_v11_independent_review_fail_closed.py
+      - name: Review CB6 Development Auditor V1 candidate
+        run: python3 v2/gates/verify_development_auditor_v1_independent_review.py
+      - name: Destructive test CB6 Development Auditor V1 independent review
+        run: python3 v2/tests/test_development_auditor_v1_independent_review_fail_closed.py
