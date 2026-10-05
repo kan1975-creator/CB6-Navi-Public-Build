@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-STATUS-REPORTING-001-V11-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "OPS-STATUS-REPORTING-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Status Reporting v11およびCB6-DEVELOPMENT-AUDITOR-V1を正式採用して進めて",
+    "recorded_at": "2026-10-06"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37383341351,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37384389316,
+      "conclusion": "success",
+      "candidate_head": "fca0e867054dc7e5e13a59ac4d51fedd6fe48b18"
+    }
+  },
+  "rule_extension": {
+    "unknown_run_id_discovery": true,
+    "push_triggered_run_discovery": true,
+    "current_head_binding": true,
+    "incomplete_zero_result_not_absence": true
+  },
+  "next_required": []
+}
