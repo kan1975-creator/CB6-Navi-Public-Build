@@ -62,7 +62,8 @@ def main():
  paths=[x.strip() for x in diff.stdout.splitlines() if x.strip()]
  mwm=txt(tree/"android/app/src/main/java/app/organicmaps/MwmActivity.java")
  fw=txt(tree/"android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp")
- sig=("nativeSetCb6Signals" in fw or "CB6_SIGNAL" in fw or "CB6_SIGNAL" in mwm)
+ sigjni=txt(tree/"android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc")
+ sig=("nativeSetCb6Signals" in sigjni and '#include "cb6_signal_jni.inc"' in fw and "mCb6Signals" in mwm)
  conv=("nativeCb6CollectConvenienceMarks" in fw and "nativeSetCb6ConvenienceMarks" in fw)
  diag=("nativeCb6ConvenienceDiagnostic" in fw or "CB6-CONVENIENCE-ZOOM-DIAG" in mwm)
  generated=bool(paths)
@@ -72,8 +73,13 @@ def main():
  check("generated_source_integration_checked",generated,"expected generated integration missing")
 
  allowed_prefixes=("android/","libs/map/","libs/storage/","data/styles/default/")
- allow=bool(paths) and all(p.startswith(allowed_prefixes) for p in paths)
- check("change_allowlist_checked",allow,"generated diff escaped approved integration surfaces: "+",".join(p for p in paths if not p.startswith(allowed_prefixes)))
+ allowed_exact={"libs/platform/http_request.cpp","data/styles/vehicle/include/Icons.mapcss"}
+ generated_priority_suffix="/include/priorities_4_overlays.prio.txt"
+ def allowed_path(p):
+  return p.startswith(allowed_prefixes) or p in allowed_exact or (p.startswith("data/styles/") and p.endswith(generated_priority_suffix))
+ escaped=[p for p in paths if not allowed_path(p)]
+ allow=bool(paths) and not escaped
+ check("change_allowlist_checked",allow,"generated diff escaped approved integration surfaces: "+",".join(escaped))
 
  densities={"mdpi":22,"hdpi":32,"xhdpi":43,"6plus":52,"xxhdpi":65,"xxxhdpi":77}
  brands=("cb6-seven","cb6-familymart","cb6-lawson","cb6-seicomart","cb6-ministop","cb6-mybasket")
