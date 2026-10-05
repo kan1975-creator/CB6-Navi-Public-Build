@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-STATUS-REPORTING-001-V10-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "OPS-STATUS-REPORTING-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Status Reporting v10を正式採用して進めて",
+    "recorded_at": "2026-10-06"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37340389327,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37340923837,
+      "conclusion": "success",
+      "candidate_head": "52358178339a71eba7f9369d99fa7f355c164d27"
+    }
+  },
+  "rule_extension": {
+    "known_run_id_direct_refresh": true,
+    "run_list_supplementary": true,
+    "list_absence_not_state_change_evidence": true
+  },
+  "next_required": []
+}
