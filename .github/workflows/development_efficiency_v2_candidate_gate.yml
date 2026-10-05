@@ -1,0 +1,19 @@
+name: Development Efficiency v2 Candidate Gate
+on:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/development_efficiency_rule_candidate_v2.json'
+      - 'v2/gates/verify_development_efficiency_candidate_v2.py'
+      - 'v2/tests/test_development_efficiency_candidate_v2_fail_closed.py'
+      - '.github/workflows/development_efficiency_v2_candidate_gate.yml'
+  workflow_dispatch:
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify candidate
+        run: python3 v2/gates/verify_development_efficiency_candidate_v2.py
+      - name: Destructive tests
+        run: python3 v2/tests/test_development_efficiency_candidate_v2_fail_closed.py
