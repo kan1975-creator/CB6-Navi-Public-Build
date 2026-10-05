@@ -112,6 +112,40 @@ if "mCb6ConvenienceDiagnosticCompleted)" not in a:
         raise SystemExit("CB6 convenience diagnostic: onLocationUpdated anchor missing")
     a = a.replace(location_anchor, location_hook, 1)
 
+zoom_field = r'''  private final android.os.Handler mCb6ConvenienceZoomDiagHandler =
+      new android.os.Handler(android.os.Looper.getMainLooper());
+  private int mCb6ConvenienceLastDrawScale = Integer.MIN_VALUE;
+  private final Runnable mCb6ConvenienceZoomDiag = new Runnable()
+  {
+    @Override
+    public void run()
+    {
+      final int drawScale = Framework.nativeGetDrawScale();
+      if (drawScale != mCb6ConvenienceLastDrawScale)
+      {
+        android.util.Log.i("CB6-CONVENIENCE-ZOOM-DIAG", "drawScale=" + drawScale);
+        mCb6ConvenienceLastDrawScale = drawScale;
+      }
+      if (!isFinishing() && !isDestroyed())
+        mCb6ConvenienceZoomDiagHandler.postDelayed(this, 1000L);
+    }
+  };
+'''
+if "CB6-CONVENIENCE-ZOOM-DIAG" not in a:
+    class_open = a.find("{", a.find(field_anchor))
+    if class_open < 0:
+        raise SystemExit("CB6 convenience zoom diagnostic: MwmActivity class anchor missing")
+    a = a[:class_open + 1] + "\n" + zoom_field + a[class_open + 1:]
+
+render_anchor = "    ThemeSwitcher.INSTANCE.restart(true);"
+render_hook = """    mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6ConvenienceZoomDiag);
+    mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);
+"""
+if "mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);" not in a:
+    if render_anchor not in a:
+        raise SystemExit("CB6 convenience zoom diagnostic: rendering initialization anchor missing")
+    a = a.replace(render_anchor, render_hook + render_anchor, 1)
+
 activity.write_text(a)
 
 print("CB6 convenience diagnostic native bridge and location-update evidence hook applied")
