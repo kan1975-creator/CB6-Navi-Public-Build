@@ -187,7 +187,7 @@ def cb6_extract_approved_png(svg_filename, svg):
     if len(matches) != 1:
         raise ValueError("Approved CB6 source must contain exactly one embedded PNG: " + svg_filename)
     png = base64.b64decode(matches[0], validate=True)
-    if not png.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+    if not png.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError("Approved CB6 payload is not PNG: " + svg_filename)
     return png_filename, png
 
