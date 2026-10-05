@@ -263,6 +263,9 @@ if field not in a:
 hook = """    if (mCb6ConvenienceLastLocation == null ||
         location.distanceTo(mCb6ConvenienceLastLocation) >= 800.0f)
     {
+      mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6ConvenienceZoomDiag);
+      mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);
+
       final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(
           location.getLatitude(), location.getLongitude(), 3000, 17);
       if (cb6 != null && cb6.length == 3 && cb6[0] != null && cb6[1] != null && cb6[2] != null)
@@ -284,15 +287,6 @@ anchor2 = "    final RoutingController routing = RoutingController.get();\n"
 if "nativeCb6CollectConvenienceMarks(" not in a:
     if anchor2 not in a: raise SystemExit("MwmActivity location routing anchor missing")
     a = a.replace(anchor2, hook + anchor2, 1)
-
-zoom_hook = """      mCb6ConvenienceZoomDiagHandler.removeCallbacks(mCb6ConvenienceZoomDiag);
-      mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);
-
-"""
-zoom_anchor = "      final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(\\n"
-if "mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);" not in a:
-    if zoom_anchor not in a: raise SystemExit("MwmActivity convenience refresh anchor missing")
-    a = a.replace(zoom_anchor, zoom_hook + zoom_anchor, 1)
 
 activity.write_text(a)
 
