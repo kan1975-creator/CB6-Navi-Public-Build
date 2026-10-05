@@ -97,7 +97,7 @@ jobs:
           p = Path("comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java")
           s = p.read_text(encoding="utf-8")
           assert s.count("final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(") == 1
-          assert s.count("mCb6ConvenienceZoomDiagHandler.post(mCb6ConvenienceZoomDiag);") == 1
+          assert "mCb6ConvenienceZoomDiag" not in s
           assert "nativeCb6CollectConvenienceMarks(\\n" not in s
           print("CONVENIENCE ZOOM GENERATED MwmActivity PASS")
           PY
@@ -115,6 +115,8 @@ jobs:
             for density in mdpi hdpi xhdpi 6plus xxhdpi xxxhdpi; do
               for name in cb6-seven cb6-familymart cb6-lawson cb6-seicomart cb6-ministop cb6-mybasket; do
                 test -s "comaps/data/styles/default/$theme/$density/$name.png"
+                test -s "comaps/data/styles/default/$theme/$density/$name-85.png"
+                test -s "comaps/data/styles/default/$theme/$density/$name-50.png"
                 test ! -e "comaps/data/styles/default/$theme/symbols/$name.svg"
               done
             done
