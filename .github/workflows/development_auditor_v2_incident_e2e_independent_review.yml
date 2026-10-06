@@ -1,0 +1,21 @@
+name: CB6 Development Auditor V2 Incident E2E Independent Review
+on:
+  workflow_dispatch:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/development_auditor_v2_incident_e2e_cases.json'
+      - 'v2/gates/verify_development_auditor_v2_incident_e2e_independent_review.py'
+      - 'v2/tests/test_development_auditor_v2_incident_e2e_independent_review_fail_closed.py'
+      - '.github/workflows/development_auditor_v2_incident_e2e_independent_review.yml'
+permissions:
+  contents: read
+jobs:
+  independent-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Independent raw-authority E2E review
+        run: python3 v2/gates/verify_development_auditor_v2_incident_e2e_independent_review.py
+      - name: Independent E2E destructive tests
+        run: python3 v2/tests/test_development_auditor_v2_incident_e2e_independent_review_fail_closed.py
