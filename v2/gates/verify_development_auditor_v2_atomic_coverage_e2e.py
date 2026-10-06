@@ -10,12 +10,9 @@ expected={
 for k,v in expected.items():
  if C.get(k)!=v:e.append("contract:"+k)
 if C.get("applicability")!={"states":["APPLIED","NOT_APPLICABLE","BLOCKED"],"mandatory_not_applicable_forbidden":True,"conditional_not_applicable_requires_reason_and_evidence":True}:e.append("contract:applicability")
-for sec in f["contract_sections"]:
- if sec not in C:e.append("missing contract section:"+sec)
-for sec in f["schema_sections"]:
- if sec not in S:e.append("missing schema section:"+sec)
-for sec in f["method_sections"]:
- if sec not in M:e.append("missing method section:"+sec)
+for kind,data in (("contract",C),("schema",S),("method",M)):
+ for sec,expected_value in f["expected_authority_sections"][kind].items():
+  if data.get(sec)!=expected_value:e.append("atomic authority mismatch:"+kind+":"+sec)
 if S.get("not_applicable_required")!=["reason","applicability_evidence_refs"]:e.append("schema:not_applicable_required")
 if len(S.get("required",[]))!=15 or len(S.get("dimension_required",[]))!=7 or len(S.get("pass_requires",{}))!=9:e.append("schema cardinality")
 if len(M.get("feature_development_pipeline",[]))!=11:e.append("method pipeline cardinality")
