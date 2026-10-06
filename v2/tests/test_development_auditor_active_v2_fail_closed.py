@@ -17,6 +17,8 @@ cases=[
 ("falsify-remaining-gaps-e2e-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["remaining_gaps_e2e_independent_review"].update({"conclusion":"failure"})),
 ("drop-final-red-team-e2e-candidate-evidence","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"].pop("final_red_team_e2e_candidate")),
 ("falsify-final-red-team-e2e-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["final_red_team_e2e_independent_review"].update({"conclusion":"failure"})),
+("drop-completion-gaps-e2e-candidate-evidence","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"].pop("completion_gaps_e2e_candidate")),
+("falsify-completion-gaps-e2e-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["completion_gaps_e2e_independent_review"].update({"conclusion":"failure"})),
 ("drop-v2-coverage","v2/gates/rule_coverage.json",lambda d:d["entries"].__setitem__(len(d["entries"])-1,{"rule_id":"CB6-DEVELOPMENT-AUDITOR-V2","coverage_status":"PROPOSED"}))
 ]
 for name,file,mut in cases:
