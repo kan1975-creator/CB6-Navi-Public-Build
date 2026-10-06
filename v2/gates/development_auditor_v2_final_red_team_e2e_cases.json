@@ -1,0 +1,263 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V2-FINAL-RED-TEAM-E2E-CANDIDATE",
+  "status": "CANDIDATE",
+  "sealed_acceptance_criteria": [
+    "RT-01 risk self-declaration cannot reduce mandatory audit depth and must STOP",
+    "RT-02 conditional NOT_APPLICABLE without reason and applicability evidence must STOP",
+    "RT-03 HEAD change during a Work Unit without resynchronization must STOP",
+    "RT-04 applicable Development Method pipeline obligation omitted before implementation must STOP",
+    "RT-05 blocking defect cannot be downgraded to a weaker failure outcome and must STOP"
+  ],
+  "authorities": {
+    "auditor": "v2/gates/development_auditor_candidate_v2.json",
+    "work_unit_schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+    "development_method": "v2/gates/development_method_contract.json"
+  },
+  "cases": [
+    {
+      "id": "RT-01",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "RT-01",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "final-red-team",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE",
+          "DEVELOPMENT_METHOD"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS",
+        "risk": {
+          "declared": "low",
+          "mandatory_checks_reduced": true
+        }
+      }
+    },
+    {
+      "id": "RT-02",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "RT-02",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "final-red-team",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE",
+          "DEVELOPMENT_METHOD"
+        ],
+        "dimensions": [
+          {
+            "name": "external_web_research",
+            "applicability": "NOT_APPLICABLE",
+            "evidence_refs": [],
+            "finding": "not applicable",
+            "counter_hypothesis_or_alternative": "external behavior may be material",
+            "unresolved_items": [],
+            "impact_scope": [
+              "research"
+            ]
+          }
+        ],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS"
+      }
+    },
+    {
+      "id": "RT-03",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "RT-03",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-B",
+        "purpose": "final-red-team",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE",
+          "DEVELOPMENT_METHOD"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS",
+        "resynchronization": {
+          "head_changed": true,
+          "resynchronized": false
+        }
+      }
+    },
+    {
+      "id": "RT-04",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "RT-04",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "final-red-team",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE",
+          "DEVELOPMENT_METHOD"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS",
+        "method_pipeline": {
+          "applicable": [
+            "internal_source_analysis",
+            "upstream_and_web_research_when_applicable",
+            "web_findings_revalidated_against_pinned_source",
+            "authority_and_evidence_classification",
+            "change_impact_before_implementation",
+            "implementation_and_audit_as_one_change_unit",
+            "positive_tests",
+            "audit_specific_destructive_tests",
+            "feature_gate",
+            "build_and_apk_evidence",
+            "real_device_evidence"
+          ],
+          "completed": [
+            "internal_source_analysis",
+            "upstream_and_web_research_when_applicable",
+            "web_findings_revalidated_against_pinned_source",
+            "authority_and_evidence_classification",
+            "implementation_and_audit_as_one_change_unit",
+            "positive_tests",
+            "audit_specific_destructive_tests",
+            "feature_gate",
+            "build_and_apk_evidence",
+            "real_device_evidence"
+          ],
+          "implementation_started": true
+        }
+      }
+    },
+    {
+      "id": "RT-05",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "RT-05",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "final-red-team",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE",
+          "DEVELOPMENT_METHOD"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "FOLLOW-UP",
+        "blocking_defect": true
+      }
+    }
+  ],
+  "non_interference": [
+    "auditor_v2_core",
+    "existing_20_e2e",
+    "registry_coverage",
+    "development_gate",
+    "method_freeze",
+    "existing_independent_review",
+    "signal",
+    "convenience",
+    "search",
+    "routing",
+    "renderer",
+    "apk",
+    "application_behavior"
+  ]
+}
