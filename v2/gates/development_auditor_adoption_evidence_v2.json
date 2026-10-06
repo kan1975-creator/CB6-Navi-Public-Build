@@ -60,14 +60,14 @@
       "candidate_head": "651d42b4ae59c869a7c94fc62787ac859c9c7e3e"
     },
     "completion_gaps_e2e_candidate": {
-      "run_id": 37418491806,
+      "run_id": 37420121872,
       "conclusion": "success",
-      "candidate_head": "8115687acc677acba2a96ea306f5fe9467a2747b"
+      "candidate_head": "469f0508a6971529d2b6c67d93133835dedb29dd"
     },
     "completion_gaps_e2e_independent_review": {
-      "run_id": 37419520662,
+      "run_id": 37420358113,
       "conclusion": "success",
-      "candidate_head": "0a54315b558c88c068a542c866062b6aaf662d7c"
+      "candidate_head": "e0bda277c8e2e973b907d45b27af79f154f18cca"
     }
   },
   "supersedes": "v2/gates/development_auditor_adoption_evidence_v1.json",
