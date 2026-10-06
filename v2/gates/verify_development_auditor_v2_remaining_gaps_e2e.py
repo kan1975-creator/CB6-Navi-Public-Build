@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 from pathlib import Path
-R=Path(__file__).resolve().parents[2];e=[];d=json.loads((R/"v2/gates/development_auditor_v2_remaining_gaps_e2e_cases.json").read_text());a=json.loads((R/"v2/gates/development_auditor_candidate_v2.json").read_text());s=json.loads((R/"v2/gates/development_auditor_work_unit_schema_v1.json").read_text());req=set(s["required"]);bind=set(a["approval"]["binding_fields"])
+R=Path(__file__).resolve().parents[2];d=json.loads((R/"v2/gates/development_auditor_v2_remaining_gaps_e2e_cases.json").read_text());a=json.loads((R/"v2/gates/development_auditor_candidate_v2.json").read_text());s=json.loads((R/"v2/gates/development_auditor_work_unit_schema_v1.json").read_text());e=[];req=set(s["required"]);bind=set(a["approval"]["binding_fields"])
 def bad(c):
  w=c["work_unit"];i=c["id"]
  if i=="CF-01A":return not w.get("change_id")
