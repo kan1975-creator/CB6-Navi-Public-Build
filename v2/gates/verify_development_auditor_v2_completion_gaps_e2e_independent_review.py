@@ -3,9 +3,17 @@ import ast,json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2];e=[]
 SELF=Path(__file__).read_text();tree=ast.parse(SELF)
+candidate_module="_".join(("verify","development","auditor","v2","completion","gaps","e2e"))
 for n in ast.walk(tree):
- if isinstance(n,(ast.Import,ast.ImportFrom)):e.append("independent review must not import candidate verifier")
- if isinstance(n,ast.Constant) and isinstance(n.value,str) and "verify_development_auditor_v2_completion_gaps_e2e.py" in n.value:e.append("candidate verifier execution/reference forbidden")
+ if isinstance(n,ast.Import):
+  if any(x.name==candidate_module or x.name.startswith(candidate_module+".") for x in n.names):e.append("candidate verifier import forbidden")
+ elif isinstance(n,ast.ImportFrom):
+  mod=n.module or ""
+  if mod==candidate_module or mod.startswith(candidate_module+"."):e.append("candidate verifier import forbidden")
+ elif isinstance(n,ast.Call):
+  fn=n.func
+  if isinstance(fn,ast.Name) and fn.id in {"exec","eval","compile","__import__"}:
+   if any(isinstance(a,ast.Constant) and isinstance(a.value,str) and candidate_module in a.value for a in n.args):e.append("candidate verifier execution forbidden")
 f=json.loads((R/"v2/gates/development_auditor_v2_completion_gaps_e2e_cases.json").read_text())
 a=json.loads((R/"v2/gates/development_auditor_candidate_v2.json").read_text())
 w=json.loads((R/"v2/gates/development_auditor_work_unit_schema_v1.json").read_text())
