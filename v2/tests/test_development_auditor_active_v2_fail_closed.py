@@ -15,8 +15,7 @@ cases=[
 ]
 for name,file,mut in cases:
  with tempfile.TemporaryDirectory() as td:
-  r=Path(td)/"repo";shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"));p=r/file;d=json.loads(p.read_text());mut(d);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+"
-")
+  r=Path(td)/"repo";shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"));p=r/file;d=json.loads(p.read_text());mut(d);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+"\\n")
   if run(r).returncode==0:raise SystemExit("V2 active destructive case passed:"+name)
   print("PASS expected V2 ACTIVE rejection:",name)
 print("CB6 DEVELOPMENT AUDITOR V2 ACTIVE DESTRUCTIVE PASS:",len(cases))
