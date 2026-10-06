@@ -1,0 +1,23 @@
+name: CB6 Development Auditor V2 Runtime Independent Review
+on:
+  workflow_dispatch:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/verify_development_auditor_work_unit_v2.py'
+      - 'v2/tests/test_development_auditor_work_unit_v2_fail_closed.py'
+      - 'v2/gates/verify_development_auditor_work_unit_v2_independent_review.py'
+      - 'v2/tests/test_development_auditor_work_unit_v2_independent_review_fail_closed.py'
+      - '.github/workflows/development_auditor_v2_runtime_candidate.yml'
+      - '.github/workflows/development_auditor_v2_runtime_independent_review.yml'
+permissions:
+  contents: read
+jobs:
+  independent-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Independently reconstruct runtime obligations
+        run: python3 v2/gates/verify_development_auditor_work_unit_v2_independent_review.py
+      - name: Destructive independent-review proof
+        run: python3 v2/tests/test_development_auditor_work_unit_v2_independent_review_fail_closed.py
