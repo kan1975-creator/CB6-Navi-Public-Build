@@ -227,8 +227,18 @@ public final class OverpassSignalProvider implements SignalProvider
     Log.i("CB6-SIGNAL-WAY-DIAG", "stage=topology-merged batches="
         + ((diagnosticPoints.size() + TOPOLOGY_BATCH_SIZE - 1) / TOPOLOGY_BATCH_SIZE)
         + " elements=" + mergedElements.length());
-    return applySignalNodeCenterClusterBatch(snapshot, diagnosticPoints,
-        new JSONObject().put("elements", mergedElements), originLat, originLon);
+    JSONObject mergedRoot = new JSONObject();
+    try
+    {
+      mergedRoot.put("elements", mergedElements);
+    }
+    catch (JSONException e)
+    {
+      Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=topology-merge-json-failed");
+      return snapshot; // fail closed: malformed merged topology must never cause a partial merge.
+    }
+    return applySignalNodeCenterClusterBatch(
+        snapshot, diagnosticPoints, mergedRoot, originLat, originLon);
   }
 
   private static JSONObject fetchSignalTopologyBatch(
