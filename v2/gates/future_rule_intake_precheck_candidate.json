@@ -1,10 +1,10 @@
 {
-  "schema": 1,
+  "schema": 2,
   "candidate_id": "OPS-FUTURE-RULE-INTAKE-PRECHECK-001",
   "status": "PROPOSED",
-  "source": "explicit_user_continuing_instruction_2026-10-01",
+  "source": "explicit_user_continuing_instruction_2026-10-06",
   "target_rule": "OPS-FUTURE-RULE-INTAKE-001",
-  "purpose": "Prevent discovering after the fact that a newly proposed continuing instruction was already covered by the development method or governance.",
+  "purpose": "Prevent a continuing user instruction from ending as a chat-only promise; require current-authority classification and route missing semantics into an auditable change-bound Work Unit.",
   "pre_registration_check": {
     "required": true,
     "search_scope": [
@@ -14,17 +14,29 @@
       "governance and cross-cutting rules"
     ],
     "outcomes": {
-      "exact_duplicate": "DO_NOT_CREATE_NEW_RULE; apply existing authority",
-      "partial_overlap": "ADD_ONLY_MISSING_SEMANTICS; preserve existing authority",
-      "no_overlap": "NEW_RULE_CANDIDATE_MAY_BE_CREATED"
+      "already_governed": "APPLY_EXISTING_AUTHORITY; record authority IDs/paths; do not end on chat memory alone",
+      "duplicate": "DO_NOT_CREATE_NEW_RULE; apply existing authority; record authority IDs/paths",
+      "conflict": "FAIL_CLOSED; do not progress until conflict is resolved",
+      "extension_needed": "ADD_ONLY_MISSING_SEMANTICS; create or update a change-bound candidate Work Unit",
+      "new_rule_needed": "CREATE_NEW_RULE_CANDIDATE; create a change-bound candidate Work Unit"
     },
     "evidence_required": [
       "current GitHub HEAD",
       "paths/IDs checked",
-      "overlap classification",
-      "gap summary when partial/no overlap"
+      "five-way classification",
+      "authority IDs/paths when already governed or duplicate",
+      "gap summary when extension/new rule",
+      "conflict summary when conflict"
     ],
-    "chat_memory_only_forbidden": true
+    "chat_memory_only_forbidden": true,
+    "chat_only_completion_forbidden": true,
+    "required_classification": [
+      "already_governed",
+      "duplicate",
+      "conflict",
+      "extension_needed",
+      "new_rule_needed"
+    ]
   },
   "lifecycle": [
     "PROPOSED",
@@ -34,5 +46,15 @@
     "EXPLICIT_USER_ADOPTED",
     "ACTIVE_REFROZEN"
   ],
-  "direct_active_forbidden": true
+  "direct_active_forbidden": true,
+  "auditor_handoff": {
+    "required_for": [
+      "extension_needed",
+      "new_rule_needed"
+    ],
+    "target": "CB6-DEVELOPMENT-AUDITOR-V2 change-bound Work Unit",
+    "work_unit_identity_required": true,
+    "approval_boundary_must_be_preserved": true,
+    "auditor_v2_logic_change_forbidden": true
+  }
 }
