@@ -43,7 +43,7 @@ if pc.get("development_gate")!={"run_id":37433235541,"conclusion":"success","hea
 if pc.get("atomic_coverage")!={"candidate":{"run_id":37433225181,"conclusion":"success"},"independent_review":{"run_id":37433235609,"conclusion":"success"}}:e.append("postchange atomic coverage")
 if pc.get("root_certification",{}).get("status")!="PROVEN" or pc.get("method_freeze",{}).get("result")!="PASS":e.append("postchange governance certification")
 rt=json.loads((R/"v2/gates/development_auditor_runtime_adoption_evidence_v2.json").read_text())
-if rt.get("status") not in ("ADOPTED_PENDING_REFREEZE","ACTIVE_REFROZEN") or rt.get("adopted_candidate_head")!="ed59169845110678d698422e6d464057f7a7433e":e.append("runtime adoption identity")
+if rt.get("status")!="ACTIVE_REFROZEN" or rt.get("adopted_candidate_head")!="ed59169845110678d698422e6d464057f7a7433e":e.append("runtime adoption identity")
 rte=rt.get("evidence",{})
 if rte.get("candidate_validation")!={"run_id":37442886846,"conclusion":"success","head_sha":"ed59169845110678d698422e6d464057f7a7433e"}:e.append("runtime candidate evidence")
 if rte.get("independent_review")!={"run_id":37442886813,"conclusion":"success","head_sha":"ed59169845110678d698422e6d464057f7a7433e"}:e.append("runtime independent review evidence")
