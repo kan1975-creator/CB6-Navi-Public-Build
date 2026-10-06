@@ -1,0 +1,44 @@
+{
+  "schema": 12,
+  "rule_id": "OPS-STATUS-REPORTING-001",
+  "status": "CANDIDATE",
+  "extends": "v2/gates/status_reporting_contract_v11.json",
+  "purpose": "Fail-closed per-response execution preflight for every CB6 progress/status response without weakening ACTIVE v11.",
+  "response_execution_preflight": {
+    "required_before_every_cb6_progress_response": true,
+    "current_head_evidence_required": true,
+    "applicable_active_rules_evidence_required": true,
+    "classification_evidence_required": true,
+    "self_attestation_alone_forbidden": true,
+    "preflight_failure_forbids_normal_pass_response": true,
+    "wait": {
+      "run_identity_required_when_run_wait": true,
+      "first_wait_requires_original_start_time": true,
+      "later_wait_requires_cumulative_elapsed_from_original_start": true,
+      "next_check_timing_required": true,
+      "next_check_requires_measured_basis_or_duration_unknown": true,
+      "unsupported_time_estimate_forbidden": true,
+      "parallel_work_availability_required": true,
+      "post_wait_instruction_required": true
+    },
+    "final_summary": {
+      "four_lines_required": true,
+      "exact_order_required": ["分類","次にユーザーがすること","ChatGPTアプリ","スマホ操作"],
+      "must_be_response_end": true
+    },
+    "evidence_boundary": {
+      "github_can_verify_contract_and_destructive_cases": true,
+      "github_cannot_intercept_chatgpt_response_transmission": true,
+      "runtime_execution_remains_chatgpt_responsibility": true,
+      "machine_enforcement_must_not_be_overclaimed": true
+    }
+  },
+  "non_interference": {
+    "active_v11_change_forbidden": true,
+    "registry_coverage_change_forbidden": true,
+    "method_freeze_change_forbidden": true,
+    "development_gate_change_forbidden": true,
+    "auditor_v2_change_forbidden": true,
+    "application_behavior_change_forbidden": true
+  }
+}
