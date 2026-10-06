@@ -33,6 +33,8 @@ cases=[
 ("falsify-postchange-independent-review","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["atomic_coverage"]["independent_review"].update({"conclusion":"failure"})),
 ("weaken-postchange-root-certification","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["root_certification"].update({"status":"UNPROVEN"})),
 ("weaken-postchange-method-freeze","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["method_freeze"].update({"result":"FAIL"})),
+("falsify-runtime-candidate-evidence","v2/gates/development_auditor_runtime_adoption_evidence_v2.json",lambda d:d["evidence"]["candidate_validation"].update({"conclusion":"failure"})),
+("falsify-runtime-independent-review-evidence","v2/gates/development_auditor_runtime_adoption_evidence_v2.json",lambda d:d["evidence"]["independent_review"].update({"run_id":0})),
 ("drop-v2-coverage","v2/gates/rule_coverage.json",lambda d:d["entries"].__setitem__(len(d["entries"])-1,{"rule_id":"CB6-DEVELOPMENT-AUDITOR-V2","coverage_status":"PROPOSED"}))
 ]
 for name,file,mut in cases:
