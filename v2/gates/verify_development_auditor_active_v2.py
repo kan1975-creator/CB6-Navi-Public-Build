@@ -12,7 +12,7 @@ if d.get("approval",{}).get("scope_expansion_requires_new_bound_approval") is no
 ev=json.loads((R/"v2/gates/development_auditor_adoption_evidence_v2.json").read_text())
 if ev.get("status")!="ACTIVE" or ev.get("subject")!="CB6-DEVELOPMENT-AUDITOR-V2":e.append("V2 adoption")
 if ev.get("evidence",{}).get("candidate_gate",{}).get("run_id")!=37405936430:e.append("candidate evidence")
-if ev.get("evidence",{}).get("independent_review",{}).get("run_id")!=37406142902:e.append("review evidence")
+if ev.get("evidence",{}).get("independent_review",{}).get("run_id")!=37406142902:e.append("review evidence")\nie2e=ev.get("evidence",{}).get("incident_e2e_candidate",{})\nif ie2e.get("run_id")!=37410918733 or ie2e.get("conclusion")!="success" or ie2e.get("candidate_head")!="599dccca73b6dfe646672c6af0ad8ffffaac24ab":e.append("incident E2E candidate evidence")\niir=ev.get("evidence",{}).get("incident_e2e_independent_review",{})\nif iir.get("run_id")!=37411289491 or iir.get("conclusion")!="success" or iir.get("candidate_head")!="871550b34d9e6d080f58a1a18e08cce606d75aae":e.append("incident E2E independent review evidence")
 reg=json.loads((R/"v2/gates/operational_rule_registry_v18.json").read_text());cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
 rr=[x for x in reg.get("rules",[]) if x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V2"]
 if len(rr)!=1 or rr[0].get("status")!="ACTIVE" or rr[0].get("contract")!="v2/gates/development_auditor_candidate_v2.json":e.append("V2 registry activation")
