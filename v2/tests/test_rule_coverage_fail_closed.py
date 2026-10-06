@@ -23,4 +23,10 @@ for name,side,needle in [
   cp=run(r); out=cp.stdout+cp.stderr
   if cp.returncode==0 or needle not in out: raise SystemExit(name+" not rejected\n"+out)
   print("PASS expected coverage rejection:",name,"=>",needle)
+with tempfile.TemporaryDirectory() as td:
+ r=Path(td)/"repo";shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"))
+ p=r/"v2/gates/rule_coverage.json";d=json.loads(p.read_text());a=next(x for x in d["entries"] if x["rule_id"]=="CB6-DEVELOPMENT-AUDITOR-V2");a["enforcement_reachability"].pop("feature_gate");p.write_text(json.dumps(d))
+ cp=run(r);out=cp.stdout+cp.stderr
+ if cp.returncode==0 or "lacks exact runtime reachability map" not in out:raise SystemExit("Auditor reachability omission not rejected\n"+out)
+ print("PASS expected coverage rejection: auditor-runtime-reachability")
 print("PASS rule coverage bidirectional destructive cases rejected")
