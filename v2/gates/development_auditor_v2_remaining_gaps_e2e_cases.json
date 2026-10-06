@@ -1,0 +1,251 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V2-REMAINING-GAPS-E2E-CANDIDATE",
+  "status": "CANDIDATE",
+  "sealed_acceptance_criteria": [
+    "CF-01 missing or mixed Work Unit identity must STOP",
+    "CF-02 cross-work-unit evidence reuse without explicit binding must STOP",
+    "CF-03 approval binding mismatch must STOP",
+    "CF-04 BLOCKED dimension cannot advance or PASS",
+    "CF-05 missing independent review or implementation-success substitution must STOP"
+  ],
+  "auditor_contract": "v2/gates/development_auditor_candidate_v2.json",
+  "work_unit_schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+  "cases": [
+    {
+      "id": "CF-01",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "remaining-gap-test",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS"
+      }
+    },
+    {
+      "id": "CF-02",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "CF-02",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "remaining-gap-test",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE"
+        ],
+        "dimensions": [
+          {
+            "name": "freshness",
+            "applicability": "APPLIED",
+            "evidence_refs": [
+              {
+                "ref": "WU-OTHER:E-1",
+                "work_unit_id": "WU-OTHER",
+                "explicit_binding": false
+              }
+            ],
+            "finding": "current",
+            "counter_hypothesis_or_alternative": "stale",
+            "unresolved_items": [],
+            "impact_scope": [
+              "auditor"
+            ]
+          }
+        ],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS"
+      }
+    },
+    {
+      "id": "CF-03",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "CF-03",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "remaining-gap-test",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true,
+          "change_id": "CF-03",
+          "basis_head": "HEAD-A",
+          "purpose": "different-purpose",
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS"
+      }
+    },
+    {
+      "id": "CF-04",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "CF-04",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "remaining-gap-test",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE"
+        ],
+        "dimensions": [
+          {
+            "name": "freshness",
+            "applicability": "BLOCKED",
+            "evidence_refs": [
+              "E-1"
+            ],
+            "finding": "cannot establish current HEAD",
+            "counter_hypothesis_or_alternative": "retry authority fetch",
+            "unresolved_items": [
+              "HEAD unresolved"
+            ],
+            "impact_scope": [
+              "auditor"
+            ]
+          }
+        ],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": true
+        },
+        "outcome": "PASS"
+      }
+    },
+    {
+      "id": "CF-05",
+      "expected": "STOP",
+      "work_unit": {
+        "change_id": "CF-05",
+        "basis_head": "HEAD-A",
+        "target_head": "HEAD-A",
+        "purpose": "remaining-gap-test",
+        "change_type": "governance",
+        "affected_domains": [
+          "auditor"
+        ],
+        "planned_paths": [
+          "v2/gates/x"
+        ],
+        "forbidden_scope": [
+          "application"
+        ],
+        "authority": [
+          "ACTIVE"
+        ],
+        "dimensions": [],
+        "approval": {
+          "bound": true
+        },
+        "actual_diff": [],
+        "validation": {
+          "complete": true
+        },
+        "independent_review": {
+          "accepted": false,
+          "evidence_refs": [
+            "implementation-success"
+          ],
+          "evidence_type": "implementation_success"
+        },
+        "outcome": "PASS"
+      }
+    }
+  ],
+  "non_interference": [
+    "auditor_v2_core",
+    "existing_15_e2e",
+    "registry_coverage",
+    "development_gate",
+    "method_freeze",
+    "signal",
+    "convenience",
+    "application_behavior"
+  ]
+}
