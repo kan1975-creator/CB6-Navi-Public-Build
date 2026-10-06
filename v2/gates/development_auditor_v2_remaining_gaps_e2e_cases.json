@@ -35,14 +35,30 @@
         ],
         "dimensions": [],
         "approval": {
-          "bound": true
+          "bound": true,
+          "change_id": "CF-01A",
+          "basis_head": "HEAD-A",
+          "purpose": "remaining-gap-test",
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
         },
         "actual_diff": [],
         "validation": {
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -70,25 +86,41 @@
         ],
         "dimensions": [],
         "approval": {
-          "bound": true
+          "bound": true,
+          "change_id": "CF-01B",
+          "basis_head": "HEAD-A",
+          "purpose": "remaining-gap-test",
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
         },
         "actual_diff": [],
         "validation": {
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
     },
     {
-      "id": "CF-01B",
+      "id": "CF-02",
       "expected": "STOP",
       "work_unit": {
-        "change_id": "CF-01B",
+        "change_id": "CF-02",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -103,16 +135,50 @@
         "authority": [
           "ACTIVE"
         ],
-        "dimensions": [],
+        "dimensions": [
+          {
+            "name": "freshness",
+            "applicability": "APPLIED",
+            "evidence_refs": [
+              {
+                "ref": "WU-OTHER:E-1",
+                "work_unit_id": "WU-OTHER",
+                "explicit_binding": false
+              }
+            ],
+            "finding": "current",
+            "counter_hypothesis_or_alternative": "stale",
+            "unresolved_items": [],
+            "impact_scope": [
+              "auditor"
+            ]
+          }
+        ],
         "approval": {
-          "bound": true
+          "bound": true,
+          "change_id": "CF-02",
+          "basis_head": "HEAD-A",
+          "purpose": "remaining-gap-test",
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
         },
         "actual_diff": [],
         "validation": {
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -123,7 +189,7 @@
       "work_unit": {
         "change_id": "CF-03A",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -159,7 +225,11 @@
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -170,7 +240,7 @@
       "work_unit": {
         "change_id": "CF-03B",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -206,7 +276,11 @@
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -217,7 +291,7 @@
       "work_unit": {
         "change_id": "CF-03C",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -253,7 +327,11 @@
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -264,7 +342,7 @@
       "work_unit": {
         "change_id": "CF-03D",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -300,7 +378,11 @@
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -311,7 +393,7 @@
       "work_unit": {
         "change_id": "CF-03E",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -347,7 +429,11 @@
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -358,7 +444,7 @@
       "work_unit": {
         "change_id": "CF-03F",
         "basis_head": "HEAD-A",
-        "target_head": "HEAD-B",
+        "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
         "change_type": "governance",
         "affected_domains": [
@@ -394,16 +480,20 @@
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
     },
     {
-      "id": "CF-03A",
+      "id": "CF-04",
       "expected": "STOP",
       "work_unit": {
-        "change_id": "CF-03A",
+        "change_id": "CF-04",
         "basis_head": "HEAD-A",
         "target_head": "HEAD-A",
         "purpose": "remaining-gap-test",
@@ -423,17 +513,15 @@
         "dimensions": [
           {
             "name": "freshness",
-            "applicability": "APPLIED",
+            "applicability": "BLOCKED",
             "evidence_refs": [
-              {
-                "ref": "WU-OTHER:E-1",
-                "work_unit_id": "WU-OTHER",
-                "explicit_binding": false
-              }
+              "E-1"
             ],
-            "finding": "current",
-            "counter_hypothesis_or_alternative": "stale",
-            "unresolved_items": [],
+            "finding": "blocked",
+            "counter_hypothesis_or_alternative": "current",
+            "unresolved_items": [
+              "HEAD"
+            ],
             "impact_scope": [
               "auditor"
             ]
@@ -441,15 +529,29 @@
         ],
         "approval": {
           "bound": true,
-          "change_id": "OTHER",
-          "purpose": "remaining-gap-test"
+          "change_id": "CF-04",
+          "basis_head": "HEAD-A",
+          "purpose": "remaining-gap-test",
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
         },
         "actual_diff": [],
         "validation": {
           "complete": true
         },
         "independent_review": {
-          "accepted": true
+          "accepted": true,
+          "evidence_refs": [
+            "IR-1"
+          ],
+          "evidence_type": "independent_review"
         },
         "outcome": "PASS"
       }
@@ -475,30 +577,21 @@
         "authority": [
           "ACTIVE"
         ],
-        "dimensions": [
-          {
-            "name": "freshness",
-            "applicability": "APPLIED",
-            "evidence_refs": [
-              {
-                "ref": "WU-OTHER:E-1",
-                "work_unit_id": "WU-OTHER",
-                "explicit_binding": false
-              }
-            ],
-            "finding": "current",
-            "counter_hypothesis_or_alternative": "stale",
-            "unresolved_items": [],
-            "impact_scope": [
-              "auditor"
-            ]
-          }
-        ],
+        "dimensions": [],
         "approval": {
           "bound": true,
-          "change_id": "CF-03B",
+          "change_id": "CF-05A",
+          "basis_head": "HEAD-A",
           "purpose": "remaining-gap-test",
-          "basis_head": "HEAD-B"
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
         },
         "actual_diff": [],
         "validation": {
@@ -533,30 +626,21 @@
         "authority": [
           "ACTIVE"
         ],
-        "dimensions": [
-          {
-            "name": "freshness",
-            "applicability": "APPLIED",
-            "evidence_refs": [
-              {
-                "ref": "WU-OTHER:E-1",
-                "work_unit_id": "WU-OTHER",
-                "explicit_binding": false
-              }
-            ],
-            "finding": "current",
-            "counter_hypothesis_or_alternative": "stale",
-            "unresolved_items": [],
-            "impact_scope": [
-              "auditor"
-            ]
-          }
-        ],
+        "dimensions": [],
         "approval": {
           "bound": true,
-          "change_id": "CF-03B",
+          "change_id": "CF-05B",
+          "basis_head": "HEAD-A",
           "purpose": "remaining-gap-test",
-          "basis_head": "HEAD-B"
+          "affected_domains": [
+            "auditor"
+          ],
+          "planned_paths": [
+            "v2/gates/x"
+          ],
+          "forbidden_scope": [
+            "application"
+          ]
         },
         "actual_diff": [],
         "validation": {
