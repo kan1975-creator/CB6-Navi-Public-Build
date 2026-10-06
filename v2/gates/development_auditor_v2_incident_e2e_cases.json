@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V2-INCIDENT-E2E-CANDIDATE",
+  "status": "CANDIDATE",
+  "sealed_acceptance_criteria": [
+    "E2E-01 implementation without prior bound approval must STOP",
+    "E2E-02 actual diff outside approved planned paths must STOP",
+    "E2E-03 Convenience implementation without fresh source-first research must STOP",
+    "E2E-04 incomplete impact coverage for a coupled JNI/UserMark change must CORRECT",
+    "E2E-05 applicable historical incident omitted from prior-failure comparison must CORRECT",
+    "E2E-06 negative conclusion based on a single zero-result search must STOP",
+    "E2E-07 evidence bound to a stale basis HEAD must STOP",
+    "E2E-08 a complete valid Work Unit must PASS"
+  ],
+  "historical_incident_authority": "v2/gates/historical_incidents.json",
+  "auditor_contract": "v2/gates/development_auditor_candidate_v2.json",
+  "work_unit_schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+  "cases": [
+    {"id":"E2E-01","expected":"STOP","approval_bound_before_implementation":false,"actual_diff_within_approved_scope":true,"source_first_research_complete":true,"impact_complete":true,"prior_failure_complete":true,"negative_conclusion_sufficient":true,"head_current":true,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-02","expected":"STOP","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":false,"source_first_research_complete":true,"impact_complete":true,"prior_failure_complete":true,"negative_conclusion_sufficient":true,"head_current":true,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-03","expected":"STOP","incident_id":"INC-RESEARCH-PRESENT-BUT-SCOPE-INCOMPLETE","feature":"convenience-brands","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":true,"source_first_research_complete":false,"impact_complete":true,"prior_failure_complete":true,"negative_conclusion_sufficient":true,"head_current":true,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-04","expected":"CORRECT","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":true,"source_first_research_complete":true,"impact_complete":false,"impact_domains":["jni","usermark"],"prior_failure_complete":true,"negative_conclusion_sufficient":true,"head_current":true,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-05","expected":"CORRECT","incident_id":"INC-STALE-AUDIT-IMPLEMENTATION-ASSUMPTION","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":true,"source_first_research_complete":true,"impact_complete":true,"prior_failure_complete":false,"negative_conclusion_sufficient":true,"head_current":true,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-06","expected":"STOP","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":true,"source_first_research_complete":true,"impact_complete":true,"prior_failure_complete":true,"negative_conclusion_sufficient":false,"negative_conclusion_basis":"single_zero_result","head_current":true,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-07","expected":"STOP","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":true,"source_first_research_complete":true,"impact_complete":true,"prior_failure_complete":true,"negative_conclusion_sufficient":true,"head_current":false,"validation_complete":true,"independent_review_accepted":true},
+    {"id":"E2E-08","expected":"PASS","approval_bound_before_implementation":true,"actual_diff_within_approved_scope":true,"source_first_research_complete":true,"impact_complete":true,"prior_failure_complete":true,"negative_conclusion_sufficient":true,"head_current":true,"validation_complete":true,"independent_review_accepted":true}
+  ],
+  "non_interference": ["auditor_v2_core","registry_coverage","development_gate","method_freeze","existing_independent_review","signal","convenience","search","routing","renderer","apk","application_behavior"]
+}
