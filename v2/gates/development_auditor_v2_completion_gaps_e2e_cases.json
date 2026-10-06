@@ -4,8 +4,8 @@
   "status": "CANDIDATE",
   "sealed_acceptance_criteria": [
     "CG-01A nonexistent evidence, CG-01B target-mismatched evidence, and CG-01C evidence that does not semantically support the finding must each STOP; cross-work-unit unbound evidence remains covered by CF-02",
-    "CG-02 actual diff that is path-allowed but semantically outside approved purpose/affected domains, enters forbidden scope, or hides scope drift through rename/delete must STOP",
-    "CG-03 independent review that reuses candidate conclusions/intermediate decisions instead of reconstructing from target HEAD, Work Unit, ACTIVE authority, and raw evidence must STOP"
+    "CG-02A purpose mismatch, CG-02B affected-domain mismatch, CG-02C forbidden-scope entry, and CG-02D rename/delete semantic drift must each STOP",
+    "CG-03A target HEAD, CG-03B Work Unit, CG-03C ACTIVE authority, CG-03D raw evidence reconstruction gap, CG-03E candidate conclusion reuse, and CG-03F candidate intermediate-decision reuse must each STOP"
   ],
   "authorities": {
     "auditor": "v2/gates/development_auditor_candidate_v2.json",
@@ -47,7 +47,7 @@
       }
     },
     {
-      "id": "CG-02",
+      "id": "CG-02A",
       "expected": "STOP",
       "scope_check": {
         "paths_within_planned": true,
@@ -58,7 +58,79 @@
       }
     },
     {
-      "id": "CG-03",
+      "id": "CG-02B",
+      "expected": "STOP",
+      "scope_check": {
+        "paths_within_planned": true,
+        "purpose_matches": true,
+        "affected_domains_match": false,
+        "forbidden_scope_entered": false,
+        "rename_delete_semantically_safe": true
+      }
+    },
+    {
+      "id": "CG-02C",
+      "expected": "STOP",
+      "scope_check": {
+        "paths_within_planned": true,
+        "purpose_matches": true,
+        "affected_domains_match": true,
+        "forbidden_scope_entered": true,
+        "rename_delete_semantically_safe": true
+      }
+    },
+    {
+      "id": "CG-02D",
+      "expected": "STOP",
+      "scope_check": {
+        "paths_within_planned": true,
+        "purpose_matches": true,
+        "affected_domains_match": true,
+        "forbidden_scope_entered": false,
+        "rename_delete_semantically_safe": false
+      }
+    },
+    {
+      "id": "CG-03A",
+      "expected": "STOP",
+      "independent_review_check": {
+        "accepted": true,
+        "reconstructed_from_target_head": false,
+        "reconstructed_from_work_unit": true,
+        "reconstructed_from_active_authority": true,
+        "reconstructed_from_raw_evidence": true,
+        "reuses_candidate_conclusion": false,
+        "reuses_candidate_intermediate_decision": false
+      }
+    },
+    {
+      "id": "CG-03B",
+      "expected": "STOP",
+      "independent_review_check": {
+        "accepted": true,
+        "reconstructed_from_target_head": true,
+        "reconstructed_from_work_unit": false,
+        "reconstructed_from_active_authority": true,
+        "reconstructed_from_raw_evidence": true,
+        "reuses_candidate_conclusion": false,
+        "reuses_candidate_intermediate_decision": false
+      }
+    },
+    {
+      "id": "CG-03C",
+      "expected": "STOP",
+      "independent_review_check": {
+        "accepted": true,
+        "reconstructed_from_target_head": true,
+        "reconstructed_from_work_unit": true,
+        "reconstructed_from_active_authority": false,
+        "reconstructed_from_raw_evidence": true,
+        "reuses_candidate_conclusion": false,
+        "reuses_candidate_intermediate_decision": false
+      }
+    },
+    {
+      "id": "CG-03D",
       "expected": "STOP",
       "independent_review_check": {
         "accepted": true,
@@ -66,7 +138,33 @@
         "reconstructed_from_work_unit": true,
         "reconstructed_from_active_authority": true,
         "reconstructed_from_raw_evidence": false,
+        "reuses_candidate_conclusion": false,
+        "reuses_candidate_intermediate_decision": false
+      }
+    },
+    {
+      "id": "CG-03E",
+      "expected": "STOP",
+      "independent_review_check": {
+        "accepted": true,
+        "reconstructed_from_target_head": true,
+        "reconstructed_from_work_unit": true,
+        "reconstructed_from_active_authority": true,
+        "reconstructed_from_raw_evidence": true,
         "reuses_candidate_conclusion": true,
+        "reuses_candidate_intermediate_decision": false
+      }
+    },
+    {
+      "id": "CG-03F",
+      "expected": "STOP",
+      "independent_review_check": {
+        "accepted": true,
+        "reconstructed_from_target_head": true,
+        "reconstructed_from_work_unit": true,
+        "reconstructed_from_active_authority": true,
+        "reconstructed_from_raw_evidence": true,
+        "reuses_candidate_conclusion": false,
         "reuses_candidate_intermediate_decision": true
       }
     }
