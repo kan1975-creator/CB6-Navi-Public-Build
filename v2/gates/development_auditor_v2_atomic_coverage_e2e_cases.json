@@ -299,5 +299,6 @@
         "behavior": "accepted_cb6_real_device_evidence"
       }
     }
-  }
+  },
+  "implementation_revision": 2
 }
