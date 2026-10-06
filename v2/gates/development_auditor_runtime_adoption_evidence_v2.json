@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "adoption_id": "CB6-DEVELOPMENT-AUDITOR-V2-RUNTIME-001",
+  "status": "ADOPTED_PENDING_REFREEZE",
+  "authority": {
+    "type": "explicit_user_decision",
+    "approved_at": "2026-10-06T18:30:00+09:00",
+    "decision": "Adopt Auditor V2 Runtime implementation after same-HEAD Candidate and Independent Review SUCCESS evidence."
+  },
+  "basis_head": "5001dd55aebd7a510765ac8f9a9843bcaa77d6d6",
+  "adopted_candidate_head": "ed59169845110678d698422e6d464057f7a7433e",
+  "evidence": {
+    "candidate_validation": {
+      "run_id": 37442886846,
+      "conclusion": "success",
+      "head_sha": "ed59169845110678d698422e6d464057f7a7433e"
+    },
+    "independent_review": {
+      "run_id": 37442886813,
+      "conclusion": "success",
+      "head_sha": "ed59169845110678d698422e6d464057f7a7433e"
+    }
+  },
+  "approved_scope": [
+    "Auditor V2 real Work Unit runtime enforcement",
+    "activation and blocking wiring",
+    "Method Freeze refreeze",
+    "Root Certification",
+    "Development Gate",
+    "postchange evidence"
+  ],
+  "forbidden_scope": [
+    "Signal behavior",
+    "Convenience behavior",
+    "search behavior",
+    "routing behavior",
+    "renderer behavior",
+    "APK application behavior"
+  ],
+  "post_adoption_requirements": [
+    "method_freeze_pass",
+    "root_certification_proven",
+    "development_gate_success",
+    "postchange_evidence_recorded"
+  ]
+}
