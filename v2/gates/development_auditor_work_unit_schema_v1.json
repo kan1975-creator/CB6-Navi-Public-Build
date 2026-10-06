@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-WORK-UNIT-V1",
+  "status": "CANDIDATE_SCHEMA",
+  "required": [
+    "change_id",
+    "basis_head",
+    "target_head",
+    "purpose",
+    "change_type",
+    "affected_domains",
+    "planned_paths",
+    "forbidden_scope",
+    "authority",
+    "dimensions",
+    "approval",
+    "actual_diff",
+    "validation",
+    "independent_review",
+    "outcome"
+  ],
+  "dimension_required": [
+    "name",
+    "applicability",
+    "evidence_refs",
+    "finding",
+    "counter_hypothesis_or_alternative",
+    "unresolved_items",
+    "impact_scope"
+  ],
+  "applicability_states": [
+    "APPLIED",
+    "NOT_APPLICABLE",
+    "BLOCKED"
+  ],
+  "not_applicable_required": [
+    "reason",
+    "applicability_evidence_refs"
+  ],
+  "outcomes": [
+    "STOP",
+    "CORRECT",
+    "FOLLOW-UP",
+    "PASS"
+  ],
+  "pass_requires": {
+    "basis_target_head_current": true,
+    "mandatory_dimensions_applied": true,
+    "no_blocked_dimension": true,
+    "no_unresolved_blocker": true,
+    "approval_bound_before_implementation": true,
+    "actual_diff_within_approved_scope": true,
+    "validation_complete": true,
+    "independent_review_accepted": true,
+    "no_blocking_disagreement": true
+  },
+  "negative_conclusion": {
+    "single_zero_result_insufficient": true,
+    "requires_independent_authoritative_countercheck_or_completeness_proof": true
+  }
+}
