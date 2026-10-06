@@ -200,14 +200,18 @@
       "contract": "v2/gates/development_auditor_candidate_v2.json",
       "verification": [
         "v2/gates/verify_development_auditor_active_v2.py",
-        "v2/tests/test_development_auditor_active_v2_fail_closed.py"
+        "v2/tests/test_development_auditor_active_v2_fail_closed.py",
+        "v2/gates/verify_development_auditor_work_unit_v2.py",
+        "v2/tests/test_development_auditor_work_unit_v2_fail_closed.py",
+        "v2/gates/verify_workflow_meta.py",
+        "v2/tests/test_workflow_meta_fail_closed.py"
       ],
       "proposal": {
         "rule": "Audit each change-bound Work Unit against current HEAD and ACTIVE authority with fail-closed applicability, concrete evidence, semantic counter-hypotheses, known-failure and impact checks, approval/diff scope binding, independent semantic reconstruction, and STOP/CORRECT/FOLLOW-UP/PASS outcomes.",
-        "github_verification_source": "Candidate Gate Run 37405936430 and Independent Review Run 37406142902; explicit user adoption 2026-10-06.",
+        "github_verification_source": "Runtime Candidate Run 37442886846 and Runtime Independent Review Run 37442886813 at HEAD ed59169845110678d698422e6d464057f7a7433e; explicit user final adoption 2026-10-06.",
         "fail_closed": true
       },
-      "adoption_evidence": "v2/gates/development_auditor_adoption_evidence_v2.json",
+      "adoption_evidence": "v2/gates/development_auditor_runtime_adoption_evidence_v2.json",
       "supersedes": "CB6-DEVELOPMENT-AUDITOR-V1"
     }
   ],
