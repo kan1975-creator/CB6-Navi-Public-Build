@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "adoption_id": "CB6-DEVELOPMENT-AUDITOR-V2-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "CB6-DEVELOPMENT-AUDITOR-V2",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Auditor V2を正式採用して、提示された5ファイルのACTIVE化第1段階を承認して進めて",
+    "recorded_at": "2026-10-06"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37405936430,
+      "conclusion": "success",
+      "candidate_head": "212871442a98a9fcd55e900f8070a017bf47587b"
+    },
+    "independent_review": {
+      "run_id": 37406142902,
+      "conclusion": "success",
+      "candidate_head": "0c4c1f0840f4776efc22432c06be4a1b1c795f05"
+    }
+  },
+  "supersedes": "v2/gates/development_auditor_adoption_evidence_v1.json",
+  "next_required": [
+    "method_freeze_refreeze_for_rule_coverage",
+    "development_gate_v2_binding",
+    "full_root_certification_and_development_gate"
+  ]
+}
