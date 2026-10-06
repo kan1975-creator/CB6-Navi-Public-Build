@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import ast
 import json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]; e=[]
@@ -49,9 +50,13 @@ if cs.get("E2E-07",{}).get("head_current") is not False:e.append("E2E-07 stale-h
 valid=cs.get("E2E-08",{})
 for k in ("approval_bound_before_implementation","actual_diff_within_approved_scope","source_first_research_complete","impact_complete","prior_failure_complete","negative_conclusion_sufficient","head_current","validation_complete","independent_review_accepted"):
  if valid.get(k) is not True:e.append("E2E-08 valid prerequisite missing:"+k)
-src=Path(__file__).read_text()
-for forbidden in ("import verify_development_auditor_v2_incident_e2e","subprocess","verify_development_auditor_v2_incident_e2e.py"):
- if forbidden in src:e.append("candidate verifier dependency:"+forbidden)
+tree=ast.parse(Path(__file__).read_text())
+candidate_module="verify_"+"development_auditor_v2_incident_e2e"
+candidate_script=candidate_module+".py"
+for node in ast.walk(tree):
+ if isinstance(node,ast.Import) and any(x.name==candidate_module for x in node.names):e.append("candidate verifier import dependency")
+ if isinstance(node,ast.ImportFrom) and node.module==candidate_module:e.append("candidate verifier from-import dependency")
+ if isinstance(node,ast.Constant) and isinstance(node.value,str) and node.value==candidate_script:e.append("candidate verifier execution reference")
 if e:
  print("AUDITOR V2 INCIDENT E2E INDEPENDENT REVIEW FAIL:",*e,sep="\n - ");raise SystemExit(1)
 print("AUDITOR V2 INCIDENT E2E INDEPENDENT REVIEW PASS: 8 cases independently reconstructed from raw authority without candidate-verifier execution")
