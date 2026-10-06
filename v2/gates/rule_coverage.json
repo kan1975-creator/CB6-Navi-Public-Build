@@ -62,7 +62,17 @@
     },
     {
       "rule_id": "CB6-DEVELOPMENT-AUDITOR-V2",
-      "coverage_status": "MACHINE_ENFORCED"
+      "coverage_status": "MACHINE_ENFORCED",
+      "enforcement_reachability": {
+        "active_verifier": "v2/gates/verify_development_auditor_active_v2.py",
+        "work_unit_verifier": "v2/gates/verify_development_auditor_work_unit_v2.py",
+        "destructive_test": "v2/tests/test_development_auditor_work_unit_v2_fail_closed.py",
+        "workflow_meta": "v2/gates/verify_workflow_meta.py",
+        "feature_gate": "v2/gates/verify_project_gate.py",
+        "candidate_workflow": ".github/workflows/development_auditor_v2_runtime_candidate.yml",
+        "independent_review_workflow": ".github/workflows/development_auditor_v2_runtime_independent_review.yml",
+        "same_head_evidence": "v2/gates/development_auditor_runtime_adoption_evidence_v2.json"
+      }
     }
   ]
 }
