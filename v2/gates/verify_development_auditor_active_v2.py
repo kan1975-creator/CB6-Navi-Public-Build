@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+R=Path(__file__).resolve().parents[2];e=[]
+d=json.loads((R/"v2/gates/development_auditor_candidate_v2.json").read_text())
+if d.get("revision")!=2 or d.get("status")!="CANDIDATE":e.append("V2 contract identity")
+for n in range(1,19):
+ if not any(x.startswith(f"AC-{n:02d} ") for x in d.get("acceptance_criteria",[])):e.append(f"missing AC-{n:02d}")
+if d.get("evidence_sufficiency",{}).get("negative_conclusion_from_single_zero_result_forbidden") is not True:e.append("zero-result sufficiency")
+if d.get("independent_review",{}).get("blocking_disagreement_forbids_pass") is not True:e.append("blocking disagreement")
+if d.get("approval",{}).get("scope_expansion_requires_new_bound_approval") is not True:e.append("approval scope drift")
+ev=json.loads((R/"v2/gates/development_auditor_adoption_evidence_v2.json").read_text())
+if ev.get("status")!="ACTIVE" or ev.get("subject")!="CB6-DEVELOPMENT-AUDITOR-V2":e.append("V2 adoption")
+if ev.get("evidence",{}).get("candidate_gate",{}).get("run_id")!=37405936430:e.append("candidate evidence")
+if ev.get("evidence",{}).get("independent_review",{}).get("run_id")!=37406142902:e.append("review evidence")
+reg=json.loads((R/"v2/gates/operational_rule_registry_v18.json").read_text());cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
+rr=[x for x in reg.get("rules",[]) if x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V2"]
+if len(rr)!=1 or rr[0].get("status")!="ACTIVE" or rr[0].get("contract")!="v2/gates/development_auditor_candidate_v2.json":e.append("V2 registry activation")
+if any(x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in reg.get("rules",[])):e.append("V1 still active in v18")
+if cov.get("registry")!="v2/gates/operational_rule_registry_v18.json":e.append("coverage registry")
+if not any(x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V2" and x.get("coverage_status")=="MACHINE_ENFORCED" for x in cov.get("entries",[])):e.append("V2 coverage")
+if any(x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in cov.get("entries",[])):e.append("V1 coverage still current")
+if e:
+ print("CB6 DEVELOPMENT AUDITOR V2 ACTIVE FAIL:");[print(" -",x) for x in e];raise SystemExit(1)
+print("CB6 DEVELOPMENT AUDITOR V2 ACTIVE PASS: adopted V2 authority, AC-01..18, semantic evidence, approval scope and machine coverage preserved")
