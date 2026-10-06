@@ -8,7 +8,7 @@ cases=[
 ("allow-zero-result", "v2/gates/development_auditor_candidate_v2.json",lambda d:d["evidence_sufficiency"].update({"negative_conclusion_from_single_zero_result_forbidden":False})),
 ("allow-scope-drift","v2/gates/development_auditor_candidate_v2.json",lambda d:d["approval"].update({"scope_expansion_requires_new_bound_approval":False})),
 ("allow-disagreement","v2/gates/development_auditor_candidate_v2.json",lambda d:d["independent_review"].update({"blocking_disagreement_forbids_pass":False})),
-("remove-adoption","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d.update({"status":"PROPOSED"})),
+("remove-adoption","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d.update({"status":"PROPOSED"})),\n("drop-incident-e2e-candidate-evidence","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"].pop("incident_e2e_candidate")),\n("falsify-incident-e2e-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["incident_e2e_independent_review"].update({"conclusion":"failure"})),
 ("drop-v2-coverage","v2/gates/rule_coverage.json",lambda d:d["entries"].__setitem__(len(d["entries"])-1,{"rule_id":"CB6-DEVELOPMENT-AUDITOR-V2","coverage_status":"PROPOSED"}))
 ]
 for name,file,mut in cases:
