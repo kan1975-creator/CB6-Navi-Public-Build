@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "certification_id": "CB6-DEVELOPMENT-AUDITOR-V2-POSTCHANGE",
+  "status": "CERTIFIED",
+  "subject": "CB6-DEVELOPMENT-AUDITOR-V2",
+  "postchange_head": "98de93efbcb2663e581708e95a70b977fed97f15",
+  "development_gate": {
+    "run_id": 37407611493,
+    "conclusion": "success",
+    "head_sha": "98de93efbcb2663e581708e95a70b977fed97f15"
+  },
+  "root_certification": {
+    "status": "PROVEN"
+  },
+  "method_freeze": {
+    "result": "PASS"
+  }
+}
