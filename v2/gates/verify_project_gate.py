@@ -48,6 +48,14 @@ if not s.get("design_verified"): fail("rebuilt design not verified")
 if s.get("feature_builds_allowed") is not True: fail("feature builds not authorized")
 # Feature builds additionally require a per-feature gate record.
 if "--require-feature-build" in sys.argv:
+ runtime=ROOT/"v2/gates/development_auditor_runtime_adoption_evidence_v2.json"
+ if not runtime.is_file(): fail("feature build lacks Development Auditor V2 runtime authority")
+ rd=json.loads(runtime.read_text(encoding="utf-8"))
+ if rd.get("status") not in {"ADOPTED_PENDING_REFREEZE","ACTIVE_REFROZEN"}: fail("Development Auditor V2 runtime is not adopted")
+ for rel in ("v2/gates/verify_development_auditor_work_unit_v2.py","v2/tests/test_development_auditor_work_unit_v2_fail_closed.py"):
+  if not (ROOT/rel).is_file(): fail("Development Auditor V2 runtime enforcement missing: "+rel)
+ cp=subprocess.run([sys.executable,str(ROOT/"v2/gates/verify_development_auditor_active_v2.py")],cwd=ROOT,text=True,capture_output=True)
+ if cp.returncode!=0: fail("Development Auditor V2 runtime ACTIVE proof failed: "+(cp.stdout+cp.stderr).strip())
  feature=None
  for arg in sys.argv:
   if arg.startswith("--feature="): feature=arg.split("=",1)[1]
