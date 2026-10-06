@@ -28,7 +28,7 @@
     "v2/gates/verify_method_completion.py": "7e3f583055cd47b7bc6ff69d0b27d5de35d07f36",
     "v2/tests/test_method_completion.py": "2ac729de719edb2fa243e4c26b354dc0e226ed6e",
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
-    "v2/gates/verify_operational_rule_registry.py": "3d98bab5c4eb96b07064617b0a8af30ff1a0264c",
+    "v2/gates/verify_operational_rule_registry.py": "41909b7484d0cd5800d660e92c78541f2f51d64c",
     "v2/gates/verify_rule_coverage.py": "b97e005569b6da0b332cca8fb49ab6883b5135ac",
     "v2/gates/rule_coverage.json": "8070ec6162290a39fcd8e29f15265e56ef15d9ce",
     "v2/tests/test_operational_rule_registry_fail_closed.py": "39f52e4991af253eb400cecd94b28c23e348e0c6",
