@@ -105,6 +105,12 @@ require('TOPOLOGY_BATCH_SIZE = 64' in provider and 'nodeIds.size() == 12' not in
         'topology normalization is still limited to the legacy 12-node diagnostic window')
 require('applySignalNodeCenterClusterBatch' in provider and 'if (pairDistance[0] > 30.0f) continue;' in provider,
         'topology-evidence intersection normalization missing')
+require('stage=topology-merged' in provider and 'fetchSignalTopologyBatch' in provider,
+        'topology transport batches are not merged before intersection normalization')
+require('result=topology-incomplete' in provider and 'return snapshot; // fail closed' in provider,
+        'incomplete topology does not fail closed to unmerged signals')
+require('stage=topology-endpoint-failed' in provider and 'ENDPOINTS.length' in provider,
+        'topology endpoint fallback missing')
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
     require(activity.count(hook) == 1, 'lifecycle hook ' + hook)
