@@ -42,6 +42,13 @@ if pc.get("status")!="CERTIFIED" or pc.get("subject")!="CB6-DEVELOPMENT-AUDITOR-
 if pc.get("development_gate")!={"run_id":37433235541,"conclusion":"success","head_sha":"f4c3bb5de2e163dbf60586e86ebfc42fe377dc12"}:e.append("postchange development gate")
 if pc.get("atomic_coverage")!={"candidate":{"run_id":37433225181,"conclusion":"success"},"independent_review":{"run_id":37433235609,"conclusion":"success"}}:e.append("postchange atomic coverage")
 if pc.get("root_certification",{}).get("status")!="PROVEN" or pc.get("method_freeze",{}).get("result")!="PASS":e.append("postchange governance certification")
+rt=json.loads((R/"v2/gates/development_auditor_runtime_adoption_evidence_v2.json").read_text())
+if rt.get("status") not in ("ADOPTED_PENDING_REFREEZE","ACTIVE_REFROZEN") or rt.get("adopted_candidate_head")!="ed59169845110678d698422e6d464057f7a7433e":e.append("runtime adoption identity")
+rte=rt.get("evidence",{})
+if rte.get("candidate_validation")!={"run_id":37442886846,"conclusion":"success","head_sha":"ed59169845110678d698422e6d464057f7a7433e"}:e.append("runtime candidate evidence")
+if rte.get("independent_review")!={"run_id":37442886813,"conclusion":"success","head_sha":"ed59169845110678d698422e6d464057f7a7433e"}:e.append("runtime independent review evidence")
+for p in ("v2/gates/verify_development_auditor_work_unit_v2.py","v2/tests/test_development_auditor_work_unit_v2_fail_closed.py",".github/workflows/development_auditor_v2_runtime_candidate.yml",".github/workflows/development_auditor_v2_runtime_independent_review.yml"):
+ if not (R/p).is_file():e.append("runtime enforcement path missing: "+p)
 reg=json.loads((R/"v2/gates/operational_rule_registry_v19.json").read_text());cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
 rr=[x for x in reg.get("rules",[]) if x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V2"]
 if len(rr)!=1 or rr[0].get("status")!="ACTIVE" or rr[0].get("contract")!="v2/gates/development_auditor_candidate_v2.json":e.append("V2 registry activation")
