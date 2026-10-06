@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-STATUS-REPORTING-001-V12-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "OPS-STATUS-REPORTING-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Status Reporting v12を正式採用し、提示したACTIVE contract・adoption evidence・ACTIVE verifier・破壊試験の4ファイルだけを追加することを承認して進めて",
+    "recorded_at": "2026-10-06"
+  },
+  "evidence": {
+    "candidate_gate": {"run_id": 37408795958, "conclusion": "success"},
+    "independent_review": {"run_id": 37408997191, "conclusion": "success", "candidate_head": "5e031baeb20db496a48c31bcdfa2aaacf0065f21"}
+  },
+  "rule_extension": {
+    "per_response_execution_preflight": true,
+    "wait_evidence_completeness": true,
+    "self_attestation_insufficient": true,
+    "terminal_four_line_summary": true,
+    "runtime_machine_boundary_explicit": true
+  },
+  "next_required": ["registry_binding","coverage_binding","method_freeze_if_required","final_development_gate"]
+}
