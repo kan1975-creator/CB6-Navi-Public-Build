@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V2-COMPLETION-GAPS-E2E-CANDIDATE",
+  "status": "CANDIDATE",
+  "sealed_acceptance_criteria": [
+    "CG-01 evidence reference that is nonexistent, cross-work-unit unbound, target-mismatched, or semantically non-supporting must STOP",
+    "CG-02 actual diff that is path-allowed but semantically outside approved purpose/affected domains, enters forbidden scope, or hides scope drift through rename/delete must STOP",
+    "CG-03 independent review that reuses candidate conclusions/intermediate decisions instead of reconstructing from target HEAD, Work Unit, ACTIVE authority, and raw evidence must STOP"
+  ],
+  "authorities": {
+    "auditor": "v2/gates/development_auditor_candidate_v2.json",
+    "work_unit_schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+    "development_method": "v2/gates/development_method_contract.json"
+  },
+  "cases": [
+    {
+      "id": "CG-01",
+      "expected": "STOP",
+      "evidence_check": {
+        "refs_nonempty": true,
+        "exists": false,
+        "work_unit_bound": true,
+        "target_matches": true,
+        "semantically_supports_finding": true
+      }
+    },
+    {
+      "id": "CG-02",
+      "expected": "STOP",
+      "scope_check": {
+        "paths_within_planned": true,
+        "purpose_matches": false,
+        "affected_domains_match": true,
+        "forbidden_scope_entered": false,
+        "rename_delete_semantically_safe": true
+      }
+    },
+    {
+      "id": "CG-03",
+      "expected": "STOP",
+      "independent_review_check": {
+        "accepted": true,
+        "reconstructed_from_target_head": true,
+        "reconstructed_from_work_unit": true,
+        "reconstructed_from_active_authority": true,
+        "reconstructed_from_raw_evidence": false,
+        "reuses_candidate_conclusion": true,
+        "reuses_candidate_intermediate_decision": true
+      }
+    }
+  ],
+  "non_interference": [
+    "auditor_v2_core",
+    "existing_25_e2e",
+    "registry_coverage",
+    "development_gate",
+    "method_freeze",
+    "existing_independent_review",
+    "signal",
+    "convenience",
+    "search",
+    "routing",
+    "renderer",
+    "apk",
+    "application_behavior"
+  ]
+}
