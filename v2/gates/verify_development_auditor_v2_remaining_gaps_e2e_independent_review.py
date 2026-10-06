@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import json
+import ast,json
 from pathlib import Path
-R=Path(__file__).resolve().parents[2];e=[];d=json.loads((R/"v2/gates/development_auditor_v2_remaining_gaps_e2e_cases.json").read_text());a=json.loads((R/"v2/gates/development_auditor_candidate_v2.json").read_text());s=json.loads((R/"v2/gates/development_auditor_work_unit_schema_v1.json").read_text());req=set(s["required"]);bind=set(a["approval"]["binding_fields"])
+R=Path(__file__).resolve().parents[2];tree=ast.parse(Path(__file__).read_text());candidate="_".join(("verify","development","auditor","v2","remaining","gaps","e2e"));assert not any((isinstance(n,ast.Import) and any(x.name==candidate for x in n.names)) or (isinstance(n,ast.ImportFrom) and (n.module or "")==candidate) for n in ast.walk(tree));d=json.loads((R/"v2/gates/development_auditor_v2_remaining_gaps_e2e_cases.json").read_text());a=json.loads((R/"v2/gates/development_auditor_candidate_v2.json").read_text());s=json.loads((R/"v2/gates/development_auditor_work_unit_schema_v1.json").read_text());e=[];req=set(s["required"]);bind=set(a["approval"]["binding_fields"])
 def bad(c):
  w=c["work_unit"];i=c["id"]
  if i=="CF-01A":return not w.get("change_id")
@@ -18,4 +18,4 @@ for i in ids:
  c=cs.get(i,{})
  if c.get("expected")!="STOP" or not req.issubset(c.get("work_unit",{})) or not bad(c):e.append(i)
 if e:print("AUDITOR V2 REMAINING GAPS INDEPENDENT REVIEW FAIL:",*e,sep="\n - ");raise SystemExit(1)
-print("AUDITOR V2 REMAINING GAPS E2E PASS: 12 independent branches")
+print("AUDITOR V2 REMAINING GAPS INDEPENDENT REVIEW PASS: 12 independent branches")
