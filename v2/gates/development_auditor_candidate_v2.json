@@ -1,0 +1,138 @@
+{
+  "schema": 2,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V1",
+  "revision": 2,
+  "status": "CANDIDATE",
+  "extends": "v2/gates/development_auditor_candidate_v1.json",
+  "purpose": "Work-unit execution audit extension: prove that each CB6 development work unit actually followed current authority, Development Method, research, approval, impact, validation and independent-review obligations without changing application behavior.",
+  "acceptance_criteria": [
+    "AC-01 freshness",
+    "AC-02 authority reconstruction",
+    "AC-03 work-unit identity",
+    "AC-04 applicability fail-closed",
+    "AC-05 concrete research evidence",
+    "AC-06 semantic challenge",
+    "AC-07 prior-failure comparison",
+    "AC-08 impact completeness",
+    "AC-09 approval binding",
+    "AC-10 scope-drift rejection",
+    "AC-11 actual-diff comparison",
+    "AC-12 validation evidence",
+    "AC-13 independent semantic review",
+    "AC-14 blocking disagreement rejection",
+    "AC-15 exit audit",
+    "AC-16 non-interference",
+    "AC-17 existing-mechanism reuse",
+    "AC-18 earliest-stage return"
+  ],
+  "mandatory_dimensions": [
+    "freshness",
+    "active_authority",
+    "user_intent",
+    "applicable_rules_and_method",
+    "approval_boundary",
+    "change_impact",
+    "known_failures",
+    "actual_scope",
+    "unresolved_blockers"
+  ],
+  "applicability": {
+    "states": [
+      "APPLIED",
+      "NOT_APPLICABLE",
+      "BLOCKED"
+    ],
+    "mandatory_not_applicable_forbidden": true,
+    "conditional_not_applicable_requires_reason_and_evidence": true
+  },
+  "evidence_sufficiency": {
+    "concrete_evidence_refs_required": true,
+    "negative_conclusion_from_single_zero_result_forbidden": true,
+    "negative_conclusion_requires_independent_authoritative_countercheck_or_completeness_proof": true,
+    "wrong_head_evidence_forbidden": true,
+    "cross_work_unit_evidence_reuse_without_explicit_binding_forbidden": true
+  },
+  "semantic_audit": {
+    "requires_finding": true,
+    "requires_counter_hypothesis_or_alternative_for_material_decisions": true,
+    "requires_impact_scope": true,
+    "requires_unresolved_items": true
+  },
+  "work_unit": {
+    "schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+    "states": [
+      "RECONSTRUCT",
+      "CLASSIFY",
+      "RESEARCH",
+      "AUDIT",
+      "PROPOSE",
+      "APPROVAL_BOUND",
+      "IMPLEMENTED",
+      "VALIDATED",
+      "INDEPENDENTLY_REVIEWED",
+      "EXIT_AUDITED",
+      "PASS"
+    ],
+    "failure_outcomes": [
+      "STOP",
+      "CORRECT",
+      "FOLLOW-UP"
+    ],
+    "implementation_before_approval_bound_forbidden": true,
+    "head_change_requires_resynchronization": true
+  },
+  "approval": {
+    "rule_id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+    "binding_fields": [
+      "change_id",
+      "basis_head",
+      "purpose",
+      "affected_domains",
+      "planned_paths",
+      "forbidden_scope"
+    ],
+    "scope_expansion_requires_new_bound_approval": true,
+    "post_hoc_approval_forbidden": true
+  },
+  "risk": {
+    "self_declared_low_cannot_reduce_mandatory_checks": true,
+    "minimum_depth_must_consider_actual_paths_affected_domains_and_authority_class": true
+  },
+  "independent_review": {
+    "required_before_pass": true,
+    "must_reconstruct_from_target_head_work_unit_active_authority_and_raw_evidence": true,
+    "implementation_success_claims_are_not_review_evidence": true,
+    "blocking_disagreement_forbids_pass": true
+  },
+  "exit_audit": {
+    "actual_diff_must_match_declared_scope": true,
+    "missing_evidence_forbids_pass": true,
+    "stale_head_forbids_pass": true,
+    "approval_mismatch_forbids_pass": true,
+    "blocked_or_unresolved_blocker_forbids_pass": true
+  },
+  "non_interference": {
+    "application_source_change_forbidden": true,
+    "signal_behavior_change_forbidden": true,
+    "convenience_behavior_change_forbidden": true,
+    "search_routing_renderer_change_forbidden": true,
+    "existing_independent_review_weaken_forbidden": true,
+    "existing_gate_or_evidence_weaken_forbidden": true,
+    "active_v1_change_forbidden_in_candidate_stage": true,
+    "registry_coverage_change_forbidden_in_candidate_stage": true,
+    "method_freeze_change_forbidden_in_candidate_stage": true,
+    "development_gate_change_forbidden_in_candidate_stage": true
+  },
+  "activation": {
+    "self_activation_forbidden": true,
+    "direct_active_forbidden": true,
+    "candidate_must_not_enter_active_rule_coverage": true,
+    "requires_before_active": [
+      "positive_candidate_verification",
+      "destructive_test",
+      "independent_review",
+      "explicit_user_adoption",
+      "machine_enforced_registry_coverage"
+    ]
+  }
+}
