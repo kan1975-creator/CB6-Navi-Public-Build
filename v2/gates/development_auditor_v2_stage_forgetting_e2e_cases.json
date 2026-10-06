@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V2-STAGE-FORGETTING-E2E-CANDIDATE",
+  "status": "CANDIDATE",
+  "sealed_acceptance_criteria": [
+    "SF-01 missing ACTIVE authority during RECONSTRUCT must STOP",
+    "SF-02 mandatory dimension falsely classified NOT_APPLICABLE must STOP",
+    "SF-03 missing counter-hypothesis for a material decision must CORRECT",
+    "SF-04 unresolved blocker omitted before PROPOSE must STOP",
+    "SF-05 missing validation evidence must FOLLOW-UP",
+    "SF-06 blocking independent-review disagreement must STOP",
+    "SF-07 exit audit with missing evidence must STOP"
+  ],
+  "auditor_contract": "v2/gates/development_auditor_candidate_v2.json",
+  "work_unit_schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+  "cases": [
+    {"id":"SF-01","stage":"RECONSTRUCT","expected":"STOP","active_authority_complete":false,"mandatory_dimensions_applied":true,"counter_hypothesis_complete":true,"unresolved_blocker":false,"validation_evidence_complete":true,"blocking_disagreement":false,"exit_evidence_complete":true},
+    {"id":"SF-02","stage":"CLASSIFY","expected":"STOP","active_authority_complete":true,"mandatory_dimensions_applied":false,"false_not_applicable":"active_authority","counter_hypothesis_complete":true,"unresolved_blocker":false,"validation_evidence_complete":true,"blocking_disagreement":false,"exit_evidence_complete":true},
+    {"id":"SF-03","stage":"AUDIT","expected":"CORRECT","active_authority_complete":true,"mandatory_dimensions_applied":true,"counter_hypothesis_complete":false,"material_decision":true,"unresolved_blocker":false,"validation_evidence_complete":true,"blocking_disagreement":false,"exit_evidence_complete":true},
+    {"id":"SF-04","stage":"PROPOSE","expected":"STOP","active_authority_complete":true,"mandatory_dimensions_applied":true,"counter_hypothesis_complete":true,"unresolved_blocker":true,"blocker_omitted":true,"validation_evidence_complete":true,"blocking_disagreement":false,"exit_evidence_complete":true},
+    {"id":"SF-05","stage":"VALIDATED","expected":"FOLLOW-UP","active_authority_complete":true,"mandatory_dimensions_applied":true,"counter_hypothesis_complete":true,"unresolved_blocker":false,"validation_evidence_complete":false,"blocking_disagreement":false,"exit_evidence_complete":true},
+    {"id":"SF-06","stage":"INDEPENDENTLY_REVIEWED","expected":"STOP","active_authority_complete":true,"mandatory_dimensions_applied":true,"counter_hypothesis_complete":true,"unresolved_blocker":false,"validation_evidence_complete":true,"blocking_disagreement":true,"exit_evidence_complete":true},
+    {"id":"SF-07","stage":"EXIT_AUDITED","expected":"STOP","active_authority_complete":true,"mandatory_dimensions_applied":true,"counter_hypothesis_complete":true,"unresolved_blocker":false,"validation_evidence_complete":true,"blocking_disagreement":false,"exit_evidence_complete":false}
+  ],
+  "non_interference": ["auditor_v2_core","existing_incident_e2e","registry_coverage","development_gate","method_freeze","signal","convenience","search","routing","renderer","apk","application_behavior"]
+}
