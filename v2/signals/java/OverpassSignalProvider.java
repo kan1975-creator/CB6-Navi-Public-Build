@@ -186,61 +186,94 @@ public final class OverpassSignalProvider implements SignalProvider
       String endpoint, SignalSnapshot snapshot, double originLat, double originLon)
   {
     ArrayList<SignalSnapshot.Point> diagnosticPoints = new ArrayList<>();
-    ArrayList<Long> nodeIds = new ArrayList<>();
     for (SignalSnapshot.Point point : snapshot.points)
     {
       // Way/relation ids are namespaced above the raw OSM node-id range.
       if (point.id >= WAY_ID_NAMESPACE) continue;
       diagnosticPoints.add(point);
-      nodeIds.add(point.id);
       Log.i("CB6-SIGNAL-WAY-DIAG", "node=" + point.id
           + " lat=" + point.lat + " lon=" + point.lon + " distance=" + point.distance);
     }
-    if (nodeIds.isEmpty())
+    if (diagnosticPoints.isEmpty())
     {
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=zero-node-ids");
       return snapshot;
     }
-    if (nodeIds.size() > TOPOLOGY_BATCH_SIZE)
+
+    // Network batching is transport-only.  Merge every complete topology response first,
+    // then run the existing intersection analysis once over all signal nodes so a batch
+    // boundary can never split one physical intersection.
+    JSONArray mergedElements = new JSONArray();
+    for (int offset = 0; offset < diagnosticPoints.size(); offset += TOPOLOGY_BATCH_SIZE)
     {
-      SignalSnapshot current = snapshot;
-      for (int offset = 0; offset < nodeIds.size(); offset += TOPOLOGY_BATCH_SIZE)
+      int end = Math.min(offset + TOPOLOGY_BATCH_SIZE, diagnosticPoints.size());
+      ArrayList<SignalSnapshot.Point> batchPoints = new ArrayList<>();
+      for (int i = offset; i < end; ++i) batchPoints.add(diagnosticPoints.get(i));
+      JSONObject batchRoot = fetchSignalTopologyBatch(endpoint, batchPoints);
+      if (batchRoot == null || batchRoot.has("remark"))
       {
-        int end = Math.min(offset + TOPOLOGY_BATCH_SIZE, nodeIds.size());
-        ArrayList<SignalSnapshot.Point> batchPoints = new ArrayList<>();
-        for (int i = offset; i < end; ++i) batchPoints.add(diagnosticPoints.get(i));
-        current = applySignalNodeCenterClusterBatch(endpoint, current, batchPoints, originLat, originLon);
+        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=topology-incomplete offset="
+            + offset + " count=" + batchPoints.size());
+        return snapshot; // fail closed: incomplete topology must never cause a partial merge.
       }
-      return current;
+      JSONArray batchElements = batchRoot.optJSONArray("elements");
+      if (batchElements == null)
+      {
+        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=topology-missing-elements offset=" + offset);
+        return snapshot;
+      }
+      for (int i = 0; i < batchElements.length(); ++i) mergedElements.put(batchElements.opt(i));
     }
-    return applySignalNodeCenterClusterBatch(endpoint, snapshot, diagnosticPoints, originLat, originLon);
+    Log.i("CB6-SIGNAL-WAY-DIAG", "stage=topology-merged batches="
+        + ((diagnosticPoints.size() + TOPOLOGY_BATCH_SIZE - 1) / TOPOLOGY_BATCH_SIZE)
+        + " elements=" + mergedElements.length());
+    return applySignalNodeCenterClusterBatch(snapshot, diagnosticPoints,
+        new JSONObject().put("elements", mergedElements), originLat, originLon);
+  }
+
+  private static JSONObject fetchSignalTopologyBatch(
+      String preferredEndpoint, ArrayList<SignalSnapshot.Point> diagnosticPoints)
+  {
+    StringBuilder ids = new StringBuilder();
+    for (int i = 0; i < diagnosticPoints.size(); ++i)
+    {
+      if (i > 0) ids.append(',');
+      ids.append(diagnosticPoints.get(i).id);
+    }
+    String query = "[out:json][timeout:8];node(id:" + ids + ")->.signals;"
+        + "way(bn.signals)[highway]->.roads;(.roads;node(w.roads););out body qt;";
+    Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start node-count=" + diagnosticPoints.size());
+    for (int attempt = -1; attempt < ENDPOINTS.length; ++attempt)
+    {
+      String candidate = attempt < 0 ? preferredEndpoint : ENDPOINTS[attempt];
+      if (attempt >= 0 && candidate.equals(preferredEndpoint)) continue;
+      try
+      {
+        String response = post(candidate, query);
+        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=http-complete endpoint=" + candidate
+            + " bytes=" + response.length());
+        JSONObject root = new JSONObject(response);
+        if (root.has("remark")) continue;
+        return root;
+      }
+      catch (Exception error)
+      {
+        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=topology-endpoint-failed endpoint=" + candidate
+            + " type=" + error.getClass().getSimpleName()
+            + " message=" + String.valueOf(error.getMessage()));
+      }
+    }
+    return null;
   }
 
   private static SignalSnapshot applySignalNodeCenterClusterBatch(
-      String endpoint, SignalSnapshot snapshot, ArrayList<SignalSnapshot.Point> diagnosticPoints,
+      SignalSnapshot snapshot, ArrayList<SignalSnapshot.Point> diagnosticPoints, JSONObject root,
       double originLat, double originLon)
   {
     ArrayList<Long> nodeIds = new ArrayList<>();
     for (SignalSnapshot.Point point : diagnosticPoints) nodeIds.add(point.id);
-    StringBuilder ids = new StringBuilder();
-    for (int i = 0; i < nodeIds.size(); ++i)
-    {
-      if (i > 0) ids.append(',');
-      ids.append(nodeIds.get(i));
-    }
-    String query = "[out:json][timeout:8];node(id:" + ids + ")->.signals;"
-        + "way(bn.signals)[highway]->.roads;(.roads;node(w.roads););out body qt;";
-    Log.i("CB6-SIGNAL-WAY-DIAG", "stage=start node-count=" + nodeIds.size());
     try
     {
-      String response = post(endpoint, query);
-      Log.i("CB6-SIGNAL-WAY-DIAG", "stage=http-complete bytes=" + response.length());
-      JSONObject root = new JSONObject(response);
-      if (root.has("remark"))
-      {
-        Log.i("CB6-SIGNAL-WAY-DIAG", "stage=complete result=incomplete");
-        return snapshot;
-      }
       JSONArray elements = root.getJSONArray("elements");
       Log.i("CB6-SIGNAL-WAY-DIAG", "stage=elements count=" + elements.length());
       if (elements.length() == 0)
