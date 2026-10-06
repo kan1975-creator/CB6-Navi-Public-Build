@@ -19,6 +19,14 @@ for x in sorted(covered-active): errors.append("coverage rule missing from regis
 for x in sorted(proposed & covered): errors.append("PROPOSED rule must not enter coverage: "+x)
 for x in cov["entries"]:
  if x.get("coverage_status")!="MACHINE_ENFORCED": errors.append("unenforced rule: "+x["rule_id"])
+aud=next((x for x in cov["entries"] if x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V2"),None)
+if aud:
+ reach=aud.get("enforcement_reachability",{})
+ req={"active_verifier","work_unit_verifier","destructive_test","workflow_meta","feature_gate","candidate_workflow","independent_review_workflow","same_head_evidence"}
+ if set(reach)!=req: errors.append("CB6-DEVELOPMENT-AUDITOR-V2 MACHINE_ENFORCED lacks exact runtime reachability map")
+ else:
+  for k,v in reach.items():
+   if not isinstance(v,str) or not (R/v).is_file(): errors.append("Auditor V2 reachability target missing: "+k+" -> "+str(v))
 if errors:
  print("CB6 RULE COVERAGE FAIL:")
  for e in errors: print(" -",e)
