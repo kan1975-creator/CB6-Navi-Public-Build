@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "adoption_id": "CB6-DEVELOPMENT-AUDITOR-V2-RUNTIME-001",
-  "status": "ADOPTED_PENDING_REFREEZE",
+  "status": "ACTIVE_REFROZEN",
   "authority": {
     "type": "explicit_user_decision",
     "approved_at": "2026-10-06T18:30:00+09:00",
