@@ -21,6 +21,12 @@ cases=[
 ("falsify-completion-gaps-e2e-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["completion_gaps_e2e_independent_review"].update({"conclusion":"failure"})),
 ("falsify-completion-gaps-e2e-candidate-head","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["completion_gaps_e2e_candidate"].update({"candidate_head":"STALE"})),
 ("falsify-completion-gaps-e2e-review-head","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["completion_gaps_e2e_independent_review"].update({"candidate_head":"STALE"})),
+("drop-final-e2e-branch-coverage","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"].pop("final_e2e_branch_coverage")),
+("falsify-final-e2e-development-gate","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["final_e2e_branch_coverage"]["development_gate"].update({"run_id":0})),
+("drop-atomic-coverage-evidence","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"].pop("atomic_coverage_e2e")),
+("falsify-atomic-candidate","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["atomic_coverage_e2e"]["candidate"].update({"conclusion":"failure"})),
+("falsify-atomic-independent-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["atomic_coverage_e2e"]["independent_review"].update({"run_id":0})),
+("falsify-atomic-development-gate","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["atomic_coverage_e2e"]["development_gate"].update({"conclusion":"failure"})),
 ("drop-v2-coverage","v2/gates/rule_coverage.json",lambda d:d["entries"].__setitem__(len(d["entries"])-1,{"rule_id":"CB6-DEVELOPMENT-AUDITOR-V2","coverage_status":"PROPOSED"}))
 ]
 for name,file,mut in cases:
