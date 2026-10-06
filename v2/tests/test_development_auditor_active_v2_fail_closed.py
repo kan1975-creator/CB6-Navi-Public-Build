@@ -27,6 +27,12 @@ cases=[
 ("falsify-atomic-candidate","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["atomic_coverage_e2e"]["candidate"].update({"conclusion":"failure"})),
 ("falsify-atomic-independent-review","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["atomic_coverage_e2e"]["independent_review"].update({"run_id":0})),
 ("falsify-atomic-development-gate","v2/gates/development_auditor_adoption_evidence_v2.json",lambda d:d["evidence"]["atomic_coverage_e2e"]["development_gate"].update({"conclusion":"failure"})),
+("stale-postchange-head","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d.update({"postchange_head":"STALE"})),
+("falsify-postchange-development-gate","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["development_gate"].update({"conclusion":"failure"})),
+("falsify-postchange-atomic-candidate","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["atomic_coverage"]["candidate"].update({"run_id":0})),
+("falsify-postchange-independent-review","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["atomic_coverage"]["independent_review"].update({"conclusion":"failure"})),
+("weaken-postchange-root-certification","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["root_certification"].update({"status":"UNPROVEN"})),
+("weaken-postchange-method-freeze","v2/gates/development_auditor_postchange_certification_v2.json",lambda d:d["method_freeze"].update({"result":"FAIL"})),
 ("drop-v2-coverage","v2/gates/rule_coverage.json",lambda d:d["entries"].__setitem__(len(d["entries"])-1,{"rule_id":"CB6-DEVELOPMENT-AUDITOR-V2","coverage_status":"PROPOSED"}))
 ]
 for name,file,mut in cases:
