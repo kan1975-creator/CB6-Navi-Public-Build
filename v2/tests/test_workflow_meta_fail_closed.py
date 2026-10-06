@@ -14,4 +14,10 @@ with tempfile.TemporaryDirectory() as d:
  x=Path(d)/"r";shutil.copytree(R,x);(x/".github/workflows/cb6_hourly_development_cycle.yml").unlink();check(x,"hourly development workflow missing")
 with tempfile.TemporaryDirectory() as d:
  x=Path(d)/"r";shutil.copytree(R,x);p=x/".github/workflows/cb6_hourly_development_cycle.yml";s=p.read_text();p.write_text(s.replace("17 * * * *","17 18 * * *"));check(x,"lacks hourly schedule")
+for label,rel,old,new,needle in [
+ ("pr",".github/workflows/cb6_development_gate.yml","pull_request:","pull_request_REMOVED:","Development Gate lacks pull_request reachability"),
+ ("manual",".github/workflows/cb6_development_gate.yml","workflow_dispatch:","workflow_dispatch_REMOVED:","Development Gate lacks workflow_dispatch reachability"),
+ ("feature-auditor","v2/gates/verify_project_gate.py","verify_development_auditor_active_v2.py","verify_development_auditor_active_v2_REMOVED.py","feature gate lacks Auditor V2 runtime blocking")]:
+ with tempfile.TemporaryDirectory() as d:
+  x=Path(d)/"r";shutil.copytree(R,x);p=x/rel;s=p.read_text();p.write_text(s.replace(old,new,1));check(x,needle)
 print("PASS workflow meta destructive cases rejected")
