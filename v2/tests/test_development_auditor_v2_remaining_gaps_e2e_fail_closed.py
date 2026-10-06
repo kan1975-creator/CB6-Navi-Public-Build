@@ -13,8 +13,9 @@ def heal(c):
   for k in ["change_id","basis_head","purpose","affected_domains","planned_paths","forbidden_scope"]:w["approval"][k]=w.get(k)
  elif i=="CF-04":w["dimensions"][0]["applicability"]="APPLIED"
  else:w["independent_review"]={"accepted":True,"evidence_refs":["IR-1"],"evidence_type":"independent_review"}
-for i in ["CF-01A","CF-01B","CF-02"]+[f"CF-03{x}" for x in "ABCDEF"]+["CF-04","CF-05A","CF-05B"]:
+ids=["CF-01A","CF-01B","CF-02"]+[f"CF-03{x}" for x in "ABCDEF"]+["CF-04","CF-05A","CF-05B"]
+for i in ids:
  with tempfile.TemporaryDirectory() as td:
-  r=Path(td)/"repo";shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"));p=r/F;d=json.loads(p.read_text());heal(next(x for x in d["cases"] if x["id"]==i));p.write_text(json.dumps(d,indent=2)+"\n")
+  r=Path(td)/"repo";shutil.copytree(S,r,ignore=shutil.ignore_patterns(".git","out","comaps"));p=r/F;d=json.loads(p.read_text());heal(next(x for x in d["cases"] if x["id"]==i));p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+"\n")
   if run(r).returncode==0:raise SystemExit("defect erasure passed:"+i)
 print("AUDITOR V2 REMAINING GAPS E2E DESTRUCTIVE PASS: 12")
