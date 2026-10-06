@@ -34,6 +34,12 @@ cases=[
   "[highway=traffic_signals]", "[highway=traffic_lights]", "current-spec query highway=traffic_signals"),
  ("topology-batch", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
   "TOPOLOGY_BATCH_SIZE = 64", "TOPOLOGY_BATCH_SIZE = 12", "topology normalization is still limited to the legacy 12-node diagnostic window"),
+ ("topology-merge-before-normalize", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
+  "stage=topology-merged", "stage=topology-unmerged", "topology transport batches are not merged before intersection normalization"),
+ ("topology-incomplete-fail-closed", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
+  "result=topology-incomplete", "result=topology-partial", "incomplete topology does not fail closed to unmerged signals"),
+ ("topology-endpoint-fallback", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
+  "stage=topology-endpoint-failed", "stage=topology-endpoint-error", "topology endpoint fallback missing"),
  ("mwm-topology-normalization", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
   "normalizedMwmSignals", "untrustedMwmSignals", "confirmed topology mapping is not applied to MWM anchors"),
 ]
