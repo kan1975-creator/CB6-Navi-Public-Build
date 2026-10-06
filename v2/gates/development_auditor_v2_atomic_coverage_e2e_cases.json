@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "id": "CB6-DEVELOPMENT-AUDITOR-V2-ATOMIC-COVERAGE-E2E-CANDIDATE",
+  "status": "CANDIDATE",
+  "basis_head": "d7cf0fdd675c943bdf58af2db3f9a7af858e6364",
+  "authorities": {
+    "contract": "v2/gates/development_auditor_candidate_v2.json",
+    "schema": "v2/gates/development_auditor_work_unit_schema_v1.json",
+    "method": "v2/gates/development_method_contract.json"
+  },
+  "contract_sections": ["acceptance_criteria","mandatory_dimensions","applicability","evidence_sufficiency","semantic_audit","work_unit","approval","risk","independent_review","exit_audit","non_interference","activation"],
+  "schema_sections": ["required","dimension_required","applicability_states","not_applicable_required","outcomes","pass_requires","negative_conclusion"],
+  "method_sections": ["feature_development_pipeline","research_policy","change_policy","pinned_upstream_source_policy","failure_return_policy","completion_authority"],
+  "required_e2e": [
+    "v2/gates/development_auditor_v2_incident_e2e_cases.json",
+    "v2/gates/development_auditor_v2_stage_forgetting_e2e_cases.json",
+    "v2/gates/development_auditor_v2_remaining_gaps_e2e_cases.json",
+    "v2/gates/development_auditor_v2_completion_gaps_e2e_cases.json",
+    "v2/gates/development_auditor_v2_final_red_team_e2e_cases.json"
+  ],
+  "atomic_requirements": {
+    "conditional_not_applicable_independent_defects": ["missing_reason","missing_applicability_evidence"],
+    "development_method_each_pipeline_stage_independently_omittable": true,
+    "all_selected_authority_leaves_destructively_proven": true,
+    "existing_e2e_non_regression_required": true
+  },
+  "final_evidence": {
+    "head": "bed756ecb9aaa9b78250ae8c42389464e1072aff",
+    "remaining_gaps_candidate_run": 37428013041,
+    "remaining_gaps_independent_review_run": 37428013105,
+    "development_gate_run": 37428013002,
+    "post_rebind_development_gate_run": 37429972754
+  },
+  "postchange_certification_policy": {
+    "stale_certification_must_not_be_treated_as_current": true,
+    "known_stale_head": "98de93efbcb2663e581708e95a70b977fed97f15"
+  }
+}
