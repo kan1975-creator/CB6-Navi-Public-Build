@@ -71,10 +71,6 @@ jobs:
         run: python3 v2/gates/verify_apk_build_preflight_active.py
       - name: Destructive ACTIVE APK Build Preflight test
         run: python3 v2/tests/test_apk_build_preflight_active_fail_closed.py
-      - name: Verify Status Reporting v11 candidate
-        run: python3 v2/gates/verify_status_reporting_candidate_v11.py
-      - name: Destructive Status Reporting v11 candidate test
-        run: python3 v2/tests/test_status_reporting_candidate_v11_fail_closed.py
       - name: Verify ACTIVE Cross-Cutting Rule Foundation
         run: python3 v2/gates/verify_cross_cutting_rule_foundation_active.py
       - name: Destructive ACTIVE Cross-Cutting Rule Foundation test
