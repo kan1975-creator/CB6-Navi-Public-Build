@@ -38,6 +38,16 @@
       "run_id": 37416002831,
       "conclusion": "success",
       "candidate_head": "72e28c4a6093f43231dee0bf1b94e8bf8f82f641"
+    },
+    "remaining_gaps_e2e_candidate": {
+      "run_id": 37416510493,
+      "conclusion": "success",
+      "candidate_head": "80fa4a0ee6f772e4a3c84936f033d564e44ca440"
+    },
+    "remaining_gaps_e2e_independent_review": {
+      "run_id": 37416698945,
+      "conclusion": "success",
+      "candidate_head": "ce30c73b78df0ec77756f54aeff5cdc4eaa458a1"
     }
   },
   "supersedes": "v2/gates/development_auditor_adoption_evidence_v1.json",
@@ -47,6 +57,7 @@
     "development_gate_v2_binding",
     "full_root_certification_and_development_gate",
     "incident_e2e_candidate_and_independent_review",
-    "stage_forgetting_e2e_candidate_and_independent_review"
+    "stage_forgetting_e2e_candidate_and_independent_review",
+    "remaining_gaps_e2e_candidate_and_independent_review"
   ]
 }
