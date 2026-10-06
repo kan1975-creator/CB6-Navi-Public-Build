@@ -3,7 +3,7 @@
   "id": "CB6-DEVELOPMENT-AUDITOR-V2-COMPLETION-GAPS-E2E-CANDIDATE",
   "status": "CANDIDATE",
   "sealed_acceptance_criteria": [
-    "CG-01 evidence reference that is nonexistent, cross-work-unit unbound, target-mismatched, or semantically non-supporting must STOP",
+    "CG-01A nonexistent evidence, CG-01B target-mismatched evidence, and CG-01C evidence that does not semantically support the finding must each STOP; cross-work-unit unbound evidence remains covered by CF-02",
     "CG-02 actual diff that is path-allowed but semantically outside approved purpose/affected domains, enters forbidden scope, or hides scope drift through rename/delete must STOP",
     "CG-03 independent review that reuses candidate conclusions/intermediate decisions instead of reconstructing from target HEAD, Work Unit, ACTIVE authority, and raw evidence must STOP"
   ],
@@ -14,7 +14,7 @@
   },
   "cases": [
     {
-      "id": "CG-01",
+      "id": "CG-01A",
       "expected": "STOP",
       "evidence_check": {
         "refs_nonempty": true,
@@ -22,6 +22,28 @@
         "work_unit_bound": true,
         "target_matches": true,
         "semantically_supports_finding": true
+      }
+    },
+    {
+      "id": "CG-01B",
+      "expected": "STOP",
+      "evidence_check": {
+        "refs_nonempty": true,
+        "exists": true,
+        "work_unit_bound": true,
+        "target_matches": false,
+        "semantically_supports_finding": true
+      }
+    },
+    {
+      "id": "CG-01C",
+      "expected": "STOP",
+      "evidence_check": {
+        "refs_nonempty": true,
+        "exists": true,
+        "work_unit_bound": true,
+        "target_matches": true,
+        "semantically_supports_finding": false
       }
     },
     {
