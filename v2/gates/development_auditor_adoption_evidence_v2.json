@@ -68,6 +68,21 @@
       "run_id": 37420358113,
       "conclusion": "success",
       "candidate_head": "e0bda277c8e2e973b907d45b27af79f154f18cca"
+    },
+    "final_e2e_branch_coverage": {
+      "head": "bed756ecb9aaa9b78250ae8c42389464e1072aff",
+      "remaining_gaps_candidate": {
+        "run_id": 37428013041,
+        "conclusion": "success"
+      },
+      "remaining_gaps_independent_review": {
+        "run_id": 37428013105,
+        "conclusion": "success"
+      },
+      "development_gate": {
+        "run_id": 37428013002,
+        "conclusion": "success"
+      }
     }
   },
   "supersedes": "v2/gates/development_auditor_adoption_evidence_v1.json",
@@ -80,6 +95,7 @@
     "stage_forgetting_e2e_candidate_and_independent_review",
     "remaining_gaps_e2e_candidate_and_independent_review",
     "final_red_team_e2e_candidate_and_independent_review",
-    "completion_gaps_e2e_candidate_and_independent_review"
+    "completion_gaps_e2e_candidate_and_independent_review",
+    "final_e2e_branch_coverage_rebound"
   ]
 }
