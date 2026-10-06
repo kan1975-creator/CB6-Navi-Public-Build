@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "adoption_id": "CB6-DEVELOPMENT-AUDITOR-V2-ADOPTION",
-  "status": "ACTIVE_REFROZEN",
+  "status": "ACTIVE",
   "subject": "CB6-DEVELOPMENT-AUDITOR-V2",
   "authority": {
     "type": "explicit_user_adoption",
