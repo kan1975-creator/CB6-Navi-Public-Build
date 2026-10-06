@@ -1,0 +1,19 @@
+name: Auditor V2 Remaining Gaps E2E Independent Review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/development_auditor_v2_remaining_gaps_e2e_cases.json'
+      - 'v2/gates/verify_development_auditor_v2_remaining_gaps_e2e_independent_review.py'
+      - 'v2/tests/test_development_auditor_v2_remaining_gaps_e2e_independent_review_fail_closed.py'
+      - '.github/workflows/development_auditor_v2_remaining_gaps_e2e_independent_review.yml'
+
+jobs:
+  independent-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 v2/gates/verify_development_auditor_v2_remaining_gaps_e2e_independent_review.py
+      - run: python3 v2/tests/test_development_auditor_v2_remaining_gaps_e2e_independent_review_fail_closed.py
