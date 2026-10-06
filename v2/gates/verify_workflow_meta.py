@@ -21,6 +21,21 @@ else:
   err.append("hourly development workflow lacks hourly schedule")
  if "python3 v2/monitoring/verify_monitoring_policy.py" not in h:
   err.append("hourly development workflow lacks monitoring verifier")
+# Development Auditor V2 runtime reachability must be structural, not a registry label.
+if "pull_request:" not in w: err.append("Development Gate lacks pull_request reachability")
+if "workflow_dispatch:" not in w: err.append("Development Gate lacks workflow_dispatch reachability")
+if "push:" not in w: err.append("Development Gate lacks push reachability")
+for rel in (".github/workflows/development_auditor_v2_runtime_candidate.yml",".github/workflows/development_auditor_v2_runtime_independent_review.yml"):
+ p=R/rel
+ if not p.exists(): err.append("Auditor runtime workflow missing: "+rel); continue
+ s=p.read_text()
+ if "workflow_dispatch:" not in s or "push:" not in s: err.append("Auditor runtime workflow lacks push/manual reachability: "+rel)
+for p in (R/".github/workflows").glob("*.yml"):
+ s=p.read_text()
+ if "--require-feature-build" in s and "verify_project_gate.py" not in s:
+  err.append("feature build bypasses common project gate: "+p.name)
+pg=(R/"v2/gates/verify_project_gate.py").read_text()
+if "verify_development_auditor_active_v2.py" not in pg: err.append("feature gate lacks Auditor V2 runtime blocking")
 if err:
  print("CB6 WORKFLOW META FAIL:")
  for e in err: print(" -",e)
