@@ -8,12 +8,9 @@ for n in ast.walk(tree):
 f=json.loads((R/"v2/gates/development_auditor_v2_atomic_coverage_e2e_cases.json").read_text())
 c=json.loads((R/f["authorities"]["contract"]).read_text());s=json.loads((R/f["authorities"]["schema"]).read_text());m=json.loads((R/f["authorities"]["method"]).read_text())
 if len(c.get("acceptance_criteria",[]))!=18 or len(c.get("mandatory_dimensions",[]))!=9:e.append("contract cardinality")
-for sec in f["contract_sections"]:
- if sec not in c:e.append("contract:"+sec)
-for sec in f["schema_sections"]:
- if sec not in s:e.append("schema:"+sec)
-for sec in f["method_sections"]:
- if sec not in m:e.append("method:"+sec)
+for kind,data in (("contract",c),("schema",s),("method",m)):
+ for sec,expected_value in f["expected_authority_sections"][kind].items():
+  if data.get(sec)!=expected_value:e.append("independent atomic authority mismatch:"+kind+":"+sec)
 if s.get("not_applicable_required")!=["reason","applicability_evidence_refs"]:e.append("N/A branches")
 if len(m.get("feature_development_pipeline",[]))!=11 or len(set(m["feature_development_pipeline"]))!=11:e.append("method 11")
 for p in f["required_e2e"]:
