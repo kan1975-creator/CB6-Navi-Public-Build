@@ -1,0 +1,21 @@
+name: Status Reporting v12 Independent Review
+on:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/status_reporting_contract_candidate_v12.json'
+      - 'v2/gates/verify_status_reporting_v12_independent_review.py'
+      - 'v2/tests/test_status_reporting_v12_independent_review_fail_closed.py'
+      - '.github/workflows/status_reporting_v12_independent_review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Independent Status Reporting v12 semantic review
+        run: python3 v2/gates/verify_status_reporting_v12_independent_review.py
+      - name: Independent Status Reporting v12 destructive tests
+        run: python3 v2/tests/test_status_reporting_v12_independent_review_fail_closed.py
