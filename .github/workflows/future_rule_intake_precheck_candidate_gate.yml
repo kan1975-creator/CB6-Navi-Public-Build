@@ -1,0 +1,42 @@
+name: Future Rule Intake Precheck Candidate Gate
+
+on:
+  push:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'v2/gates/future_rule_intake_precheck_candidate.json'
+      - 'v2/gates/future_rule_intake_precheck_change_record.json'
+      - 'v2/gates/verify_future_rule_intake_precheck_candidate.py'
+      - 'v2/tests/test_future_rule_intake_precheck_candidate_fail_closed.py'
+      - '.github/workflows/future_rule_intake_precheck_candidate_gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate HEAD
+        uses: actions/checkout@v4
+
+      - name: Verify Future Rule Intake Precheck candidate
+        run: python3 v2/gates/verify_future_rule_intake_precheck_candidate.py
+
+      - name: Destructive Future Rule Intake Precheck candidate test
+        run: python3 v2/tests/test_future_rule_intake_precheck_candidate_fail_closed.py
+
+      - name: Confirm candidate has not self-activated
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("v2/gates/future_rule_intake_precheck_candidate.json")
+          d = json.loads(p.read_text(encoding="utf-8"))
+          if d.get("status") != "PROPOSED":
+              raise SystemExit("FAIL: Future Rule Intake Precheck candidate self-activated")
+          if d.get("direct_active_forbidden") is not True:
+              raise SystemExit("FAIL: direct ACTIVE protection missing")
+          print("PASS: candidate remains PROPOSED and direct ACTIVE is forbidden")
+          PY
