@@ -28,11 +28,15 @@
     "duration_unknown_behavior_preserved": true,
     "non_wait_four_line_summary_preserved": true
   },
-  "next_required": [
-    "registry_v20_binding",
-    "coverage_binding",
-    "registry_verifier_v20_binding",
-    "method_freeze_if_required",
-    "final_development_gate"
-  ]
+  "next_required": [],
+  "completion": {
+    "registry_binding": "complete",
+    "coverage_binding": "complete",
+    "registry_verifier_binding": "complete",
+    "method_freeze": "complete",
+    "final_development_gate": {
+      "status": "success",
+      "run_id": 37585575419
+    }
+  }
 }
