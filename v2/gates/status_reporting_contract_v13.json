@@ -1,0 +1,51 @@
+{
+  "schema": 13,
+  "rule_id": "OPS-STATUS-REPORTING-001",
+  "status": "ACTIVE",
+  "source": "explicit_user_adoption_2026-10-07",
+  "extends": "v2/gates/status_reporting_contract_v12.json",
+  "purpose": "Make the user-approved wait-status final display a fixed six-line terminal summary without weakening ACTIVE v12 timing evidence rules.",
+  "wait_final_summary": {
+    "required": true,
+    "classification": "待ち",
+    "exact_order_required": [
+      "分類",
+      "累積経過時間",
+      "次回確認目安",
+      "次にユーザーがすること",
+      "ChatGPTアプリ",
+      "スマホ操作"
+    ],
+    "must_be_response_end": true,
+    "duplicate_information_forbidden": true
+  },
+  "preservation": {
+    "active_v12_unchanged": true,
+    "run_start_basis_preserved": true,
+    "cumulative_elapsed_no_reset_preserved": true,
+    "evidence_based_next_check_preserved": true,
+    "duration_unknown_behavior_preserved": true,
+    "non_wait_four_line_summary_preserved": true
+  },
+  "non_interference": {
+    "registry_coverage_change_forbidden": true,
+    "auditor_v2_change_forbidden": true,
+    "method_freeze_change_forbidden": true,
+    "development_gate_change_forbidden": true,
+    "signal_convenience_application_behavior_change_forbidden": true
+  },
+  "activation": {
+    "status": "ACTIVE",
+    "candidate_validation_run_id": 37550233646,
+    "independent_review_run_id": 37559089448
+  },
+  "revision": {
+    "from": "v2/gates/status_reporting_contract_v12.json",
+    "reason": "Adopt the user-approved fixed six-line terminal summary for wait responses while preserving ACTIVE v12 timing evidence and non-wait behavior.",
+    "supersedes": "v2/gates/status_reporting_contract_v12.json"
+  },
+  "adoption": {
+    "status": "ADOPTED",
+    "explicit_user_adoption": "Status Reporting v13を正式採用して、ACTIVE化段階を承認して進めて"
+  }
+}
