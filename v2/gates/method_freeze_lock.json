@@ -3,7 +3,7 @@
   "status": "FROZEN",
   "policy": "Any byte change to a frozen method file invalidates the method until explicit full recertification.",
   "files": {
-    ".github/workflows/cb6_development_gate.yml": "46c0750dc3b0c67f65a7162d664fb9bd4871689d",
+    ".github/workflows/cb6_development_gate.yml": "84815fb2421c838695fec64ca7de57f66f15f38c",
     "docs/CB6_V2_DEVELOPMENT_METHOD.md": "0f3b153c2a950f0b448374004911eddd41913419",
     "v2/gates/development_method_contract.json": "d00c737290ae4f97d46756cf7ae4615757bf23da",
     "v2/gates/domain_verification_policy.json": "1c5c7c5c2e49d631f8c03648aed81a8869e89382",
@@ -28,10 +28,10 @@
     "v2/gates/verify_method_completion.py": "7e3f583055cd47b7bc6ff69d0b27d5de35d07f36",
     "v2/tests/test_method_completion.py": "2ac729de719edb2fa243e4c26b354dc0e226ed6e",
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
-    "v2/gates/verify_operational_rule_registry.py": "0c5934ef016dcf86af6b2c4a6c2365091e368b62",
+    "v2/gates/verify_operational_rule_registry.py": "48d0378c7f5cdf02a944fa5bb1e1341e37a22dfa",
     "v2/gates/verify_rule_coverage.py": "7f0ccec8b75f5dd26906d482f37867910417a862",
-    "v2/gates/rule_coverage.json": "2193fdc041f931bc8afa0d45a315ec6349b95290",
-    "v2/tests/test_operational_rule_registry_fail_closed.py": "1da651283397cc1b955e48f9c745dc8ae67d8552",
+    "v2/gates/rule_coverage.json": "5f36a1ed8a3a0ec3e8c059551757c4adcd34649d",
+    "v2/tests/test_operational_rule_registry_fail_closed.py": "c0f3b926615956df73d0cd98107bc1b5faca1894",
     "v2/tests/test_rule_coverage_fail_closed.py": "a4402ae918a58f025a4a4d91d0d7217d8875366b",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
     "v2/gates/method_revision_procedure_v1.json": "86b2f69734ed61873f9ab205e04619b04e57b72d",
@@ -78,7 +78,7 @@
     "v2/gates/verify_status_reporting_active_v8.py": "800ef10cf80d59ad443d43ae7ed30eda60eec3ee",
     "v2/tests/test_status_reporting_active_v8_fail_closed.py": "73b6521a2e21d2025dfc1472a8e87d1d9acb6176",
     "v2/gates/rule_consistency_preflight_active.json": "8a365b7dd183e11d494d5fd7b5bf57e50cbdbd73",
-    "v2/gates/verify_rule_consistency_preflight_active.py": "c60e8dcd4d02c9e7edb9a6f6e5e22849186667e9",
+    "v2/gates/verify_rule_consistency_preflight_active.py": "b0366158d30ddfce7f14ae30b2b1950f68fea773",
     "v2/tests/test_rule_consistency_preflight_active_fail_closed.py": "49ef255e1f08bb2f4f20678645453a6869bcb14e",
     "v2/governance/status_reporting_protocol.md": "12bf2036baba30976cb191e491250450020c9638",
     "v2/gates/status_reporting_adoption_evidence_v8.json": "837941182b243baa630e0b54f2718ded224bb8d3",
@@ -91,9 +91,9 @@
     "v2/gates/operational_rule_registry_v15.json": "bef8e708193959468c2844a3a3b344fae2ac0771",
     "v2/gates/development_efficiency_rule_candidate_v2.json": "da58c39f2ef20879f597e99d29ae9138238afdd5",
     "v2/gates/development_efficiency_adoption_evidence_v2.json": "1e06ebea14c0e2f7915d21869ce6c46022d4abce",
-    "v2/gates/verify_development_efficiency_active_v2.py": "655ddbbe030209bc41e5403ebe1fc636daa4a653",
+    "v2/gates/verify_development_efficiency_active_v2.py": "025304f3005ed949235d6f626449ba1d5de6ef10",
     "v2/tests/test_development_efficiency_active_v2_fail_closed.py": "81cca382ce903ac272d9e46428d14af6183a0ad6",
-    "v2/gates/verify_apk_build_preflight_active.py": "0a83b214b8d02786cc6a7ef83909e69caf2d49d8",
-    "v2/tests/test_apk_build_preflight_active_fail_closed.py": "5b3a9fdfb5249dcce5af342cf8ee20dd52e190c0"
+    "v2/gates/verify_apk_build_preflight_active.py": "39004d1d6e496d6462a5f2179020a39e2b5b49db",
+    "v2/tests/test_apk_build_preflight_active_fail_closed.py": "7858ce15828f55cdf069c7521dd97eba77543384"
   }
 }
