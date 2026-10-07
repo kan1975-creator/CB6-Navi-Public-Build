@@ -115,8 +115,8 @@ jobs:
       - name: Executable APK Build Preflight
         run: |
           set -euxo pipefail
-          python3 v2/tests/test_apk_build_preflight_runtime_fail_closed.py
-          python3 v2/gates/verify_apk_build_preflight_runtime.py --feature signals --tree comaps --mode production
+          python3 v2/tests/test_signal_standard_poc_direct.py
+          python3 v2/tests/verify_signal_standard_poc_direct.py --tree comaps
 
       - name: Build CB6 Gate 1 arm64 release
         shell: bash
