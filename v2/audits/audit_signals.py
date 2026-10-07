@@ -74,13 +74,15 @@ require('SignalPolicy.validCoordinate(record.lat, record.lon)' in verified, 'ver
 require('record.provenance == null || record.provenance.trim().isEmpty()' in verified, 'verified supplement provenance validation missing')
 require('record.verifiedDate == null || !record.verifiedDate.matches' in verified, 'verified supplement date validation missing')
 require('SOURCE_DEDUP_M' in composite and 'a == null && b == null' in composite, 'source dedup/fail-safe composition missing')
+require('topologyMembers.addAll(a.topologyMembers)' in composite and 'new SignalSnapshot(merged, topologyMembers, topologyCenters)' in composite, 'composite drops topology normalization')
 require('primaryError != null && (b == null || b.points.isEmpty())' in composite, 'primary failure can be masked by empty supplement')
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('snapshot.displayPoints()' in controller, 'signal display publication missing')
 require('location == null' in controller and 'nativeSetCb6Signals(location.getLatitude(), location.getLongitude(),' in controller,
         'MWM-anchor publication must run from current location even with empty Overpass snapshot')
 snapshot = (module/'java/SignalSnapshot.java').read_text()
-require('return points;' in snapshot, 'proximity-only snapshot layer must retain uncertain signals')
+require('return points;' in snapshot, 'snapshot display must publish normalized retained points')
+require('topologyMembers.size() - centres.size()' in snapshot, 'clustered count does not reflect topology normalization')
 require('DISPLAY_CLUSTER_M' not in snapshot and 'latSum' not in snapshot and 'lonSum' not in snapshot,
         'proximity-only clustering/coordinate relocation reintroduced')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
@@ -111,6 +113,13 @@ require('result=topology-incomplete' in provider and 'return snapshot; // fail c
         'incomplete topology does not fail closed to unmerged signals')
 require('stage=topology-endpoint-failed' in provider and 'ENDPOINTS.length' in provider,
         'topology endpoint fallback missing')
+require('relation-normalized=' in provider and 'points.removeAll(confirmed)' in provider,
+        'traffic_signals_set members are not authoritative normalization evidence')
+cache = (module/'java/SignalCache.java').read_text()
+require('root.optInt("schema") != 3' in cache and '.put("topology", topology)' in cache,
+        'cache schema does not preserve topology normalization')
+require('return new SignalSnapshot(points, members, centers)' in cache,
+        'cache restore drops topology normalization')
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
     require(activity.count(hook) == 1, 'lifecycle hook ' + hook)
