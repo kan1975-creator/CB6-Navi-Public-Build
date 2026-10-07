@@ -30,8 +30,13 @@ public final class SignalSnapshot
   public final List<Point> topologyMembers;
   public final List<Point> topologyCenters;
 
-  /** Counts acquired points hidden only by renderer clustering; acquisition/cache remain unchanged. */
-  public int clusteredPointCount() { return points.size() - displayPoints().size(); }
+  /** Number of topology-confirmed signal members collapsed behind intersection centres. */
+  public int clusteredPointCount()
+  {
+    HashSet<Long> centres = new HashSet<>();
+    for (Point p : topologyCenters) centres.add(p.id);
+    return Math.max(0, topologyMembers.size() - centres.size());
+  }
 
   public SignalSnapshot(List<Point> candidates)
   {
