@@ -42,6 +42,14 @@ cases=[
   "stage=topology-endpoint-failed", "stage=topology-endpoint-error", "topology endpoint fallback missing"),
  ("mwm-topology-normalization", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
   "normalizedMwmSignals", "untrustedMwmSignals", "confirmed topology mapping is not applied to MWM anchors"),
+ ("relation-normalization", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
+  "relation-normalized=", "relation-diagnostic-only=", "traffic_signals_set members are not authoritative normalization evidence"),
+ ("composite-topology-continuity", "android/app/src/main/java/app/organicmaps/cb6/signals/CompositeSignalProvider.java",
+  "topologyMembers.addAll(a.topologyMembers)", "/* topology dropped */", "composite drops topology normalization"),
+ ("cache-topology-schema", "android/app/src/main/java/app/organicmaps/cb6/signals/SignalCache.java",
+  "root.optInt(\"schema\") != 3", "root.optInt(\"schema\") != 2", "cache schema does not preserve topology normalization"),
+ ("cache-topology-restore", "android/app/src/main/java/app/organicmaps/cb6/signals/SignalCache.java",
+  "return new SignalSnapshot(points, members, centers)", "return new SignalSnapshot(points)", "cache restore drops topology normalization"),
 ]
 if a.allow_convenience_style:
  cases.append(("integrated-convenience-style-extra", "data/styles/vehicle/include/Icons.mapcss",
