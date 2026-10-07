@@ -120,7 +120,44 @@ public final class OverpassSignalProvider implements SignalProvider
       Location.distanceBetween(lat, lon, y, x, distance);
       points.add(new SignalSnapshot.Point(id, y, x, distance[0]));
     }
-    return new SignalSnapshot(points); // Sort ALL candidates before the 1400 cap.
+    // traffic_signals_set is authoritative intersection evidence when its member signal
+    // nodes are also present in this response. Collapse only explicitly listed members;
+    // unresolved/unknown members remain untouched and are handled by road topology later.
+    ArrayList<SignalSnapshot.Point> relationMembers = new ArrayList<>();
+    ArrayList<SignalSnapshot.Point> relationCenters = new ArrayList<>();
+    for (int i = 0; i < elements.length(); ++i)
+    {
+      JSONObject relation = elements.optJSONObject(i);
+      if (relation == null || !"relation".equals(relation.optString("type"))) continue;
+      JSONObject tags = relation.optJSONObject("tags");
+      if (tags == null || !"traffic_signals_set".equals(tags.optString("type"))) continue;
+      long rawRelationId = relation.optLong("id", -1);
+      if (rawRelationId <= 0 || rawRelationId >= RELATION_RAW_ID_LIMIT) continue;
+      long relationId = RELATION_ID_NAMESPACE | rawRelationId;
+      SignalSnapshot.Point center = null;
+      for (SignalSnapshot.Point p : points) if (p.id == relationId) { center = p; break; }
+      JSONArray members = relation.optJSONArray("members");
+      if (center == null || members == null) continue;
+      ArrayList<SignalSnapshot.Point> confirmed = new ArrayList<>();
+      for (int m = 0; m < members.length(); ++m)
+      {
+        JSONObject member = members.optJSONObject(m);
+        if (member == null || !"node".equals(member.optString("type"))) continue;
+        long ref = member.optLong("ref", -1);
+        for (SignalSnapshot.Point candidate : points)
+          if (candidate.id == ref && !confirmed.contains(candidate)) { confirmed.add(candidate); break; }
+      }
+      if (confirmed.size() < 2) continue;
+      points.removeAll(confirmed);
+      for (SignalSnapshot.Point member : confirmed)
+      {
+        relationMembers.add(member);
+        relationCenters.add(center);
+      }
+      Log.i("CB6-SIGNAL-WAY-DIAG", "relation-normalized=" + rawRelationId
+          + " member-count=" + confirmed.size());
+    }
+    return new SignalSnapshot(points, relationMembers, relationCenters); // Sort ALL candidates before the 1400 cap.
   }
 
   private static void logMwmDirectDuplicateCandidates(
@@ -589,8 +626,8 @@ public final class OverpassSignalProvider implements SignalProvider
       // Each cluster is anchored to its base center; merged centers never become new anchors.
       boolean[] displayMemberAssigned = new boolean[diagnosticPoints.size()];
       ArrayList<SignalSnapshot.Point> displayPoints = new ArrayList<>(snapshot.points);
-      ArrayList<SignalSnapshot.Point> topologyMembers = new ArrayList<>();
-      ArrayList<SignalSnapshot.Point> topologyCenters = new ArrayList<>();
+      ArrayList<SignalSnapshot.Point> topologyMembers = new ArrayList<>(snapshot.topologyMembers);
+      ArrayList<SignalSnapshot.Point> topologyCenters = new ArrayList<>(snapshot.topologyCenters);
       for (int cluster = 0; cluster < mergedCenterBases.size(); ++cluster)
       {
         int base = mergedCenterBases.get(cluster);
