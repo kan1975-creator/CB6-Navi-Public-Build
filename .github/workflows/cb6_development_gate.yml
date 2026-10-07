@@ -51,10 +51,10 @@ jobs:
         run: python3 v2/gates/verify_method_version_coverage.py
       - name: Destructive method-version coverage test
         run: python3 v2/tests/test_method_version_coverage_fail_closed.py
-      - name: Verify ACTIVE Status Reporting v12 response execution preflight contract
-        run: python3 v2/gates/verify_status_reporting_active_v12.py
-      - name: Destructive ACTIVE Status Reporting v12 test
-        run: python3 v2/tests/test_status_reporting_active_v12_fail_closed.py
+      - name: Verify ACTIVE Status Reporting v13 response execution preflight contract
+        run: python3 v2/gates/verify_status_reporting_active_v13.py
+      - name: Destructive ACTIVE Status Reporting v13 test
+        run: python3 v2/tests/test_status_reporting_active_v13_fail_closed.py
       - name: Verify ACTIVE CB6 Development Auditor V2
         run: python3 v2/gates/verify_development_auditor_active_v2.py
       - name: Destructive real Work Unit runtime enforcement test
