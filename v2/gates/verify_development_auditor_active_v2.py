@@ -49,11 +49,11 @@ if rte.get("candidate_validation")!={"run_id":37442886846,"conclusion":"success"
 if rte.get("independent_review")!={"run_id":37442886813,"conclusion":"success","head_sha":"ed59169845110678d698422e6d464057f7a7433e"}:e.append("runtime independent review evidence")
 for p in ("v2/gates/verify_development_auditor_work_unit_v2.py","v2/tests/test_development_auditor_work_unit_v2_fail_closed.py",".github/workflows/development_auditor_v2_runtime_candidate.yml",".github/workflows/development_auditor_v2_runtime_independent_review.yml"):
  if not (R/p).is_file():e.append("runtime enforcement path missing: "+p)
-reg=json.loads((R/"v2/gates/operational_rule_registry_v19.json").read_text());cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
+reg=json.loads((R/"v2/gates/operational_rule_registry_v20.json").read_text());cov=json.loads((R/"v2/gates/rule_coverage.json").read_text())
 rr=[x for x in reg.get("rules",[]) if x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V2"]
 if len(rr)!=1 or rr[0].get("status")!="ACTIVE" or rr[0].get("contract")!="v2/gates/development_auditor_candidate_v2.json":e.append("V2 registry activation")
-if any(x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in reg.get("rules",[])):e.append("V1 still active in v19")
-if cov.get("registry")!="v2/gates/operational_rule_registry_v19.json":e.append("coverage registry")
+if any(x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in reg.get("rules",[])):e.append("V1 still active in v20")
+if cov.get("registry")!="v2/gates/operational_rule_registry_v20.json":e.append("coverage registry")
 if not any(x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V2" and x.get("coverage_status")=="MACHINE_ENFORCED" for x in cov.get("entries",[])):e.append("V2 coverage")
 if any(x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in cov.get("entries",[])):e.append("V1 coverage still current")
 if e:
