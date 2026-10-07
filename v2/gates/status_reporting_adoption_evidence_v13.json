@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "adoption_id": "OPS-STATUS-REPORTING-001-V13-ADOPTION",
+  "status": "ACTIVE",
+  "subject": "OPS-STATUS-REPORTING-001",
+  "authority": {
+    "type": "explicit_user_adoption",
+    "decision": "Status Reporting v13を正式採用して、ACTIVE化段階を承認して進めて",
+    "recorded_at": "2026-10-07"
+  },
+  "evidence": {
+    "candidate_gate": {
+      "run_id": 37550233646,
+      "conclusion": "success"
+    },
+    "independent_review": {
+      "run_id": 37559089448,
+      "conclusion": "success",
+      "candidate_head": "78b6e367dd65e7b454c12862cc327b3ca2fa9ce1"
+    }
+  },
+  "rule_extension": {
+    "wait_terminal_six_line_summary": true,
+    "exact_wait_order": true,
+    "original_run_start_preserved": true,
+    "cumulative_elapsed_no_reset_preserved": true,
+    "evidence_based_next_check_preserved": true,
+    "duration_unknown_behavior_preserved": true,
+    "non_wait_four_line_summary_preserved": true
+  },
+  "next_required": [
+    "registry_v20_binding",
+    "coverage_binding",
+    "registry_verifier_v20_binding",
+    "method_freeze_if_required",
+    "final_development_gate"
+  ]
+}
