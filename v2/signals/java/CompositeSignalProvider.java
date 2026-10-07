@@ -32,11 +32,18 @@ public final class CompositeSignalProvider implements SignalProvider
           supplementError);
 
     ArrayList<SignalSnapshot.Point> merged = new ArrayList<>();
-    if (a != null) merged.addAll(a.points);
+    ArrayList<SignalSnapshot.Point> topologyMembers = new ArrayList<>();
+    ArrayList<SignalSnapshot.Point> topologyCenters = new ArrayList<>();
+    if (a != null)
+    {
+      merged.addAll(a.points);
+      topologyMembers.addAll(a.topologyMembers);
+      topologyCenters.addAll(a.topologyCenters);
+    }
     if (b != null)
       for (SignalSnapshot.Point candidate : b.points)
         if (!nearAny(candidate, merged)) merged.add(candidate);
-    return new SignalSnapshot(merged);
+    return new SignalSnapshot(merged, topologyMembers, topologyCenters);
   }
 
   private static boolean nearAny(SignalSnapshot.Point candidate, List<SignalSnapshot.Point> points)
