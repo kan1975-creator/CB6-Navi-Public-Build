@@ -53,7 +53,7 @@ reg=json.loads((R/"v2/gates/operational_rule_registry_v20.json").read_text());co
 rr=[x for x in reg.get("rules",[]) if x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V2"]
 if len(rr)!=1 or rr[0].get("status")!="ACTIVE" or rr[0].get("contract")!="v2/gates/development_auditor_candidate_v2.json":e.append("V2 registry activation")
 if any(x.get("id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in reg.get("rules",[])):e.append("V1 still active in v20")
-if cov.get("registry")!="v2/gates/operational_rule_registry_v20.json":e.append("coverage registry")
+if cov.get("registry")!="v2/gates/operational_rule_registry_v21.json":e.append("coverage registry")
 if not any(x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V2" and x.get("coverage_status")=="MACHINE_ENFORCED" for x in cov.get("entries",[])):e.append("V2 coverage")
 if any(x.get("rule_id")=="CB6-DEVELOPMENT-AUDITOR-V1" for x in cov.get("entries",[])):e.append("V1 coverage still current")
 if e:
