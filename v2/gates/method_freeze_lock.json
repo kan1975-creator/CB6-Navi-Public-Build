@@ -30,7 +30,7 @@
     "v2/gates/development_method_completion.json": "4eb4d45053f4e43ca4083812773b119af39c27b7",
     "v2/gates/verify_operational_rule_registry.py": "0c5934ef016dcf86af6b2c4a6c2365091e368b62",
     "v2/gates/verify_rule_coverage.py": "7f0ccec8b75f5dd26906d482f37867910417a862",
-    "v2/gates/rule_coverage.json": "1c31f48aa6af83fb3d764c4cdd957f8962596ce4",
+    "v2/gates/rule_coverage.json": "2193fdc041f931bc8afa0d45a315ec6349b95290",
     "v2/tests/test_operational_rule_registry_fail_closed.py": "2ee02dadf4386ffbe08ce65167c8b8df6c41dabb",
     "v2/tests/test_rule_coverage_fail_closed.py": "a4402ae918a58f025a4a4d91d0d7217d8875366b",
     "v2/gates/verify_rule_adoption_lifecycle.py": "cc66ec2c721d5c1c76021e766f9c96b78e558b7e",
