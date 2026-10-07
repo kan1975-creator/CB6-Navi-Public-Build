@@ -1,6 +1,6 @@
 # CB6 Status Reporting Protocol
 
-Status: ACTIVE (Status Reporting v10)  
+Status: ACTIVE (Status Reporting v13)  
 Rule ID: `OPS-STATUS-REPORTING-001`  
 Source: explicit user continuing instruction, 2026-09-30; four-line reporting extension explicitly requested 2026-10-02
 
@@ -28,7 +28,7 @@ Canonical no-user-operation form:
 - **ChatGPTアプリ：閉じてOK**
 - **スマホ操作：不要。再試行もしなくて大丈夫です。**
 
-For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all existing ACTIVE v10 required wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
+For `待ち`, the same four-line structure MUST be retained. In addition to the awaited Run/result, every `待ち` report MUST explicitly state all preserved ACTIVE wait fields: **目安時間** (`approximate_wait_time`), **次回確認タイミング** (`next_check_timing`), **待機中にできる対応の有無** (`parallel_work_available`), and **待機後の指示** (`post_wait_user_instruction`). For `スマホ操作が必要`, the second and fourth lines MUST state the concrete operation/evidence required rather than using the no-operation wording.
 
 ## Wait-time display
 
@@ -88,6 +88,6 @@ GitHub machine verification covers repository contract, verifier/destructive-tes
 
 ## Adoption and verification
 
-Status Reporting v10 is `ACTIVE`, bound by `v2/gates/status_reporting_contract_v10.json`, registered by `v2/gates/operational_rule_registry_v16.json`, with `MACHINE_ENFORCED` repository-contract coverage in `v2/gates/rule_coverage.json`.
+Status Reporting v13 is `ACTIVE`, bound by `v2/gates/status_reporting_contract_v13.json`, with `MACHINE_ENFORCED` repository-contract coverage in `v2/gates/rule_coverage.json`. For `待ち`, the response MUST end with exactly these six fields in order: **分類 / 累積経過時間 / 次回確認目安 / 次にユーザーがすること / ChatGPTアプリ / スマホ操作**. The six-line wait summary MUST be at the response end and duplicate reporting information is forbidden. ACTIVE v12 timing-evidence rules and the non-wait four-line summary remain preserved.
 
 The adoption lifecycle remains: **candidate verification → destructive test → independent review → explicit adoption → MACHINE_ENFORCED coverage**.
