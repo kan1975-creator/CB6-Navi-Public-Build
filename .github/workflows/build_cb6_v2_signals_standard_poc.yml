@@ -2,6 +2,11 @@ name: CB6 Signal Standard Flow PoC
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - cb6-v2-clean
+    paths:
+      - '.github/workflows/build_cb6_v2_signals_standard_poc.yml'
 
 permissions:
   contents: read
