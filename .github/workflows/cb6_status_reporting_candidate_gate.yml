@@ -35,6 +35,9 @@ on:
       - 'v2/gates/status_reporting_contract_candidate_v12.json'
       - 'v2/gates/verify_status_reporting_candidate_v12.py'
       - 'v2/tests/test_status_reporting_candidate_v12_fail_closed.py'
+      - 'v2/gates/status_reporting_contract_candidate_v13.json'
+      - 'v2/gates/verify_status_reporting_candidate_v13.py'
+      - 'v2/tests/test_status_reporting_candidate_v13_fail_closed.py'
       - '.github/workflows/cb6_status_reporting_candidate_gate.yml'
 permissions:
   contents: read
@@ -83,6 +86,10 @@ jobs:
         run: python3 v2/gates/verify_status_reporting_candidate_v12.py
       - name: Destructive status-reporting v12 response-execution-preflight test
         run: python3 v2/tests/test_status_reporting_candidate_v12_fail_closed.py
+      - name: Verify status-reporting v13 wait-summary candidate
+        run: python3 v2/gates/verify_status_reporting_candidate_v13.py
+      - name: Destructive status-reporting v13 wait-summary test
+        run: python3 v2/tests/test_status_reporting_candidate_v13_fail_closed.py
       - name: Verify active Development Gate remains frozen
         run: python3 v2/gates/verify_method_freeze.py
       - name: Verify active method revision procedure
