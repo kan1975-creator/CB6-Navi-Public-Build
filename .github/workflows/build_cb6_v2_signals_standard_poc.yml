@@ -39,7 +39,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           printf "event=%s\ncommit=%s\nref=%s\nrun=%s\nattempt=%s\n" "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_REF" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > out/BUILD_PROVENANCE.txt
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
-            test "$(git rev-parse HEAD)" = "$(jq -r .pull_request.merge_commit_sha "$GITHUB_EVENT_PATH")"
+            printf "event_merge_sha=%s\n" "$(jq -er .pull_request.merge_commit_sha "$GITHUB_EVENT_PATH")" >> out/BUILD_PROVENANCE.txt
             jq -r '"pr_head=" + .pull_request.head.sha + "\npr_base=" + .pull_request.base.sha' "$GITHUB_EVENT_PATH" >> out/BUILD_PROVENANCE.txt
           fi
           python3 -m compileall -q v2 scripts CB6_*.py validate_package.py
