@@ -79,3 +79,41 @@ for mutation in (
     assert any("ACTIVE independent review" in x for x in blocked)
     assert any("ACTIVE pre-fix approval" in x for x in blocked)
 print("PASS: independent review and pre-fix approval cannot be spoofed by GitHub candidate metadata")
+
+# Evidence-specific destructive tests: no candidate-local assertion can
+# substitute for a GitHub-authenticated, current-SHA independent attestation.
+good=copy.deepcopy(base)
+good["pr"]["body"]="approval-ref-123"
+good["approval_evidence"]={
+    "approval_id":"a1","approved_at":"2026-10-01T00:00:00Z",
+    "implementation_started_at":"2026-10-02T00:00:00Z",
+    "proposed_change_id":"change-1","change_id":"change-1",
+    "approved_change_summary":"candidate normalization",
+    "github_reference":"approval-ref-123",
+    "authenticated_by":"independent_external_verification"}
+good["independent_review_evidence"]={
+    "target_commit":h,"implementation_context_shared":False,
+    "result":"ACCEPTED","checklist":"v2/governance/audit_checklist_v1.md",
+    "evidence":["github evidence"],"review_context":"separate session",
+    "verified_external_provenance":True}
+# The GitHub review body is the independently fetched attestation.
+good["reviews"][0]["body"]="CB6-INDEPENDENT-CONTEXT:"+h
+e,k=m.audit(good,h,b)
+assert not e and not k,(e,k)
+for name,mutate,needle in [
+ ("stale independent target",lambda x:x["independent_review_evidence"].update(target_commit="c"*40),"invalid or stale"),
+ ("shared review context",lambda x:x["independent_review_evidence"].update(implementation_context_shared=True),"invalid or stale"),
+ ("empty independent evidence",lambda x:x["independent_review_evidence"].update(evidence=[]),"invalid or stale"),
+ ("review rejected",lambda x:x["independent_review_evidence"].update(result="REJECTED"),"invalid or stale"),
+ ("spoofed external review",lambda x:x["reviews"][0].update(body="self-assertion"),"external attestation"),
+ ("stale GitHub review",lambda x:x["reviews"][0].update(commit_id="c"*40),"external attestation"),
+ ("unverified reviewer provenance",lambda x:x["independent_review_evidence"].update(verified_external_provenance=False),"separation"),
+ ("approval reuse",lambda x:x["approval_evidence"].update(change_id="different"),"binding or timing"),
+ ("post-hoc approval",lambda x:x["approval_evidence"].update(approved_at="2026-10-03T00:00:00Z"),"binding or timing"),
+ ("missing approval reference",lambda x:x["pr"].update(body=""),"binding or timing"),
+ ("unauthenticated approval",lambda x:x["approval_evidence"].update(authenticated_by="self"),"authenticity"),
+]:
+    data=copy.deepcopy(good);mutate(data)
+    errors,blocks=m.audit(data,h,b)
+    assert any(needle in x for x in blocks),name+":"+str((errors,blocks))
+print("PASS: valid evidence unlocks candidate blockers; 11 evidence mutations fail closed")
