@@ -81,6 +81,14 @@
       "DT-10",
       "DT-11",
       "DT-12"
-    ]
+    ],
+    "active_rule_boundary": "Existing OPS-USER-APPROVAL-BEFORE-FIX-001 remains ACTIVE; this stage1 verifier is CANDIDATE and does not replace or weaken the ACTIVE approval gate.",
+    "supplementary_acceptance": {
+      "AT_01": "GitHub base64 with CR/LF decodes; invalid characters, truncated content and invalid JSON reject",
+      "AT_02": "HTTP 401, 403, 404, 429, 500 and 503 fail closed",
+      "AT_03": "Deleted or inaccessible comment rejects; wrong issue and comment ID reject",
+      "AT_04": "Legacy syntax remains parseable but never authenticates approval",
+      "AT_05": "ACTIVE rule remains in force; candidate verifier does not self-activate"
+    }
   }
 }
