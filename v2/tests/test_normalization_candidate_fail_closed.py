@@ -11,17 +11,24 @@ spec.loader.exec_module(m)
 h, b = "a"*40, "b"*40
 base = {"pr":{"head":{"sha":h},"base":{"sha":b},"state":"open","draft":True,"user":{"login":"author"}},
         "files":[{"filename":x,"status":"added"} for x in sorted(m.ALLOWED)],
+        "review_threads":[],
         "reviews":[{"state":"APPROVED","commit_id":h,"user":{"login":"independent"}}],
         "runs":[{"name":n,"head_sha":h,"status":"completed","conclusion":"success"} for n in m.REQUIRED_CHECKS],
         "branch":{"protected":True,"commit":{"sha":b}}}
 errors, blockers = m.audit(base,h,b)
 assert not errors and any("approval authenticity" in x for x in blockers)
-assert any("device acceptance" in x for x in blockers)
-assert any("review-thread" in x for x in blockers)
+assert not any("device acceptance" in x for x in blockers)
+assert any("independent normalization workflow" in x for x in blockers)
+assert not any("review-thread" in x for x in blockers)
 cases = [
  ("out-of-scope",lambda x:x["files"].append({"filename":"v2/signals/x","status":"added"}),"error","diff outside"),
  ("stale PR",lambda x:x["pr"]["head"].update(sha="c"*40),"error","HEAD"),
  ("stale base",lambda x:x["branch"]["commit"].update(sha="c"*40),"error","HEAD"),
+ ("unresolved thread",lambda x:x.update(review_threads=[{"isResolved":False}]),"block","unresolved review threads"),
+ ("missing thread evidence",lambda x:x.pop("review_threads"),"block","review-thread resolution"),
+ ("malformed thread evidence",lambda x:x.update(review_threads=[{"isResolved":"yes"}]),"error","malformed review-thread"),
+ ("missing independent workflow",lambda x:x.update(runs=[]),"block","independent normalization workflow"),
+ ("application scope",lambda x:x["files"].append({"filename":"app/src/main/java/Changed.java","status":"added"}),"block","device acceptance"),
  ("missing review",lambda x:x.update(reviews=[]),"block","review missing"),
  ("self review",lambda x:x["reviews"][0]["user"].update(login="author"),"block","review missing"),
  ("stale review",lambda x:x["reviews"][0].update(commit_id="c"*40),"block","review missing"),
@@ -46,4 +53,4 @@ for name, mutate, kind, needle in cases:
 assert m.audit(None,h,b)[0] == ["malformed GitHub evidence"]
 # CLI must not convert malformed input into a successful advisory audit.
 assert m.main() == 2
-print("PASS: 18 destructive cases; AUDIT_ERROR fails, release blockers remain explicit")
+print("PASS: 23 destructive cases; AUDIT_ERROR fails, release blockers remain explicit")
