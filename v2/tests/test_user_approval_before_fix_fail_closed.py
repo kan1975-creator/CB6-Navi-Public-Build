@@ -128,7 +128,7 @@ class TestApproval(unittest.TestCase):
                 return {"sha":"b"*40,"commit":{"committer":{"date":"2026-10-08T08:00:00Z"}}}
             return v._verify_with_transport(d,t,"test",fetch)
         self.assertEqual(run(encoded), [])
-        folded = "\\r\\n".join(encoded[i:i+40] for i in range(0,len(encoded),40))
+        folded = "\r\n".join(encoded[i:i+40] for i in range(0,len(encoded),40))
         self.assertEqual(run(folded), [])
         for broken in (encoded[:8]+"!"+encoded[8:], encoded[:-1], base64.b64encode(b"not-json").decode()):
             self.assertTrue(run(broken), "invalid plan content accepted")
