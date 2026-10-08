@@ -5,9 +5,17 @@
   "scope": "implementation_problem_fix_commits",
   "requirement": "Explicit user approval for the exact proposed implementation-problem fix must predate implementation work.",
   "approval_record": {
-    "required_fields": ["approval_id","approved_at","proposed_change_id","approved_change_summary"],
+    "required_fields": [
+      "approval_id",
+      "approved_at",
+      "proposed_change_id",
+      "approved_change_summary"
+    ],
     "github_reference_required": true,
-    "allowed_reference_locations": ["commit_message","pull_request_description"],
+    "allowed_reference_locations": [
+      "commit_message",
+      "pull_request_description"
+    ],
     "change_binding": "exact_proposed_change_id"
   },
   "fail_closed": {
@@ -15,5 +23,30 @@
     "post_hoc_approval": true,
     "approval_reuse_for_different_change": true,
     "missing_change_binding": true
+  },
+  "stage1": {
+    "status": "VERIFIER_TESTED_ONLY_AFTER_TEST_EVIDENCE",
+    "overall_status": "ENFORCEMENT_UNVERIFIED",
+    "trusted_github_user_id": 313684924,
+    "production_requires_live_github_api": true,
+    "production_requires_external_plan_sha256": true,
+    "production_requires_external_plan_commit_sha": true,
+    "production_requires_external_implementation_event": true,
+    "production_mock_evidence_forbidden": true,
+    "api_failure_reject": true,
+    "scope": "verifier_only_no_workflow_or_ruleset_enforcement",
+    "canonical_plan_fields": [
+      "proposed_change_id",
+      "basis_head",
+      "planned_paths",
+      "forbidden_scope",
+      "affected_domains"
+    ],
+    "accepted_comment_kind": "issue_comment",
+    "comment_edit_policy": "created_at_must_equal_updated_at",
+    "timestamp_policy": "UTC_RFC3339",
+    "sha256_encoding": "utf8_canonical_json_sorted_keys_compact",
+    "ac_count": 12,
+    "dt_count": 12
   }
 }
