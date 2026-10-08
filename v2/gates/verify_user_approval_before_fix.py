@@ -7,7 +7,8 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime
+from urllib.parse import quote
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -74,10 +75,17 @@ def check(d, github_comment=None, trusted=None):
             errors.append("GitHub user mismatch")
         if github_comment["id"] != trusted["comment_id"]:
             errors.append("comment ID mismatch")
+        expected_issue = "https://api.github.com/repos/" + trusted["repository"] + "/issues/" + str(trusted["issue_number"])
+        if github_comment.get("issue_url") != expected_issue:
+            errors.append("issue ownership mismatch")
         if github_comment.get("created_at") != github_comment.get("updated_at"):
             errors.append("edited comment")
         created = instant(github_comment["created_at"])
         started = instant(trusted["implementation_event_at"])
+        if not trusted.get("implementation_event_verified"):
+            errors.append("implementation event not independently verified")
+        if not trusted.get("plan_anchor_verified"):
+            errors.append("plan anchor not independently verified")
         if created >= started:
             errors.append("approval is not pre-implementation")
         if approval.get("approved_at") != github_comment["created_at"]:
@@ -105,7 +113,7 @@ def github_get(repo, endpoint, token):
     with urllib.request.urlopen(req, timeout=15) as response:
         return json.load(response)
 
-def verify_live(d, trusted, token, fetch=github_get):
+def _verify_with_transport(d, trusted, token, fetch):
     """Production: obtain both comment and plan blob from GitHub, never from supplied mock."""
     try:
         if not isinstance(trusted, dict):
@@ -114,6 +122,9 @@ def verify_live(d, trusted, token, fetch=github_get):
         comment_id = trusted["comment_id"]
         commit = trusted["plan_commit_sha"]
         path = trusted["plan_path"]
+        issue_number = trusted["issue_number"]
+        if not isinstance(issue_number, int) or isinstance(issue_number, bool) or issue_number <= 0:
+            raise ValueError("invalid issue number")
         if not isinstance(comment_id, int) or comment_id <= 0:
             raise ValueError("invalid comment id")
         if not isinstance(commit, str) or not SHA.fullmatch(commit):
@@ -121,17 +132,50 @@ def verify_live(d, trusted, token, fetch=github_get):
         if not isinstance(path, str) or not path or ".." in path.split("/") or path.startswith("/"):
             raise ValueError("invalid plan path")
         comment = fetch(repo, "/issues/comments/" + str(comment_id), token)
-        obj = fetch(repo, "/contents/" + path + "?ref=" + commit, token)
+        obj = fetch(repo, "/contents/" + quote(path, safe="/") + "?ref=" + commit, token)
+        commit_obj = fetch(repo, "/commits/" + commit, token)
+        if commit_obj.get("sha") != commit:
+            raise ValueError("plan commit SHA mismatch")
+        if not commit_obj.get("commit", {}).get("committer", {}).get("date"):
+            raise ValueError("plan commit timestamp missing")
+        if instant(commit_obj["commit"]["committer"]["date"]) >= instant(comment["created_at"]):
+            raise ValueError("plan commit is not before approval (metadata check only)")
         import base64
         if obj.get("encoding") != "base64" or obj.get("type") != "file":
             raise ValueError("invalid plan blob")
-        raw = base64.b64decode(obj["content"], validate=False)
+        raw = base64.b64decode(obj["content"], validate=True)
         plan = json.loads(raw.decode("utf-8"))
         bound = dict(trusted)
         bound["plan"] = plan
         return check(d, comment, bound)
-    except (OSError, urllib.error.URLError, ValueError, TypeError, KeyError, AttributeError) as exc:
+    except (OSError, urllib.error.URLError, ValueError, TypeError, KeyError, AttributeError, OverflowError) as exc:
         return ["GitHub API or plan retrieval failed: " + str(exc)]
+
+def verify_live(d, trusted, token):
+    """Production entrypoint: network transport cannot be supplied by caller."""
+    return _verify_with_transport(d, trusted, token, github_get)
+
+def verify_legacy_structure(d):
+    """Legacy syntax only: never grants authenticated approval."""
+    if not isinstance(d, dict):
+        return ["invalid evidence"]
+    a = d.get("approval")
+    if not isinstance(a, dict):
+        return ["missing approval"]
+    errors = ["legacy evidence is not authenticated approval"]
+    for k in CONTRACT["approval_record"]["required_fields"]:
+        if not a.get(k):
+            errors.append("missing approval field: " + k)
+    if a.get("proposed_change_id") != d.get("proposed_change_id"):
+        errors.append("approval binding mismatch")
+    if not a.get("github_reference"):
+        errors.append("missing github approval reference")
+    try:
+        if instant(a["approved_at"]) >= instant(d["implementation_started_at"]):
+            errors.append("approval is not pre-implementation")
+    except (KeyError, TypeError, ValueError, AttributeError):
+        errors.append("invalid legacy timestamp")
+    return errors
 
 def main(argv):
     if len(argv) != 3:
@@ -140,6 +184,10 @@ def main(argv):
     try:
         evidence = json.loads(Path(argv[1]).read_text())
         trusted = json.loads(Path(argv[2]).read_text())
+        if not isinstance(trusted, dict) or not trusted.get("trust_anchor_provisioned_externally"):
+            raise ValueError("external trust anchor not established")
+        if not trusted.get("implementation_event_verified") or not trusted.get("plan_anchor_verified"):
+            raise ValueError("external provenance not verified")
         token = os.environ.get("GITHUB_TOKEN")
         if not token:
             raise ValueError("GITHUB_TOKEN missing")
