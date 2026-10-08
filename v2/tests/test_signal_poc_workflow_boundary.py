@@ -25,5 +25,23 @@ rejects(m.POC_WORKFLOW, workflow.replace("      - name: Executable APK Build Pre
 rejects(m.POC_WORKFLOW, workflow.replace("      - name: Verify Gate 1 APK\n", "      - name: Verify Gate 1 APK\n        continue-on-error: true\n"), "ignored APK failure")
 rejects(m.POC_WORKFLOW, workflow.replace("          python3 v2/tests/test_signal_standard_poc_direct.py", "          # python3 v2/tests/test_signal_standard_poc_direct.py"), "commented direct test")
 rejects(m.POC_WORKFLOW, workflow.replace('          grep -Fx "commit=$GITHUB_SHA" out/BUILD_PROVENANCE.txt', '          echo "commit=$GITHUB_SHA"'), "unbound provenance")
-rejects(m.POC_WORKFLOW, workflow.replace("        if: success()\n        uses: actions/upload-artifact@v4", "        if: always()\n        uses: actions/upload-artifact@v4"), "upload after failure")
+def mutate_verified_upload_condition(source):
+    """Target the verified-upload step; reject a no-op mutation."""
+    marker = "      - name: Upload verified Signal PoC APK and direct evidence\\n"
+    if source.count(marker) != 1:
+        raise SystemExit("FAIL upload step missing or duplicated")
+    start = source.index(marker) + len(marker)
+    end = source.find("\\n      - name: ", start)
+    if end == -1:
+        end = len(source)
+    block = source[start:end]
+    condition = "        if: success()"
+    if block.count(condition) != 1:
+        raise SystemExit("FAIL upload success condition missing or duplicated")
+    changed = block.replace(condition, "        if: always()", 1)
+    mutated = source[:start] + changed + source[end:]
+    if mutated == source:
+        raise SystemExit("FAIL upload mutation did not occur")
+    return mutated
+rejects(m.POC_WORKFLOW, mutate_verified_upload_condition(workflow), "upload after failure")
 print("PASS PoC-only boundary destructive tests")
