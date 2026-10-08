@@ -1,16 +1,21 @@
-# CB6 Governance Normalization — candidate phase 2
+# CB6 Governance Normalization — candidate phase 3
 
 Status: CANDIDATE, not ACTIVE. Existing Development Gate and ACTIVE rules remain authoritative.
 
-## Scope and workflow
-Only these four candidate files may be modified in phase 2. No Signal, Convenience, app runtime, Method Freeze, PR #3, or legacy gate changes. Follow fresh HEAD -> research -> prior explicit user approval -> scoped PR -> real tests -> independent review -> APK provenance -> actual device acceptance.
+## Scope
+Only these four candidate files may be modified. No legacy Gate, Method Freeze, ACTIVE rules, PR #3, Signal, Convenience or app runtime changes.
 
 ## AC-01–AC-12
-01 HEAD freshness; 02 authentic prior approval; 03 actual PR diff scope; 04 multi-angle research; 05 ACTIVE spec consistency; 06 direct tests; 07 independent review; 08 same-SHA CI; 09 APK provenance/signature/hash; 10 real device Acceptance; 11 future-feature coverage; 12 no legacy gate retirement before equivalence and explicit adoption.
+01 HEAD freshness; 02 authentic prior approval; 03 actual PR diff scope; 04 multi-angle research; 05 ACTIVE consistency; 06 direct tests; 07 independent review; 08 same-SHA CI; 09 APK provenance; 10 real device Acceptance; 11 future-feature coverage; 12 legacy gate preservation.
 
-## Phase 2 evidence policy
-The workflow uses read-only GitHub REST API to retrieve actual PR files, PR head/base SHA, current base branch, PR reviews, and Actions runs. The candidate audit checks actual diff against the four allowed files, independently authored GitHub review on current SHA, and required CI names with successful runs on PR head SHA. It rejects incomplete pagination and API errors. API-shaped destructive tests cover stale SHA, scope drift, missing/failed CI, absent/self/stale review, malformed evidence and unprotected branch.
+## Phase 3 audit semantics
+- AUDIT_ERROR: malformed/missing GitHub API evidence, HEAD mismatch or out-of-scope PR diff. Nonzero exit, candidate CI fails.
+- AUDIT_OK: read-only evidence inspection completed without audit errors. Zero exit means only this, never approval.
+- RELEASE_BLOCKED: independent release prerequisites absent. Always reported, not silently converted into an approval.
+- Candidate workflow must not depend on its own completion. Only existing Development Gate is inspected for same-head SHA success.
+- GitHub review evidence is evaluated using the latest decisive review state per independent reviewer; dismissed/stale approvals cannot authorize. CHANGES_REQUESTED is blocking. Review-thread resolution is not yet checked and therefore remains explicitly blocked.
+- User approval in ChatGPT cannot be independently authenticated by GitHub API. APK/device acceptance and branch protection are separate, unresolved release prerequisites.
+- Pull request checkout uses synthetic merge SHA; audit separately checks PR head SHA. API failures and pagination truncation are audit errors.
 
-**Important:** A passing candidate job only means the audit executed and blockers were reported; it is NOT a successful authorization decision. A GitHub API token cannot authenticate user approval given in ChatGPT. The candidate therefore always reports user-approval authenticity as BLOCKED. APK/device Acceptance likewise remains BLOCKED. GitHub branch protection is separately checked, not configured. No automated merge or monitoring.
-
-The pull_request event checks out GitHub's synthetic merge SHA; the audit separately compares the PR head SHA to CI run head SHA. Existing Development Gate must remain successful. Release, formal adoption and old gate retirement require separate explicit approval and real evidence.
+## Transition guardrails
+A candidate CI SUCCESS is never authorization to merge, retire old gates or mark app/device acceptance. PR #4 stays Draft and unmerged. Independent review and explicit user approval are mandatory before any ACTIVE change. No auto-merge or monitoring.
