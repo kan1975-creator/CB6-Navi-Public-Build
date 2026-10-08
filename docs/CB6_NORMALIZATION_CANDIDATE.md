@@ -1,4 +1,4 @@
-# CB6 Governance Normalization — candidate phase 3
+# CB6 Governance Normalization — candidate phase 5
 
 Status: CANDIDATE, not ACTIVE. Existing Development Gate and ACTIVE rules remain authoritative.
 
@@ -64,3 +64,16 @@ Completion requires **all applicable** criteria, with links to verifiable eviden
 ## Destination change control
 
 Progress/evidence updates must **not** silently weaken, delete, relabel or redefine these completion criteria. A substantive change to the destination or acceptance threshold requires a stated reason, impact/authority consistency check and **prior explicit user approval tied to that exact change**. Keep the previous criteria visible in version history. The phase 4 approval authorizes this documentation addition only, not later edits or ACTIVE adoption.
+
+## Phase 5 — bounded evidence classification (candidate only)
+
+- Review-thread status is fetched from GitHub GraphQL at the current PR, including the resolved flag. API errors, malformed responses and truncated pagination are audit errors; unresolved threads remain release blockers. An empty verified list is not treated as an unverified list.
+- The existing historical governance/efficiency independent-review workflows do **not** review this candidate SHA merely by existing. A separately named `CB6 Governance Normalization Independent Review` workflow success on the same HEAD is checked as independent automation evidence. Until a genuine separate workflow run exists, the release blocker remains. Automated review is never mislabeled as a human GitHub approval.
+- GitHub independent human review remains separately required under the current candidate criteria; with no separate reviewer available, it remains blocked pending explicit, authority-consistent decision. No self-review or invented reviewer.
+- APK provenance and CB6 real-device acceptance are **not applicable to this four-file documentation/audit-only candidate**, because it changes no app runtime and produces no releasable APK. The condition becomes mandatory again for any app behavior change or APK release; no device acceptance is inferred.
+- Prior approval authenticity remains a release blocker, not a successful proof. The existing approval contract's `CANDIDATE` status cannot itself establish ACTIVE authenticated evidence.
+- Base branch protection remains a blocker until actual protection or a separately approved and verified equivalent exists.
+- Candidate audit success is a read-only evidence-consistency result, not independent review, release authorization, formal adoption, or permission to retire old gates.
+- The phase 5 change is restricted to the existing candidate verifier, destructive tests and this document. The existing candidate workflow, ACTIVE authorities and application behavior remain unchanged.
+
+**Phase 5 acceptance:** current-SHA CI and destructive tests must pass; malformed or missing evidence must not silently become a PASS; any unproven independent/approval/branch safeguard must remain RELEASE_BLOCKED. The fixed end-state criteria above are unchanged.
