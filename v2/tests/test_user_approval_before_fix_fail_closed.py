@@ -116,5 +116,62 @@ class TestApproval(unittest.TestCase):
         import inspect
         self.assertNotIn("fetch",inspect.signature(v.verify_live).parameters)
 
+
+    def test_at01_base64_github_folding_and_invalid(self):
+        import base64, json
+        d,c,t = fixture()
+        encoded = base64.b64encode(json.dumps(PLAN).encode()).decode()
+        def run(blob):
+            def fetch(repo,endpoint,token):
+                if endpoint.startswith("/issues/comments/"): return c
+                if endpoint.startswith("/contents/"): return {"type":"file","encoding":"base64","content":blob}
+                return {"sha":"b"*40,"commit":{"committer":{"date":"2026-10-08T08:00:00Z"}}}
+            return v._verify_with_transport(d,t,"test",fetch)
+        self.assertEqual(run(encoded), [])
+        folded = "\\r\\n".join(encoded[i:i+40] for i in range(0,len(encoded),40))
+        self.assertEqual(run(folded), [])
+        for broken in (encoded[:8]+"!"+encoded[8:], encoded[:-1], base64.b64encode(b"not-json").decode()):
+            self.assertTrue(run(broken), "invalid plan content accepted")
+
+    def test_at02_http_status_fail_closed(self):
+        import urllib.error
+        d,c,t = fixture()
+        for status in (401,403,404,429,500,503):
+            with self.subTest(status=status):
+                def fetch(repo,endpoint,token):
+                    raise urllib.error.HTTPError("https://api.github.com",status,"simulated",{},None)
+                errors=v._verify_with_transport(d,t,"test",fetch)
+                self.assertTrue(any("retrieval failed" in e for e in errors),errors)
+
+    def test_at03_deleted_comment_and_wrong_binding(self):
+        import urllib.error
+        d,c,t = fixture()
+        def deleted(repo,endpoint,token):
+            raise urllib.error.HTTPError("https://api.github.com",404,"not found",{},None)
+        self.assertTrue(v._verify_with_transport(d,t,"test",deleted))
+        c["issue_url"]="https://api.github.com/repos/"+REPO+"/issues/6"
+        self.assertIn("issue ownership mismatch",v.check(d,c,t))
+        c["issue_url"]=COMMENT["issue_url"]
+        c["id"]=43
+        self.assertIn("comment ID mismatch",v.check(d,c,t))
+
+    def test_at04_legacy_structure_never_authenticated(self):
+        d,c,t=fixture()
+        legacy={"proposed_change_id":"change-A","implementation_started_at":"2026-10-08T09:01:00Z",
+                "approval":{"approval_id":"A-1","approved_at":"2026-10-08T09:00:00Z",
+                            "proposed_change_id":"change-A","approved_change_summary":"exact",
+                            "github_reference":"commit-message: Approval-Ref=A-1"}}
+        self.assertEqual(v.verify_legacy_structure(legacy),["legacy evidence is not authenticated approval"])
+        self.assertTrue(v.check(legacy))
+        legacy["approval"]["approved_at"]="2026-10-08T09:02:00Z"
+        self.assertIn("approval is not pre-implementation",v.verify_legacy_structure(legacy))
+
+    def test_at05_candidate_active_boundary(self):
+        self.assertEqual(v.CONTRACT["status"],"CANDIDATE")
+        self.assertEqual(v.CONTRACT["stage1"]["overall_status"],"ENFORCEMENT_UNVERIFIED")
+        self.assertIn("remains ACTIVE",v.CONTRACT["stage1"]["active_rule_boundary"])
+        self.assertEqual(v.CONTRACT["stage1"]["ac_count"],12)
+        self.assertEqual(v.CONTRACT["stage1"]["dt_count"],12)
+
 if __name__ == "__main__":
     unittest.main()
