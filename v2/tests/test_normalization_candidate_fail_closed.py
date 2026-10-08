@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Candidate phase 3 destructive tests: audit errors vs release blockers."""
+"""Candidate destructive tests: audit errors vs release blockers and PR trigger."""
 import copy
 import importlib.util
 from pathlib import Path
@@ -54,3 +54,14 @@ assert m.audit(None,h,b)[0] == ["malformed GitHub evidence"]
 # CLI must not convert malformed input into a successful advisory audit.
 assert m.main() == 2
 print("PASS: 23 destructive cases; AUDIT_ERROR fails, release blockers remain explicit")
+
+# Regression: candidate reconstruction must run from PR events without a
+# workflow_dispatch entry that is unavailable until default-branch installation.
+workflow = (Path(__file__).resolve().parents[2] / ".github/workflows/cb6_normalization_candidate.yml").read_text()
+assert "  workflow_dispatch:" not in workflow
+assert "  pull_request:" in workflow
+assert "  independent-review-candidate:" in workflow
+assert "if: github.event_name == 'pull_request'" in workflow
+assert "fetch-depth: 0" in workflow
+assert "RELEASE_BLOCKED: same-workflow job does not establish independent review" in workflow
+print("PASS: PR-triggered reconstruction contract; no false independent acceptance")
