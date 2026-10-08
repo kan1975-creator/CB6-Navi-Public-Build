@@ -1,0 +1,35 @@
+name: CB6 Governance Normalization Candidate
+on:
+  pull_request:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'docs/CB6_NORMALIZATION_CANDIDATE.md'
+      - 'v2/gates/verify_normalization_candidate.py'
+      - 'v2/tests/test_normalization_candidate_fail_closed.py'
+      - '.github/workflows/cb6_normalization_candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Verify checked out SHA
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+      - name: Run candidate destructive tests
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 v2/tests/test_normalization_candidate_fail_closed.py
+      - name: Explicitly preserve release and retirement block
+        shell: bash
+        run: |
+          set -euxo pipefail
+          echo 'Candidate tests only: approval authenticity, protected branch, independent review, APK and device acceptance are NOT certified.'
+          echo 'Legacy Development Gate remains authoritative. No release or retirement permission.'
