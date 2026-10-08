@@ -115,8 +115,11 @@ def audit(snapshot, expected_head, expected_base):
         elif review_evidence.get("verified_external_provenance") is not True:
             blockers.append("ACTIVE independent review separation not independently verified")
         else:
-            # A supplied boolean is not a proof of separate context.
-            blockers.append("ACTIVE independent review provenance requires external attestation")
+            # A current-SHA GitHub review must attest to the separate context.
+            marker = "CB6-INDEPENDENT-CONTEXT:" + expected_head
+            witnessed = [v for v in approvals if marker in (v.get("body") or "")]
+            if not witnessed:
+                blockers.append("ACTIVE independent review provenance requires external attestation")
 
     return errors, blockers
 
