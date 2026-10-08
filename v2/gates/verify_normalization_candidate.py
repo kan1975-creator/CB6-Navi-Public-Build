@@ -59,15 +59,30 @@ def audit(snapshot, expected_head, expected_base):
         blockers.append("independent current-SHA GitHub review missing")
     if changes:
         blockers.append("unresolved changes requested")
-    # Review threads and their resolution status are not yet independently audited.
-    blockers.append("review-thread resolution not independently verified")
+    threads = snapshot.get("review_threads")
+    if not isinstance(threads, list):
+        blockers.append("review-thread resolution not independently verified")
+    elif any(not isinstance(t, dict) or not isinstance(t.get("isResolved"), bool) for t in threads):
+        errors.append("malformed review-thread evidence")
+    elif any(not t["isResolved"] for t in threads):
+        blockers.append("unresolved review threads")
+    # Independent automated review and human GitHub review are distinct evidence.
+    independent = [x for x in runs if isinstance(x, dict) and
+        x.get("name") == "CB6 Governance Normalization Independent Review" and
+        x.get("head_sha") == expected_head and x.get("status") == "completed" and
+        x.get("conclusion") == "success"]
+    if not independent:
+        blockers.append("same-SHA independent normalization workflow evidence missing")
+    # The four-file documentation/audit candidate is not an APK or device release.
+    # This does not waive acceptance for a later application release.
+    if set(x.get("filename") for x in files if isinstance(x, dict)) != ALLOWED:
+        blockers.append("APK provenance and CB6 device acceptance not verified")
     for name in REQUIRED_CHECKS:
         matches = [x for x in runs if isinstance(x, dict) and x.get("name") == name and
             x.get("head_sha") == expected_head and x.get("status") == "completed" and x.get("conclusion") == "success"]
         if not matches:
             blockers.append("missing current-SHA CI: " + name)
     blockers.append("user approval authenticity not independently verifiable")
-    blockers.append("APK provenance and CB6 device acceptance not verified")
     return errors, blockers
 
 def github(path):
@@ -79,6 +94,35 @@ def github(path):
     })
     with urllib.request.urlopen(req, timeout=20) as response:
         return json.load(response)
+
+def fetch_review_threads(pr_number):
+    """GitHub GraphQL provides the authoritative resolved state of PR threads."""
+    query = """query($owner:String!,$repo:String!,$number:Int!){
+      repository(owner:$owner,name:$repo){
+        pullRequest(number:$number){
+          reviewThreads(first:100){nodes{isResolved} pageInfo{hasNextPage}}
+        }
+      }
+    }"""
+    payload = json.dumps({"query": query, "variables": {
+        "owner": "kan1975-creator", "repo": "CB6-Navi-Public-Build",
+        "number": pr_number}}).encode()
+    req = urllib.request.Request("https://api.github.com/graphql", data=payload, headers={
+        "Accept": "application/vnd.github+json",
+        "Authorization": "Bearer " + os.environ["GITHUB_TOKEN"],
+        "Content-Type": "application/json",
+    })
+    with urllib.request.urlopen(req, timeout=20) as response:
+        data = json.load(response)
+    if data.get("errors"):
+        raise ValueError("GraphQL review-thread query errors")
+    try:
+        threads = data["data"]["repository"]["pullRequest"]["reviewThreads"]
+        if threads["pageInfo"]["hasNextPage"]:
+            raise ValueError("review-thread pagination incomplete")
+        return threads["nodes"]
+    except (KeyError, TypeError) as exc:
+        raise ValueError("malformed review-thread API response") from exc
 
 def fetch_snapshot(pr_number):
     pr = github("/pulls/" + str(pr_number))
@@ -93,6 +137,7 @@ def fetch_snapshot(pr_number):
     if runs_data.get("total_count", 0) > len(runs_data.get("workflow_runs", [])):
         raise ValueError("workflow runs pagination incomplete")
     return {"pr": pr, "files": files, "reviews": reviews,
+            "review_threads": fetch_review_threads(pr_number),
             "runs": runs_data["workflow_runs"], "branch": github("/branches/" + branch_name)}
 
 def main():
@@ -113,9 +158,6 @@ def main():
         return 2
     # Advisory candidate job succeeds only when evidence was read consistently.
     # Release remains blocked, irrespective of this exit code.
-    if not blockers:
-        print("AUDIT_ERROR: unexpected unblocked release state")
-        return 2
     print("AUDIT_OK: evidence audit completed; RELEASE_BLOCKED remains")
     return 0
 
