@@ -143,7 +143,11 @@ def _verify_with_transport(d, trusted, token, fetch):
         import base64
         if obj.get("encoding") != "base64" or obj.get("type") != "file":
             raise ValueError("invalid plan blob")
-        raw = base64.b64decode(obj["content"], validate=True)
+        encoded = obj["content"]
+        if not isinstance(encoded, str):
+            raise ValueError("invalid base64 plan content")
+        # GitHub may fold base64 with CR/LF; other invalid characters still reject.
+        raw = base64.b64decode(encoded.replace("\r", "").replace("\n", ""), validate=True)
         plan = json.loads(raw.decode("utf-8"))
         bound = dict(trusted)
         bound["plan"] = plan
