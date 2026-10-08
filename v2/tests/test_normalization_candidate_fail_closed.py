@@ -16,9 +16,9 @@ base = {"pr":{"head":{"sha":h},"base":{"sha":b},"state":"open","draft":True,"use
         "runs":[{"name":n,"head_sha":h,"status":"completed","conclusion":"success"} for n in m.REQUIRED_CHECKS],
         "branch":{"protected":True,"commit":{"sha":b}}}
 errors, blockers = m.audit(base,h,b)
-assert not errors and any("approval authenticity" in x for x in blockers)
+assert not errors and any("ACTIVE pre-fix approval" in x for x in blockers)
 assert not any("device acceptance" in x for x in blockers)
-assert any("independent normalization workflow" in x for x in blockers)
+assert any("ACTIVE independent review" in x for x in blockers)
 assert not any("review-thread" in x for x in blockers)
 cases = [
  ("out-of-scope",lambda x:x["files"].append({"filename":"v2/signals/x","status":"added"}),"error","diff outside"),
@@ -27,18 +27,18 @@ cases = [
  ("unresolved thread",lambda x:x.update(review_threads=[{"isResolved":False}]),"block","unresolved review threads"),
  ("missing thread evidence",lambda x:x.pop("review_threads"),"block","review-thread resolution"),
  ("malformed thread evidence",lambda x:x.update(review_threads=[{"isResolved":"yes"}]),"error","malformed review-thread"),
- ("missing independent workflow",lambda x:x.update(runs=[]),"block","independent normalization workflow"),
+ ("missing independent workflow",lambda x:x.update(runs=[]),"block","ACTIVE independent review"),
  ("application scope",lambda x:x["files"].append({"filename":"app/src/main/java/Changed.java","status":"added"}),"block","device acceptance"),
- ("missing review",lambda x:x.update(reviews=[]),"block","review missing"),
- ("self review",lambda x:x["reviews"][0]["user"].update(login="author"),"block","review missing"),
- ("stale review",lambda x:x["reviews"][0].update(commit_id="c"*40),"block","review missing"),
- ("withdrawn approval",lambda x:x["reviews"].append({"state":"DISMISSED","commit_id":h,"user":{"login":"independent"}}),"block","review missing"),
+ ("missing review",lambda x:x.update(reviews=[]),"block","ACTIVE independent review"),
+ ("self review",lambda x:x["reviews"][0]["user"].update(login="author"),"block","ACTIVE independent review"),
+ ("stale review",lambda x:x["reviews"][0].update(commit_id="c"*40),"block","ACTIVE independent review"),
+ ("withdrawn approval",lambda x:x["reviews"].append({"state":"DISMISSED","commit_id":h,"user":{"login":"independent"}}),"block","ACTIVE independent review"),
  ("latest changes requested",lambda x:x["reviews"].append({"state":"CHANGES_REQUESTED","commit_id":h,"user":{"login":"independent"}}),"block","unresolved changes"),
  ("other reviewer changes requested",lambda x:x["reviews"].append({"state":"CHANGES_REQUESTED","commit_id":h,"user":{"login":"other"}}),"block","unresolved changes"),
  ("missing CI",lambda x:x.update(runs=[]),"block","current-SHA CI"),
  ("stale CI",lambda x:x["runs"][0].update(head_sha="c"*40),"block","current-SHA CI"),
  ("failed CI",lambda x:x["runs"][0].update(conclusion="failure"),"block","current-SHA CI"),
- ("unprotected",lambda x:x["branch"].update(protected=False),"block","branch protection"),
+ ("unprotected",lambda x:x["branch"].update(protected=False),"block","ACTIVE independent review"),
  ("not draft",lambda x:x["pr"].update(draft=False),"block","draft"),
  ("wrong file status",lambda x:x["files"][0].update(status="removed"),"error","diff outside"),
  ("missing API evidence",lambda x:x.update(files=None),"error","missing GitHub API"),
@@ -53,7 +53,7 @@ for name, mutate, kind, needle in cases:
 assert m.audit(None,h,b)[0] == ["malformed GitHub evidence"]
 # CLI must not convert malformed input into a successful advisory audit.
 assert m.main() == 2
-print("PASS: 23 destructive cases; AUDIT_ERROR fails, release blockers remain explicit")
+print("PASS: destructive cases; AUDIT_ERROR fails, ACTIVE review and approval remain blocked")
 
 # Regression: candidate reconstruction must run from PR events without a
 # workflow_dispatch entry that is unavailable until default-branch installation.
@@ -65,3 +65,17 @@ assert "if: github.event_name == 'pull_request'" in workflow
 assert "fetch-depth: 0" in workflow
 assert "RELEASE_BLOCKED: same-workflow job does not establish independent review" in workflow
 print("PASS: PR-triggered reconstruction contract; no false independent acceptance")
+
+# Candidate-only GitHub reviewer, named workflow and branch protection cannot
+# stand in for ACTIVE independent review or ACTIVE pre-fix approval.
+for mutation in (
+    lambda x:x["reviews"].clear(),
+    lambda x:x["branch"].update(protected=False),
+    lambda x:x["runs"].append({"name":"CB6 Governance Normalization Independent Review","head_sha":h,"status":"completed","conclusion":"success"}),
+):
+    data=copy.deepcopy(base); mutation(data)
+    err, blocked=m.audit(data,h,b)
+    assert not err
+    assert any("ACTIVE independent review" in x for x in blocked)
+    assert any("ACTIVE pre-fix approval" in x for x in blocked)
+print("PASS: independent review and pre-fix approval cannot be spoofed by GitHub candidate metadata")
