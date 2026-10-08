@@ -8,12 +8,19 @@ on:
       - 'v2/tests/test_normalization_candidate_fail_closed.py'
       - '.github/workflows/cb6_normalization_candidate.yml'
   workflow_dispatch:
+    inputs:
+      review_mode:
+        description: 'Run separate evidence-only independent-review candidate'
+        required: true
+        type: choice
+        options: [independent-review]
 permissions:
   contents: read
   pull-requests: read
   actions: read
 jobs:
   candidate:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,3 +43,37 @@ jobs:
       - name: Preserve release block
         run: |
           echo 'AUDIT_OK does not mean release authorization. RELEASE_BLOCKED remains until independent evidence.'
+
+  independent-review-candidate:
+    # Separate dispatch/run, not a self-approval or an ACTIVE independent acceptance.
+    if: github.event_name == 'workflow_dispatch' && inputs.review_mode == 'independent-review'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Independent evidence reconstruction (no release authorization)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 v2/tests/test_normalization_candidate_fail_closed.py
+          python3 - <<'PY'
+          import json, pathlib, subprocess
+          root=pathlib.Path('.')
+          allowed={
+            'docs/CB6_NORMALIZATION_CANDIDATE.md',
+            'v2/gates/verify_normalization_candidate.py',
+            'v2/tests/test_normalization_candidate_fail_closed.py',
+            '.github/workflows/cb6_normalization_candidate.yml',
+          }
+          base=subprocess.check_output(['git','merge-base','HEAD','origin/cb6-v2-clean'],text=True).strip()
+          changed=set(subprocess.check_output(['git','diff','--name-only',base,'HEAD'],text=True).splitlines())
+          assert changed==allowed, f'unexpected scope: {changed ^ allowed}'
+          reg=json.loads((root/'v2/gates/operational_rule_registry_v21.json').read_text())
+          rules={x['id']:x for x in reg['rules']}
+          assert rules['OPS-INDEPENDENT-ACCEPTANCE-001']['status']=='ACTIVE'
+          assert rules['OPS-USER-APPROVAL-BEFORE-FIX-001']['status']=='ACTIVE'
+          print('INDEPENDENT_CANDIDATE_CHECK_OK: separate-run scope and ACTIVE rules reconstructed')
+          print('RELEASE_BLOCKED: no independent human approval or certified independent context')
+          PY
