@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only GitHub evidence audit. Candidate audit success is NOT release approval."""
+"""Candidate-only, read-only GitHub evidence audit; never authorizes release."""
 import json
 import os
 import sys
@@ -12,43 +12,63 @@ ALLOWED = frozenset({
     "v2/tests/test_normalization_candidate_fail_closed.py",
     ".github/workflows/cb6_normalization_candidate.yml",
 })
-REQUIRED_CHECKS = {"CB6 Development Gate", "CB6 Governance Normalization Candidate"}
+# Only the pre-existing independent Development Gate is eligible here.
+# Candidate workflow cannot verify its own success while still running.
+REQUIRED_CHECKS = {"CB6 Development Gate"}
 
 def audit(snapshot, expected_head, expected_base):
-    """Verify independently fetched GitHub facts, return explicit blockers."""
-    blockers = []
+    """Return (audit_errors, release_blockers). Neither is release authorization."""
+    errors, blockers = [], []
     if not isinstance(snapshot, dict):
-        return ["malformed GitHub evidence"]
+        return ["malformed GitHub evidence"], []
     pr, files, reviews, runs, branch = (snapshot.get(k) for k in
         ("pr", "files", "reviews", "runs", "branch"))
     if not isinstance(pr, dict) or not isinstance(files, list) or not isinstance(reviews, list) or not isinstance(runs, list) or not isinstance(branch, dict):
-        return ["missing GitHub API evidence"]
-    head = (pr.get("head") or {}).get("sha") if isinstance(pr.get("head"), dict) else None
-    base = (pr.get("base") or {}).get("sha") if isinstance(pr.get("base"), dict) else None
-    if head != expected_head or base != expected_base or branch.get("commit", {}).get("sha") != expected_base:
-        blockers.append("stale or mismatched GitHub HEAD")
+        return ["missing GitHub API evidence"], []
+    head, base = pr.get("head"), pr.get("base")
+    if not isinstance(head, dict) or not isinstance(base, dict) or not isinstance(branch.get("commit"), dict):
+        return ["malformed PR or branch evidence"], []
+    if head.get("sha") != expected_head or base.get("sha") != expected_base or branch["commit"].get("sha") != expected_base:
+        errors.append("stale or mismatched GitHub HEAD")
     if pr.get("state") != "open" or pr.get("draft") is not True:
         blockers.append("candidate PR must remain open and draft")
-    names = [x.get("filename") for x in files if isinstance(x, dict)]
-    if len(names) != len(files) or set(names) != ALLOWED or len(names) != len(set(names)) or any(x.get("status") != "added" for x in files):
-        blockers.append("actual GitHub PR diff outside approved four modified files")
+    if any(not isinstance(x, dict) for x in files):
+        errors.append("malformed PR files")
+    else:
+        names = [x.get("filename") for x in files]
+        if set(names) != ALLOWED or len(names) != len(ALLOWED) or any(x.get("status") != "added" for x in files):
+            errors.append("actual GitHub PR diff outside approved four added files")
     if branch.get("protected") is not True:
         blockers.append("branch protection not enabled")
-    # Never trust review summaries or a self-authored PR body.
-    valid_reviews = [x for x in reviews if isinstance(x, dict) and x.get("state") == "APPROVED" and
-        x.get("commit_id") == expected_head and
-        (x.get("user") or {}).get("login") != (pr.get("user") or {}).get("login")]
-    if not valid_reviews:
-        blockers.append("independent GitHub review missing")
+    author = (pr.get("user") or {}).get("login") if isinstance(pr.get("user"), dict) else None
+    # GitHub review records are chronological. Latest decisive state per reviewer wins.
+    latest = {}
+    for review in reviews:
+        if not isinstance(review, dict) or not isinstance(review.get("user"), dict):
+            errors.append("malformed review evidence")
+            continue
+        login = review["user"].get("login")
+        if not isinstance(login, str) or not login:
+            errors.append("malformed reviewer identity")
+            continue
+        if login != author:
+            latest[login] = review
+    approvals = [v for v in latest.values() if v.get("state") == "APPROVED" and v.get("commit_id") == expected_head]
+    changes = [v for v in latest.values() if v.get("state") == "CHANGES_REQUESTED"]
+    if not approvals:
+        blockers.append("independent current-SHA GitHub review missing")
+    if changes:
+        blockers.append("unresolved changes requested")
+    # Review threads and their resolution status are not yet independently audited.
+    blockers.append("review-thread resolution not independently verified")
     for name in REQUIRED_CHECKS:
-        matching = [x for x in runs if isinstance(x, dict) and x.get("name") == name and
+        matches = [x for x in runs if isinstance(x, dict) and x.get("name") == name and
             x.get("head_sha") == expected_head and x.get("status") == "completed" and x.get("conclusion") == "success"]
-        if not matching:
+        if not matches:
             blockers.append("missing current-SHA CI: " + name)
-    # Approval in this chat cannot be authenticated by GitHub API; no automatic bypass.
     blockers.append("user approval authenticity not independently verifiable")
     blockers.append("APK provenance and CB6 device acceptance not verified")
-    return blockers
+    return errors, blockers
 
 def github(path):
     api = "https://api.github.com/repos/kan1975-creator/CB6-Navi-Public-Build"
@@ -77,22 +97,26 @@ def fetch_snapshot(pr_number):
 
 def main():
     if len(sys.argv) != 4 or not os.environ.get("GITHUB_TOKEN"):
-        print("BLOCKED: PR number, expected head/base, and GitHub token required")
+        print("AUDIT_ERROR: PR number, expected SHA values and GitHub token required")
         return 2
     try:
         snapshot = fetch_snapshot(int(sys.argv[1]))
-        blockers = audit(snapshot, sys.argv[2], sys.argv[3])
-    except (ValueError, KeyError, TypeError, urllib.error.URLError, OSError) as ex:
-        print("BLOCKED: GitHub evidence unavailable:", ex)
+        errors, blockers = audit(snapshot, sys.argv[2], sys.argv[3])
+    except (ValueError, KeyError, TypeError, AttributeError, urllib.error.URLError, OSError) as ex:
+        print("AUDIT_ERROR: GitHub evidence unavailable:", ex)
         return 2
-    for blocker in blockers:
-        print("BLOCKED:", blocker)
-    # Exit 0 means audit executed and known safety blockers remained blocked.
-    # This is NOT a release check or an approval gate.
+    for issue in errors:
+        print("AUDIT_ERROR:", issue)
+    for issue in blockers:
+        print("RELEASE_BLOCKED:", issue)
+    if errors:
+        return 2
+    # Advisory candidate job succeeds only when evidence was read consistently.
+    # Release remains blocked, irrespective of this exit code.
     if not blockers:
-        print("ERROR: candidate audit unexpectedly has no blockers")
-        return 1
-    print("PASS: read-only candidate audit ran; release remains BLOCKED")
+        print("AUDIT_ERROR: unexpected unblocked release state")
+        return 2
+    print("AUDIT_OK: evidence audit completed; RELEASE_BLOCKED remains")
     return 0
 
 if __name__ == "__main__":
