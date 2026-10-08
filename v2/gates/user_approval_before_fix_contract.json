@@ -25,7 +25,7 @@
     "missing_change_binding": true
   },
   "stage1": {
-    "status": "VERIFIER_TESTED_ONLY_AFTER_TEST_EVIDENCE",
+    "status": "VERIFIER_TESTED_ONLY_AFTER_EXECUTED_TEST_EVIDENCE",
     "overall_status": "ENFORCEMENT_UNVERIFIED",
     "trusted_github_user_id": 313684924,
     "production_requires_live_github_api": true,
@@ -47,6 +47,40 @@
     "timestamp_policy": "UTC_RFC3339",
     "sha256_encoding": "utf8_canonical_json_sorted_keys_compact",
     "ac_count": 12,
-    "dt_count": 12
+    "dt_count": 12,
+    "production_requires_independent_trust_anchor": true,
+    "production_requires_commit_metadata_check": true,
+    "production_requires_issue_url_match": true,
+    "production_requires_trusted_implementation_event": true,
+    "legacy_schema_is_not_authenticated_approval": true,
+    "test_evidence_is_not_production_evidence": true,
+    "ac_ids": [
+      "AC-01",
+      "AC-02",
+      "AC-03",
+      "AC-04",
+      "AC-05",
+      "AC-06",
+      "AC-07",
+      "AC-08",
+      "AC-09",
+      "AC-10",
+      "AC-11",
+      "AC-12"
+    ],
+    "dt_ids": [
+      "DT-01",
+      "DT-02",
+      "DT-03",
+      "DT-04",
+      "DT-05",
+      "DT-06",
+      "DT-07",
+      "DT-08",
+      "DT-09",
+      "DT-10",
+      "DT-11",
+      "DT-12"
+    ]
   }
 }
