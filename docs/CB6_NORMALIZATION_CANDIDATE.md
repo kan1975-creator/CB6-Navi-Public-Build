@@ -77,3 +77,7 @@ Progress/evidence updates must **not** silently weaken, delete, relabel or redef
 - The phase 5 change is restricted to the existing candidate verifier, destructive tests and this document. The existing candidate workflow, ACTIVE authorities and application behavior remain unchanged.
 
 **Phase 5 acceptance:** current-SHA CI and destructive tests must pass; malformed or missing evidence must not silently become a PASS; any unproven independent/approval/branch safeguard must remain RELEASE_BLOCKED. The fixed end-state criteria above are unchanged.
+
+## Phase 6 — separate-run reconstruction candidate
+
+The existing candidate workflow now supports an explicit `workflow_dispatch` with `review_mode=independent-review`. Its separate job checks out the exact run SHA with full history, reconstructs the four-file PR diff against `cb6-v2-clean`, verifies the two relevant ACTIVE rule identities, and reruns destructive tests. The pull-request candidate job is unchanged in purpose. The dispatch job is a **candidate evidence reconstruction**, not a certified independent human reviewer or proof of independent context; no dispatch run is claimed until GitHub Actions actually records one. The verifier continues to block missing `CB6 Governance Normalization Independent Review` same-SHA evidence and missing human GitHub approval; this dispatch does not spoof that workflow name. Existing blockers for approval authenticity and branch protection remain. Do not treat dispatch success as formal independent acceptance, release or merge authorization.
