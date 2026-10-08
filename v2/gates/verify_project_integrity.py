@@ -141,7 +141,7 @@ for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(enc
  if token not in signal_selftest: fail("signal audit selftest not derived from current spec")
 if '"return 12;", "return 11;"' in signal_selftest: fail("signal audit selftest contains stale hardcoded zoom")
 
-from v2.gates.signal_poc_workflow_boundary import validate_poc_workflow, POC_WORKFLOW
+from signal_poc_workflow_boundary import validate_poc_workflow, POC_WORKFLOW
 
 # Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
 wfdir=ROOT/".github/workflows"
