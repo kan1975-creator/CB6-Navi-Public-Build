@@ -23,7 +23,7 @@ jobs:
           set -euxo pipefail
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python3 v2/tests/test_normalization_candidate_fail_closed.py
-      - name: Fetch and audit live GitHub evidence (advisory, release blocked)
+      - name: Audit GitHub evidence; do not authorize release
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -31,8 +31,8 @@ jobs:
           PR_HEAD: ${{ github.event.pull_request.head.sha }}
           PR_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           python3 v2/gates/verify_normalization_candidate.py "$PR_NUMBER" "$PR_HEAD" "$PR_BASE"
-      - name: Preserve release and retirement block
+      - name: Preserve release block
         run: |
-          echo 'Candidate-only evidence audit. Not user approval, merge permission, APK acceptance, or legacy gate retirement.'
+          echo 'AUDIT_OK does not mean release authorization. RELEASE_BLOCKED remains until independent evidence.'
