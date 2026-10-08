@@ -7,6 +7,10 @@ on:
       - cb6-v2-clean
     paths:
       - '.github/workflows/build_cb6_v2_signals_standard_poc.yml'
+      - 'v2/**'
+      - 'scripts/**'
+      - 'CB6_*.py'
+      - 'validate_package.py'
 
 permissions:
   contents: read
@@ -33,6 +37,11 @@ jobs:
           mkdir -p out
           git rev-parse HEAD > out/WORKFLOW_SHA.txt
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf "event=%s\ncommit=%s\nref=%s\nrun=%s\nattempt=%s\n" "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$GITHUB_REF" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > out/BUILD_PROVENANCE.txt
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            test "$(git rev-parse HEAD)" = "$(jq -r .pull_request.merge_commit_sha "$GITHUB_EVENT_PATH")"
+            jq -r '"pr_head=" + .pull_request.head.sha + "\npr_base=" + .pull_request.base.sha' "$GITHUB_EVENT_PATH" >> out/BUILD_PROVENANCE.txt
+          fi
           python3 -m compileall -q v2 scripts CB6_*.py validate_package.py
           ! grep -E 'apply_cb6_|Cb6SupplementManager|nativeSetCb6DrivingMarks' v2/signals/apply_signals.py
 
@@ -145,10 +154,14 @@ jobs:
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
           "$APKSIGNER" verify --verbose out/CB6-V2-Gate1-Signals-arm64.apk | tee out/SIGNATURE_VERIFY.txt
           sha256sum out/CB6-V2-Gate1-Signals-arm64.apk | tee out/SHA256SUMS.txt
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          grep -Fx "commit=$GITHUB_SHA" out/BUILD_PROVENANCE.txt
+          test -s out/SHA256SUMS.txt
 
 
 
       - name: Upload verified Signal PoC APK and direct evidence
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: CB6-Signal-Standard-PoC-arm64
