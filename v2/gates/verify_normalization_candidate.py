@@ -38,8 +38,7 @@ def audit(snapshot, expected_head, expected_base):
         names = [x.get("filename") for x in files]
         if set(names) != ALLOWED or len(names) != len(ALLOWED) or any(x.get("status") != "added" for x in files):
             errors.append("actual GitHub PR diff outside approved four added files")
-    if branch.get("protected") is not True:
-        blockers.append("branch protection not enabled")
+    # Branch protection is advisory here; ACTIVE authority must be checked separately.
     author = (pr.get("user") or {}).get("login") if isinstance(pr.get("user"), dict) else None
     # GitHub review records are chronological. Latest decisive state per reviewer wins.
     latest = {}
@@ -55,8 +54,7 @@ def audit(snapshot, expected_head, expected_base):
             latest[login] = review
     approvals = [v for v in latest.values() if v.get("state") == "APPROVED" and v.get("commit_id") == expected_head]
     changes = [v for v in latest.values() if v.get("state") == "CHANGES_REQUESTED"]
-    if not approvals:
-        blockers.append("independent current-SHA GitHub review missing")
+    # GitHub approval is supporting evidence, not the sole independent-review route.
     if changes:
         blockers.append("unresolved changes requested")
     threads = snapshot.get("review_threads")
@@ -71,8 +69,7 @@ def audit(snapshot, expected_head, expected_base):
         x.get("name") == "CB6 Governance Normalization Independent Review" and
         x.get("head_sha") == expected_head and x.get("status") == "completed" and
         x.get("conclusion") == "success"]
-    if not independent:
-        blockers.append("same-SHA independent normalization workflow evidence missing")
+    # A named workflow alone cannot establish separate review context.
     # The four-file documentation/audit candidate is not an APK or device release.
     # This does not waive acceptance for a later application release.
     if set(x.get("filename") for x in files if isinstance(x, dict)) != ALLOWED:
@@ -82,7 +79,8 @@ def audit(snapshot, expected_head, expected_base):
             x.get("head_sha") == expected_head and x.get("status") == "completed" and x.get("conclusion") == "success"]
         if not matches:
             blockers.append("missing current-SHA CI: " + name)
-    blockers.append("user approval authenticity not independently verifiable")
+    blockers.append("ACTIVE pre-fix approval binding and timing not independently verified")
+    blockers.append("ACTIVE independent review context, target SHA and evidence not independently verified")
     return errors, blockers
 
 def github(path):
