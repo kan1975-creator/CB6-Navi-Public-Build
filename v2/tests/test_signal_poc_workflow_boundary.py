@@ -20,7 +20,7 @@ def rejects(name, source, label):
 
 rejects("build_other_workflow.yml", workflow, "exception expansion")
 for token in m.REQUIRED:
-    rejects(m.POC_WORKFLOW, workflow.replace(token, "REMOVED", 1), "missing "+token)
+    rejects(m.POC_WORKFLOW, workflow.replace(token, "REMOVED"), "missing "+token)
 rejects(m.POC_WORKFLOW, workflow.replace('test "$(git rev-parse HEAD)" = "$GITHUB_SHA"', 'echo "$GITHUB_SHA"', 1), "HEAD check missing")
 rejects(m.POC_WORKFLOW, workflow.replace("          python3 v2/baseline/apply_identity.py comaps", "          python3 v2/baseline/apply_identity.py comaps\n          test \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\"", 1).replace('          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"\n', "", 1), "late HEAD check")
 rejects(m.POC_WORKFLOW, workflow+"\nGITHUB_SHA: forged\n", "HEAD override")
