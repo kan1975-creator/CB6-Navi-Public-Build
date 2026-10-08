@@ -174,9 +174,23 @@ def fetch_snapshot(pr_number):
     runs_data = github("/actions/runs?head_sha=" + pr["head"]["sha"] + "&per_page=100")
     if runs_data.get("total_count", 0) > len(runs_data.get("workflow_runs", [])):
         raise ValueError("workflow runs pagination incomplete")
+    # Fetch GitHub provenance, never promote PR prose into user approval.
+    commits = github("/pulls/" + str(pr_number) + "/commits?per_page=100")
+    if len(commits) >= 100 or len(commits) != pr.get("commits"):
+        raise ValueError("PR commit pagination incomplete")
+    comments = github("/issues/" + str(pr_number) + "/comments?per_page=100")
+    if len(comments) >= 100:
+        raise ValueError("PR comment pagination incomplete")
+    if any(not isinstance(x, dict) or not isinstance(x.get("sha"), str)
+           or not isinstance(x.get("commit"), dict) for x in commits):
+        raise ValueError("malformed PR commit evidence")
+    if any(not isinstance(x, dict) or not isinstance(x.get("user"), dict)
+           or not isinstance(x.get("created_at"), str) for x in comments):
+        raise ValueError("malformed PR comment evidence")
     return {"pr": pr, "files": files, "reviews": reviews,
             "review_threads": fetch_review_threads(pr_number),
-            "runs": runs_data["workflow_runs"], "branch": github("/branches/" + branch_name)}
+            "runs": runs_data["workflow_runs"], "branch": github("/branches/" + branch_name),
+            "commits": commits, "comments": comments}
 
 def main():
     if len(sys.argv) != 4 or not os.environ.get("GITHUB_TOKEN"):
