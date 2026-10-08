@@ -27,11 +27,11 @@ rejects(m.POC_WORKFLOW, workflow.replace("          python3 v2/tests/test_signal
 rejects(m.POC_WORKFLOW, workflow.replace('          grep -Fx "commit=$GITHUB_SHA" out/BUILD_PROVENANCE.txt', '          echo "commit=$GITHUB_SHA"'), "unbound provenance")
 def mutate_verified_upload_condition(source):
     """Target the verified-upload step; reject a no-op mutation."""
-    marker = "      - name: Upload verified Signal PoC APK and direct evidence\\n"
+    marker = "      - name: Upload verified Signal PoC APK and direct evidence\n"
     if source.count(marker) != 1:
         raise SystemExit("FAIL upload step missing or duplicated")
     start = source.index(marker) + len(marker)
-    end = source.find("\\n      - name: ", start)
+    end = source.find("\n      - name: ", start)
     if end == -1:
         end = len(source)
     block = source[start:end]
