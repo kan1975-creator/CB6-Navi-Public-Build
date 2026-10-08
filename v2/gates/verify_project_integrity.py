@@ -141,6 +141,8 @@ for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(enc
  if token not in signal_selftest: fail("signal audit selftest not derived from current spec")
 if '"return 12;", "return 11;"' in signal_selftest: fail("signal audit selftest contains stale hardcoded zoom")
 
+from signal_poc_workflow_boundary import validate_poc_workflow, POC_WORKFLOW
+
 # Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
 wfdir=ROOT/".github/workflows"
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
@@ -156,6 +158,10 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   # GitHub owns GITHUB_SHA. Build workflows must not shadow, clear or rewrite it.
   if any(line.strip().startswith("GITHUB_SHA:") or line.strip().startswith("GITHUB_SHA=") for line in s.splitlines()) or "unset GITHUB_SHA" in s:
    fail("build workflow overrides GITHUB_SHA: "+p.name)
+  if p.name==POC_WORKFLOW:
+   try: validate_poc_workflow(p.name,s)
+   except ValueError as e: fail("PoC direct-check boundary violated: "+str(e))
+   continue
   token="verify_project_gate.py --require-feature-build --feature="
   if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
   freeze_token="verify_method_freeze.py"
@@ -182,6 +188,10 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
    parts=stripped.split()
    if len(parts)>=2 and parts[0]=="git" and parts[1] in {"checkout","reset","switch","pull","fetch"}: dangerous.append(stripped)
   if dangerous: fail("control repo can change after feature gate: "+p.name+" -> "+" | ".join(dangerous))
+
+import subprocess as _poc_subprocess
+_poc_test=_poc_subprocess.run(["python3","v2/tests/test_signal_poc_workflow_boundary.py"],cwd=ROOT,capture_output=True,text=True)
+if _poc_test.returncode: fail("PoC workflow exception destructive tests failed: "+_poc_test.stdout+" "+_poc_test.stderr)
 
 # APK-evidence template is part of the development method and must remain fail-closed.
 apk_template=load("v2/gates/apk_evidence/TEMPLATE.json")
