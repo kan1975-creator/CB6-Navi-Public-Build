@@ -30,7 +30,7 @@ def audit(snapshot, expected_head, expected_base):
     if pr.get("state") != "open" or pr.get("draft") is not True:
         blockers.append("candidate PR must remain open and draft")
     names = [x.get("filename") for x in files if isinstance(x, dict)]
-    if len(names) != len(files) or set(names) != ALLOWED or len(names) != len(set(names)) or any(x.get("status") != "modified" for x in files):
+    if len(names) != len(files) or set(names) != ALLOWED or len(names) != len(set(names)) or any(x.get("status") != "added" for x in files):
         blockers.append("actual GitHub PR diff outside approved four modified files")
     if branch.get("protected") is not True:
         blockers.append("branch protection not enabled")
