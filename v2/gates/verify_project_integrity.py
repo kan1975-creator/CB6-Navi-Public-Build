@@ -189,6 +189,10 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
    if len(parts)>=2 and parts[0]=="git" and parts[1] in {"checkout","reset","switch","pull","fetch"}: dangerous.append(stripped)
   if dangerous: fail("control repo can change after feature gate: "+p.name+" -> "+" | ".join(dangerous))
 
+import subprocess as _poc_subprocess
+_poc_test=_poc_subprocess.run(["python3","v2/tests/test_signal_poc_workflow_boundary.py"],cwd=ROOT,capture_output=True,text=True)
+if _poc_test.returncode: fail("PoC workflow exception destructive tests failed: "+_poc_test.stdout+" "+_poc_test.stderr)
+
 # APK-evidence template is part of the development method and must remain fail-closed.
 apk_template=load("v2/gates/apk_evidence/TEMPLATE.json")
 required_apk_template_fields={"schema","feature_id","build_commit","feature_gate","apk_path","apk_sha256","apk_checks","status"}
