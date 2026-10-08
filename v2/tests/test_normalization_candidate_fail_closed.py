@@ -10,7 +10,7 @@ m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 h, b = "a"*40, "b"*40
 base = {"pr":{"head":{"sha":h},"base":{"sha":b},"state":"open","draft":True,"user":{"login":"author"}},
-        "files":[{"filename":x,"status":"modified"} for x in sorted(m.ALLOWED)],
+        "files":[{"filename":x,"status":"added"} for x in sorted(m.ALLOWED)],
         "reviews":[{"state":"APPROVED","commit_id":h,"user":{"login":"independent"}}],
         "runs":[{"name":n,"head_sha":h,"status":"completed","conclusion":"success"} for n in m.REQUIRED_CHECKS],
         "branch":{"protected":True,"commit":{"sha":b}}}
