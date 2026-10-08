@@ -79,8 +79,45 @@ def audit(snapshot, expected_head, expected_base):
             x.get("head_sha") == expected_head and x.get("status") == "completed" and x.get("conclusion") == "success"]
         if not matches:
             blockers.append("missing current-SHA CI: " + name)
-    blockers.append("ACTIVE pre-fix approval binding and timing not independently verified")
-    blockers.append("ACTIVE independent review context, target SHA and evidence not independently verified")
+    # Evidence is verified against GitHub API metadata, never against a local
+    # candidate assertion or same-workflow success. A review is supporting
+    # evidence only: an independent review context must also be evidenced.
+    approval = snapshot.get("approval_evidence")
+    if not isinstance(approval, dict):
+        blockers.append("ACTIVE pre-fix approval binding and timing not independently verified")
+    else:
+        required = ("approval_id", "approved_at", "proposed_change_id",
+                    "approved_change_summary", "github_reference",
+                    "implementation_started_at")
+        if any(not isinstance(approval.get(k), str) or not approval[k].strip() for k in required):
+            blockers.append("ACTIVE pre-fix approval evidence incomplete")
+        elif (approval["approved_at"] >= approval["implementation_started_at"]
+              or approval["proposed_change_id"] != approval.get("change_id")
+              or approval["github_reference"] not in (pr.get("body") or "")):
+            blockers.append("ACTIVE pre-fix approval binding or timing invalid")
+        else:
+            # The reference's presence does not authenticate the user who
+            # granted approval. An independently verified provenance is needed.
+            if approval.get("authenticated_by") != "independent_external_verification":
+                blockers.append("ACTIVE pre-fix approval authenticity not independently verified")
+    review_evidence = snapshot.get("independent_review_evidence")
+    if not isinstance(review_evidence, dict):
+        blockers.append("ACTIVE independent review context, target SHA and evidence not independently verified")
+    else:
+        if (review_evidence.get("target_commit") != expected_head
+            or review_evidence.get("implementation_context_shared") is not False
+            or review_evidence.get("result") != "ACCEPTED"
+            or review_evidence.get("checklist") != "v2/governance/audit_checklist_v1.md"
+            or not isinstance(review_evidence.get("evidence"), list)
+            or not review_evidence["evidence"]
+            or not review_evidence.get("review_context")):
+            blockers.append("ACTIVE independent review evidence invalid or stale")
+        elif review_evidence.get("verified_external_provenance") is not True:
+            blockers.append("ACTIVE independent review separation not independently verified")
+        else:
+            # A supplied boolean is not a proof of separate context.
+            blockers.append("ACTIVE independent review provenance requires external attestation")
+
     return errors, blockers
 
 def github(path):
