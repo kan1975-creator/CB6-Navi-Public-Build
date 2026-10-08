@@ -7,20 +7,12 @@ on:
       - 'v2/gates/verify_normalization_candidate.py'
       - 'v2/tests/test_normalization_candidate_fail_closed.py'
       - '.github/workflows/cb6_normalization_candidate.yml'
-  workflow_dispatch:
-    inputs:
-      review_mode:
-        description: 'Run separate evidence-only independent-review candidate'
-        required: true
-        type: choice
-        options: [independent-review]
 permissions:
   contents: read
   pull-requests: read
   actions: read
 jobs:
   candidate:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,8 +37,8 @@ jobs:
           echo 'AUDIT_OK does not mean release authorization. RELEASE_BLOCKED remains until independent evidence.'
 
   independent-review-candidate:
-    # Separate dispatch/run, not a self-approval or an ACTIVE independent acceptance.
-    if: github.event_name == 'workflow_dispatch' && inputs.review_mode == 'independent-review'
+    # Separate job on the same PR event; NOT an independent workflow or certified review.
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -76,6 +68,6 @@ jobs:
           rules={x['id']:x for x in reg['rules']}
           assert rules['OPS-INDEPENDENT-ACCEPTANCE-001']['status']=='ACTIVE'
           assert rules['OPS-USER-APPROVAL-BEFORE-FIX-001']['status']=='ACTIVE'
-          print('INDEPENDENT_CANDIDATE_CHECK_OK: separate-run scope and ACTIVE rules reconstructed')
-          print('RELEASE_BLOCKED: no independent human approval or certified independent context')
+          print('RECONSTRUCTION_CANDIDATE_CHECK_OK: PR-triggered scope and ACTIVE rules reconstructed')
+          print('RELEASE_BLOCKED: same-workflow job does not establish independent review')
           PY
