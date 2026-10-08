@@ -141,6 +141,8 @@ for token in ['SPEC=json.loads((ROOT/"v2/gates/current_spec.json").read_text(enc
  if token not in signal_selftest: fail("signal audit selftest not derived from current spec")
 if '"return 12;", "return 11;"' in signal_selftest: fail("signal audit selftest contains stale hardcoded zoom")
 
+from v2.gates.signal_poc_workflow_boundary import validate_poc_workflow, POC_WORKFLOW
+
 # Any workflow that can run on cb6-v2-clean and can build must fail closed through the gate.
 wfdir=ROOT/".github/workflows"
 for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
@@ -156,6 +158,10 @@ for p in sorted(list(wfdir.glob("*.yml"))+list(wfdir.glob("*.yaml"))):
   # GitHub owns GITHUB_SHA. Build workflows must not shadow, clear or rewrite it.
   if any(line.strip().startswith("GITHUB_SHA:") or line.strip().startswith("GITHUB_SHA=") for line in s.splitlines()) or "unset GITHUB_SHA" in s:
    fail("build workflow overrides GITHUB_SHA: "+p.name)
+  if p.name==POC_WORKFLOW:
+   try: validate_poc_workflow(p.name,s)
+   except ValueError as e: fail("PoC direct-check boundary violated: "+str(e))
+   continue
   token="verify_project_gate.py --require-feature-build --feature="
   if token not in s: fail("V2 build workflow bypasses feature gate: "+p.name)
   freeze_token="verify_method_freeze.py"
