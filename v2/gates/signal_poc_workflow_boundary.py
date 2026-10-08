@@ -21,14 +21,14 @@ def validate_poc_workflow(name, source):
             raise ValueError("missing PoC requirement: " + token)
     if any(line.strip().startswith(("GITHUB_SHA:", "GITHUB_SHA=")) for line in source.splitlines()) or "unset GITHUB_SHA" in source:
         raise ValueError("GITHUB_SHA override")
-    if "  pull_request:\\n    branches:\\n      - cb6-v2-clean\\n    paths:" not in source:
+    if "  pull_request:\n    branches:\n      - cb6-v2-clean\n    paths:" not in source:
         raise ValueError("missing scoped PR trigger")
     blocks = re.split(r"(?m)^      - name: ", source)
     if len(blocks) < 3:
         raise ValueError("no executable steps")
     steps = {}
     for block in blocks[1:]:
-        name, _, body = block.partition("\\n")
+        name, _, body = block.partition("\n")
         if name in steps:
             raise ValueError("duplicate step")
         steps[name] = body
