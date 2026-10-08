@@ -117,3 +117,47 @@ for name,mutate,needle in [
     errors,blocks=m.audit(data,h,b)
     assert any(needle in x for x in blocks),name+":"+str((errors,blocks))
 print("PASS: valid evidence unlocks candidate blockers; 11 evidence mutations fail closed")
+
+# Read-only GitHub provenance acquisition: metadata is evidence, not approval.
+original_github, original_threads = m.github, m.fetch_review_threads
+api = {
+ "/pulls/4": dict(base["pr"], commits=1, changed_files=len(base["files"]),
+                  number=4),
+ "/pulls/4/files?per_page=100": base["files"],
+ "/pulls/4/reviews?per_page=100": base["reviews"],
+ "/actions/runs?head_sha="+h+"&per_page=100": {
+     "total_count":len(base["runs"]),"workflow_runs":base["runs"]},
+ "/branches/main":base["branch"],
+ "/pulls/4/commits?per_page=100":[{"sha":h,"commit":{"message":"Approved (unverified)"}}],
+ "/issues/4/comments?per_page=100":[{"user":{"login":"author"},
+      "created_at":"2026-10-01T00:00:00Z","body":"I approved (unverified)"}],
+}
+api["/pulls/4"]["base"]["ref"]="main"
+try:
+    m.github=lambda path: copy.deepcopy(api[path])
+    m.fetch_review_threads=lambda number: []
+    snap=m.fetch_snapshot(4)
+    assert len(snap["commits"])==1 and len(snap["comments"])==1
+    assert "approval_evidence" not in snap
+    assert "independent_review_evidence" not in snap
+    errors, blocks=m.audit(snap,h,b)
+    assert not errors and any("ACTIVE pre-fix approval" in x for x in blocks)
+    assert any("ACTIVE independent review" in x for x in blocks)
+    for name, mutate in [
+        ("missing commits",lambda a:a.update({"/pulls/4/commits?per_page=100":[]})),
+        ("commit truncation",lambda a:a["/pulls/4"].update(commits=2)),
+        ("malformed commit",lambda a:a.update({"/pulls/4/commits?per_page=100":[{}]})),
+        ("comment truncation",lambda a:a.update({"/issues/4/comments?per_page=100":[
+            {"user":{"login":"x"},"created_at":"now"}]*100})),
+        ("malformed comment",lambda a:a.update({"/issues/4/comments?per_page=100":[{}]})),
+    ]:
+        mutated=copy.deepcopy(api);mutate(mutated)
+        m.github=lambda path, a=mutated: copy.deepcopy(a[path])
+        try:
+            m.fetch_snapshot(4)
+            assert False, name+" accepted malformed/truncated evidence"
+        except ValueError:
+            pass
+finally:
+    m.github, m.fetch_review_threads=original_github, original_threads
+print("PASS: live provenance acquisition; five truncation/malformed mutations fail closed")
