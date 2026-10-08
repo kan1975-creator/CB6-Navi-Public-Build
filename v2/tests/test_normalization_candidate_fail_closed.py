@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GitHub evidence audit destructive tests, using isolated API-shaped fixtures."""
+"""Candidate phase 3 destructive tests: audit errors vs release blockers."""
 import copy
 import importlib.util
 from pathlib import Path
@@ -14,26 +14,36 @@ base = {"pr":{"head":{"sha":h},"base":{"sha":b},"state":"open","draft":True,"use
         "reviews":[{"state":"APPROVED","commit_id":h,"user":{"login":"independent"}}],
         "runs":[{"name":n,"head_sha":h,"status":"completed","conclusion":"success"} for n in m.REQUIRED_CHECKS],
         "branch":{"protected":True,"commit":{"sha":b}}}
-assert any("approval authenticity" in x for x in m.audit(base,h,b))
-assert any("device acceptance" in x for x in m.audit(base,h,b))
+errors, blockers = m.audit(base,h,b)
+assert not errors and any("approval authenticity" in x for x in blockers)
+assert any("device acceptance" in x for x in blockers)
+assert any("review-thread" in x for x in blockers)
 cases = [
- ("out-of-scope",lambda x:x["files"].append({"filename":"v2/signals/x","status":"added"}),"diff outside"),
- ("stale PR",lambda x:x["pr"]["head"].update(sha="c"*40),"HEAD"),
- ("stale base",lambda x:x["branch"]["commit"].update(sha="c"*40),"HEAD"),
- ("missing review",lambda x:x.update(reviews=[]),"review missing"),
- ("self review",lambda x:x["reviews"][0]["user"].update(login="author"),"review missing"),
- ("stale review",lambda x:x["reviews"][0].update(commit_id="c"*40),"review missing"),
- ("missing CI",lambda x:x.update(runs=[]),"current-SHA CI"),
- ("stale CI",lambda x:x["runs"][0].update(head_sha="c"*40),"current-SHA CI"),
- ("failed CI",lambda x:x["runs"][0].update(conclusion="failure"),"current-SHA CI"),
- ("unprotected",lambda x:x["branch"].update(protected=False),"branch protection"),
- ("not draft",lambda x:x["pr"].update(draft=False),"draft"),
- ("wrong status",lambda x:x["files"][0].update(status="removed"),"diff outside"),
- ("missing API evidence",lambda x:x.update(files=None),"missing GitHub API"),
+ ("out-of-scope",lambda x:x["files"].append({"filename":"v2/signals/x","status":"added"}),"error","diff outside"),
+ ("stale PR",lambda x:x["pr"]["head"].update(sha="c"*40),"error","HEAD"),
+ ("stale base",lambda x:x["branch"]["commit"].update(sha="c"*40),"error","HEAD"),
+ ("missing review",lambda x:x.update(reviews=[]),"block","review missing"),
+ ("self review",lambda x:x["reviews"][0]["user"].update(login="author"),"block","review missing"),
+ ("stale review",lambda x:x["reviews"][0].update(commit_id="c"*40),"block","review missing"),
+ ("withdrawn approval",lambda x:x["reviews"].append({"state":"DISMISSED","commit_id":h,"user":{"login":"independent"}}),"block","review missing"),
+ ("latest changes requested",lambda x:x["reviews"].append({"state":"CHANGES_REQUESTED","commit_id":h,"user":{"login":"independent"}}),"block","unresolved changes"),
+ ("other reviewer changes requested",lambda x:x["reviews"].append({"state":"CHANGES_REQUESTED","commit_id":h,"user":{"login":"other"}}),"block","unresolved changes"),
+ ("missing CI",lambda x:x.update(runs=[]),"block","current-SHA CI"),
+ ("stale CI",lambda x:x["runs"][0].update(head_sha="c"*40),"block","current-SHA CI"),
+ ("failed CI",lambda x:x["runs"][0].update(conclusion="failure"),"block","current-SHA CI"),
+ ("unprotected",lambda x:x["branch"].update(protected=False),"block","branch protection"),
+ ("not draft",lambda x:x["pr"].update(draft=False),"block","draft"),
+ ("wrong file status",lambda x:x["files"][0].update(status="removed"),"error","diff outside"),
+ ("missing API evidence",lambda x:x.update(files=None),"error","missing GitHub API"),
+ ("malformed review",lambda x:x["reviews"].append(None),"error","malformed review"),
 ]
-for name, mutate, needle in cases:
+for name, mutate, kind, needle in cases:
     data=copy.deepcopy(base)
     mutate(data)
-    assert any(needle in s for s in m.audit(data,h,b)), name
-assert m.audit(None,h,b) == ["malformed GitHub evidence"]
-print("PASS: 14 API-shaped destructive cases; approval/device always blocked")
+    errors, blockers = m.audit(data,h,b)
+    target = errors if kind == "error" else blockers
+    assert any(needle in s for s in target), name
+assert m.audit(None,h,b)[0] == ["malformed GitHub evidence"]
+# CLI must not convert malformed input into a successful advisory audit.
+assert m.main() == 2
+print("PASS: 18 destructive cases; AUDIT_ERROR fails, release blockers remain explicit")
