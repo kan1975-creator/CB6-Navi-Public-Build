@@ -1,0 +1,31 @@
+# CANDIDATE ONLY. Not deployed. This job deliberately fails closed until a
+# separately authorized protected trust anchor and merge-required check exist.
+# pull_request_target uses BASE branch code only. Do not checkout PR HEAD.
+name: CB6 Approval Enforcement Candidate
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+  actions: read
+jobs:
+  approval-enforcement:
+    name: CB6 Approval Enforcement
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout trusted base only (never PR head)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - name: Execute existing candidate regression tests
+        run: python3 -B v2/tests/test_user_approval_before_fix_fail_closed.py -v
+      - name: Block until protected provenance is actually deployed
+        # Intentionally fails: no caller input or runtime flags can grant trust.
+        # It must not be marked continue-on-error.
+        run: python3 -B v2/gates/verify_user_approval_before_fix.py
