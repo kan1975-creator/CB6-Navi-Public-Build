@@ -26,6 +26,12 @@ jobs:
       - name: Execute existing candidate regression tests
         run: python3 -B v2/tests/test_user_approval_before_fix_fail_closed.py -v
       - name: Block until protected provenance is actually deployed
-        # Intentionally fails: no caller input or runtime flags can grant trust.
-        # It must not be marked continue-on-error.
+        # No PR code is checked out. Untrusted event or code cannot grant trust.
         run: python3 -B v2/gates/verify_user_approval_before_fix.py
+      - name: Prevent accidental PASS before independent trust and Required Check
+        # Candidate cannot silently become successful if the verifier changes.
+        # Future activation requires a separately authorized workflow revision.
+        if: always()
+        run: |
+          echo "CB6 C-05/C-07 remains BLOCKED: independent trust, start and revocation authority, GitHub App check origin and required-check policy unproven"
+          exit 1
