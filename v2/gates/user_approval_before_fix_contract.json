@@ -25,6 +25,12 @@
     "prior_user_approval_required": true,
     "separate_gpt_review_required": true,
     "affected_scope_tests_required": true,
-    "does_not_override_active_rules": true
+    "does_not_override_active_rules": true,
+    "user_completion_criteria_decision": {
+      "status": "USER_APPROVED_POLICY_ONLY",
+      "decision_date": "2026-10-13",
+      "deployment_status": "NOT_DEPLOYED",
+      "active_rules_unchanged": true
+    }
   }
 }
