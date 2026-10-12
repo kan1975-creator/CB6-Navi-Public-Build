@@ -422,5 +422,374 @@ class TestStage2ProductionFailClosed(unittest.TestCase):
                 with patch.object(v, 'github_get', side_effect=AssertionError('must not call fake network')):
                     self.assertEqual(v.main(['verify',str(d),str(t)]),1)
 
+
+class TestProtectedLiveHandoffCandidate(unittest.TestCase):
+    """ONLY the new read-only bridge; synthetic responses never authorize PASS."""
+
+    def setUp(self):
+        import base64
+        self.d, self.comment, self.trusted = fixture()
+        self.trusted.update(pr_number=5, pr_head_sha="c"*40,
+                            pr_base_sha="a"*40, pr_base_ref="cb6-v2-clean")
+        self.trusted["plan"]["basis_head"] = "a"*40
+        self.trusted["plan_sha256"] = v.plan_digest(self.trusted["plan"])
+        self.comment["body"] = ("CB6-APPROVE change-A " +
+                                self.trusted["plan_sha256"] + " " + "b"*40)
+        self.changed = [{"filename":"v2/gates/a","status":"modified"}]
+        self.pr = {"number":5, "state":"open", "changed_files":1,
+                   "head":{"sha":"c"*40},
+                   "base":{"sha":"a"*40,"ref":"cb6-v2-clean",
+                           "repo":{"full_name":REPO}}}
+        self.plan_blob = base64.b64encode(
+            __import__('json').dumps(self.trusted['plan']).encode()).decode()
+        self.end_comment = copy.deepcopy(self.comment)
+        self.requests = []
+
+    def api(self, repo, endpoint, token):
+        self.assertEqual(repo, REPO)
+        self.assertEqual(token, 'fake')
+        self.requests.append(endpoint)
+        if endpoint == '/issues/comments/42':
+            if self.requests.count(endpoint) > 1:
+                return copy.deepcopy(self.end_comment)
+            return copy.deepcopy(self.comment)
+        if endpoint == '/contents/approval-plan.json?ref=' + 'b'*40:
+            return {'encoding':'base64','type':'file','content':self.plan_blob}
+        if endpoint == '/commits/' + 'b'*40:
+            return {'sha':'b'*40, 'commit':{'committer':{'date':'2026-10-08T08:59:00Z'}}}
+        if endpoint == '/pulls/5': return copy.deepcopy(self.pr)
+        if endpoint == '/pulls/5/files?per_page=100&page=1':
+            return copy.deepcopy(self.changed)
+        raise OSError('unexpected read endpoint')
+
+    def inspect(self, trusted=None, api=None):
+        return v.inspect_live_provenance_candidate(
+            self.d, self.trusted if trusted is None else trusted,
+            'fake', self.api if api is None else api)
+
+    def test_connected_reads_still_cannot_grant_production_pass(self):
+        claimed=copy.deepcopy(self.trusted)
+        claimed.update(trust_anchor_provisioned_externally=True,
+                       implementation_event_verified=True,
+                       plan_anchor_verified=True,revoked=False,
+                       issuer_status='success')
+        result=self.inspect(trusted=claimed)
+        self.assertEqual(len(result),1)
+        self.assertIn('PROVENANCE_BLOCKED',result[0])
+        self.assertEqual(self.requests.count('/issues/comments/42'),2)
+        self.assertEqual(self.requests.count('/pulls/5'),2)
+        # Actual production entrypoint must remain an unconditional blocker.
+        self.assertIn('PROVENANCE_BLOCKED',v.verify_live(self.d,claimed,'fake')[0])
+
+    def test_approval_modified_during_scope_review_rejects(self):
+        self.end_comment['updated_at']='2026-10-08T09:05:00Z'
+        result=self.inspect()
+        self.assertIn('edited comment',str(result))
+        self.assertIn('PROVENANCE_BLOCKED',str(result))
+
+    def test_live_plan_scope_mismatch_rejects_before_api(self):
+        forged=copy.deepcopy(self.trusted)
+        forged['plan']['planned_paths']=['v2/forged.py']
+        result=self.inspect(trusted=forged)
+        self.assertIn('scope plan hash mismatch',str(result))
+        self.assertFalse(self.requests)
+
+    def test_changed_pr_head_rejects_and_stays_blocked(self):
+        self.pr['head']['sha']='d'*40
+        result=self.inspect()
+        self.assertIn('PR HEAD mismatch',str(result))
+        self.assertIn('PROVENANCE_BLOCKED',str(result))
+
+    def test_comment_deleted_or_api_failure_stays_blocked(self):
+        import urllib.error
+        def deleted(repo, endpoint, token):
+            if endpoint == '/issues/comments/42':
+                raise urllib.error.HTTPError('https://api.github.com',404,'missing',{},None)
+            return self.api(repo,endpoint,token)
+        result=self.inspect(api=deleted)
+        self.assertIn('PROVENANCE_BLOCKED',str(result))
+        self.assertIn('404',str(result))
+
+    def test_missing_protected_input_and_self_asserted_revocation(self):
+        forged=copy.deepcopy(self.trusted)
+        forged.update(revoked=False,plan_anchor_verified=True,
+                      implementation_event_verified=True)
+        forged['repository']='outsider/fork'
+        self.assertIn('PROVENANCE_BLOCKED',str(self.inspect(trusted=forged)))
+        self.assertFalse(self.requests)
+        self.assertIn('PROVENANCE_BLOCKED',str(self.inspect()))
+
+
+
+class TestNewC05C07Bridge(unittest.TestCase):
+    """ONLY new C-05/C-07 connector behavior, not the previous passing suite."""
+    def test_authenticated_blocking_check_still_blocks_production(self):
+        d = {"repository": REPO, "pr_head_sha": "a"*40,
+             "proposed_change_id": "change-A", "plan_sha256": "c"*64}
+        def api(repo, endpoint, token):
+            self.assertEqual(endpoint, "/commits/" + "a"*40 + "/check-runs?per_page=100")
+            return {"total_count": 1, "check_runs": [{
+                "name":"CB6 Approval Enforcement", "head_sha":"a"*40,
+                "external_id":"CB6-BLOCKED:change-A:"+"c"*64+":"+"a"*40,
+                "app":{"id":123}, "status":"completed", "conclusion":"failure"}]}
+        self.assertIn("PROVENANCE_BLOCKED", v.observe_independent_check_candidate(
+            d, "token", api, 123)[0])
+
+    def test_forged_and_stale_check_rejected(self):
+        d = {"repository": REPO, "pr_head_sha": "a"*40,
+             "proposed_change_id": "change-A", "plan_sha256": "c"*64}
+        for forged in (
+            {"name":"CB6 Approval Enforcement", "head_sha":"b"*40,
+             "external_id":"CB6-BLOCKED:change-A:"+"c"*64+":"+"a"*40,
+             "app":{"id":123}, "status":"completed", "conclusion":"failure"},
+            {"name":"CB6 Approval Enforcement", "head_sha":"a"*40,
+                "external_id":"CB6-BLOCKED:change-A:"+"c"*64+":"+"a"*40,
+             "app":{"id":999}, "status":"completed", "conclusion":"failure"},
+            {"name":"CB6 Approval Enforcement", "head_sha":"a"*40,
+             "external_id":"CB6-BLOCKED:change-A:"+"c"*64+":"+"a"*40,
+             "app":{"id":123}, "status":"completed", "conclusion":"success"},
+            {"name":"CB6 Approval Enforcement", "head_sha":"a"*40,
+             "external_id":"CB6-BLOCKED:change-B:"+"c"*64+":"+"a"*40,
+             "app":{"id":123}, "status":"completed", "conclusion":"failure"},
+        ):
+            with self.subTest(forged=forged):
+                fetch=lambda repo, endpoint, token: {"total_count":1,"check_runs":[forged]}
+                e=v.observe_independent_check_candidate(d,"token",fetch,123)
+                self.assertIn("rejected",e[0]);self.assertIn("PROVENANCE_BLOCKED",e[-1])
+
+    def test_incomplete_check_and_missing_anchor_rejected(self):
+        d = {"repository": REPO, "pr_head_sha": "a"*40,
+             "proposed_change_id": "change-A", "plan_sha256": "c"*64}
+        for data in ({"total_count":101,"check_runs":[]},
+                     {"total_count":2,"check_runs":[]},
+                     {"total_count":0,"check_runs":[]}):
+            errors=v.observe_independent_check_candidate(d,"token",lambda *args:data,123)
+            self.assertIn("PROVENANCE_BLOCKED",errors[-1])
+        self.assertIn("App ID unprovisioned",str(v.observe_independent_check_candidate(
+            d,"token",lambda *args:None,None)))
+
+    def test_sql_decision_ledger_is_candidate_and_immutable(self):
+        import sqlite3
+        schema=(P.parents[2]/"db"/"schema.sql").read_text()
+        db=sqlite3.connect(":memory:")
+        db.executescript(schema)
+        row=("00000000-0000-4000-8000-000000000001","f"*64,101,1,"a"*40,"b"*40,
+             "change-A","c"*64,"d"*40,"APPROVE",42,313684924,"2026-10-12T01:00:00Z")
+        sql="""INSERT INTO issuer_decision_event_candidate
+          (delivery_id,body_sha256,repository_id,pr_number,pr_head_sha,basis_head,
+           change_id,plan_sha256,plan_commit_sha,decision,github_comment_id,
+           github_actor_id,github_created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+        db.execute(sql,row)
+        with self.assertRaises(sqlite3.IntegrityError): db.execute(sql,row)
+        with self.assertRaises(sqlite3.IntegrityError): db.execute(
+            "UPDATE issuer_decision_event_candidate SET decision='REVOKE'")
+        with self.assertRaises(sqlite3.IntegrityError): db.execute(
+            "DELETE FROM issuer_decision_event_candidate")
+        self.assertEqual(db.execute("SELECT gate_verdict FROM issuer_decision_event_candidate").fetchone(),
+                         ("BLOCKED_UNVERIFIED",))
+        for idx,val in ((11,1),(3,0),(7,"g"*64),(9,"GRANT")):
+            bad=list(row);bad[0]="00000000-0000-4000-8000-000000000002";bad[1]="e"*64
+            bad[10]=43;bad[idx]=val
+            with self.subTest(idx=idx), self.assertRaises(sqlite3.IntegrityError):
+                db.execute(sql,bad)
+        db.close()
+
+
+class TestNewFiveFileTimelineDelta(unittest.TestCase):
+    """Only new 5-file candidate boundary, not earlier accepted AC/DT tests."""
+
+    @staticmethod
+    def identity():
+        return {"repository_id": 101, "pr_number": 5, "change_id": "change-A",
+                "plan_sha256": "c"*64, "plan_commit_sha": "d"*40,
+                "head_sha": "a"*40, "basis_head": "b"*40}
+
+    @classmethod
+    def row(cls, timestamp, decision=None):
+        d = cls.identity()
+        d["pr_head_sha"] = d.pop("head_sha")
+        d["github_created_at"] = timestamp
+        if decision is not None:
+            d["decision"] = decision
+        return d
+
+    def test_prestart_approval_still_blocks_without_independent_authority(self):
+        approval = self.row("2026-10-12T10:00:00Z", "APPROVE")
+        start = self.row("2026-10-12T10:01:00Z")
+        result = v.inspect_captured_timeline_candidate(self.identity(), [start], [approval])
+        self.assertEqual(len(result), 1)
+        self.assertIn("PROVENANCE_BLOCKED", result[-1])
+
+    def test_captured_revocation_blocks(self):
+        approval = self.row("2026-10-12T10:00:00Z", "APPROVE")
+        revoke = self.row("2026-10-12T10:03:00Z", "REVOKE")
+        start = self.row("2026-10-12T10:01:00Z")
+        result = v.inspect_captured_timeline_candidate(self.identity(), [start], [approval, revoke])
+        self.assertIn("recorded revocation blocks approval", result)
+        self.assertIn("PROVENANCE_BLOCKED", result[-1])
+
+    def test_posthoc_approval_rejected(self):
+        approval = self.row("2026-10-12T10:02:00Z", "APPROVE")
+        start = self.row("2026-10-12T10:01:00Z")
+        result = v.inspect_captured_timeline_candidate(self.identity(), [start], [approval])
+        self.assertIn("approval not before captured start", result)
+
+    def test_stale_head_and_crossplan_rows_rejected(self):
+        approval = self.row("2026-10-12T10:00:00Z", "APPROVE")
+        start = self.row("2026-10-12T10:01:00Z")
+        approval["pr_head_sha"] = "b"*40
+        self.assertIn("stale PR HEAD", str(v.inspect_captured_timeline_candidate(
+            self.identity(), [start], [approval])))
+        approval["pr_head_sha"] = "a"*40
+        approval["plan_sha256"] = "e"*64
+        self.assertIn("cross-plan", str(v.inspect_captured_timeline_candidate(
+            self.identity(), [start], [approval])))
+        approval["plan_sha256"] = "c"*64
+        approval["basis_head"] = "f"*40
+        self.assertIn("cross-plan", str(v.inspect_captured_timeline_candidate(
+            self.identity(), [start], [approval])))
+
+    def test_missing_start_and_approval_cannot_grant_pass(self):
+        result = v.inspect_captured_timeline_candidate(self.identity(), [], [])
+        self.assertIn("missing or ambiguous captured start", result)
+        self.assertIn("missing or ambiguous captured approval", result)
+        self.assertIn("PROVENANCE_BLOCKED", result[-1])
+
+    @staticmethod
+    def make_db():
+        import sqlite3
+        db = sqlite3.connect(":memory:")
+        db.executescript((P.parents[2]/"db"/"schema.sql").read_text())
+        return db
+
+    @staticmethod
+    def insert_decision(db, delivery, body, comment, timestamp, decision):
+        return db.execute("""INSERT INTO issuer_decision_event_candidate
+             (delivery_id, body_sha256, repository_id, pr_number, pr_head_sha,
+              basis_head, change_id, plan_sha256, plan_commit_sha, decision,
+              github_comment_id, github_actor_id, github_created_at)
+             VALUES (?, ?, 101, 5, ?, ?, 'change-A', ?, ?, ?, ?, 313684924, ?)""",
+            (delivery, body, "a"*40, "b"*40, "c"*64, "d"*40, decision, comment, timestamp))
+
+    @staticmethod
+    def insert_start(db, delivery, body, comment, timestamp):
+        return db.execute("""INSERT INTO issuer_start_observation_candidate
+             (delivery_id, body_sha256, repository_id, pr_number, pr_head_sha,
+              basis_head, change_id, plan_sha256, plan_commit_sha,
+              github_comment_id, github_actor_id, github_created_at)
+             VALUES (?, ?, 101, 5, ?, ?, 'change-A', ?, ?, ?, 313684924, ?)""",
+            (delivery, body, "a"*40, "b"*40, "c"*64, "d"*40, comment, timestamp))
+
+    def test_sql_atomic_revocation_before_approval(self):
+        import sqlite3
+        db = self.make_db()
+        self.insert_decision(db, "revoke-id", "f"*64, 40, "2026-10-12T10:03:00Z", "REVOKE")
+        with self.assertRaisesRegex(sqlite3.IntegrityError, "prior_revocation"):
+            self.insert_decision(db, "approve-id", "e"*64, 41, "2026-10-12T10:00:00Z", "APPROVE")
+        self.assertEqual(db.execute("SELECT count(*) FROM issuer_decision_event_candidate").fetchone()[0], 1)
+        db.close()
+
+    def test_sql_late_approval_rejected_start_first(self):
+        import sqlite3
+        db = self.make_db()
+        self.insert_start(db, "start-id", "f"*64, 40, "2026-10-12T10:01:00Z")
+        with self.assertRaisesRegex(sqlite3.IntegrityError, "approval_not_before_captured_start"):
+            self.insert_decision(db, "approve-id", "e"*64, 41, "2026-10-12T10:02:00Z", "APPROVE")
+        db.close()
+
+    def test_sql_late_approval_rejected_approval_first(self):
+        import sqlite3
+        db = self.make_db()
+        self.insert_decision(db, "approve-id", "e"*64, 41, "2026-10-12T10:02:00Z", "APPROVE")
+        with self.assertRaisesRegex(sqlite3.IntegrityError, "observed_start_not_after_approval"):
+            self.insert_start(db, "start-id", "f"*64, 40, "2026-10-12T10:01:00Z")
+        db.close()
+
+    def test_sql_start_is_immutable_and_non_authorizing(self):
+        import sqlite3
+        db = self.make_db()
+        self.insert_start(db, "start-id", "f"*64, 40, "2026-10-12T10:01:00Z")
+        self.assertEqual(db.execute("SELECT gate_verdict FROM issuer_start_observation_candidate").fetchone(),
+                         ("BLOCKED_UNVERIFIED",))
+        with self.assertRaises(sqlite3.IntegrityError):
+            db.execute("DELETE FROM issuer_start_observation_candidate")
+        with self.assertRaises(sqlite3.IntegrityError):
+            db.execute("UPDATE issuer_start_observation_candidate SET github_created_at='2026-10-12T01:00:00Z'")
+        db.close()
+
+    def test_candidate_workflow_guarantees_failure(self):
+        text = (P.parents[2]/".github"/"workflows"/"cb6_approval_enforcement.yml").read_text()
+        self.assertIn("ref: ${{ github.event.pull_request.base.sha }}", text)
+        self.assertIn("persist-credentials: false", text)
+        self.assertIn("if: always()", text)
+        self.assertIn("exit 1", text)
+        self.assertNotIn("continue-on-error: true", text)
+
+
+class TestNewBlockedCheckHandshakeOnly(unittest.TestCase):
+    """NEW delta only: Check identity handshake is never a PASS source."""
+
+    def setUp(self):
+        self.d = {"repository": REPO, "pr_number": 5, "pr_head_sha": "a"*40,
+                  "pr_base_sha": "b"*40, "pr_base_ref": "cb6-v2-clean",
+                  "proposed_change_id": "change-A", "plan_sha256": "c"*64}
+        self.check = {"name": "CB6 Approval Enforcement", "head_sha": "a"*40,
+                      "external_id": "CB6-BLOCKED:change-A:" + "c"*64 + ":" + "a"*40,
+                      "status": "completed", "conclusion": "failure", "app": {"id": 123}}
+        self.pr = {"number": 5, "state": "open", "head": {"sha": "a"*40},
+                   "base": {"sha": "b"*40, "ref": "cb6-v2-clean",
+                            "repo": {"id": 101, "full_name": REPO}}}
+
+    def api(self, repo, endpoint, token):
+        self.assertEqual(repo, REPO)
+        if endpoint == "/pulls/5":
+            return copy.deepcopy(self.pr)
+        if endpoint == "/commits/" + "a"*40 + "/check-runs?per_page=100":
+            return {"total_count": 1, "check_runs": [copy.deepcopy(self.check)]}
+        raise AssertionError("unexpected endpoint " + endpoint)
+
+    def test_new_blocking_handshake_is_not_authorization(self):
+        result = v.inspect_live_blocked_issuer_candidate(self.d, "token", self.api, 123, 101)
+        self.assertEqual(len(result), 1)
+        self.assertIn("PROVENANCE_BLOCKED", result[0])
+
+    def test_new_stale_and_cross_plan_check_rejected(self):
+        for field, value in (("head_sha", "f"*40),
+                             ("external_id", "CB6-BLOCKED:other:" + "c"*64 + ":" + "a"*40),
+                             ("conclusion", "success"),
+                             ("app", {"id": 999})):
+            with self.subTest(field=field):
+                old = self.check[field]; self.check[field] = value
+                result = v.inspect_live_blocked_issuer_candidate(self.d, "token", self.api, 123, 101)
+                self.assertIn("rejected", result[0])
+                self.assertIn("PROVENANCE_BLOCKED", result[-1])
+                self.check[field] = old
+
+    def test_new_stale_live_pr_and_missing_app_id_rejected(self):
+        for field, value in (("sha", "f"*40), ("sha", "a"*40)):
+            self.pr["head"][field] = value
+            result = v.inspect_live_blocked_issuer_candidate(self.d, "token", self.api, 123, 101)
+            self.assertIn("PROVENANCE_BLOCKED", result[-1])
+            if value != "a"*40:
+                self.assertIn("rejected", result[0])
+        self.assertIn("not independently configured", str(
+            v.inspect_live_blocked_issuer_candidate(self.d, "token", self.api, None, 101)))
+        self.assertIn("repository ID not independently configured", str(
+            v.inspect_live_blocked_issuer_candidate(self.d, "token", self.api, 123, None)))
+
+    def test_new_changed_live_pr_between_reads_rejected(self):
+        count = 0
+        def swap(repo, endpoint, token):
+            nonlocal count
+            if endpoint == "/pulls/5":
+                count += 1
+                p = copy.deepcopy(self.pr)
+                if count == 2: p["head"]["sha"] = "e"*40
+                return p
+            return self.api(repo,endpoint,token)
+        result = v.inspect_live_blocked_issuer_candidate(self.d,"token",swap,123,101)
+        self.assertIn("rejected", result[0])
+        self.assertIn("PROVENANCE_BLOCKED", result[-1])
+
 if __name__ == "__main__":
     unittest.main()
