@@ -260,6 +260,206 @@ def verify_pr_diff_with_transport(d, trusted, token, fetch):
         return ["PR diff evidence rejected: " + str(exc)]
 
 
+
+def inspect_live_provenance_candidate(d, trusted, token, fetch):
+    """Read-only bridge diagnostic, NEVER an independent approval or PASS.
+
+    Check the *live* GitHub comment/plan and the PR file scope using existing
+    readers, then re-read the comment after the PR audit. Caller-supplied
+    anchors, issuer flags, cancellation flags, and transport results are NOT
+    independent authority. A separately provisioned protected issuer, fresh
+    revocation decision, and merge-time binding remain mandatory and absent.
+    """
+    blocked = ("PROVENANCE_BLOCKED: independent issuer authentication, "
+               "fresh revocation authority and mandatory check are not provisioned")
+    if (not isinstance(d, dict) or not isinstance(trusted, dict) or
+            not isinstance(token, str) or not token or not callable(fetch) or
+            trusted.get("repository") != "kan1975-creator/CB6-Navi-Public-Build"):
+        return ["invalid live provenance inputs", blocked]
+    try:
+        # The scope must refer to the SAME digest as the plan fetched from
+        # GitHub by _verify_with_transport; no separately caller-picked scope.
+        if (plan_digest(trusted["plan"]) != trusted["plan_sha256"] or
+                not DIGEST.fullmatch(trusted["plan_sha256"])):
+            raise ValueError("candidate scope plan hash mismatch")
+        errors = _verify_with_transport(d, trusted, token, fetch)
+        if errors:
+            return errors + [blocked]
+        errors = verify_pr_diff_with_transport(d, trusted, token, fetch)
+        if errors:
+            return errors + [blocked]
+        # A removed/edited approval during the PR audit must be rejected.
+        # This is NOT a proof of absence of a separate revocation event.
+        comment_id = trusted["comment_id"]
+        if type(comment_id) is not int or comment_id <= 0:
+            raise ValueError("invalid approval comment id")
+        comment = fetch(trusted["repository"],
+                        "/issues/comments/" + str(comment_id), token)
+        errors = check(d, comment, trusted)
+        if errors:
+            return errors + [blocked]
+    except (OSError, urllib.error.URLError, KeyError, ValueError,
+            TypeError, AttributeError, OverflowError) as exc:
+        return ["live provenance candidate rejected: " + str(exc), blocked]
+    # Success here means only that read-only checks found no contradiction.
+    # NO state or environment value is allowed to turn this into PASS.
+    return [blocked]
+
+
+def observe_independent_check_candidate(d, token, fetch=github_get, issuer_app_id=None):
+    """Read-only C-05/C-07 check bridge; NEVER grants approval or a PASS.
+
+    GitHub REST is authenticated using the gate's credential. The App ID must
+    come from a separately provisioned trusted configuration, not PR content.
+    A Check name, stale Check or approval comment alone has no authority to
+    prove pre-implementation approval and COMPLETE non-revocation.
+    """
+    blocked = "PROVENANCE_BLOCKED: issuer's protected approval/start/revocation authority unproven"
+    try:
+        if not isinstance(d, dict) or not isinstance(token, str) or not token:
+            raise ValueError("missing independent issuer transport")
+        if type(issuer_app_id) is not int or issuer_app_id <= 0:
+            raise ValueError("independent issuer App ID unprovisioned")
+        repo = d["repository"]
+        head = d["pr_head_sha"]
+        change = d["proposed_change_id"]
+        plan_hash = d["plan_sha256"]
+        if not isinstance(plan_hash, str) or not DIGEST.fullmatch(plan_hash):
+            raise ValueError("issuer plan SHA-256 binding invalid")
+        if repo != "kan1975-creator/CB6-Navi-Public-Build" or not SHA.fullmatch(head):
+            raise ValueError("independent issuer repository or HEAD mismatch")
+        if not isinstance(change, str) or not re.fullmatch(r"[A-Za-z0-9_.-]{1,128}", change):
+            raise ValueError("independent issuer change binding invalid")
+        # GitHub Check API is scoped to an immutable head; paginate conservatively
+        # and reject partial results to avoid treating missing evidence as consent.
+        data = fetch(repo, "/commits/" + head + "/check-runs?per_page=100", token)
+        if not isinstance(data, dict) or type(data.get("total_count")) is not int or not (0 <= data["total_count"] <= 100):
+            raise ValueError("incomplete issuer check results")
+        runs = data.get("check_runs")
+        if not isinstance(runs, list) or len(runs) != data["total_count"]:
+            raise ValueError("incomplete issuer check page")
+        seen = []
+        for item in runs:
+            if not isinstance(item, dict) or item.get("name") != "CB6 Approval Enforcement":
+                continue
+            if item.get("head_sha") != head:
+                raise ValueError("issuer check HEAD mismatch")
+            expected_external_id = "CB6-BLOCKED:" + change + ":" + plan_hash + ":" + head
+            if item.get("external_id") != expected_external_id:
+                raise ValueError("issuer check change/plan/HEAD binding mismatch")
+            app = item.get("app")
+            if not isinstance(app, dict) or app.get("id") != issuer_app_id:
+                raise ValueError("issuer App identity mismatch")
+            # The fixed request name alone is not authorization; note outcome
+            # without trusting any positive result as evidence of cancellation.
+            if item.get("status") != "completed" or item.get("conclusion") != "failure":
+                raise ValueError("issuer check does not prove protected consent")
+            seen.append(item)
+        if not seen:
+            raise ValueError("no authenticated blocking issuer Check")
+        return [blocked]
+    except (OSError, urllib.error.URLError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return ["independent issuer observation rejected: " + str(exc), blocked]
+
+
+
+def inspect_live_blocked_issuer_candidate(d, token, fetch=github_get,
+                                          issuer_app_id=None, issuer_repo_id=None):
+    """Read-only negative-only issuer handshake; never production authorization.
+
+    C-05 re-reads the *live* PR before and after the Check observation, using
+    separately provisioned immutable GitHub App/repository identities. A failure
+    Check for an obsolete HEAD or another plan/App is not trusted. This is a
+    diagnostic only; missing independent custody always blocks success.
+    """
+    blocked = "PROVENANCE_BLOCKED: independent protected consent and revocation authority not established"
+    try:
+        if not isinstance(d, dict) or not isinstance(token, str) or not token:
+            raise ValueError("independent issuer transport missing")
+        if type(issuer_app_id) is not int or issuer_app_id <= 0:
+            raise ValueError("issuer App ID not independently configured")
+        if type(issuer_repo_id) is not int or issuer_repo_id <= 0:
+            raise ValueError("issuer repository ID not independently configured")
+        repo = d["repository"]
+        if repo != "kan1975-creator/CB6-Navi-Public-Build":
+            raise ValueError("issuer repository mismatch")
+        number = d["pr_number"]
+        head = d["pr_head_sha"]
+        base = d["pr_base_sha"]
+        base_ref = d["pr_base_ref"]
+        if type(number) is not int or number <= 0 or not SHA.fullmatch(head) or                 not SHA.fullmatch(base) or base_ref not in ("main", "cb6-v2-clean"):
+            raise ValueError("issuer PR/base/HEAD binding invalid")
+        def live_pr():
+            pr = fetch(repo, "/pulls/" + str(number), token)
+            if not isinstance(pr, dict) or pr.get("number") != number or pr.get("state") != "open":
+                raise ValueError("issuer PR unavailable")
+            prbase = pr.get("base")
+            prhead = pr.get("head")
+            if not isinstance(prbase, dict) or not isinstance(prhead, dict) or                     prbase.get("sha") != base or prbase.get("ref") != base_ref or                     not isinstance(prbase.get("repo"), dict) or                     prbase["repo"].get("id") != issuer_repo_id or                     prbase["repo"].get("full_name") != repo or                     prhead.get("sha") != head:
+                raise ValueError("issuer live PR/HEAD mismatch")
+        live_pr()
+        observed = observe_independent_check_candidate(d, token, fetch, issuer_app_id)
+        if len(observed) != 1 or observed[0] != (
+                "PROVENANCE_BLOCKED: issuer's protected approval/start/revocation authority unproven"):
+            return ["issuer Check binding rejected: " + "; ".join(observed), blocked]
+        live_pr()
+        return [blocked]
+    except (OSError, urllib.error.URLError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return ["issuer live handshake rejected: " + str(exc), blocked]
+
+
+def inspect_captured_timeline_candidate(identity, start_rows, decision_rows):
+    """Negative-only C-05/C-07 diagnostic; NEVER an authorization verdict.
+
+    Rows from D1 are not protected custody and could be incomplete or
+    modified by its administrator. Even a fully consistent chronology remains
+    blocked until independent provenance, revocation and live HEAD are proven.
+    """
+    blocked = "PROVENANCE_BLOCKED: captured timeline has no protected start/revocation authority"
+    errors = []
+    try:
+        if not isinstance(identity, dict) or not isinstance(start_rows, list) or not isinstance(decision_rows, list):
+            raise ValueError("invalid timeline inputs")
+        keys = ("repository_id", "pr_number", "change_id", "plan_sha256", "plan_commit_sha", "basis_head")
+        if type(identity.get("repository_id")) is not int or identity["repository_id"] <= 0:
+            raise ValueError("invalid repository ID")
+        if type(identity.get("pr_number")) is not int or identity["pr_number"] <= 0:
+            raise ValueError("invalid PR number")
+        if (not isinstance(identity.get("change_id"), str) or
+                not re.fullmatch(r"[A-Za-z0-9_.-]{1,128}", identity["change_id"])):
+            raise ValueError("invalid change binding")
+        if (not isinstance(identity.get("plan_sha256"), str) or
+                not DIGEST.fullmatch(identity["plan_sha256"]) or
+                not isinstance(identity.get("plan_commit_sha"), str) or
+                not SHA.fullmatch(identity["plan_commit_sha"])):
+            raise ValueError("invalid plan binding")
+        if not isinstance(identity.get("head_sha"), str) or not SHA.fullmatch(identity["head_sha"]):
+            raise ValueError("invalid HEAD binding")
+        if not isinstance(identity.get("basis_head"), str) or not SHA.fullmatch(identity["basis_head"]):
+            raise ValueError("invalid basis HEAD binding")
+        for row in start_rows + decision_rows:
+            if not isinstance(row, dict) or any(row.get(k) != identity[k] for k in keys):
+                raise ValueError("cross-plan event mismatch")
+            if row.get("pr_head_sha") != identity["head_sha"]:
+                raise ValueError("stale PR HEAD observation")
+            instant(row["github_created_at"])
+        if len(start_rows) != 1:
+            errors.append("missing or ambiguous captured start")
+        approvals = [r for r in decision_rows if r.get("decision") == "APPROVE"]
+        revokes = [r for r in decision_rows if r.get("decision") == "REVOKE"]
+        if any(r.get("decision") not in ("APPROVE", "REVOKE") for r in decision_rows):
+            errors.append("invalid decision event")
+        if len(approvals) != 1:
+            errors.append("missing or ambiguous captured approval")
+        if revokes:
+            errors.append("recorded revocation blocks approval")
+        if start_rows and approvals and instant(approvals[0]["github_created_at"]) >= instant(start_rows[0]["github_created_at"]):
+            errors.append("approval not before captured start")
+    except (KeyError, ValueError, TypeError, AttributeError, OverflowError) as exc:
+        errors.append("captured timeline rejected: " + str(exc))
+    return errors + [blocked]
+
+
 def verify_live(d, trusted, token):
     """Production entrypoint: UNCONDITIONAL fail-close until anchor is implemented.
 
