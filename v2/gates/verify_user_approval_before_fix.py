@@ -858,6 +858,100 @@ def personal_transition_proposal_guard(policy=None):
     return 'PERSONAL_TRANSITION_PROPOSED_UNDEPLOYED'
 
 
+
+# PROPOSED AUTO CANDIDATE ONLY. Not a production check and not ACTIVE authority.
+# Only the PR's *metadata* is parsed. The authenticated personal_check() fetches
+# GitHub API records afresh and rejects mismatch, change, revocation or API loss.
+PERSONAL_AUTO_ACTIONS = frozenset({
+    'opened', 'reopened', 'synchronize', 'edited', 'ready_for_review'
+})
+
+def personal_pr_event_inputs(event, repository, event_name):
+    """Convert untrusted webhook DATA to strictly validated personal_check args."""
+    personal_require(event_name == 'pull_request', 'not a pull_request event')
+    personal_require(repository == PERSONAL_REPO, 'wrong event repository')
+    personal_require(isinstance(event, dict) and event.get('action') in PERSONAL_AUTO_ACTIONS,
+                     'unhandled PR event action')
+    pr = event.get('pull_request')
+    personal_require(isinstance(pr, dict) and pr.get('draft') is False,
+                     'draft or missing PR')
+    number = event.get('number')
+    personal_require(type(number) is int and number > 0 and number == pr.get('number'),
+                     'PR event number mismatch')
+    base = pr.get('base')
+    head = pr.get('head')
+    personal_require(isinstance(base, dict) and isinstance(head, dict) and
+                     base.get('ref') in ('main', 'cb6-v2-clean') and
+                     base.get('repo', {}).get('full_name') == PERSONAL_REPO,
+                     'PR event base invalid')
+    expected_head = head.get('sha')
+    personal_require(isinstance(expected_head, str) and PERSONAL_HEX40.fullmatch(expected_head),
+                     'PR event HEAD invalid')
+    personal_require(isinstance(pr.get('body'), str), 'PR body unavailable')
+    rows = pr['body'].splitlines()
+    def field(key):
+        matches = [line[len(key)+1:] for line in rows if line.startswith(key+' ')]
+        personal_require(len(matches) == 1 and matches[0] and
+                         len(matches[0]) <= 250 and matches[0] == matches[0].strip(),
+                         'missing or duplicate PR approval metadata: ' + key)
+        return matches[0]
+    approval_ref = field('CB6-APPROVAL-REF')
+    m = re.fullmatch(r'issue-comment:([1-9][0-9]{0,17})', approval_ref)
+    personal_require(m is not None, 'bad GitHub approval reference')
+    plan_sha = field('CB6-PLAN-SHA256')
+    plan_commit = field('CB6-PLAN-COMMIT')
+    plan_path = field('CB6-PLAN-PATH')
+    personal_require(PERSONAL_HEX64.fullmatch(plan_sha) is not None and
+                     PERSONAL_HEX40.fullmatch(plan_commit) is not None and
+                     0 < len(plan_path) <= 200 and not plan_path.startswith('/') and
+                     all(segment not in ('', '.', '..') for segment in plan_path.split('/')),
+                     'invalid PR plan metadata')
+    # The timestamp/change/summary fields are still required by personal_check
+    # and must match the authenticated approval comment. Never trust PR claims.
+    for key in ('CB6-APPROVED-AT', 'CB6-PROPOSED-CHANGE', 'CB6-APPROVED-SUMMARY'):
+        field(key)
+    return (number, int(m.group(1)), plan_sha, plan_commit, plan_path, expected_head)
+
+
+def personal_pr_auto_main(environ=None, event=None, checker=None):
+    """Candidate-only: fails closed unless API-backed personal_check succeeds.
+
+    This must only be run from a trusted checkout *after* a separately authorized
+    rollout. A pull_request workflow sourced from an untrusted PR merge is not
+    independently authoritative for Required Check enforcement.
+    """
+    environ = os.environ if environ is None else environ
+    try:
+        personal_transition_proposal_guard()
+        personal_require(environ.get('GITHUB_EVENT_NAME') == 'pull_request' and
+                         environ.get('GITHUB_REPOSITORY') == PERSONAL_REPO,
+                         'unexpected GitHub event identity')
+        personal_require(environ.get('GITHUB_BASE_REF') in ('main','cb6-v2-clean'),
+                         'unexpected PR base ref')
+        token = environ.get('GITHUB_TOKEN', '')
+        personal_require(isinstance(token, str) and token, 'GITHUB_TOKEN missing')
+        if event is None:
+            path = environ.get('GITHUB_EVENT_PATH', '')
+            personal_require(bool(path) and Path(path).is_file(), 'GitHub event file missing')
+            try:
+                event = json.loads(Path(path).read_text(encoding='utf-8'))
+            except (OSError, ValueError) as exc:
+                raise PersonalBlocked('malformed GitHub event payload') from exc
+        args = personal_pr_event_inputs(event, environ['GITHUB_REPOSITORY'],
+                                        environ['GITHUB_EVENT_NAME'])
+        personal_require(event['pull_request']['base']['ref'] ==
+                         environ['GITHUB_BASE_REF'], 'environment/event base mismatch')
+        func = personal_check if checker is None else checker
+        outcome = func(*args, token)
+        personal_require(outcome == 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY',
+                         'personal approval result not accepted')
+        print('CANDIDATE AUTO PASS: PERSONAL_APPROVAL_V1_PR_PROXY_ONLY')
+        print('NOTE: Not production authorization, not an independently protected Required Check.')
+        return 0
+    except (PersonalBlocked, OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
+        print('CANDIDATE AUTO BLOCK:', str(exc), file=sys.stderr)
+        return 1
+
 def personal_main(argv=None):
     p=argparse.ArgumentParser()
     p.add_argument('--pr', type=int, required=True)
@@ -891,6 +985,9 @@ def main(argv):
     if len(argv) >= 2 and argv[1] == "--personal-manual":
         # Returns advisory status ONLY, not independent Required Check authority.
         return personal_main(argv[2:])
+    if len(argv) == 2 and argv[1] == "--personal-pr-auto":
+        # Candidate-only event adapter; no legacy verify_live() promotion.
+        return personal_pr_auto_main()
     if len(argv) != 3:
         print("usage: verify_user_approval_before_fix.py evidence.json trusted-config.json")
         return 1

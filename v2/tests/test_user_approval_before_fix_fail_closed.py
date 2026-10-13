@@ -1200,7 +1200,8 @@ class PersonalCompletionPolicy20261013ChangeOnlyTests(unittest.TestCase):
         w=(P.parent.parent.parent / '.github/workflows/cb6_approval_enforcement.yml').read_text()
         self.assertIn('workflow_dispatch:', w)
         self.assertNotIn('pull_request_target:', w)
-        self.assertNotIn('  pull_request:', w)
+        self.assertIn('  pull_request:', w)  # PROPOSED adapter, not trusted enforcement
+        self.assertIn('ref: main', w)
         self.assertIn('persist-credentials: false', w)
         self.assertIn("policy.get('production_deployment') == 'NOT_AUTHORIZED'", w)
         self.assertIn("policy.get('workflow_trigger_selection')", w)
@@ -1215,6 +1216,85 @@ class PersonalCompletionPolicy20261013ChangeOnlyTests(unittest.TestCase):
                          'USER_APPROVED_POLICY_ONLY')
         self.assertEqual(reg['transition_proposal']['personal_completion_policy']['proposal_status'],
                          'NOT_ADOPTED_NOT_DEPLOYED')
+
+
+class PersonalAutoPRChangeOnlyTests(unittest.TestCase):
+    """NEW auto-adapter delta ONLY. Invoke this class, not the previous suite."""
+
+    @staticmethod
+    def event():
+        return {
+            'action': 'opened', 'number': 41,
+            'pull_request': {
+                'number': 41, 'draft': False,
+                'base': {'ref':'cb6-v2-clean', 'repo':{'full_name':REPO}},
+                'head': {'sha':'c'*40},
+                'body': '\n'.join([
+                    'CB6-APPROVAL-REF issue-comment:123',
+                    'CB6-APPROVED-AT 2026-10-13T03:28:49Z',
+                    'CB6-PROPOSED-CHANGE sample-01',
+                    'CB6-APPROVED-SUMMARY scoped personal governance change',
+                    'CB6-PLAN-SHA256 ' + 'd'*64,
+                    'CB6-PLAN-COMMIT ' + 'e'*40,
+                    'CB6-PLAN-PATH docs/sample-plan.json',
+                ])}}
+
+    @staticmethod
+    def env():
+        return {'GITHUB_EVENT_NAME':'pull_request','GITHUB_REPOSITORY':REPO,
+                'GITHUB_BASE_REF':'cb6-v2-clean','GITHUB_TOKEN':'test-readonly-token'}
+
+    def test_delta_01_metadata_binds_exact_pr_and_plan(self):
+        e=self.event()
+        self.assertEqual(v.personal_pr_event_inputs(e,REPO,'pull_request'),
+                         (41,123,'d'*64,'e'*40,'docs/sample-plan.json','c'*40))
+
+    def test_delta_02_no_approval_and_duplicate_field_fail_closed(self):
+        e=self.event();e['pull_request']['body']=e['pull_request']['body'].replace(
+            'CB6-APPROVAL-REF issue-comment:123','')
+        with self.assertRaises(v.PersonalBlocked): v.personal_pr_event_inputs(e,REPO,'pull_request')
+        e=self.event();e['pull_request']['body']+='\nCB6-PLAN-PATH docs/other.json'
+        with self.assertRaises(v.PersonalBlocked): v.personal_pr_event_inputs(e,REPO,'pull_request')
+
+    def test_delta_03_reject_draft_bad_action_and_wrong_repo(self):
+        e=self.event();e['pull_request']['draft']=True
+        with self.assertRaises(v.PersonalBlocked): v.personal_pr_event_inputs(e,REPO,'pull_request')
+        e=self.event();e['action']='deleted'
+        with self.assertRaises(v.PersonalBlocked): v.personal_pr_event_inputs(e,REPO,'pull_request')
+        with self.assertRaises(v.PersonalBlocked): v.personal_pr_event_inputs(self.event(),'attacker/repo','pull_request')
+
+    def test_delta_04_authentication_delegated_to_existing_api_check(self):
+        observations=[]
+        def api_checker(*args):
+            observations.append(args)
+            return 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY'
+        self.assertEqual(v.personal_pr_auto_main(self.env(),self.event(),api_checker),0)
+        self.assertEqual(observations[0][-1],'test-readonly-token')
+        self.assertEqual(observations[0][0],41)
+        self.assertEqual(observations[0][1],123)
+
+    def test_delta_05_missing_token_mismatch_or_api_failure_blocks(self):
+        e=self.event()
+        broken=self.env();del broken['GITHUB_TOKEN']
+        self.assertEqual(v.personal_pr_auto_main(broken,e,lambda *a: 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY'),1)
+        broken=self.env();broken['GITHUB_BASE_REF']='main'
+        self.assertEqual(v.personal_pr_auto_main(broken,e,lambda *a: 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY'),1)
+        self.assertEqual(v.personal_pr_auto_main(self.env(),e,lambda *a: (_ for _ in ()).throw(v.PersonalBlocked('API down'))),1)
+        self.assertEqual(v.personal_pr_auto_main(self.env(),e,lambda *a: 'FORGED_PASS'),1)
+
+    def test_delta_06_workflow_no_pr_checkout_privilege_or_live_unlock(self):
+        workflow=(P.parent.parent.parent/'.github/workflows/cb6_approval_enforcement.yml').read_text()
+        self.assertIn('  pull_request:',workflow)
+        self.assertIn("if: github.event_name == 'pull_request'",workflow)
+        self.assertIn('ref: main',workflow)
+        self.assertIn('persist-credentials: false',workflow)
+        self.assertIn('trusted main auto verifier NOT DEPLOYED',workflow)
+        self.assertNotIn('pull_request_target:',workflow.replace('No pull_request_target',''))
+        self.assertNotIn('head.sha }}',workflow)
+        self.assertNotIn('secrets.',workflow)
+        self.assertNotIn('contents: write',workflow)
+        self.assertIn('PROVENANCE_BLOCKED',v.verify_live({}, {}, 'token')[0])
+        self.assertEqual(v.CONTRACT['personal_completion_policy_20261013']['production_deployment'], 'NOT_AUTHORIZED')
 
 
 if __name__ == "__main__":

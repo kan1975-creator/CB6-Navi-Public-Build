@@ -1,7 +1,11 @@
 # ISOLATED CANDIDATE ONLY. NOT DEPLOYED. ADVISORY CHECK, NOT a Required Check.
-# Manual read-only workflow avoids pull_request_target and does not execute PR code.
-name: CB6 Personal Approval Manual Candidate (Nonmandatory)
+# Candidate pull_request adapter + original manual mode. Neither is a Required Check.
+# CRITICAL: pull_request workflow YAML is sourced from PR merge; NOT trusted enforcement.
+# Never check out PR head or execute PR code. The trusted main rollout is NOT done.
+name: CB6 Personal Approval Candidate (Nonmandatory)
 on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
   workflow_dispatch:
     inputs:
       pr_number:
@@ -34,6 +38,7 @@ permissions:
   pull-requests: read
 jobs:
   personal-check:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -81,3 +86,28 @@ jobs:
             --pr "$PR" --comment-id "$COMMENT" \
             --plan-sha "$PLAN_SHA" --plan-commit "$PLAN_COMMIT" \
             --plan-path "$PLAN_PATH" --expected-head "$EXPECTED_HEAD"
+
+  personal-pr-proxy-candidate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout main only (PR code must NEVER be executed)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Verify trusted main supports this candidate adapter
+        shell: bash
+        run: |
+          # This is expected to FAIL until authorized trusted-main deployment.
+          # No dynamic checkout, no PR scripts, no secrets or write permissions.
+          python3 -I -B - <<'PYGUARD'
+          from pathlib import Path
+          s = Path('v2/gates/verify_user_approval_before_fix.py').read_text()
+          assert 'def personal_pr_auto_main(' in s, 'trusted main auto verifier NOT DEPLOYED'
+          PYGUARD
+      - name: Authenticate owner approval and PR metadata (candidate only)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -I -B v2/gates/verify_user_approval_before_fix.py --personal-pr-auto
