@@ -4,6 +4,11 @@
 # Never check out PR head or execute PR code. The trusted main rollout is NOT done.
 name: CB6 Personal Approval Candidate (Nonmandatory)
 on:
+  push:
+    branches: ['poc/cb6-personal-actions-proof-20261013']
+    paths:
+      - '.github/workflows/cb6_approval_enforcement.yml'
+      - 'v2/tests/test_user_approval_before_fix_fail_closed.py'
   pull_request:
     types: [opened, reopened, synchronize, edited, ready_for_review]
   workflow_dispatch:
@@ -111,3 +116,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 -I -B v2/gates/verify_user_approval_before_fix.py --personal-pr-auto
+
+  # One-branch / one-push Actions smoke proof. NO PR checkout, deploy or secrets.
+  cb6-personal-actions-proof:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/poc/cb6-personal-actions-proof-20261013'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout approved non-PR isolated branch commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Reject wrong event, repo, parent or changed paths
+        shell: bash
+        env:
+          CB6_APPROVED_PARENT: 5d73fc32f222c4156ae819e3e045caab924d4837
+          CB6_TARGET_REF: refs/heads/poc/cb6-personal-actions-proof-20261013
+        run: |
+          set -euo pipefail
+          test "${GITHUB_EVENT_NAME}" = 'push'
+          test "${GITHUB_REPOSITORY}" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "${GITHUB_REF}" = "${CB6_TARGET_REF}"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test "$(git rev-parse HEAD^)" = "${CB6_APPROVED_PARENT}"
+          actual="$(git diff-tree --no-commit-id --name-only -r "${GITHUB_SHA}")"
+          expected="$(printf '%s\n' '.github/workflows/cb6_approval_enforcement.yml' 'v2/tests/test_user_approval_before_fix_fail_closed.py')"
+          test "${actual}" = "${expected}"
+          echo 'CB6_ACTIONS_PROOF_SCOPE_PASS'
+      - name: Run ONLY NEW push-event delta tests (never previous PASS suites)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I -B v2/tests/test_user_approval_before_fix_fail_closed.py PersonalActionsPushProofDeltaTests -v
+          echo 'CB6_ACTIONS_PROOF_DELTA_PASS'

@@ -1297,5 +1297,45 @@ class PersonalAutoPRChangeOnlyTests(unittest.TestCase):
         self.assertEqual(v.CONTRACT['personal_completion_policy_20261013']['production_deployment'], 'NOT_AUTHORIZED')
 
 
+class PersonalActionsPushProofDeltaTests(unittest.TestCase):
+    """NEW push-only runtime probe, deliberately no previous suite reruns."""
+
+    @staticmethod
+    def workflow():
+        return (P.parent.parent.parent / '.github/workflows/cb6_approval_enforcement.yml').read_text()
+
+    def test_push_01_isolated_branch_only_and_no_other_auto_trigger(self):
+        w=self.workflow()
+        self.assertIn("branches: ['poc/cb6-personal-actions-proof-20261013']",w)
+        self.assertIn("if: github.event_name == 'push' && github.ref == 'refs/heads/poc/cb6-personal-actions-proof-20261013'",w)
+        self.assertIn("paths:\n      - '.github/workflows/cb6_approval_enforcement.yml'",w)
+        self.assertIn("      - 'v2/tests/test_user_approval_before_fix_fail_closed.py'",w)
+        self.assertNotIn('pull_request_target:',w)
+
+    def test_push_02_readonly_and_no_pr_checkout_or_secret_access(self):
+        w=self.workflow().split('  cb6-personal-actions-proof:',1)[1]
+        self.assertIn('    permissions:\n      contents: read',w)
+        self.assertIn('ref: $'+'{{ github.sha }}',w)
+        self.assertIn('persist-credentials: false',w)
+        self.assertNotIn('secrets.',w)
+        self.assertNotIn('contents: write',w)
+        self.assertNotIn('pull_request.head',w)
+        self.assertNotIn('pull_request_target',w)
+
+    def test_push_03_exact_parent_and_scope_fail_closed_asserted(self):
+        w=self.workflow()
+        for marker in (
+            'CB6_APPROVED_PARENT: 5d73fc32f222c4156ae819e3e045caab924d4837',
+            "test \"${GITHUB_EVENT_NAME}\" = 'push'",
+            'test "${GITHUB_REF}" = "${CB6_TARGET_REF}"',
+            'test "$(git rev-parse HEAD^)" = "${CB6_APPROVED_PARENT}"',
+            'git diff-tree --no-commit-id --name-only -r',
+            'test "${actual}" = "${expected}"',
+            'PersonalActionsPushProofDeltaTests -v',
+        ):
+            self.assertIn(marker,w)
+        self.assertNotIn('PRODUCTION_DEPLOYED',w)
+
+
 if __name__ == "__main__":
     unittest.main()
