@@ -1,0 +1,18 @@
+{
+  "proposed_change_id": "CB6-PERSONAL-LIVE-PROBE-20261013",
+  "basis_head": "645132832a478025e162d0f9fea2e785bcba374e",
+  "planned_paths": [
+    "docs/cb6_personal_approval_live_probe_20261013.md"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/operational_rule_registry_v21.json",
+    "v2/gates/rule_coverage.json",
+    "v2/gates/user_approval_before_fix_contract.json",
+    "v2/gates/verify_user_approval_before_fix.py",
+    "v2/tests/test_user_approval_before_fix_fail_closed.py"
+  ],
+  "affected_domains": [
+    "governance-personal-approval-probe"
+  ]
+}
