@@ -47,6 +47,26 @@ jobs:
         with:
           ref: main
           persist-credentials: false
+      - name: Fail closed if isolated transition proposal is activated
+        run: |
+          python3 -I -B - <<'PYGUARD'
+          import json
+          from pathlib import Path
+          j = json.loads(Path('v2/gates/user_approval_before_fix_contract.json').read_text())
+          p = j.get('personal_formal_transition_proposal', {})
+          assert j.get('status') == 'CANDIDATE'
+          assert p.get('status') == 'PROPOSED_NOT_ACTIVE'
+          assert p.get('allow_production_pass') is False
+          assert p.get('deployment_status') == 'NOT_DEPLOYED'
+          assert p.get('active_rules_unchanged') is True
+          assert 'affected_scope_change_tests' in p.get('requires_before_deployment', [])
+          policy = j.get('personal_completion_policy_20261013', {})
+          assert policy.get('status') == 'USER_APPROVED_POLICY_ONLY'
+          assert policy.get('authorization') == 'ISOLATED_LOCAL_CANDIDATE_ONLY'
+          assert policy.get('github_required_check') == 'REQUIRED_FOR_FINAL_COMPLETION_NOT_IMPLEMENTED'
+          assert policy.get('production_deployment') == 'NOT_AUTHORIZED'
+          assert policy.get('workflow_trigger_selection') == 'UNSELECTED_PENDING_SECURITY_VALIDATION'
+          PYGUARD
       - name: Inspect the GitHub user approval and PR scope read-only
         env:
           GITHUB_TOKEN: ${{ github.token }}

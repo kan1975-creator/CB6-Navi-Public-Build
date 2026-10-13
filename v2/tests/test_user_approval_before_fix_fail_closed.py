@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Stage-1 only: twelve independent synthetic AC/DT pairs, never production evidence."""
 import copy
+import json
 import importlib.util
 import pathlib
 import unittest
@@ -1036,6 +1037,184 @@ class NewPersonalFixIssuesOnly(unittest.TestCase):
         with self.assertRaisesRegex(v.PersonalBlocked,'PR changed during verification'):
             v.personal_check(6,42,self.base.plan_sha,'c'*40,'plans/change.json',
                              'a'*40,'synthetic-read-only-token',transport=change)
+
+
+
+class PersonalFormalTransitionProposalDeltaTests(unittest.TestCase):
+    """NEW tests only for this unadopted migration delta."""
+
+    def test_new_01_policy_only_proposal_remains_unadopted(self):
+        self.assertEqual(v.personal_transition_proposal_guard(),
+                         'PERSONAL_TRANSITION_PROPOSED_UNDEPLOYED')
+        self.assertEqual(v.CONTRACT['status'],'CANDIDATE')
+        self.assertEqual(v.CONTRACT['personal_issuer_relaxation_candidate']['status'],
+                         'PROPOSED_NOT_ADOPTED')
+
+    def test_new_02_status_escalation_is_rejected(self):
+        p = copy.deepcopy(v.CONTRACT)
+        p['personal_formal_transition_proposal']['status'] = 'ACTIVE'
+        with self.assertRaisesRegex(v.PersonalBlocked, 'guard is missing or activated'):
+            v.personal_transition_proposal_guard(p)
+
+    def test_new_03_decision_or_missing_prerequisites_fail_closed(self):
+        p = copy.deepcopy(v.CONTRACT)
+        p['personal_issuer_relaxation_candidate']['user_completion_criteria_decision']['deployment_status']='DEPLOYED'
+        with self.assertRaisesRegex(v.PersonalBlocked, 'policy adoption/provenance invalid'):
+            v.personal_transition_proposal_guard(p)
+        p=copy.deepcopy(v.CONTRACT)
+        p['personal_formal_transition_proposal']['requires_before_deployment'].remove('trusted_main_execution')
+        with self.assertRaisesRegex(v.PersonalBlocked, 'transition prerequisites missing'):
+            v.personal_transition_proposal_guard(p)
+
+    def test_new_04_original_live_gate_remains_provenance_blocked(self):
+        self.assertIn('PROVENANCE_BLOCKED', v.verify_live({}, {}, 'dummy')[0])
+        self.assertFalse(v.CONTRACT['personal_formal_transition_proposal']['allow_production_pass'])
+
+    def test_new_05_workflow_is_manual_trusted_main_only(self):
+        text=(P.parent.parent.parent / '.github/workflows/cb6_approval_enforcement.yml').read_text()
+        self.assertIn('workflow_dispatch:',text)
+        self.assertIn('EXPECTED_REF: refs/heads/main',text)
+        self.assertIn('persist-credentials: false',text)
+        self.assertIn('Fail closed if isolated transition proposal is activated',text)
+        self.assertNotIn('pull_request_target:',text)
+
+    def test_new_06_registry_v22_is_complete_but_proposed(self):
+        reg=json.loads((P.parent / 'operational_rule_registry_v22.json').read_text())
+        self.assertEqual(reg['status'],'PROPOSED')
+        self.assertEqual(reg['version'],22)
+        self.assertEqual(reg['base_registry_git_blob_sha1'],
+                         '18b120864515ad39c24e98abbc2c75f36b9fdf7b')
+        self.assertIs(reg['replace_active_registry_allowed'],False)
+        self.assertEqual(reg['candidate_format'], 'FULL_V21_SEMANTIC_COPY_PROPOSED_NOT_INSTALLABLE')
+        self.assertEqual(len(reg['rules']), 15)
+        self.assertEqual(sum(r.get('status') == 'ACTIVE' for r in reg['rules']), 15)
+
+
+class PersonalFormalTransitionFourFileFixTests(unittest.TestCase):
+    """NEW change-only checks. Old 13/15/6 tests must NOT be rerun."""
+
+    def test_fix01_missing_affected_scope_tests_is_rejected(self):
+        p = copy.deepcopy(v.CONTRACT)
+        p['personal_formal_transition_proposal']['requires_before_deployment'].remove('affected_scope_change_tests')
+        with self.assertRaisesRegex(v.PersonalBlocked, 'transition prerequisites missing'):
+            v.personal_transition_proposal_guard(p)
+
+    def test_fix02_unhashable_or_non_string_prerequisite_is_rejected(self):
+        for invalid in ([{'invalid': True}], [None]):
+            with self.subTest(invalid=invalid):
+                p = copy.deepcopy(v.CONTRACT)
+                p['personal_formal_transition_proposal']['requires_before_deployment'] += invalid
+                with self.assertRaisesRegex(v.PersonalBlocked, 'transition prerequisites missing'):
+                    v.personal_transition_proposal_guard(p)
+
+    def test_fix03_existing_policy_only_guard_remains_rejecting_activation(self):
+        self.assertEqual(v.personal_transition_proposal_guard(), 'PERSONAL_TRANSITION_PROPOSED_UNDEPLOYED')
+        p = copy.deepcopy(v.CONTRACT)
+        p['personal_formal_transition_proposal']['allow_production_pass'] = True
+        with self.assertRaises(v.PersonalBlocked):
+            v.personal_transition_proposal_guard(p)
+
+    def test_fix04_workflow_requires_change_scoped_tests_remains_manual(self):
+        text=(P.parent.parent.parent / '.github/workflows/cb6_approval_enforcement.yml').read_text()
+        self.assertIn("assert 'affected_scope_change_tests' in p.get('requires_before_deployment', [])", text)
+        self.assertIn('workflow_dispatch:', text)
+        self.assertIn('persist-credentials: false', text)
+        self.assertNotIn('pull_request_target:', text)
+
+    def test_fix05_registry_full_v21_semantic_equality_proposed_only(self):
+        new=json.loads((P.parent/'operational_rule_registry_v22.json').read_text())
+        original_file=P.parent/'operational_rule_registry_v21.json'
+        if not original_file.exists():
+            original_file=P.parents[3]/'evidence/registry_v21_source.json'
+        previous=json.loads(original_file.read_text())
+        excluded={'version','status','supersedes','change_reason','candidate_format',
+                  'base_registry_git_blob_sha1','replace_active_registry_allowed',
+                  'in_place_v21_change_allowed','deployment_status','transition_proposal'}
+        self.assertEqual({k:v for k,v in new.items() if k not in excluded},
+                         {k:v for k,v in previous.items() if k not in excluded})
+        self.assertEqual(new['rules'],previous['rules'])
+        self.assertEqual(len(new['rules']),15)
+        self.assertEqual(new['status'],'PROPOSED')
+        self.assertEqual(new['version'],22)
+        self.assertIs(new['replace_active_registry_allowed'],False)
+
+    def test_fix06_full_copy_loss_detection(self):
+        new=json.loads((P.parent/'operational_rule_registry_v22.json').read_text())
+        original_file=P.parent/'operational_rule_registry_v21.json'
+        if not original_file.exists():
+            original_file=P.parents[3]/'evidence/registry_v21_source.json'
+        original=json.loads(original_file.read_text())
+        malicious=copy.deepcopy(new)
+        malicious['rules'].pop()
+        self.assertNotEqual(malicious['rules'], original['rules'])
+
+    def test_fix07_legacy_verify_live_remains_provenance_blocked(self):
+        self.assertIn('PROVENANCE_BLOCKED',v.verify_live({}, {}, 'dummy')[0])
+        self.assertEqual(v.CONTRACT['status'],'CANDIDATE')
+        self.assertEqual(v.CONTRACT['personal_issuer_relaxation_candidate']['status'],'PROPOSED_NOT_ADOPTED')
+
+
+
+class PersonalCompletionPolicy20261013ChangeOnlyTests(unittest.TestCase):
+    """NEW 2026-10-13 policy-only delta. Old tests are NOT rerun."""
+
+    def test_policy_01_approved_policy_is_only_an_uninstalled_proposal(self):
+        self.assertEqual(v.personal_completion_policy_guard(),
+                         'USER_APPROVED_POLICY_ONLY_NOT_DEPLOYED')
+        self.assertEqual(v.personal_transition_proposal_guard(),
+                         'PERSONAL_TRANSITION_PROPOSED_UNDEPLOYED')
+        self.assertEqual(v.CONTRACT['status'], 'CANDIDATE')
+
+    def test_policy_02_mutating_guarantees_or_adoption_fails_closed(self):
+        for field, value in [
+            ('administrator_self_lock_guarantee', 'PROVEN'),
+            ('historical_unrecorded_local_edit', 'RETROACTIVE_PASS'),
+            ('future_preimplementation_owner_approval', 'OPTIONAL'),
+            ('separate_gpt_independent_review', 'OPTIONAL'),
+            ('external_independent_issuer', 'PRODUCTION_ISSUER_DEPLOYED'),
+            ('github_required_check', 'ALREADY_PROVEN'),
+            ('workflow_trigger_selection', 'PULL_REQUEST_TARGET_SELECTED'),
+            ('production_deployment', 'AUTHORIZED'),
+        ]:
+            with self.subTest(field=field):
+                p=copy.deepcopy(v.CONTRACT)
+                p['personal_completion_policy_20261013'][field]=value
+                with self.assertRaisesRegex(v.PersonalBlocked, 'policy proposal changed'):
+                    v.personal_completion_policy_guard(p)
+
+    def test_policy_03_missing_or_extra_policy_is_blocked(self):
+        p=copy.deepcopy(v.CONTRACT)
+        del p['personal_completion_policy_20261013']
+        with self.assertRaises(v.PersonalBlocked):
+            v.personal_completion_policy_guard(p)
+        p=copy.deepcopy(v.CONTRACT)
+        p['personal_completion_policy_20261013']['allow_admin_bypass']=True
+        with self.assertRaises(v.PersonalBlocked):
+            v.personal_completion_policy_guard(p)
+
+    def test_policy_04_legacy_live_provenance_is_still_blocked(self):
+        self.assertIn('PROVENANCE_BLOCKED', v.verify_live({}, {}, 'token')[0])
+        self.assertFalse(v.CONTRACT['personal_formal_transition_proposal']['allow_production_pass'])
+
+    def test_policy_05_no_unsafe_workflow_promotion(self):
+        w=(P.parent.parent.parent / '.github/workflows/cb6_approval_enforcement.yml').read_text()
+        self.assertIn('workflow_dispatch:', w)
+        self.assertNotIn('pull_request_target:', w)
+        self.assertNotIn('  pull_request:', w)
+        self.assertIn('persist-credentials: false', w)
+        self.assertIn("policy.get('production_deployment') == 'NOT_AUTHORIZED'", w)
+        self.assertIn("policy.get('workflow_trigger_selection')", w)
+
+    def test_policy_06_registry_stays_proposed_and_inherited_rules_untouched(self):
+        reg=json.loads((P.parent/'operational_rule_registry_v22.json').read_text())
+        self.assertEqual(reg['status'], 'PROPOSED')
+        self.assertIs(reg['replace_active_registry_allowed'],False)
+        self.assertEqual(len(reg['rules']),15)
+        self.assertTrue(all(x['status']=='ACTIVE' for x in reg['rules']))
+        self.assertEqual(reg['transition_proposal']['personal_completion_policy']['policy_status'],
+                         'USER_APPROVED_POLICY_ONLY')
+        self.assertEqual(reg['transition_proposal']['personal_completion_policy']['proposal_status'],
+                         'NOT_ADOPTED_NOT_DEPLOYED')
 
 
 if __name__ == "__main__":

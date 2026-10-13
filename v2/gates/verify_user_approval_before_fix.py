@@ -807,6 +807,57 @@ def personal_check(pr_number, comment_id, plan_sha, plan_commit, plan_path, expe
             'repository comments changed between scans')
     return 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY'
 
+# USER-APPROVED 2026-10-13 POLICY, PROPOSED / NOT DEPLOYED.
+# This guard cannot authorize a Required Check or change legacy verify_live().
+def personal_completion_policy_guard(document=None):
+    document = CONTRACT if document is None else document
+    personal_require(isinstance(document, dict) and
+                     document.get('status') == 'CANDIDATE',
+                     'personal completion policy cannot activate the contract')
+    record = document.get('personal_completion_policy_20261013')
+    expected = {'status': 'USER_APPROVED_POLICY_ONLY', 'authorization': 'ISOLATED_LOCAL_CANDIDATE_ONLY', 'record_date': '2026-10-13', 'scope': 'PERSONAL_DEVELOPMENT_ONLY', 'administrator_self_lock_guarantee': 'UNATTAINABLE_NOT_REQUIRED', 'administrator_settings_changes': 'AUDIT_WITH_EXPLICIT_OWNER_DECISION_NOT_PREVENTION', 'historical_unrecorded_local_edit': 'UNPROVEN_NEVER_RETROACTIVE_PASS', 'future_preimplementation_owner_approval': 'REQUIRED_CHANGE_BOUND_BEFORE_WORK', 'future_evidence': 'FIXED_PLAN_SHA_APPROVAL_RECORD_AND_START_LOG_WITHOUT_ABSOLUTE_LOCAL_TIME_PROOF', 'external_independent_issuer': 'NOT_REQUIRED_FOR_PERSONAL_COMPLETION_POLICY', 'external_human_administrator': 'NOT_REQUIRED_FOR_PERSONAL_COMPLETION_POLICY', 'separate_gpt_independent_review': 'REQUIRED', 'affected_scope_tests': 'REQUIRED', 'legacy_verify_live': 'RETAIN_UNCONDITIONAL_PROVENANCE_BLOCKED', 'github_required_check': 'REQUIRED_FOR_FINAL_COMPLETION_NOT_IMPLEMENTED', 'workflow_trigger_selection': 'UNSELECTED_PENDING_SECURITY_VALIDATION', 'untrusted_pr_code_at_privileged_scope': 'FORBIDDEN', 'active_registry_v21': 'UNCHANGED', 'registry_v22': 'PROPOSED_NOT_ACTIVE', 'write_and_method_freezes': 'UNCHANGED', 'final_owner_adoption': 'SEPARATELY_REQUIRED_AFTER_EVIDENCE', 'production_deployment': 'NOT_AUTHORIZED'}
+    personal_require(isinstance(record, dict) and
+                     record == expected,
+                     'personal completion policy proposal changed or activated')
+    personal_require(document.get('personal_issuer_relaxation_candidate', {}).get('status') ==
+                     'PROPOSED_NOT_ADOPTED' and
+                     document.get('personal_formal_transition_proposal', {}).get('allow_production_pass') is False,
+                     'personal completion policy cannot authorize production')
+    return 'USER_APPROVED_POLICY_ONLY_NOT_DEPLOYED'
+
+
+def personal_transition_proposal_guard(policy=None):
+    """Read-only proposal guard; NEVER grants production/Required Check authority."""
+    policy = CONTRACT if policy is None else policy
+    personal_require(isinstance(policy, dict) and policy.get('status') == 'CANDIDATE',
+                     'personal transition is not an active contract')
+    personal = policy.get('personal_issuer_relaxation_candidate', {})
+    decision = personal.get('user_completion_criteria_decision', {})
+    candidate = policy.get('personal_formal_transition_proposal', {})
+    personal_require(personal.get('status') == 'PROPOSED_NOT_ADOPTED' and
+                     personal.get('does_not_override_active_rules') is True and
+                     decision.get('status') == 'USER_APPROVED_POLICY_ONLY' and
+                     decision.get('deployment_status') == 'NOT_DEPLOYED' and
+                     decision.get('active_rules_unchanged') is True,
+                     'personal policy adoption/provenance invalid')
+    personal_require(candidate.get('status') == 'PROPOSED_NOT_ACTIVE' and
+                     candidate.get('method') == 'PERSONAL_MANUAL_READ_ONLY_ADVISORY' and
+                     candidate.get('allow_production_pass') is False and
+                     candidate.get('active_rules_unchanged') is True and
+                     candidate.get('deployment_status') == 'NOT_DEPLOYED',
+                     'personal transition guard is missing or activated')
+    personal_completion_policy_guard(policy)
+    prereqs = candidate.get('requires_before_deployment')
+    personal_require(isinstance(prereqs, list) and
+                     all(isinstance(v, str) for v in prereqs) and
+                     {'explicit_user_final_adoption','separate_gpt_independent_review',
+                      'trusted_main_execution','read_only_github_api_token',
+                      'affected_scope_change_tests',
+                      'required_active_registry_migration_and_freeze_compliance'}.issubset(set(prereqs)),
+                     'transition prerequisites missing')
+    return 'PERSONAL_TRANSITION_PROPOSED_UNDEPLOYED'
+
+
 def personal_main(argv=None):
     p=argparse.ArgumentParser()
     p.add_argument('--pr', type=int, required=True)
@@ -823,6 +874,7 @@ def personal_main(argv=None):
             policy.get("scope") == "PERSONAL_DEVELOPMENT_ONLY" and
             policy.get("does_not_override_active_rules") is True,
             "personal candidate contract missing or invalid")
+        personal_transition_proposal_guard()
         status = personal_check(a.pr, a.comment_id, a.plan_sha, a.plan_commit,
                        a.plan_path, a.expected_head, os.environ.get('GITHUB_TOKEN', ''))
         print('CANDIDATE PASS:', status)
