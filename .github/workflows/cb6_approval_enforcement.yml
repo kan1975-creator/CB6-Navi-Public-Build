@@ -1,0 +1,41 @@
+# CB6 trusted-main PR approval CANDIDATE, not deployed or ACTIVE.
+# Proposed event pull_request_target is restricted for public repositories by
+# GitHub Actions event policy (Nov 2 2026 enforcement). Policy authorization
+# must be separately proven BEFORE deployment. No PR head checkout, no secret injection.
+# DO NOT designate this job as Required Check before owner final adoption.
+name: CB6 Personal Approval Trusted Main Candidate
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+jobs:
+  cb6-personal-approval-trusted-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # NEVER gate the job via 'if:'; a skipped Required Check may count as success.
+    steps:
+      - name: Checkout the trusted BASE SHA only (never PR head/merge)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Ensure checkout is trusted main event commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = 'pull_request_target'
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$GITHUB_BASE_REF" = 'main'
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -f v2/gates/user_approval_before_fix_contract.json
+          test -f v2/gates/verify_user_approval_before_fix.py
+      - name: Verify GitHub owner approval and exact PR scope (candidate only)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 -I -B v2/gates/verify_user_approval_before_fix.py --personal-trusted-target-candidate

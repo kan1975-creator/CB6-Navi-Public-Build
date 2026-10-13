@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "rule_id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
+  "status": "CANDIDATE",
+  "scope": "implementation_problem_fix_commits",
+  "requirement": "Explicit user approval for the exact proposed implementation-problem fix must predate implementation work.",
+  "approval_record": {
+    "required_fields": [
+      "approval_id",
+      "approved_at",
+      "proposed_change_id",
+      "approved_change_summary"
+    ],
+    "github_reference_required": true,
+    "allowed_reference_locations": [
+      "commit_message",
+      "pull_request_description"
+    ],
+    "change_binding": "exact_proposed_change_id"
+  },
+  "fail_closed": {
+    "missing_approval": true,
+    "post_hoc_approval": true,
+    "approval_reuse_for_different_change": true,
+    "missing_change_binding": true
+  },
+  "personal_issuer_relaxation_candidate": {
+    "status": "PROPOSED_NOT_ADOPTED",
+    "scope": "PERSONAL_DEVELOPMENT_ONLY",
+    "external_issuer_required": false,
+    "independent_required_check_required": false,
+    "independent_github_admin_required": false,
+    "prior_user_approval_required": true,
+    "separate_gpt_review_required": true,
+    "affected_scope_tests_required": true,
+    "does_not_override_active_rules": true,
+    "user_completion_criteria_decision": {
+      "status": "USER_APPROVED_POLICY_ONLY",
+      "decision_date": "2026-10-13",
+      "deployment_status": "NOT_DEPLOYED",
+      "active_rules_unchanged": true
+    }
+  },
+  "personal_formal_transition_proposal": {
+    "status": "PROPOSED_NOT_ACTIVE",
+    "method": "PERSONAL_MANUAL_READ_ONLY_ADVISORY",
+    "registry_candidate": "v2/gates/operational_rule_registry_v22.json",
+    "registry_candidate_requires_full_v21_semantic_preservation": true,
+    "requires_before_deployment": [
+      "explicit_user_final_adoption",
+      "separate_gpt_independent_review",
+      "affected_scope_change_tests",
+      "trusted_main_execution",
+      "read_only_github_api_token",
+      "required_active_registry_migration_and_freeze_compliance"
+    ],
+    "retained_rejections": [
+      "approval_missing",
+      "posthoc_or_reused_approval",
+      "approval_revoked",
+      "plan_digest_mismatch",
+      "pr_head_or_path_mismatch",
+      "api_read_or_pagination_failure"
+    ],
+    "assurance_limits": [
+      "github_approval_before_pr_creation_not_proof_before_first_local_edit",
+      "repository_owner_can_bypass_manual_advisory_check",
+      "not_a_required_check"
+    ],
+    "allow_production_pass": false,
+    "active_rules_unchanged": true,
+    "deployment_status": "NOT_DEPLOYED"
+  },
+  "personal_completion_policy_20261013": {
+    "status": "USER_APPROVED_POLICY_ONLY",
+    "authorization": "ISOLATED_LOCAL_CANDIDATE_ONLY",
+    "record_date": "2026-10-13",
+    "scope": "PERSONAL_DEVELOPMENT_ONLY",
+    "administrator_self_lock_guarantee": "UNATTAINABLE_NOT_REQUIRED",
+    "administrator_settings_changes": "AUDIT_WITH_EXPLICIT_OWNER_DECISION_NOT_PREVENTION",
+    "historical_unrecorded_local_edit": "UNPROVEN_NEVER_RETROACTIVE_PASS",
+    "future_preimplementation_owner_approval": "REQUIRED_CHANGE_BOUND_BEFORE_WORK",
+    "future_evidence": "FIXED_PLAN_SHA_APPROVAL_RECORD_AND_START_LOG_WITHOUT_ABSOLUTE_LOCAL_TIME_PROOF",
+    "external_independent_issuer": "NOT_REQUIRED_FOR_PERSONAL_COMPLETION_POLICY",
+    "external_human_administrator": "NOT_REQUIRED_FOR_PERSONAL_COMPLETION_POLICY",
+    "separate_gpt_independent_review": "REQUIRED",
+    "affected_scope_tests": "REQUIRED",
+    "legacy_verify_live": "RETAIN_UNCONDITIONAL_PROVENANCE_BLOCKED",
+    "github_required_check": "REQUIRED_FOR_FINAL_COMPLETION_NOT_IMPLEMENTED",
+    "workflow_trigger_selection": "UNSELECTED_PENDING_SECURITY_VALIDATION",
+    "untrusted_pr_code_at_privileged_scope": "FORBIDDEN",
+    "active_registry_v21": "UNCHANGED",
+    "registry_v22": "PROPOSED_NOT_ACTIVE",
+    "write_and_method_freezes": "UNCHANGED",
+    "final_owner_adoption": "SEPARATELY_REQUIRED_AFTER_EVIDENCE",
+    "production_deployment": "NOT_AUTHORIZED"
+  }
+}
