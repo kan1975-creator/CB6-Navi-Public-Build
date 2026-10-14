@@ -1,9 +1,9 @@
-# CB6 trusted-default-main PR approval CANDIDATE; not deployed, ACTIVE or Required Check.
-# Proposed event pull_request_target is restricted for public repositories by
+# CB6 trusted-default-main PR approval. Required Check only after owner adoption.
+# pull_request_target may be restricted for public repositories by
 # GitHub Actions event policy (Nov 2 2026 enforcement). Policy authorization
-# must be separately proven BEFORE deployment. No PR head checkout, no secret injection.
+# must be maintained. No PR head checkout, no secret injection.
 # Trusted workflow resides on default main; PR base can be main or cb6-v2-clean.
-# DO NOT designate this job as Required Check before owner final adoption.
+# Rule-set enforcement requires separate owner approval and GitHub verification.
 name: CB6 Personal Approval Trusted Main Candidate
 on:
   pull_request_target:
@@ -38,8 +38,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -f v2/gates/user_approval_before_fix_contract.json
           test -f v2/gates/verify_user_approval_before_fix.py
-      - name: Verify GitHub owner approval and exact PR scope (candidate only)
+      - name: Verify GitHub owner approval and exact PR scope (required gate)
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python3 -I -B v2/gates/verify_user_approval_before_fix.py --personal-trusted-target-candidate
+          python3 -I -B v2/gates/verify_user_approval_before_fix.py --personal-trusted-target-required

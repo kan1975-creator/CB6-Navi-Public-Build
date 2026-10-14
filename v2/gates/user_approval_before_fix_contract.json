@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "rule_id": "OPS-USER-APPROVAL-BEFORE-FIX-001",
-  "status": "CANDIDATE",
+  "status": "ACTIVE",
   "scope": "implementation_problem_fix_commits",
   "requirement": "Explicit user approval for the exact proposed implementation-problem fix must predate implementation work.",
   "approval_record": {
@@ -126,5 +126,43 @@
     "write_and_method_freezes": "UNCHANGED",
     "final_owner_adoption": "SEPARATELY_REQUIRED_AFTER_EVIDENCE",
     "production_deployment": "NOT_AUTHORIZED"
+  },
+  "personal_trusted_target_auto_active": {
+    "status": "ACTIVE",
+    "method": "TRUSTED_DEFAULT_MAIN_PULL_REQUEST_TARGET_METADATA_ONLY",
+    "event": "pull_request_target",
+    "allowed_base_branches": [
+      "main",
+      "cb6-v2-clean"
+    ],
+    "separately_deploy_trusted_workflow_to_each_base": false,
+    "execute_pr_head_or_merge_code": false,
+    "github_token_permissions": [
+      "contents:read",
+      "issues:read",
+      "pull-requests:read"
+    ],
+    "skip_success_as_required_check": false,
+    "required_check_context": "cb6-personal-approval-trusted-candidate",
+    "required_check_integration_id": 15368,
+    "required_checks": "GITHUB_BRANCH_RULESET",
+    "allow_production_pass": true,
+    "require_owner_prior_approval": true,
+    "retain_separate_gpt_review": true,
+    "retain_affected_scope_tests": true,
+    "legacy_verify_live_retains_block": true,
+    "assurance_boundary": "GITHUB_OWNER_APPROVAL_BEFORE_PR_CREATION_AND_APPROVED_PATH_SET_NOT_FIRST_LOCAL_EDIT_OR_CONTENT_HASH",
+    "trusted_workflow_source_branch": "main",
+    "trusted_event_ref": "refs/heads/main",
+    "pr_base_match_sources": [
+      "GITHUB_BASE_REF",
+      "event.pull_request.base",
+      "authenticated_github_api_pr"
+    ],
+    "checkout_trusted_default_branch_sha_only": true,
+    "trusted_workflow_sha256": "d79e24ac5e1b79e77e5e71f8ceaf8a03146a6e40ce072881766bf665b925435a",
+    "candidate_provenance_run_id": 38571667600,
+    "candidate_provenance_main_sha": "401e31b7b03f8c78173ae703f5c8791254dd2cc0",
+    "final_adoption_requires": "OWNER_APPROVAL_AND_EFFECTIVE_RULESET_CHECK_ENFORCEMENT"
   }
 }

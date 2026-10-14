@@ -1003,6 +1003,12 @@ def personal_main(argv=None):
 # this module does not authorize deployment or Required Check registration.
 def personal_trusted_target_candidate_main(environ=None, event=None, checker=None):
     environ = os.environ if environ is None else environ
+    if CONTRACT.get('status') == 'ACTIVE':
+        # Compatibility for the historical CLI entrypoint after formal adoption.
+        # Never execute candidate-only checks or print a candidate PASS in ACTIVE.
+        # Delegate to the strict active verifier; it fails closed on drift/errors.
+        return personal_trusted_target_required_main(environ=environ, event=event,
+                                                     checker=checker)
     try:
         personal_transition_proposal_guard()
         # Complete equality rejects missing, extra or weakened auto-contract fields.
@@ -1091,7 +1097,108 @@ def personal_trusted_target_candidate_main(environ=None, event=None, checker=Non
         return 1
 
 
+
+def personal_trusted_target_required_main(environ=None, event=None, checker=None):
+    environ = os.environ if environ is None else environ
+    try:
+        # ACTIVE contract is separate from the immutable historical candidate evidence.
+        personal_require(CONTRACT.get('status') == 'ACTIVE', 'active contract not adopted')
+        expected_auto = {'status': 'ACTIVE',
+         'method': 'TRUSTED_DEFAULT_MAIN_PULL_REQUEST_TARGET_METADATA_ONLY',
+         'event': 'pull_request_target',
+         'allowed_base_branches': ['main', 'cb6-v2-clean'],
+         'separately_deploy_trusted_workflow_to_each_base': False,
+         'execute_pr_head_or_merge_code': False,
+         'github_token_permissions': ['contents:read', 'issues:read', 'pull-requests:read'],
+         'skip_success_as_required_check': False,
+         'required_check_context': 'cb6-personal-approval-trusted-candidate',
+         'required_check_integration_id': 15368,
+         'required_checks': 'GITHUB_BRANCH_RULESET',
+         'allow_production_pass': True,
+         'require_owner_prior_approval': True,
+         'retain_separate_gpt_review': True,
+         'retain_affected_scope_tests': True,
+         'legacy_verify_live_retains_block': True,
+         'assurance_boundary': 'GITHUB_OWNER_APPROVAL_BEFORE_PR_CREATION_AND_APPROVED_PATH_SET_NOT_FIRST_LOCAL_EDIT_OR_CONTENT_HASH',
+         'trusted_workflow_source_branch': 'main',
+         'trusted_event_ref': 'refs/heads/main',
+         'pr_base_match_sources': ['GITHUB_BASE_REF',
+                                   'event.pull_request.base',
+                                   'authenticated_github_api_pr'],
+         'checkout_trusted_default_branch_sha_only': True,
+         'trusted_workflow_sha256': 'd79e24ac5e1b79e77e5e71f8ceaf8a03146a6e40ce072881766bf665b925435a',
+         'candidate_provenance_run_id': 38571667600,
+         'candidate_provenance_main_sha': '401e31b7b03f8c78173ae703f5c8791254dd2cc0',
+         'final_adoption_requires': 'OWNER_APPROVAL_AND_EFFECTIVE_RULESET_CHECK_ENFORCEMENT'}
+        personal_require(CONTRACT.get('personal_trusted_target_auto_active') == expected_auto,
+                         'active required-check contract missing or drifted')
+        # Bind declared permissions, event trigger and trusted checkout to exact
+        # trusted-main workflow bytes; a YAML/contract drift fails closed.
+        workflow_path = ROOT / '.github/workflows/cb6_approval_enforcement.yml'
+        personal_require(hashlib.sha256(workflow_path.read_bytes()).hexdigest() ==
+                         expected_auto['trusted_workflow_sha256'],
+                         'trusted-main workflow differs from approved auto contract')
+        personal_require(environ.get('GITHUB_EVENT_NAME') == 'pull_request_target',
+                         'not a pull_request_target event')
+        personal_require(environ.get('GITHUB_REPOSITORY') == PERSONAL_REPO,
+                         'unexpected repository identity')
+        base_ref = environ.get('GITHUB_BASE_REF')
+        personal_require(environ.get('GITHUB_REF') == 'refs/heads/main' and
+                         base_ref in expected_auto['allowed_base_branches'],
+                         'trusted default-main ref or PR target branch mismatch')
+        trusted_sha = environ.get('GITHUB_SHA', '')
+        personal_require(isinstance(trusted_sha, str) and
+                         PERSONAL_HEX40.fullmatch(trusted_sha) is not None,
+                         'trusted base SHA missing or malformed')
+        token = environ.get('GITHUB_TOKEN', '')
+        personal_require(isinstance(token, str) and bool(token),
+                         'read-only GITHUB_TOKEN required')
+        if event is None:
+            path = environ.get('GITHUB_EVENT_PATH')
+            personal_require(isinstance(path, str) and bool(path),
+                             'GitHub event path unavailable')
+            try:
+                event = json.loads(Path(path).read_text(encoding='utf-8'))
+            except (OSError, UnicodeError, ValueError) as exc:
+                raise PersonalBlocked('unreadable PR target event') from exc
+        personal_require(isinstance(event, dict), 'PR target event must be object')
+        repository = event.get('repository')
+        personal_require(isinstance(repository, dict) and
+                         repository.get('full_name') == PERSONAL_REPO,
+                         'PR target payload repository mismatch')
+        pr = event.get('pull_request')
+        personal_require(isinstance(pr, dict), 'PR target payload missing PR')
+        base = pr.get('base')
+        personal_require(isinstance(base, dict) and base.get('ref') == base_ref and
+                         isinstance(base.get('sha'), str) and
+                         PERSONAL_HEX40.fullmatch(base['sha']) is not None and
+                         base.get('repo', {}).get('full_name') == PERSONAL_REPO,
+                         'PR target base identity malformed or mismatched')
+        # GITHUB_SHA is the trusted main SHA, not the PR's base SHA.
+        # Compare PR base SHA/ref to authenticated API inside personal_check.
+        # This parser validates metadata only. Its event_name parameter is a
+        # parser label, never a claim that a pull_request workflow was trusted.
+        args = personal_pr_event_inputs(event, PERSONAL_REPO, 'pull_request')
+        if checker is None:
+            outcome = personal_check(*args, token, expected_base_ref=base_ref,
+                                     expected_base_sha=base['sha'])
+        else:
+            # Preserves isolated injected-checker signature; CLI never passes a checker.
+            outcome = checker(*args, token)
+        personal_require(outcome == 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY',
+                         'authenticated personal approval absent or rejected')
+        print('TRUSTED_MAIN_REQUIRED PASS: GitHub owner PR-approval proxy verified')
+        print('NOTE: Required-Check enforcement is owned by GitHub ruleset, not self-certified by this process.')
+        return 0
+    except (PersonalBlocked, OSError, UnicodeError, ValueError, TypeError,
+            AttributeError, KeyError) as exc:
+        print('TRUSTED_MAIN_REQUIRED BLOCK:', str(exc), file=sys.stderr)
+        return 1
+
+
 def main(argv):
+    if len(argv) == 2 and argv[1] == '--personal-trusted-target-required':
+        return personal_trusted_target_required_main()
     if len(argv) == 2 and argv[1] == "--personal-trusted-target-candidate":
         # Trusted-main metadata-only candidate, NOT an active Required Check.
         return personal_trusted_target_candidate_main()
