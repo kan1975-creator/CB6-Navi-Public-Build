@@ -1,8 +1,8 @@
-# CB6 trusted-base PR approval CANDIDATE; not deployed, ACTIVE or Required Check.
+# CB6 trusted-default-main PR approval CANDIDATE; not deployed, ACTIVE or Required Check.
 # Proposed event pull_request_target is restricted for public repositories by
 # GitHub Actions event policy (Nov 2 2026 enforcement). Policy authorization
 # must be separately proven BEFORE deployment. No PR head checkout, no secret injection.
-# Coverage for each target branch requires a trusted workflow on that base branch.
+# Trusted workflow resides on default main; PR base can be main or cb6-v2-clean.
 # DO NOT designate this job as Required Check before owner final adoption.
 name: CB6 Personal Approval Trusted Main Candidate
 on:
@@ -18,23 +18,23 @@ jobs:
     timeout-minutes: 10
     # NEVER gate the job via 'if:'; a skipped Required Check may count as success.
     steps:
-      - name: Checkout the trusted BASE SHA only (never PR head/merge)
+      - name: Checkout trusted default-main event SHA (never PR head/merge)
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: false
-      - name: Ensure checkout is trusted base event commit
+      - name: Ensure checkout is trusted default-main event commit
         shell: bash
         run: |
           set -euo pipefail
           test "$GITHUB_EVENT_NAME" = 'pull_request_target'
           test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_REF" = 'refs/heads/main'
           case "$GITHUB_BASE_REF" in
             main|cb6-v2-clean) ;;
             *) exit 1 ;;
           esac
-          test "$GITHUB_REF" = "refs/heads/$GITHUB_BASE_REF"
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -f v2/gates/user_approval_before_fix_contract.json
           test -f v2/gates/verify_user_approval_before_fix.py

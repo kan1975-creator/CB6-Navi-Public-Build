@@ -73,20 +73,35 @@
   },
   "personal_trusted_target_auto_candidate": {
     "status": "PROPOSED_NOT_ACTIVE",
-    "method": "TRUSTED_BASE_PULL_REQUEST_TARGET_METADATA_ONLY",
+    "method": "TRUSTED_DEFAULT_MAIN_PULL_REQUEST_TARGET_METADATA_ONLY",
     "event": "pull_request_target",
-    "allowed_base_branches": ["main", "cb6-v2-clean"],
-    "separately_deploy_trusted_workflow_to_each_base": true,
+    "allowed_base_branches": [
+      "main",
+      "cb6-v2-clean"
+    ],
+    "separately_deploy_trusted_workflow_to_each_base": false,
     "execute_pr_head_or_merge_code": false,
-    "checkout_trusted_base_sha_only": true,
-    "github_token_permissions": ["contents:read", "issues:read", "pull-requests:read"],
+    "github_token_permissions": [
+      "contents:read",
+      "issues:read",
+      "pull-requests:read"
+    ],
     "skip_success_as_required_check": false,
     "actions_policy_verified": false,
     "required_check_live_verified": false,
     "required_checks": "NOT_REGISTERED",
     "allow_production_pass": false,
     "active_rules_unchanged": true,
-    "deployment_status": "NOT_DEPLOYED"
+    "deployment_status": "NOT_DEPLOYED",
+    "trusted_workflow_source_branch": "main",
+    "trusted_event_ref": "refs/heads/main",
+    "pr_base_match_sources": [
+      "GITHUB_BASE_REF",
+      "event.pull_request.base",
+      "authenticated_github_api_pr"
+    ],
+    "checkout_trusted_default_branch_sha_only": true,
+    "trusted_workflow_sha256": "e6b2c117a5d7bc93a667522dc3a14b360d995b0e240c4aef0f494b418a2f6bb3"
   },
   "personal_completion_policy_20261013": {
     "status": "USER_APPROVED_POLICY_ONLY",

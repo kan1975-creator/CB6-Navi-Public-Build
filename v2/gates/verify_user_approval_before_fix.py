@@ -707,7 +707,7 @@ def personal_repository_comment_snapshot(api, owner_id, change_id, approval):
     return tuple(snapshot)
 
 
-def personal_check(pr_number, comment_id, plan_sha, plan_commit, plan_path, expected_head, token, transport=None):
+def personal_check(pr_number, comment_id, plan_sha, plan_commit, plan_path, expected_head, token, transport=None, expected_base_ref=None, expected_base_sha=None):
     personal_require(type(pr_number) is int and pr_number > 0 and type(comment_id) is int and comment_id > 0, 'bad PR/comment ID')
     personal_require(isinstance(plan_sha, str) and PERSONAL_HEX64.fullmatch(plan_sha), 'bad plan SHA256')
     personal_require(isinstance(plan_commit, str) and PERSONAL_HEX40.fullmatch(plan_commit), 'bad plan commit SHA')
@@ -715,6 +715,11 @@ def personal_check(pr_number, comment_id, plan_sha, plan_commit, plan_path, expe
     personal_require(isinstance(plan_path, str) and 0 < len(plan_path) <= 200 and all(
             seg not in ('', '.', '..') for seg in plan_path.split('/')) and not plan_path.startswith('/'), 'bad plan path')
     personal_require(isinstance(token, str) and token, 'GITHUB_TOKEN missing')
+    if expected_base_ref is not None or expected_base_sha is not None:
+        personal_require(expected_base_ref in ('main', 'cb6-v2-clean') and
+                         isinstance(expected_base_sha, str) and
+                         PERSONAL_HEX40.fullmatch(expected_base_sha) is not None,
+                         'malformed expected PR base identity')
     api = lambda suffix: personal_gh_get(suffix, token, transport)
 
     repository = api('')
@@ -728,6 +733,10 @@ def personal_check(pr_number, comment_id, plan_sha, plan_commit, plan_path, expe
     personal_require(pr.get('head', {}).get('sha') == expected_head, 'stale PR HEAD')
     personal_require(pr.get('base', {}).get('repo', {}).get('full_name') == PERSONAL_REPO, 'PR base repository mismatch')
     personal_require(pr.get('base', {}).get('ref') in ('main', 'cb6-v2-clean'), 'unsupported base branch')
+    if expected_base_ref is not None:
+        personal_require(pr['base'].get('ref') == expected_base_ref and
+                         pr['base'].get('sha') == expected_base_sha,
+                         'authenticated PR base ref/SHA differs from event')
     comment = api(f'/issues/comments/{comment_id}')
     personal_require(isinstance(comment, dict) and comment.get('id') == comment_id and
             comment.get('user', {}).get('id') == owner_id, 'not owner-authored GitHub comment')
@@ -794,6 +803,11 @@ def personal_check(pr_number, comment_id, plan_sha, plan_commit, plan_path, expe
             api, owner_id, plan['proposed_change_id'], comment)
     latest_pr=api(f'/pulls/{pr_number}')
     latest_comment=api(f'/issues/comments/{comment_id}')
+    if expected_base_ref is not None:
+        personal_require(latest_pr.get('base', {}).get('ref') == expected_base_ref and
+                         latest_pr.get('base', {}).get('sha') == expected_base_sha and
+                         latest_pr.get('base', {}).get('repo', {}).get('full_name') == PERSONAL_REPO,
+                         'authenticated PR base identity changed during verification')
     personal_require(latest_pr.get('head', {}).get('sha') == expected_head and
             latest_pr.get('base', {}).get('sha') == pr['base']['sha'] and
             latest_pr.get('changed_files') == pr['changed_files'] and
@@ -982,33 +996,51 @@ def personal_main(argv=None):
 
 
 
-# Trusted-base PR target adapter, ISOLATED CANDIDATE ONLY.
+# Trusted-default-main PR target adapter, ISOLATED CANDIDATE ONLY.
 # This accepts only event metadata; it NEVER checks out, imports or executes PR code.
-# The enclosing workflow must run from a trusted base branch with read-only token.
+# The enclosing workflow must run from trusted default main with read-only token.
 # GitHub Actions event policy for pull_request_target remains UNVERIFIED;
 # this module does not authorize deployment or Required Check registration.
 def personal_trusted_target_candidate_main(environ=None, event=None, checker=None):
     environ = os.environ if environ is None else environ
     try:
         personal_transition_proposal_guard()
-        auto = CONTRACT.get('personal_trusted_target_auto_candidate')
-        personal_require(isinstance(auto, dict) and
-                         auto.get('status') == 'PROPOSED_NOT_ACTIVE' and
-                         auto.get('allow_production_pass') is False and
-                         auto.get('active_rules_unchanged') is True and
-                         auto.get('deployment_status') == 'NOT_DEPLOYED' and
-                         auto.get('required_checks') == 'NOT_REGISTERED' and
-                         auto.get('execute_pr_head_or_merge_code') is False and
-                         auto.get('checkout_trusted_base_sha_only') is True,
-                         'trusted-base auto proposal missing or activated')
+        # Complete equality rejects missing, extra or weakened auto-contract fields.
+        expected_auto = {'status': 'PROPOSED_NOT_ACTIVE',
+         'method': 'TRUSTED_DEFAULT_MAIN_PULL_REQUEST_TARGET_METADATA_ONLY',
+         'event': 'pull_request_target',
+         'allowed_base_branches': ['main', 'cb6-v2-clean'],
+         'separately_deploy_trusted_workflow_to_each_base': False,
+         'execute_pr_head_or_merge_code': False,
+         'github_token_permissions': ['contents:read', 'issues:read', 'pull-requests:read'],
+         'skip_success_as_required_check': False,
+         'actions_policy_verified': False,
+         'required_check_live_verified': False,
+         'required_checks': 'NOT_REGISTERED',
+         'allow_production_pass': False,
+         'active_rules_unchanged': True,
+         'deployment_status': 'NOT_DEPLOYED',
+         'trusted_workflow_source_branch': 'main',
+         'trusted_event_ref': 'refs/heads/main',
+         'pr_base_match_sources': ['GITHUB_BASE_REF', 'event.pull_request.base', 'authenticated_github_api_pr'],
+         'checkout_trusted_default_branch_sha_only': True,
+         'trusted_workflow_sha256': 'e6b2c117a5d7bc93a667522dc3a14b360d995b0e240c4aef0f494b418a2f6bb3'}
+        personal_require(CONTRACT.get('personal_trusted_target_auto_candidate') == expected_auto,
+                         'trusted-default-main auto contract missing, altered or activated')
+        # Bind declared permissions, event trigger and trusted checkout to exact
+        # trusted-main workflow bytes; a YAML/contract drift fails closed.
+        workflow_path = ROOT / '.github/workflows/cb6_approval_enforcement.yml'
+        personal_require(hashlib.sha256(workflow_path.read_bytes()).hexdigest() ==
+                         expected_auto['trusted_workflow_sha256'],
+                         'trusted-main workflow differs from approved auto contract')
         personal_require(environ.get('GITHUB_EVENT_NAME') == 'pull_request_target',
                          'not a pull_request_target event')
         personal_require(environ.get('GITHUB_REPOSITORY') == PERSONAL_REPO,
                          'unexpected repository identity')
         base_ref = environ.get('GITHUB_BASE_REF')
-        personal_require(base_ref in ('main', 'cb6-v2-clean') and
-                         environ.get('GITHUB_REF') == 'refs/heads/' + base_ref,
-                         'trusted base ref mismatch')
+        personal_require(environ.get('GITHUB_REF') == 'refs/heads/main' and
+                         base_ref in expected_auto['allowed_base_branches'],
+                         'trusted default-main ref or PR target branch mismatch')
         trusted_sha = environ.get('GITHUB_SHA', '')
         personal_require(isinstance(trusted_sha, str) and
                          PERSONAL_HEX40.fullmatch(trusted_sha) is not None,
@@ -1033,13 +1065,21 @@ def personal_trusted_target_candidate_main(environ=None, event=None, checker=Non
         personal_require(isinstance(pr, dict), 'PR target payload missing PR')
         base = pr.get('base')
         personal_require(isinstance(base, dict) and base.get('ref') == base_ref and
-                         base.get('sha') == trusted_sha,
-                         'PR target base SHA/ref changed or mismatched')
+                         isinstance(base.get('sha'), str) and
+                         PERSONAL_HEX40.fullmatch(base['sha']) is not None and
+                         base.get('repo', {}).get('full_name') == PERSONAL_REPO,
+                         'PR target base identity malformed or mismatched')
+        # GITHUB_SHA is the trusted main SHA, not the PR's base SHA.
+        # Compare PR base SHA/ref to authenticated API inside personal_check.
         # This parser validates metadata only. Its event_name parameter is a
         # parser label, never a claim that a pull_request workflow was trusted.
         args = personal_pr_event_inputs(event, PERSONAL_REPO, 'pull_request')
-        verifier = personal_check if checker is None else checker
-        outcome = verifier(*args, token)
+        if checker is None:
+            outcome = personal_check(*args, token, expected_base_ref=base_ref,
+                                     expected_base_sha=base['sha'])
+        else:
+            # Preserves isolated injected-checker signature; CLI never passes a checker.
+            outcome = checker(*args, token)
         personal_require(outcome == 'PERSONAL_APPROVAL_V1_PR_PROXY_ONLY',
                          'authenticated personal approval absent or rejected')
         print('TRUSTED_MAIN_CANDIDATE PASS: GitHub owner PR-approval proxy verified')
