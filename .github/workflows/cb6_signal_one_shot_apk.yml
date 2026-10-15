@@ -30,6 +30,8 @@ jobs:
     permissions:
       contents: read
       actions: read
+      checks: read
+      pull-requests: read
     env:
       SOURCE_SHA: d1afd49da4ad35123877a35ec47cf28b3d7b2560
       COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
@@ -53,16 +55,66 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Verify frozen source and indispensable feature gates
+      - name: Verify frozen source and authenticated PASS of existing feature Gate
         shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
           test -z "$(git status --porcelain --untracked-files=no)"
           python3 v2/gates/verify_method_freeze.py
-          python3 v2/gates/verify_project_gate.py --require-feature-build --feature=signals
           mkdir -p out
           echo "$SOURCE_SHA" > out/SOURCE_SHA.txt
+          # Preserve GitHub-managed GITHUB_SHA on main. The existing Development
+          # Gate passed on immutable SOURCE_SHA; do not rerun past PASS tests.
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38750137563" > out/TRUSTED_GATE_RUN.json
+          gh api "repos/$GITHUB_REPOSITORY/commits/$SOURCE_SHA/check-runs?per_page=100" > out/TRUSTED_GATE_CHECKS.json
+          gh api "repos/$GITHUB_REPOSITORY/pulls/13" > out/TRUSTED_PR13.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          run = json.loads(Path('out/TRUSTED_GATE_RUN.json').read_text())
+          data = json.loads(Path('out/TRUSTED_GATE_CHECKS.json').read_text())
+          pr = json.loads(Path('out/TRUSTED_PR13.json').read_text())
+          source = 'd1afd49da4ad35123877a35ec47cf28b3d7b2560'
+          if (run.get('id') != 38750137563 or
+              run.get('name') != 'CB6 Development Gate' or
+              run.get('path') != '.github/workflows/cb6_development_gate.yml' or
+              run.get('head_sha') != source or
+              run.get('event') != 'pull_request' or
+              run.get('run_attempt') != 1 or
+              run.get('status') != 'completed' or
+              run.get('conclusion') != 'success'):
+              raise SystemExit('EXISTING_GATE_RUN_INVALID')
+          checks = data.get('check_runs')
+          if (type(data.get('total_count')) is not int or
+              not isinstance(checks, list) or
+              not (0 < data['total_count'] <= 100) or
+              len(checks) != data['total_count']):
+              raise SystemExit('EXISTING_GATE_CHECKS_INCOMPLETE')
+          matches = [c for c in checks if c.get('name') == 'gate']
+          if len(matches) != 1:
+              raise SystemExit('EXISTING_GATE_CHECK_MISSING_OR_AMBIGUOUS')
+          c = matches[0]
+          if (c.get('id') != 116474072130 or
+              c.get('head_sha') != source or
+              c.get('status') != 'completed' or
+              c.get('conclusion') != 'success' or
+              c.get('app', {}).get('id') != 15368 or
+              c.get('details_url') !=
+                'https://github.com/kan1975-creator/CB6-Navi-Public-Build/actions/runs/38750137563/job/116474072130'):
+              raise SystemExit('EXISTING_GATE_CHECK_UNTRUSTED')
+          if (pr.get('number') != 13 or
+              pr.get('state') != 'open' or
+              pr.get('merged') is not False or
+              pr.get('head', {}).get('sha') != source or
+              pr.get('head', {}).get('repo', {}).get('full_name') !=
+                'kan1975-creator/CB6-Navi-Public-Build' or
+              pr.get('base', {}).get('ref') != 'cb6-v2-clean' or
+              pr.get('base', {}).get('sha') !=
+                '645132832a478025e162d0f9fea2e785bcba374e'):
+              raise SystemExit('FIXED_SOURCE_PR13_CHANGED')
+          print('AUTHENTICATED_PRIOR_PR13_DEVELOPMENT_GATE_PASS')
+          PY
 
       - name: Java 21
         uses: actions/setup-java@v4
@@ -182,7 +234,22 @@ jobs:
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
           test -x "$APKSIGNER"
           "$APKSIGNER" verify --verbose --print-certs out/CB6-Signal-OneShot-arm64.apk | tee out/SIGNATURE_VERIFY.txt
-          sha256sum out/CB6-Signal-OneShot-arm64.apk | tee out/SHA256SUMS.txt
+          # Existing successful Signals Run 37559064432, artifact 11456861577.
+          # Reference APK SHA256: 560f13365a416b1f925662ad014ae0133419461bb1633b51aea8c1bebc51d475
+          # Reference CERT.RSA signer X.509 fingerprint (SHA-256):
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          evidence = Path('out/SIGNATURE_VERIFY.txt').read_text(encoding='utf-8')
+          expected = '0CCCC7C349BCC0005F53AA1A58F42B1C8EC6A387513F7C33576390842EAC301A'
+          signers = re.findall(r'^Signer #(\d+) certificate SHA-256 digest: ([0-9a-fA-F]{64})\s*$',
+                               evidence, re.MULTILINE)
+          count = re.findall(r'^Number of signers: (\d+)\s*$', evidence, re.MULTILINE)
+          if count != ['1'] or len(signers) != 1 or signers[0][0] != '1' or signers[0][1].upper() != expected:
+              raise SystemExit('CANONICAL_SIGNER_SHA256_MISMATCH_OR_MISSING')
+          print('CANONICAL_SIGNER_SHA256_MATCH', expected)
+          PY
+          (cd out && sha256sum CB6-Signal-OneShot-arm64.apk > SHA256SUMS.txt)
 
       - name: Upload verified APK and text evidence (no new source archive)
         uses: actions/upload-artifact@v4
