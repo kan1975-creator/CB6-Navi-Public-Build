@@ -2,9 +2,8 @@
   "schema": 1,
   "signal": {
     "display": {
-      "min_zoom": 14,
+      "min_zoom": 15,
       "zoom_symbols": {
-        "14": "xs",
         "15": "xs"
       },
       "forward_zoom_symbols": {
@@ -37,6 +36,13 @@
         "overpass_role": "missing-signal-supplement",
         "intersection_normalization": "topology-evidence-only",
         "uncertain_signal_policy": "retain"
+      },
+      "full_display_min_zoom": 17,
+      "topology_center_match_m": 0.5,
+      "zoom_visibility": {
+        "500m_or_farther": "Hide CB6 signal symbols at zoom 14 and below; validate scale equivalence on CB6 device.",
+        "200m": "At zoom 15-16, retain one symbol per confirmed intersection centre; uncertain signals remain.",
+        "100m_or_closer": "At zoom 17 and above, display all existing marks with original forward emphasis."
       }
     },
     "acquisition": {

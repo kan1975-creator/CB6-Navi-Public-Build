@@ -1,0 +1,71 @@
+{
+  "proposed_change_id": "CB6-SIG-200M-DECLUTTER-20261015",
+  "basis_head": "645132832a478025e162d0f9fea2e785bcba374e",
+  "planned_paths": [
+    "v2/signals/native/cb6_signal_mark.hpp",
+    "v2/signals/native/cb6_signal_jni.inc",
+    "v2/gates/current_spec.json",
+    "v2/audits/audit_signals.py",
+    "v2/tests/signals_audit_selftest.py",
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+    "v2/signals/plans/CB6-SIG-200M-DECLUTTER-20261015.json",
+    "v2/signals/java/SignalController.java",
+    "v2/signals/apply_signals.py"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/verify_user_approval_before_fix.py",
+    "v2/gates/user_approval_before_fix_contract.json"
+  ],
+  "affected_domains": [
+    "traffic_signals_100m_and_closer_preserved",
+    "traffic_signals_200m_display_only_decluttering",
+    "traffic_signals_500m_and_further_hidden"
+  ],
+  "approved_constraints": {
+    "100m_or_closer": "Preserve current signal symbols, positions, and counts.",
+    "200m": "Reduce displayed signals by safe intersection topology; do not remove or change source records.",
+    "500m_or_farther": "Display no CB6 traffic-signal symbols.",
+    "preserve": [
+      "MWM source priority",
+      "Overpass supplementary source",
+      "0.5 metre raw duplicate exclusion",
+      "topology-aware intersection normalization",
+      "vehicle signals only",
+      "existing non-signal features",
+      "15 active rules",
+      "Method Freeze",
+      "all BLOCK/STOP"
+    ],
+    "excluded": [
+      "pan display fix",
+      "merging PR",
+      "Ruleset changes",
+      "manual Actions runs",
+      "new ZIPs",
+      "rerunning earlier PASS tests",
+      "unrelated code changes"
+    ]
+  },
+  "base_ref": "cb6-v2-clean",
+  "branch": "fix/cb6-sig-200m-declutter-20261015",
+  "evidence_type": "GitHub owner Issue comment predating implementation and PR creation",
+  "amendment": {
+    "change_scope": "Independent review FAIL1 intersection-identity and FAIL2 audit/selftest corrections only",
+    "remediation_from_head": "b945e49ba73c796df315bf0f63a89f8132548684",
+    "old_owner_comment": 6191910920,
+    "old_plan_sha256": "7ca14569b6fa87e8c2072d451aed77d1225762c90c39420dfdfb55127573b270",
+    "exception_paths": [
+      "v2/signals/java/SignalController.java",
+      "v2/signals/apply_signals.py"
+    ],
+    "implementation_paths": [
+      "v2/signals/native/cb6_signal_jni.inc",
+      "v2/signals/java/SignalController.java",
+      "v2/signals/apply_signals.py",
+      "v2/audits/audit_signals.py",
+      "v2/tests/signals_audit_selftest.py"
+    ],
+    "fail_closed": "No merge, no code changes without new owner Issue comment; unknown/conflicting topology groups always retain marks"
+  }
+}

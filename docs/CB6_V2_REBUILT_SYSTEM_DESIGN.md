@@ -17,7 +17,7 @@ GitHub is the persistent source of truth. Active decisions, authority, evidence,
 
 Requirements: `SIG-200M-001`, `SIGNAL-ZOOM-001`.
 
-Traffic-signal presentation is owned by the dedicated signal path, not a shared destructive POI group. Current display authority is current_spec.json. Signals are not required at 1 km. At the 200 m driving presentation they remain slim and approximately the accepted 500 m visual size; forward/near emphasis may use only the explicit current-spec mapping. Historical symbol sizes are evidence, not authority.
+Traffic-signal presentation is owned by the dedicated signal path, not a shared destructive POI group. Current display authority is current_spec.json. The 2026-10-15 owner-approved CB6-SIG-200M-DECLUTTER-20261015 decision supersedes the old z14 long-range presentation: at 500 m and farther (target z14 and below) CB6 signal symbols are hidden; at 200 m (target z15-16) identical topology-confirmed intersection centres receive one representative signal symbol, retaining every uncertain signal; at 100 m or closer (target z17 and above) every retained signal mark returns with its original location and forward enlargement. No simple distance-only clustering is permitted. MWM source priority, Overpass supplement, 0.5 m raw duplicate exclusion, vehicle-signal-only scope and source records remain unchanged. These zoom-to-device-scale bands require CB6 real-device verification before acceptance; source checks alone do not establish actual screen scale. Historical symbol sizes are evidence, not authority.
 
 ## SIG
 

@@ -182,14 +182,16 @@ public final class SignalController
         + " display=" + n + " clustered=" + snapshot.clusteredPointCount());
     int t = snapshot.topologyMembers.size();
     double[] memberLats = new double[t], memberLons = new double[t], centerLats = new double[t], centerLons = new double[t];
+    long[] memberIds = new long[t], centerIds = new long[t];
     for (int i = 0; i < t; ++i)
     {
       SignalSnapshot.Point member = snapshot.topologyMembers.get(i), center = snapshot.topologyCenters.get(i);
       memberLats[i] = member.lat; memberLons[i] = member.lon;
       centerLats[i] = center.lat; centerLons[i] = center.lon;
+      memberIds[i] = member.id; centerIds[i] = center.id;
     }
     Framework.nativeSetCb6Signals(location.getLatitude(), location.getLongitude(), ids, lats, lons, forward,
-        memberLats, memberLons, centerLats, centerLons);
+        memberLats, memberLons, centerLats, centerLons, memberIds, centerIds);
     published = snapshot;
     publishedForward = forward;
   }

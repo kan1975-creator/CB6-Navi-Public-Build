@@ -1,9 +1,9 @@
 // Included inside Framework.cpp's existing extern "C" section.
 // Caller: Android main thread, matching BookmarkManager's thread contract.
 JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
-    JNIEnv * env, jclass, jdouble originLat, jdouble originLon, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray, jdoubleArray memberLatArray, jdoubleArray memberLonArray, jdoubleArray centerLatArray, jdoubleArray centerLonArray)
+    JNIEnv * env, jclass, jdouble originLat, jdouble originLon, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray, jdoubleArray memberLatArray, jdoubleArray memberLonArray, jdoubleArray centerLatArray, jdoubleArray centerLonArray, jlongArray memberIdArray, jlongArray centerIdArray)
 {
-  if (!idArray || !latArray || !lonArray || !forwardArray || !memberLatArray || !memberLonArray || !centerLatArray || !centerLonArray)
+  if (!idArray || !latArray || !lonArray || !forwardArray || !memberLatArray || !memberLonArray || !centerLatArray || !centerLonArray || !memberIdArray || !centerIdArray)
   {
     LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-reject-null"));
     return;
@@ -12,14 +12,17 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
   LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-enter", n));
   if (n > 1400 || env->GetArrayLength(idArray) != n || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
   jsize const topologyN = env->GetArrayLength(memberLatArray);
-  if (topologyN > 1400 || env->GetArrayLength(memberLonArray) != topologyN || env->GetArrayLength(centerLatArray) != topologyN || env->GetArrayLength(centerLonArray) != topologyN) return;
+  if (topologyN > 1400 || env->GetArrayLength(memberLonArray) != topologyN || env->GetArrayLength(centerLatArray) != topologyN || env->GetArrayLength(centerLonArray) != topologyN || env->GetArrayLength(memberIdArray) != topologyN || env->GetArrayLength(centerIdArray) != topologyN) return;
   std::vector<jdouble> memberLats(topologyN), memberLons(topologyN), centerLats(topologyN), centerLons(topologyN);
+  std::vector<jlong> memberIds(topologyN), centerIds(topologyN);
   if (topologyN > 0)
   {
     env->GetDoubleArrayRegion(memberLatArray, 0, topologyN, memberLats.data()); if (env->ExceptionCheck()) return;
     env->GetDoubleArrayRegion(memberLonArray, 0, topologyN, memberLons.data()); if (env->ExceptionCheck()) return;
     env->GetDoubleArrayRegion(centerLatArray, 0, topologyN, centerLats.data()); if (env->ExceptionCheck()) return;
     env->GetDoubleArrayRegion(centerLonArray, 0, topologyN, centerLons.data()); if (env->ExceptionCheck()) return;
+    env->GetLongArrayRegion(memberIdArray, 0, topologyN, memberIds.data()); if (env->ExceptionCheck()) return;
+    env->GetLongArrayRegion(centerIdArray, 0, topologyN, centerIds.data()); if (env->ExceptionCheck()) return;
   }
   std::vector<jlong> ids(n);
   std::vector<jdouble> lats(n), lons(n);
@@ -66,32 +69,88 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     return 2.0 * kEarthRadiusM * std::asin(std::sqrt(a));
   };
 
-  std::vector<ms::LatLon> normalizedMwmSignals;
-  for (auto const & mwm : mwmSignals)
+  // Group identity is the topology-verified centre ID, never centre proximity.
+  // If the same ID refers to inconsistent centre coordinates, it is untrusted.
+  auto const reliableGroupId = [&](jlong groupId)
   {
-    bool mapped = false;
+    if (groupId <= 0) return false;
+    jsize first = -1;
+    for (jsize t = 0; t < topologyN; ++t)
+    {
+      if (centerIds[t] != groupId) continue;
+      if (first < 0) { first = t; continue; }
+      if (distanceMeters(centerLats[t], centerLons[t], centerLats[first], centerLons[first]) > kDirectDuplicateM)
+        return false;
+    }
+    return first >= 0;
+  };
+
+  // Keep all original MWM signal anchors at every z17+ scale.
+  // Topology only controls the display-only 200 m flag.
+  std::vector<jlong> mwmGroupIds(mwmSignals.size(), 0);
+  for (size_t mwmIndex = 0; mwmIndex < mwmSignals.size(); ++mwmIndex)
+  {
+    auto const & mwm = mwmSignals[mwmIndex];
+    jlong mappedGroup = 0;
+    bool ambiguous = false;
     for (jsize t = 0; t < topologyN; ++t)
     {
       if (distanceMeters(mwm.m_lat, mwm.m_lon, memberLats[t], memberLons[t]) > kDirectDuplicateM) continue;
-      ms::LatLon const candidate(centerLats[t], centerLons[t]);
-      bool centerExists = false;
-      for (auto const & existing : normalizedMwmSignals)
-        if (distanceMeters(existing.m_lat, existing.m_lon, candidate.m_lat, candidate.m_lon) <= kDirectDuplicateM) { centerExists = true; break; }
-      if (!centerExists) normalizedMwmSignals.push_back(candidate);
-      mapped = true;
-      break;
+      if (memberIds[t] <= 0 || !reliableGroupId(centerIds[t]))
+      {
+        ambiguous = true;
+        break;
+      }
+      if (mappedGroup != 0 && mappedGroup != centerIds[t])
+      {
+        ambiguous = true;
+        break;
+      }
+      mappedGroup = centerIds[t];
     }
-    if (!mapped) normalizedMwmSignals.push_back(mwm);
+    if (!ambiguous && mappedGroup > 0) mwmGroupIds[mwmIndex] = mappedGroup;
   }
+
+  auto const groupForMark = [&](jlong pointId, double lat, double lon, jlong mwmGroupId) -> jlong
+  {
+    if (mwmGroupId > 0) return reliableGroupId(mwmGroupId) ? mwmGroupId : 0;
+    jlong matchedGroup = 0;
+    for (jsize t = 0; t < topologyN; ++t)
+    {
+      bool const memberMatch = pointId > 0 && memberIds[t] == pointId
+          && distanceMeters(lat, lon, memberLats[t], memberLons[t]) <= kDirectDuplicateM;
+      bool const centerMatch = pointId > 0 && centerIds[t] == pointId
+          && distanceMeters(lat, lon, centerLats[t], centerLons[t]) <= kDirectDuplicateM;
+      if (!memberMatch && !centerMatch) continue;
+      if (!reliableGroupId(centerIds[t])) return 0;
+      if (matchedGroup != 0 && matchedGroup != centerIds[t]) return 0;
+      matchedGroup = centerIds[t];
+    }
+    return matchedGroup;
+  };
+
+  // Only 200m visibility is thinned. Every mark is still created at z17+.
+  std::vector<jlong> shown200mGroupIds;
+  auto const keepAt200m = [&](jlong pointId, double lat, double lon, jlong mwmGroupId)
+  {
+    jlong const groupId = groupForMark(pointId, lat, lon, mwmGroupId);
+    if (groupId == 0) return true; // Fail open: never hide unknown/colliding marks.
+    for (auto const & shownId : shown200mGroupIds)
+      if (shownId == groupId) return false;
+    shown200mGroupIds.push_back(groupId);
+    return true;
+  };
 
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
   size_t created = 0, suppressed = 0, mwmCreated = 0;
-  for (auto const & mwm : normalizedMwmSignals)
+  for (size_t mwmIndex = 0; mwmIndex < mwmSignals.size(); ++mwmIndex)
   {
+    auto const & mwm = mwmSignals[mwmIndex];
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));
     mark->SetForward(false);
+    mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));
     ++created;
     ++mwmCreated;
   }
@@ -101,7 +160,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     bool directDuplicate = false;
     if (ids[i] > 0 && ids[i] < kWayIdNamespace)
     {
-      for (auto const & mwm : normalizedMwmSignals)
+      for (auto const & mwm : mwmSignals)
       {
         if (distanceMeters(mwm.m_lat, mwm.m_lon, lats[i], lons[i]) <= kDirectDuplicateM)
         {
@@ -118,6 +177,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     }
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(lats[i], lons[i]));
     mark->SetForward(forward[i] == JNI_TRUE);
+    mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));
     ++created;
   }
   LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "mwm-raw", mwmSignals.size(), "mwm-created", mwmCreated, "suppressed", suppressed));
