@@ -1,0 +1,265 @@
+# CB6-SIG-APK-ACTIONS-ONEBUILD-20261016
+# PR #13 immutable source. Trusted main manual dispatch ONLY.
+name: CB6 Signal One-Shot APK
+on:
+  workflow_dispatch:
+    inputs:
+      publish_release:
+        description: "Publish only with a separate owner Release approval on Issue 11"
+        required: false
+        default: false
+        type: boolean
+      release_approval_comment_id:
+        description: "Owner's new Release approval comment ID; required for publication"
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+concurrency:
+  group: cb6-signal-one-shot-20261016
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Pinned-source arm64 APK (one attempt)
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      actions: read
+    env:
+      SOURCE_SHA: d1afd49da4ad35123877a35ec47cf28b3d7b2560
+      COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
+      SKIP_MAP_DOWNLOAD: "true"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Fail closed on any second dispatch or rerun
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$GITHUB_RUN_ATTEMPT" = '1'
+          gh api "repos/$GITHUB_REPOSITORY/actions/workflows/cb6_signal_one_shot_apk.yml/runs?event=workflow_dispatch&per_page=100" |
+            jq -e --argjson rid "$GITHUB_RUN_ID" '.total_count == 1 and (.workflow_runs | length) == 1 and .workflow_runs[0].id == $rid'
+
+      - name: Checkout exact source HEAD, never PR merge or moving branch
+        uses: actions/checkout@v4
+        with:
+          ref: d1afd49da4ad35123877a35ec47cf28b3d7b2560
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify frozen source and indispensable feature gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          python3 v2/gates/verify_method_freeze.py
+          python3 v2/gates/verify_project_gate.py --require-feature-build --feature=signals
+          mkdir -p out
+          echo "$SOURCE_SHA" > out/SOURCE_SHA.txt
+
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install existing Signals build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build cmake qt6-base-dev qt6-declarative-dev qt6-positioning-dev libqt6svg6-dev optipng libfreetype-dev libharfbuzz-dev libxkbcommon-dev libxkbcommon-x11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev python3-pip python3-venv rsync jq zlib1g-dev unzip
+          pip install 'protobuf<3.21' --break-system-packages
+
+      - name: Fetch pinned CoMaps and submodules
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin "$COMAPS_SHA"
+          git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          for attempt in 1 2 3 4 5 6; do
+            if git -C comaps submodule update --init --recursive --depth=1 --jobs=8; then break; fi
+            sleep $((attempt*15))
+          done
+          test -f comaps/3party/protobuf/protobuf/src/google/protobuf/arena.cc
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          test -z "$(git -C comaps status --porcelain --untracked-files=no)"
+
+      - name: Apply original CB6 identity/signals and source-scope preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 v2/baseline/apply_identity.py comaps
+          python3 v2/signals/apply_signals.py comaps
+          python3 v2/audits/preflight_gate1.py comaps out/GENERATED_SOURCE_SHA256.json
+          git -C comaps diff --check
+
+      - name: Test ONLY added/modified signal audit cases, not existing PASS suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - comaps <<'PY' | tee out/CHANGED_SIGNAL_TESTS.txt
+          import ast
+          from pathlib import Path
+          path = Path('v2/tests/signals_audit_selftest.py').resolve()
+          tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+          wanted = {
+              '500m-visibility', '200m-mwm-mark-gating',
+              'semantic-mwm-ambiguous', 'semantic-jni-identity',
+              'mwm-topology-normalization',
+              'semantic-mwm-original-coordinates', 'semantic-mwm-all-anchors',
+              'semantic-mwm-raw-overpass-dedup',
+              'semantic-jni-12-argument-order', 'semantic-jni-12-argument-type',
+              'semantic-java-12-argument-order',
+          }
+          matches = 0
+          for node in tree.body:
+              if not isinstance(node, ast.Assign) or not any(
+                  isinstance(t, ast.Name) and t.id == 'cases' for t in node.targets):
+                  continue
+              if not isinstance(node.value, ast.List):
+                  raise SystemExit('BLOCK: changed test list is not static')
+              selected = []
+              for item in node.value.elts:
+                  if not isinstance(item, ast.Tuple) or not item.elts or not isinstance(item.elts[0], ast.Constant):
+                      raise SystemExit('BLOCK: unexpected test case shape')
+                  if item.elts[0].value in wanted:
+                      selected.append(item)
+              if len(selected) != len(wanted) or {x.elts[0].value for x in selected} != wanted:
+                  raise SystemExit('BLOCK: changed audit cases do not match approved diff')
+              node.value.elts = selected
+              matches += 1
+          if matches != 1:
+              raise SystemExit('BLOCK: ambiguous test case list')
+          ast.fix_missing_locations(tree)
+          exec(compile(tree, str(path), 'exec'), {'__name__': '__main__', '__file__': str(path)})
+          PY
+
+      - name: Configure and verify generated source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd comaps && bash ./configure.sh --skip-map-download) 2>&1 | tee out/CONFIGURE.log
+          python3 v2/audits/preflight_gate1.py comaps out/GENERATED_SOURCE_SHA256.json --verify
+          git -C comaps diff --check
+
+      - name: Build Android arm64 web release exactly once
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd comaps/android
+          ./gradlew -Parm64 app:assembleWebRelease --no-daemon --stacktrace 2>&1 | tee ../../out/GRADLE.log
+
+      - name: Verify APK, package, arm64, original signing and SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out verify-apk
+          APK="$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | head -1)"
+          test -n "$APK"
+          test "$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | wc -l)" = '1'
+          cp "$APK" out/CB6-Signal-OneShot-arm64.apk
+          unzip -q out/CB6-Signal-OneShot-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
+          readelf -h verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -E 'AArch64|ARM aarch64'
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt2 | sort -V | tail -1)"
+          test -x "$AAPT"
+          "$AAPT" dump badging out/CB6-Signal-OneShot-arm64.apk | tee out/APK_BADGING.txt
+          grep -F "package: name='jp.cb6.navi'" out/APK_BADGING.txt
+          python3 v2/audits/audit_signals.py comaps --apk out/CB6-Signal-OneShot-arm64.apk | tee out/APK_SIGNAL_AUDIT.txt
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs out/CB6-Signal-OneShot-arm64.apk | tee out/SIGNATURE_VERIFY.txt
+          sha256sum out/CB6-Signal-OneShot-arm64.apk | tee out/SHA256SUMS.txt
+
+      - name: Upload verified APK and text evidence (no new source archive)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-Signal-OneShot-Verified-APK
+          path: |
+            out/CB6-Signal-OneShot-arm64.apk
+            out/SHA256SUMS.txt
+            out/SOURCE_SHA.txt
+            out/SIGNATURE_VERIFY.txt
+            out/APK_BADGING.txt
+            out/APK_SIGNAL_AUDIT.txt
+            out/CHANGED_SIGNAL_TESTS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    name: Separate privileged release; disabled without new owner consent
+    needs: build
+    if: inputs.publish_release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_SHA: d1afd49da4ad35123877a35ec47cf28b3d7b2560
+    steps:
+      - name: Verify separate, earlier, unedited owner release approval
+        shell: bash
+        env:
+          APPROVAL_COMMENT_ID: ${{ inputs.release_approval_comment_id }}
+        run: |
+          set -euo pipefail
+          [[ "$APPROVAL_COMMENT_ID" =~ ^[1-9][0-9]*$ ]]
+          mkdir -p approval
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$APPROVAL_COMMENT_ID" > approval/comment.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > approval/run.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime
+          c = json.loads(Path('approval/comment.json').read_text())
+          run = json.loads(Path('approval/run.json').read_text())
+          expected = ('CB6-APPROVE-RELEASE CB6-SIG-APK-ACTIONS-ONEBUILD-20261016 '
+                      'd1afd49da4ad35123877a35ec47cf28b3d7b2560')
+          def t(s): return datetime.fromisoformat(s.replace('Z', '+00:00'))
+          ok = (c.get('user', {}).get('login') == 'kan1975-creator' and
+                c.get('user', {}).get('id') == 313684924 and
+                c.get('issue_url') == 'https://api.github.com/repos/kan1975-creator/CB6-Navi-Public-Build/issues/11' and
+                c.get('body') == expected and
+                c.get('created_at') == c.get('updated_at') and
+                t(c['created_at']) < t(run['created_at']))
+          if not ok: raise SystemExit('RELEASE_APPROVAL_MISSING_OR_UNTRUSTED')
+          print('OWNER_RELEASE_APPROVAL_PASS')
+          PY
+
+      - name: Retrieve verified artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CB6-Signal-OneShot-Verified-APK
+          path: verified
+
+      - name: Publish one verified APK only
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd verified
+          sha256sum --check SHA256SUMS.txt
+          test "$(cat SOURCE_SHA.txt)" = "$SOURCE_SHA"
+          test -s SIGNATURE_VERIFY.txt
+          test -s APK_SIGNAL_AUDIT.txt
+          test -s CHANGED_SIGNAL_TESTS.txt
+          TAG='cb6-signal-one-shot-d1afd49da4ad'
+          ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1
+          gh release create "$TAG" CB6-Signal-OneShot-arm64.apk SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$SOURCE_SHA" \
+            --title "CB6 Signal One-Shot d1afd49da4ad" \
+            --notes "Owner-approved one-shot arm64 APK from fixed d1afd49da4ad35123877a35ec47cf28b3d7b2560. Not formal adoption."
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets,url

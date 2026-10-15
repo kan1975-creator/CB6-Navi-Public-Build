@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - main
+    # Ignore exactly the approved one-shot APK PR changes.
+    paths-ignore:
+      - '.github/workflows/build_cb6_voice_final.yml'
+      - '.github/workflows/cb6_signal_one_shot_apk.yml'
+      - 'v2/signals/plans/CB6-SIG-APK-ACTIONS-ONEBUILD-20261016.json'
 
 permissions:
   contents: read
