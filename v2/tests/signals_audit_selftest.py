@@ -35,17 +35,45 @@ cases=[
   'if (true)\n      symbols->insert({15, "cb6-signal-xs"});',
   "100m unchanged mark restoration missing"),
  ("200m-unknown-topology-retained", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
-  "if (confirmedIndex < 0) return true;", "if (confirmedIndex < 0) return false;",
-  "200m confirmed-topology display gating missing"),
+  "if (groupId == 0) return true;", "if (groupId == 0) return false;",
+  "200m unknown or conflicting signal visibility not preserved"),
  ("200m-topology-center-retained", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
-  "shown200mCenters.push_back(confirmedCenter);", "/* centre deliberately not recorded */",
-  "200m confirmed-topology display gating missing"),
+  "shown200mGroupIds.push_back(groupId);", "/* centre identity deliberately not recorded */",
+  "200m unknown or conflicting signal visibility not preserved"),
  ("200m-mwm-mark-gating", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
-  "mark->SetShowAt200m(keepAt200m(mwm.m_lat, mwm.m_lon));", "mark->SetShowAt200m(true);",
+  "mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, normalizedMwmGroupIds[mwmIndex]));", "mark->SetShowAt200m(true);",
   "200m topology mark gating missing"),
  ("200m-overpass-mark-gating", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
-  "mark->SetShowAt200m(keepAt200m(lats[i], lons[i]));", "mark->SetShowAt200m(true);",
+  "mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));", "mark->SetShowAt200m(true);",
   "200m topology mark gating missing"),
+ ("semantic-z14-symbol", "libs/map/cb6_signal_mark.hpp",
+  'if (m_showAt200m)\n      symbols->insert({15, "cb6-signal-xs"});',
+  'symbols->insert({14, "cb6-signal-xs"});\n    if (m_showAt200m)\n      symbols->insert({15, "cb6-signal-xs"});',
+  "500m signal visibility not disabled"),
+ ("semantic-z17-restore", "libs/map/cb6_signal_mark.hpp",
+  'symbols->insert({17, "cb6-signal-xs"});',
+  'symbols->insert({18, "cb6-signal-xs"});',
+  "100m unchanged mark restoration missing"),
+ ("semantic-unknown-retained", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+  "if (groupId == 0) return true;", "if (groupId == 0) return false;",
+  "200m unknown or conflicting signal visibility not preserved"),
+ ("semantic-intersection-id-conflict", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+  "if (matchedGroup != 0 && matchedGroup != centerIds[t]) return 0;",
+  "if (matchedGroup != 0 && matchedGroup != centerIds[t]) return matchedGroup;",
+  "200m intersection identity conflict not fail-open"),
+ ("semantic-member-identity", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+  "memberIds[t] == pointId", "memberIds[t] != pointId",
+  "200m intersection identity conflict not fail-open"),
+ ("semantic-mwm-ambiguous", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+  "normalizedMwmGroupIds.push_back(0);", "normalizedMwmGroupIds.push_back(mappedGroup);",
+  "MWM ambiguous topology must preserve original marks"),
+ ("semantic-java-identity", "android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java",
+  "memberIds[i] = member.id; centerIds[i] = center.id;",
+  "memberIds[i] = 0; centerIds[i] = 0;",
+  "Java topology identity transport missing"),
+ ("semantic-jni-identity", "android/sdk/src/main/java/app/organicmaps/sdk/Framework.java",
+  "long[] memberIds, long[] centerIds);", "long[] memberIds);",
+  "generated JNI identity declaration missing"),
  ("stock-signal-style", "data/styles/default/include/Icons.mapcss",
   "node|z17-[highway=elevator],", "node|z16-[highway=elevator],", "stock traffic_signals icon suppression is not exact"),
  ("acquisition-query", "android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java",
@@ -85,7 +113,10 @@ for name,rel,old,new,needle in cases:
   out=cp.stdout+cp.stderr
   if cp.returncode==0:
    raise SystemExit(f"SIGNAL AUDIT SELFTEST FAIL {name}: destructive mutation was accepted\n{out}")
-  accepted_reasons=(needle,"generated template changed:")
+  # Newly added semantic mutations MUST fail for their named invariant.
+  # The generated-template byte mismatch is not sufficient as a PASS.
+  semantic_only=name.startswith("semantic-")
+  accepted_reasons=(needle,) if semantic_only else (needle,"generated template changed:")
   if not any(reason in out for reason in accepted_reasons):
    raise SystemExit(f"SIGNAL AUDIT SELFTEST FAIL {name}: rejected for unrecognized reason rc={cp.returncode}\n{out}")
   matched=next(reason for reason in accepted_reasons if reason in out)

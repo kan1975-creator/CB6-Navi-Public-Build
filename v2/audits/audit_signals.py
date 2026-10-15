@@ -25,6 +25,55 @@ def require(ok, message):
 
 def read(path): return (root / path).read_text()
 
+# FAIL1/FAIL2: focused semantic checks run BEFORE generated-template byte checks.
+# A broken generated implementation must fail for its actual signal behavior.
+jni_semantic = read('android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc')
+mark_semantic = read('libs/map/cb6_signal_mark.hpp')
+controller_semantic = read('android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java')
+framework_semantic = read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java')
+applier_semantic = (module/'apply_signals.py').read_text()
+require('symbols->insert({14,' not in mark_semantic
+        and 'if (m_showAt200m)' in mark_semantic
+        and 'symbols->insert({15, "cb6-signal-xs"});' in mark_semantic,
+        '500m signal visibility not disabled')
+require('if (m_showAt200m) return 15;' in mark_semantic, 'minimum zoom mismatch')
+require('return 17;' in mark_semantic, '200m/100m mark zoom gating mismatch')
+require('symbols->insert({17, "cb6-signal-xs"});' in mark_semantic
+        and 'symbols->insert({17, "cb6-signal-m"});' in mark_semantic
+        and 'symbols->insert({19, "cb6-signal-l"});' in mark_semantic,
+        '100m unchanged mark restoration missing')
+require('jlongArray memberIdArray, jlongArray centerIdArray' in jni_semantic
+        and 'GetLongArrayRegion(memberIdArray' in jni_semantic
+        and 'GetLongArrayRegion(centerIdArray' in jni_semantic,
+        'JNI topology identity transport missing')
+require('memberIds[i] = member.id; centerIds[i] = center.id;' in controller_semantic
+        and 'memberLats, memberLons, centerLats, centerLons, memberIds, centerIds);' in controller_semantic,
+        'Java topology identity transport missing')
+identity_decl = ('public static native void nativeSetCb6Signals(double originLat, double originLon, '
+                 'long[] ids, double[] lat, double[] lon, boolean[] forward, double[] memberLat, '
+                 'double[] memberLon, double[] centerLat, double[] centerLon, long[] memberIds, long[] centerIds);')
+require(identity_decl in framework_semantic and identity_decl in applier_semantic,
+        'generated JNI identity declaration missing')
+require('if (mappedGroup != 0 && mappedGroup != centerIds[t])' in jni_semantic
+        and 'ambiguous = true;' in jni_semantic
+        and 'normalizedMwmGroupIds.push_back(0);' in jni_semantic,
+        'MWM ambiguous topology must preserve original marks')
+require('if (matchedGroup != 0 && matchedGroup != centerIds[t]) return 0;' in jni_semantic
+        and 'if (!reliableGroupId(centerIds[t])) return 0;' in jni_semantic
+        and 'memberIds[t] == pointId' in jni_semantic
+        and 'centerIds[t] == pointId' in jni_semantic,
+        '200m intersection identity conflict not fail-open')
+require('if (groupId == 0) return true;' in jni_semantic
+        and 'shown200mGroupIds.push_back(groupId);' in jni_semantic
+        and 'if (shownId == groupId) return false;' in jni_semantic
+        and 'shown200mCenters' not in jni_semantic,
+        '200m unknown or conflicting signal visibility not preserved')
+require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, normalizedMwmGroupIds[mwmIndex]));' in jni_semantic
+        and 'mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));' in jni_semantic,
+        '200m topology mark gating missing')
+require('SetShowAt200m' in mark_semantic and 'session.CreateUserMark<Cb6SignalMark>' in jni_semantic
+        and 'return 17;' in mark_semantic, '100m display restoration must retain source marks')
+
 copies = {p: 'android/app/src/main/java/app/organicmaps/cb6/signals/' + p.name
           for p in (module / 'java').glob('*.java')}
 copies[module / 'native/cb6_signal_mark.hpp'] = 'libs/map/cb6_signal_mark.hpp'
@@ -70,13 +119,13 @@ require('if (m_showAt200m)\n      symbols->insert({15, "cb6-signal-xs"});' in ma
         and 'bool m_showAt200m = true;' in mark
         and 'symbols->insert({17, "cb6-signal-xs"})' in mark,
         '100m unchanged mark restoration missing')
-require('std::vector<ms::LatLon> shown200mCenters;' in jni
-        and 'if (confirmedIndex < 0) return true;' in jni
-        and 'centerLats[t], centerLons[t]) <= kDirectDuplicateM' in jni
-        and 'shown200mCenters.push_back(confirmedCenter);' in jni,
+require('std::vector<jlong> shown200mGroupIds;' in jni
+        and 'memberIds[t] == pointId' in jni
+        and 'centerIds[t] == pointId' in jni
+        and 'normalizedMwmGroupIds.push_back(mappedGroup);' in jni,
         '200m confirmed-topology display gating missing')
-require('mark->SetShowAt200m(keepAt200m(mwm.m_lat, mwm.m_lon));' in jni
-        and 'mark->SetShowAt200m(keepAt200m(lats[i], lons[i]));' in jni,
+require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, normalizedMwmGroupIds[mwmIndex]));' in jni
+        and 'mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));' in jni,
         '200m topology mark gating missing')
 acq=spec['acquisition']
 policy_values={
@@ -147,7 +196,7 @@ require('return new SignalSnapshot(points, members, centers)' in cache,
 activity = read('android/app/src/main/java/app/organicmaps/MwmActivity.java')
 for hook in ('mCb6Signals.start(Map.isEngineCreated())', 'mCb6Signals.stop()', 'mCb6Signals.renderingReady()', 'mCb6Signals.onLocation(location)'):
     require(activity.count(hook) == 1, 'lifecycle hook ' + hook)
-require('nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward, double[] memberLat, double[] memberLon, double[] centerLat, double[] centerLon)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
+require('nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward, double[] memberLat, double[] memberLon, double[] centerLat, double[] centerLon, long[] memberIds, long[] centerIds)' in read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java'), 'Java JNI signature')
 require('#include "cb6_signal_jni.inc"' in read('android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp'), 'JNI translation unit')
 require('CB6_SIGNAL,' in read('libs/map/user_mark.hpp'), 'type registration')
 require('DebugMarkPoint(m2::PointD const & ptOrg, UserMark::Type type);' in read('libs/map/user_mark.hpp'), 'typed constructor declaration')
