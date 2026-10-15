@@ -8,14 +8,14 @@
     "v2/audits/audit_signals.py",
     "v2/tests/signals_audit_selftest.py",
     "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
-    "v2/signals/plans/CB6-SIG-200M-DECLUTTER-20261015.json"
+    "v2/signals/plans/CB6-SIG-200M-DECLUTTER-20261015.json",
+    "v2/signals/java/SignalController.java",
+    "v2/signals/apply_signals.py"
   ],
   "forbidden_scope": [
     ".github/workflows/cb6_approval_enforcement.yml",
     "v2/gates/verify_user_approval_before_fix.py",
-    "v2/gates/user_approval_before_fix_contract.json",
-    "v2/signals/apply_signals.py",
-    "v2/signals/java/SignalController.java"
+    "v2/gates/user_approval_before_fix_contract.json"
   ],
   "affected_domains": [
     "traffic_signals_100m_and_closer_preserved",
@@ -49,5 +49,23 @@
   },
   "base_ref": "cb6-v2-clean",
   "branch": "fix/cb6-sig-200m-declutter-20261015",
-  "evidence_type": "GitHub owner Issue comment predating implementation and PR creation"
+  "evidence_type": "GitHub owner Issue comment predating implementation and PR creation",
+  "amendment": {
+    "change_scope": "Independent review FAIL1 intersection-identity and FAIL2 audit/selftest corrections only",
+    "remediation_from_head": "b945e49ba73c796df315bf0f63a89f8132548684",
+    "old_owner_comment": 6191910920,
+    "old_plan_sha256": "7ca14569b6fa87e8c2072d451aed77d1225762c90c39420dfdfb55127573b270",
+    "exception_paths": [
+      "v2/signals/java/SignalController.java",
+      "v2/signals/apply_signals.py"
+    ],
+    "implementation_paths": [
+      "v2/signals/native/cb6_signal_jni.inc",
+      "v2/signals/java/SignalController.java",
+      "v2/signals/apply_signals.py",
+      "v2/audits/audit_signals.py",
+      "v2/tests/signals_audit_selftest.py"
+    ],
+    "fail_closed": "No merge, no code changes without new owner Issue comment; unknown/conflicting topology groups always retain marks"
+  }
 }
