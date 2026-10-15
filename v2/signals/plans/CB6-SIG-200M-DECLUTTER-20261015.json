@@ -2,9 +2,13 @@
   "proposed_change_id": "CB6-SIG-200M-DECLUTTER-20261015",
   "basis_head": "645132832a478025e162d0f9fea2e785bcba374e",
   "planned_paths": [
-    "v2/signals/plans/CB6-SIG-200M-DECLUTTER-20261015.json",
     "v2/signals/native/cb6_signal_mark.hpp",
-    "v2/signals/native/cb6_signal_jni.inc"
+    "v2/signals/native/cb6_signal_jni.inc",
+    "v2/gates/current_spec.json",
+    "v2/audits/audit_signals.py",
+    "v2/tests/signals_audit_selftest.py",
+    "docs/CB6_V2_REBUILT_SYSTEM_DESIGN.md",
+    "v2/signals/plans/CB6-SIG-200M-DECLUTTER-20261015.json"
   ],
   "forbidden_scope": [
     ".github/workflows/cb6_approval_enforcement.yml",
