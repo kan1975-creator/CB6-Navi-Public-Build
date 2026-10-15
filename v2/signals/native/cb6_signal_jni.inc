@@ -84,6 +84,31 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     if (!mapped) normalizedMwmSignals.push_back(mwm);
   }
 
+  // Display-only 200 m thinning: one icon per topology-confirmed centre.
+  // Signals without confirmed topology are always retained.
+  std::vector<ms::LatLon> shown200mCenters;
+  auto const keepAt200m = [&](double lat, double lon)
+  {
+    jsize confirmedIndex = -1;
+    for (jsize t = 0; t < topologyN; ++t)
+    {
+      if (distanceMeters(lat, lon, centerLats[t], centerLons[t]) <= kDirectDuplicateM)
+      {
+        confirmedIndex = t;
+        break;
+      }
+    }
+    if (confirmedIndex < 0) return true;
+    ms::LatLon const confirmedCenter(centerLats[confirmedIndex], centerLons[confirmedIndex]);
+    for (auto const & shown : shown200mCenters)
+    {
+      if (distanceMeters(shown.m_lat, shown.m_lon, confirmedCenter.m_lat, confirmedCenter.m_lon) <= kDirectDuplicateM)
+        return false;
+    }
+    shown200mCenters.push_back(confirmedCenter);
+    return true;
+  };
+
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
@@ -92,6 +117,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
   {
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));
     mark->SetForward(false);
+    mark->SetShowAt200m(keepAt200m(mwm.m_lat, mwm.m_lon));
     ++created;
     ++mwmCreated;
   }
@@ -118,6 +144,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     }
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(lats[i], lons[i]));
     mark->SetForward(forward[i] == JNI_TRUE);
+    mark->SetShowAt200m(keepAt200m(lats[i], lons[i]));
     ++created;
   }
   LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "suppression-complete", "mwm-raw", mwmSignals.size(), "mwm-created", mwmCreated, "suppressed", suppressed));

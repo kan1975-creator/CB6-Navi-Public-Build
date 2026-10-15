@@ -54,6 +54,30 @@ expected_zoom.update({int(z):s for z,s in spec['display']['forward_zoom_symbols'
 for zoom, symbol in sorted(expected_zoom.items()):
     require(f'{{{zoom}, "cb6-signal-{symbol}"}}' in mark, f'current-spec z{zoom} symbol')
 require(mark.index('if (m_forward)') < mark.index('{17,'), 'unconditional enlargement')
+# The scale change is a presentation-only change, not a data/source reduction.
+display = spec['display']
+require(display['min_zoom'] == 15 and display['full_display_min_zoom'] == 17
+        and display['topology_center_match_m'] == 0.5, 'new signal zoom specification mismatch')
+require(set(display['zoom_visibility']) == {'500m_or_farther', '200m', '100m_or_closer'},
+        'signal visibility scale bands missing')
+require('symbols->insert({14,' not in mark, '500m signal visibility not disabled')
+require(f"if (m_showAt200m) return {display['min_zoom']};" in mark
+        and f"return {display['full_display_min_zoom']};" in mark,
+        '200m/100m mark zoom gating mismatch')
+require('if (m_showAt200m)\n      symbols->insert({15, "cb6-signal-xs"});' in mark
+        and 'SetShowAt200m(bool showAt200m)' in mark
+        and 'm_showAt200m = showAt200m' in mark
+        and 'bool m_showAt200m = true;' in mark
+        and 'symbols->insert({17, "cb6-signal-xs"})' in mark,
+        '100m unchanged mark restoration missing')
+require('std::vector<ms::LatLon> shown200mCenters;' in jni
+        and 'if (confirmedIndex < 0) return true;' in jni
+        and 'centerLats[t], centerLons[t]) <= kDirectDuplicateM' in jni
+        and 'shown200mCenters.push_back(confirmedCenter);' in jni,
+        '200m confirmed-topology display gating missing')
+require('mark->SetShowAt200m(keepAt200m(mwm.m_lat, mwm.m_lon));' in jni
+        and 'mark->SetShowAt200m(keepAt200m(lats[i], lons[i]));' in jni,
+        '200m topology mark gating missing')
 acq=spec['acquisition']
 policy_values={
  'RADIUS_M':str(acq['radius_m']), 'MAX_POINTS':str(acq['max_points']),
