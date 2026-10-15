@@ -85,12 +85,13 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     return first >= 0;
   };
 
-  std::vector<ms::LatLon> normalizedMwmSignals;
-  std::vector<jlong> normalizedMwmGroupIds;
-  for (auto const & mwm : mwmSignals)
+  // Keep all original MWM signal anchors at every z17+ scale.
+  // Topology only controls the display-only 200 m flag.
+  std::vector<jlong> mwmGroupIds(mwmSignals.size(), 0);
+  for (size_t mwmIndex = 0; mwmIndex < mwmSignals.size(); ++mwmIndex)
   {
+    auto const & mwm = mwmSignals[mwmIndex];
     jlong mappedGroup = 0;
-    jsize memberIndex = -1;
     bool ambiguous = false;
     for (jsize t = 0; t < topologyN; ++t)
     {
@@ -106,26 +107,8 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
         break;
       }
       mappedGroup = centerIds[t];
-      memberIndex = t;
     }
-    if (!ambiguous && memberIndex >= 0)
-    {
-      // Do not conflate two different groups, even if their centres are adjacent.
-      bool alreadyMapped = false;
-      for (auto const & existingId : normalizedMwmGroupIds)
-        if (existingId == mappedGroup) { alreadyMapped = true; break; }
-      if (!alreadyMapped)
-      {
-        normalizedMwmSignals.emplace_back(centerLats[memberIndex], centerLons[memberIndex]);
-        normalizedMwmGroupIds.push_back(mappedGroup);
-      }
-    }
-    else
-    {
-      // Missing, colliding or ambiguous topology: preserve the raw MWM signal.
-      normalizedMwmSignals.push_back(mwm);
-      normalizedMwmGroupIds.push_back(0);
-    }
+    if (!ambiguous && mappedGroup > 0) mwmGroupIds[mwmIndex] = mappedGroup;
   }
 
   auto const groupForMark = [&](jlong pointId, double lat, double lon, jlong mwmGroupId) -> jlong
@@ -162,12 +145,12 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
   session.ClearGroup(UserMark::Type::CB6_SIGNAL);
   session.SetIsVisible(UserMark::Type::CB6_SIGNAL, true);
   size_t created = 0, suppressed = 0, mwmCreated = 0;
-  for (size_t mwmIndex = 0; mwmIndex < normalizedMwmSignals.size(); ++mwmIndex)
+  for (size_t mwmIndex = 0; mwmIndex < mwmSignals.size(); ++mwmIndex)
   {
-    auto const & mwm = normalizedMwmSignals[mwmIndex];
+    auto const & mwm = mwmSignals[mwmIndex];
     auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));
     mark->SetForward(false);
-    mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, normalizedMwmGroupIds[mwmIndex]));
+    mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));
     ++created;
     ++mwmCreated;
   }
@@ -177,7 +160,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
     bool directDuplicate = false;
     if (ids[i] > 0 && ids[i] < kWayIdNamespace)
     {
-      for (auto const & mwm : normalizedMwmSignals)
+      for (auto const & mwm : mwmSignals)
       {
         if (distanceMeters(mwm.m_lat, mwm.m_lon, lats[i], lons[i]) <= kDirectDuplicateM)
         {

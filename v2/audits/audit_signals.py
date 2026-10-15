@@ -25,54 +25,129 @@ def require(ok, message):
 
 def read(path): return (root / path).read_text()
 
-# FAIL1/FAIL2: focused semantic checks run BEFORE generated-template byte checks.
-# A broken generated implementation must fail for its actual signal behavior.
+# FAIL1/FAIL2: fixed source-preservation and 12-argument JNI invariants.
+# Check transformed code semantics BEFORE generated template byte comparison.
 jni_semantic = read('android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc')
 mark_semantic = read('libs/map/cb6_signal_mark.hpp')
 controller_semantic = read('android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java')
 framework_semantic = read('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java')
 applier_semantic = (module/'apply_signals.py').read_text()
+
+sym_begin = mark_semantic.find('drape_ptr<SymbolNameZoomInfo> GetSymbolNames() const override')
+sym_end = mark_semantic.find('int GetMinZoom() const override', sym_begin)
+require(sym_begin >= 0 and sym_end > sym_begin, 'signal zoom symbols implementation missing')
+sym_shape = re.sub(r'\s+', '', mark_semantic[sym_begin:sym_end])
+expected_sym = re.sub(r'\s+', '', """
+drape_ptr<SymbolNameZoomInfo> GetSymbolNames() const override
+{
+  auto symbols = make_unique_dp<SymbolNameZoomInfo>();
+  if (m_showAt200m)
+    symbols->insert({15, "cb6-signal-xs"});
+  if (m_forward)
+  {
+    symbols->insert({17, "cb6-signal-m"});
+    symbols->insert({19, "cb6-signal-l"});
+  }
+  else
+  {
+    symbols->insert({17, "cb6-signal-xs"});
+  }
+  return symbols;
+}
+""")
 require('symbols->insert({14,' not in mark_semantic
-        and 'if (m_showAt200m)' in mark_semantic
-        and 'symbols->insert({15, "cb6-signal-xs"});' in mark_semantic,
+        and 'if(m_showAt200m)symbols->insert({15,"cb6-signal-xs"});' in sym_shape,
         '500m signal visibility not disabled')
-require('if (m_showAt200m) return 15;' in mark_semantic, 'minimum zoom mismatch')
-require('return 17;' in mark_semantic, '200m/100m mark zoom gating mismatch')
-require('symbols->insert({17, "cb6-signal-xs"});' in mark_semantic
-        and 'symbols->insert({17, "cb6-signal-m"});' in mark_semantic
-        and 'symbols->insert({19, "cb6-signal-l"});' in mark_semantic,
+require('symbols->insert({17,"cb6-signal-m"});' in sym_shape
+        and 'symbols->insert({17,"cb6-signal-xs"});' in sym_shape,
         '100m unchanged mark restoration missing')
-require('jlongArray memberIdArray, jlongArray centerIdArray' in jni_semantic
-        and 'GetLongArrayRegion(memberIdArray' in jni_semantic
+require(sym_shape == expected_sym, 'signal zoom symbols branch shape mismatch')
+minzoom = re.search(r'int GetMinZoom\(\) const override\s*\{([^}]*)\}', mark_semantic, re.S)
+require(minzoom is not None, 'signal GetMinZoom implementation missing')
+min_shape = re.sub(r'\s+', '', minzoom.group(1))
+require('if(m_showAt200m)return15;' in min_shape, 'minimum zoom mismatch')
+require('return17;' in min_shape, '200m/100m mark zoom gating mismatch')
+require(min_shape == 'if(m_showAt200m)return15;return17;',
+        '200m/100m mark zoom gating mismatch')
+
+# All twelve Java parameters and all twelve native parameters must match in type/order.
+jdecl = re.search(r'public static native void nativeSetCb6Signals\s*\(([^)]*)\)\s*;', framework_semantic, re.S)
+cdecl = re.search(r'JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals\s*\(([^)]*)\)', jni_semantic, re.S)
+require(jdecl is not None, 'generated JNI identity declaration missing')
+require(cdecl is not None, 'JNI 12 argument order/type mismatch')
+java_args = [x.strip() for x in jdecl.group(1).split(',')]
+cpp_args = [x.strip() for x in cdecl.group(1).split(',')]
+expected_java = [
+ 'double originLat', 'double originLon', 'long[] ids', 'double[] lat', 'double[] lon',
+ 'boolean[] forward', 'double[] memberLat', 'double[] memberLon', 'double[] centerLat',
+ 'double[] centerLon', 'long[] memberIds', 'long[] centerIds'
+]
+expected_cpp = [
+ 'jdouble originLat', 'jdouble originLon', 'jlongArray idArray', 'jdoubleArray latArray',
+ 'jdoubleArray lonArray', 'jbooleanArray forwardArray', 'jdoubleArray memberLatArray',
+ 'jdoubleArray memberLonArray', 'jdoubleArray centerLatArray', 'jdoubleArray centerLonArray',
+ 'jlongArray memberIdArray', 'jlongArray centerIdArray'
+]
+require(java_args == expected_java and len(java_args) == 12, 'JNI 12 argument order/type mismatch')
+require(len(cpp_args) == 14 and re.fullmatch(r'JNIEnv\s*\*\s*env', cpp_args[0])
+        and cpp_args[1] == 'jclass' and cpp_args[2:] == expected_cpp,
+        'JNI 12 argument order/type mismatch')
+identity_decl = 'public static native void nativeSetCb6Signals(' + ', '.join(expected_java) + ');'
+require(identity_decl in applier_semantic, 'generated JNI identity declaration missing')
+jcall = re.search(r'Framework\.nativeSetCb6Signals\s*\((.*?)\);', controller_semantic, re.S)
+expected_call = ['location.getLatitude()', 'location.getLongitude()', 'ids', 'lats', 'lons',
+                 'forward', 'memberLats', 'memberLons', 'centerLats', 'centerLons',
+                 'memberIds', 'centerIds']
+require(jcall is not None and [x.strip() for x in jcall.group(1).split(',')] == expected_call,
+        'JNI 12 argument order/type mismatch')
+require('memberIds[i] = member.id; centerIds[i] = center.id;' in controller_semantic,
+        'Java topology identity transport missing')
+require('GetLongArrayRegion(memberIdArray' in jni_semantic
         and 'GetLongArrayRegion(centerIdArray' in jni_semantic,
         'JNI topology identity transport missing')
-require('memberIds[i] = member.id; centerIds[i] = center.id;' in controller_semantic
-        and 'memberLats, memberLons, centerLats, centerLons, memberIds, centerIds);' in controller_semantic,
-        'Java topology identity transport missing')
-identity_decl = ('public static native void nativeSetCb6Signals(double originLat, double originLon, '
-                 'long[] ids, double[] lat, double[] lon, boolean[] forward, double[] memberLat, '
-                 'double[] memberLon, double[] centerLat, double[] centerLon, long[] memberIds, long[] centerIds);')
-require(identity_decl in framework_semantic and identity_decl in applier_semantic,
-        'generated JNI identity declaration missing')
-require('if (mappedGroup != 0 && mappedGroup != centerIds[t])' in jni_semantic
-        and 'ambiguous = true;' in jni_semantic
-        and 'normalizedMwmGroupIds.push_back(0);' in jni_semantic,
+
+# At z17+, preserve every raw MWM mark; never normalize away MWM anchors.
+require('std::vector<jlong> mwmGroupIds(mwmSignals.size(), 0);' in jni_semantic
+        and 'if (!ambiguous && mappedGroup > 0) mwmGroupIds[mwmIndex] = mappedGroup;' in jni_semantic
+        and 'if (mappedGroup != 0 && mappedGroup != centerIds[t])' in jni_semantic,
         'MWM ambiguous topology must preserve original marks')
+mwm_start = jni_semantic.find('size_t created = 0, suppressed = 0, mwmCreated = 0;')
+mwm_end = jni_semantic.find('constexpr jlong kWayIdNamespace', mwm_start)
+require(mwm_start >= 0 and mwm_end > mwm_start, '100m MWM source mark restoration missing')
+mwm_draw = re.sub(r'\s+', '', jni_semantic[mwm_start:mwm_end])
+expected_mwm_draw = re.sub(r'\s+', '', """
+size_t created = 0, suppressed = 0, mwmCreated = 0;
+for (size_t mwmIndex = 0; mwmIndex < mwmSignals.size(); ++mwmIndex)
+{
+  auto const & mwm = mwmSignals[mwmIndex];
+  auto * mark = session.CreateUserMark<Cb6SignalMark>(mercator::FromLatLon(mwm.m_lat, mwm.m_lon));
+  mark->SetForward(false);
+  mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));
+  ++created;
+  ++mwmCreated;
+}
+""")
+require(mwm_draw == expected_mwm_draw and 'normalizedMwmSignals' not in jni_semantic,
+        '100m MWM source mark restoration missing')
+require(re.search(r'for \(auto const & mwm : mwmSignals\)\s*\{\s*if \(distanceMeters\(mwm\.m_lat,\s*mwm\.m_lon,\s*lats\[i\],\s*lons\[i\]\) <= kDirectDuplicateM\)', jni_semantic),
+        'MWM/Overpass direct duplicate must use raw MWM coordinates')
+
+# Only confirmed topology identity thins z15, unknowns stay visible.
+require('std::vector<jlong> shown200mGroupIds;' in jni_semantic
+        and 'if (shownId == groupId) return false;' in jni_semantic
+        and 'shown200mCenters' not in jni_semantic,
+        '200m confirmed-topology display gating missing')
+require('if (groupId == 0) return true;' in jni_semantic
+        and 'shown200mGroupIds.push_back(groupId);' in jni_semantic,
+        '200m unknown or conflicting signal visibility not preserved')
 require('if (matchedGroup != 0 && matchedGroup != centerIds[t]) return 0;' in jni_semantic
         and 'if (!reliableGroupId(centerIds[t])) return 0;' in jni_semantic
         and 'memberIds[t] == pointId' in jni_semantic
         and 'centerIds[t] == pointId' in jni_semantic,
         '200m intersection identity conflict not fail-open')
-require('if (groupId == 0) return true;' in jni_semantic
-        and 'shown200mGroupIds.push_back(groupId);' in jni_semantic
-        and 'if (shownId == groupId) return false;' in jni_semantic
-        and 'shown200mCenters' not in jni_semantic,
-        '200m unknown or conflicting signal visibility not preserved')
-require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, normalizedMwmGroupIds[mwmIndex]));' in jni_semantic
+require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));' in jni_semantic
         and 'mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));' in jni_semantic,
         '200m topology mark gating missing')
-require('SetShowAt200m' in mark_semantic and 'session.CreateUserMark<Cb6SignalMark>' in jni_semantic
-        and 'return 17;' in mark_semantic, '100m display restoration must retain source marks')
 
 copies = {p: 'android/app/src/main/java/app/organicmaps/cb6/signals/' + p.name
           for p in (module / 'java').glob('*.java')}
@@ -122,9 +197,9 @@ require('if (m_showAt200m)\n      symbols->insert({15, "cb6-signal-xs"});' in ma
 require('std::vector<jlong> shown200mGroupIds;' in jni
         and 'memberIds[t] == pointId' in jni
         and 'centerIds[t] == pointId' in jni
-        and 'normalizedMwmGroupIds.push_back(mappedGroup);' in jni,
+        and 'mwmGroupIds[mwmIndex] = mappedGroup;' in jni,
         '200m confirmed-topology display gating missing')
-require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, normalizedMwmGroupIds[mwmIndex]));' in jni
+require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));' in jni
         and 'mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));' in jni,
         '200m topology mark gating missing')
 acq=spec['acquisition']
@@ -172,7 +247,7 @@ require('RectByCenterXYAndSizeInMeters(center, 3000.0)' in jni and 'mwmCreated' 
         'MWM traffic-signal anchors are not published as CB6_SIGNAL')
 require('kDirectDuplicateM = 0.5' in jni and 'direct-duplicate-suppressed' in jni,
         'MWM anchor priority/direct duplicate suppression missing')
-require('normalizedMwmSignals' in jni and 'memberLats' in jni and 'centerLats' in jni,
+require('mwmGroupIds' in jni and 'memberLats' in jni and 'centerLats' in jni,
         'confirmed topology mapping is not applied to MWM anchors')
 require('distanceMeters(mwm.m_lat, mwm.m_lon, memberLats[t], memberLons[t]) > kDirectDuplicateM' in jni,
         'MWM topology mapping must use only the existing direct-match threshold')
