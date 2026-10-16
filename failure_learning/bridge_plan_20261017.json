@@ -1,0 +1,45 @@
+{
+  "affected_domains": [
+    "failure_learning_prewrite",
+    "failure_learning_postcheck",
+    "failure_learning_recurrence"
+  ],
+  "basis_head": "d18f1f88d4279207dc596a2533264a7e8e7e2726",
+  "dependency_merge_commit": "d18f1f88d4279207dc596a2533264a7e8e7e2726",
+  "dependency_pr": 18,
+  "existing_passes_reused": true,
+  "files_sha256": {
+    "failure_learning/operation_bridge.py": "ec1f3341516b2f4ca6fcd24ab5609d41c49ee2f5cd8d7f6cc5f96e28803cf6de",
+    "failure_learning/test_operation_bridge.py": "eedef9e6357b503381943d9088845c5cb8002beda91b71713c00a3925eb27957"
+  },
+  "forbidden_scope": [
+    ".github/workflows",
+    "v2",
+    "PUBLIC_BUILD_NOTICE.md"
+  ],
+  "implementation_scope": "new branch from post-PR18 main, plan + exact two PR19 reviewed code blobs, no edits to code or existing protected paths",
+  "known_limits": [
+    "opt-in prewrite bridge not automatically connected to all GitHub writers",
+    "failure ledger proposal not automatically persisted",
+    "non-atomic GitHub branch writes",
+    "limited Shell parser; quoted here-doc edge cases outside full parser"
+  ],
+  "merge_release_apk_authorized": false,
+  "no_duplicate_retest": true,
+  "planned_paths": [
+    "failure_learning/bridge_plan_20261017.json",
+    "failure_learning/operation_bridge.py",
+    "failure_learning/test_operation_bridge.py"
+  ],
+  "proposed_change_id": "CB6-FAILURE-LEARNING-BRIDGE-POST-PR18-20261017",
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "required_provenance_sequence": "commit immutable canonical plan -> owner-authored unedited issue approval BEFORE creating new PR -> create new PR with exact plan metadata -> new-file scope and Required Check -> only new plan delta independent check",
+  "schema": 1,
+  "source_github_blob_sha1": {
+    "failure_learning/operation_bridge.py": "a02edb2a6bcf4bb0885b78e0451f682085530ef7",
+    "failure_learning/test_operation_bridge.py": "5ed20a47be0b57667dde74e1e0d487308c0556f1"
+  },
+  "superseded_head": "d6559922662f0f5f63f6efbd2c1830b94c59d478",
+  "superseded_pr": 19,
+  "superseded_pr19_handling": "Do not merge old PR19; close without merge only if separately in authorized scope, and verify close before new PR merge."
+}
