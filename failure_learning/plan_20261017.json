@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "proposed_change_id": "CB6-FAILURE-LEARNING-GATE-20261017",
+  "basis_head": "4cc03f8b45cb4d4b9cceb82954d1e49949cec443",
+  "planned_paths": [
+    "failure_learning/plan_20261017.json",
+    "failure_learning/failures_v1.json",
+    "failure_learning/preflight.py",
+    "failure_learning/test_preflight.py"
+  ],
+  "forbidden_scope": [
+    ".github/workflows",
+    "v2",
+    "PUBLIC_BUILD_NOTICE.md"
+  ],
+  "affected_domains": [
+    "approval_provenance",
+    "github_actions_log_transport",
+    "duplicate_pull_request_head",
+    "apk_signer_output_parsing"
+  ],
+  "implementation_scope": "new files only, candidate advisory not auto-wired",
+  "run_policy": "no workflow dispatch, merge, release, or legacy PASS retests",
+  "planned_action": "one isolation branch, one owner-authored issue comment on Issue 11 after plan commit and before PR, one PR",
+  "not_auto_required_check": true,
+  "fixed_signals_head": "d1afd49da4ad35123877a35ec47cf28b3d7b2560"
+}
