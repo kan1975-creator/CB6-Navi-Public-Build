@@ -1,0 +1,433 @@
+# CB6-SIG-APK-ACTIONS-ONEBUILD-20261016
+# PR #13 immutable source. Trusted main manual dispatch ONLY.
+name: CB6 Signal One-Shot APK
+on:
+  workflow_dispatch:
+    inputs:
+      publish_release:
+        description: "Publish only with a separate owner Release approval on Issue 11"
+        required: false
+        default: false
+        type: boolean
+      release_approval_comment_id:
+        description: "Owner's new Release approval comment ID; required for publication"
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+concurrency:
+  group: cb6-signal-one-shot-20261016
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Pinned-source arm64 APK (one attempt)
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      actions: read
+      checks: read
+      pull-requests: read
+    env:
+      SOURCE_SHA: d1afd49da4ad35123877a35ec47cf28b3d7b2560
+      COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
+      SKIP_MAP_DOWNLOAD: "true"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Fail closed on any second dispatch or rerun
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$GITHUB_RUN_ATTEMPT" = '1'
+          gh api "repos/$GITHUB_REPOSITORY/actions/workflows/cb6_signal_one_shot_apk.yml/runs?event=workflow_dispatch&per_page=100" |
+            jq -e --argjson rid "$GITHUB_RUN_ID" '.total_count == 1 and (.workflow_runs | length) == 1 and .workflow_runs[0].id == $rid'
+
+      - name: Checkout exact source HEAD, never PR merge or moving branch
+        uses: actions/checkout@v4
+        with:
+          ref: d1afd49da4ad35123877a35ec47cf28b3d7b2560
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify frozen source and authenticated PASS of existing feature Gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          python3 v2/gates/verify_method_freeze.py
+          mkdir -p out
+          echo "$SOURCE_SHA" > out/SOURCE_SHA.txt
+          # Preserve GitHub-managed GITHUB_SHA on main. The existing Development
+          # Gate passed on immutable SOURCE_SHA; do not rerun past PASS tests.
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38750137563" > out/TRUSTED_GATE_RUN.json
+          gh api "repos/$GITHUB_REPOSITORY/commits/$SOURCE_SHA/check-runs?per_page=100" > out/TRUSTED_GATE_CHECKS.json
+          gh api "repos/$GITHUB_REPOSITORY/pulls/13" > out/TRUSTED_PR13.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38750137563/jobs?per_page=100" > out/TRUSTED_GATE_JOBS.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          run = json.loads(Path('out/TRUSTED_GATE_RUN.json').read_text())
+          data = json.loads(Path('out/TRUSTED_GATE_CHECKS.json').read_text())
+          pr = json.loads(Path('out/TRUSTED_PR13.json').read_text())
+          source = 'd1afd49da4ad35123877a35ec47cf28b3d7b2560'
+          if (run.get('id') != 38750137563 or
+              run.get('name') != 'CB6 Development Gate' or
+              run.get('path') != '.github/workflows/cb6_development_gate.yml' or
+              run.get('head_sha') != source or
+              run.get('event') != 'pull_request' or
+              run.get('run_attempt') != 1 or
+              run.get('status') != 'completed' or
+              run.get('conclusion') != 'success'):
+              raise SystemExit('EXISTING_GATE_RUN_INVALID')
+          checks = data.get('check_runs')
+          if (type(data.get('total_count')) is not int or
+              not isinstance(checks, list) or
+              not (0 < data['total_count'] <= 100) or
+              len(checks) != data['total_count']):
+              raise SystemExit('EXISTING_GATE_CHECKS_INCOMPLETE')
+          matches = [c for c in checks if c.get('name') == 'gate']
+          if len(matches) != 1:
+              raise SystemExit('EXISTING_GATE_CHECK_MISSING_OR_AMBIGUOUS')
+          c = matches[0]
+          if (c.get('id') != 116474072130 or
+              c.get('head_sha') != source or
+              c.get('status') != 'completed' or
+              c.get('conclusion') != 'success' or
+              c.get('app', {}).get('id') != 15368 or
+              c.get('details_url') !=
+                'https://github.com/kan1975-creator/CB6-Navi-Public-Build/actions/runs/38750137563/job/116474072130'):
+              raise SystemExit('EXISTING_GATE_CHECK_UNTRUSTED')
+          if (pr.get('number') != 13 or
+              pr.get('state') != 'open' or
+              pr.get('merged') is not False or
+              pr.get('head', {}).get('sha') != source or
+              pr.get('head', {}).get('repo', {}).get('full_name') !=
+                'kan1975-creator/CB6-Navi-Public-Build' or
+              pr.get('base', {}).get('ref') != 'cb6-v2-clean' or
+              pr.get('base', {}).get('sha') !=
+                '645132832a478025e162d0f9fea2e785bcba374e'):
+              raise SystemExit('FIXED_SOURCE_PR13_CHANGED')
+          print('AUTHENTICATED_PRIOR_PR13_DEVELOPMENT_GATE_PASS')
+          # Common governance checks already passed in the authenticated fixed-SHA
+          # run. The feature-only branch of the frozen Gate is checked below
+          # exactly as written, without rerunning any earlier PASS test.
+          import ast
+          import hashlib
+          import pathlib
+          from types import SimpleNamespace
+
+          jobs_doc = json.loads(Path('out/TRUSTED_GATE_JOBS.json').read_text())
+          jobs = jobs_doc.get('jobs')
+          if (jobs_doc.get('total_count') != 1 or
+              not isinstance(jobs, list) or len(jobs) != 1):
+              raise SystemExit('TRUSTED_GATE_JOB_COUNT_MISMATCH')
+          job = jobs[0]
+          if (job.get('id') != 116474072130 or
+              job.get('name') != 'gate' or
+              job.get('status') != 'completed' or
+              job.get('conclusion') != 'success' or
+              job.get('run_id') != 38750137563):
+              raise SystemExit('TRUSTED_GATE_JOB_IDENTITY_MISMATCH')
+          steps = job.get('steps')
+          if not isinstance(steps, list):
+              raise SystemExit('TRUSTED_GATE_STEPS_UNAVAILABLE')
+          common_passed = {
+              'Verify ACTIVE CB6 Development Auditor V2',
+              'Verify root invariants and repository-only reconstruction',
+              'Derive root certification from executable proofs',
+              'Verify frozen development method',
+              'Verify persistent CB6 project gate',
+              'Verify decision traceability and workflow coverage',
+              'Generic feature-contract destructive tests',
+          }
+          for label in common_passed:
+              hits = [step for step in steps if step.get('name') == label]
+              if (len(hits) != 1 or hits[0].get('status') != 'completed' or
+                  hits[0].get('conclusion') != 'success'):
+                  raise SystemExit('TRUSTED_COMMON_GATE_STEP_NOT_PASS: '+label)
+
+          root = Path.cwd()
+          state = json.loads((root/'v2/gates/project_state.json').read_text())
+          cert = json.loads((root/'v2/gates/root_invariants.json').read_text())['certification']
+          runtime = root/'v2/gates/development_auditor_runtime_adoption_evidence_v2.json'
+          if (state.get('schema') != 1 or state.get('branch') != 'cb6-v2-clean' or
+              state.get('stage') != 'IMPLEMENTATION_ENABLED' or
+              state.get('feature_builds_allowed') is not True or
+              state.get('design_verified') is not True or
+              cert.get('status') != 'CERTIFIED' or
+              cert.get('feature_execution_permitted') is not True or
+              not runtime.is_file() or
+              json.loads(runtime.read_text()).get('status') not in
+                 ('ADOPTED_PENDING_REFREEZE', 'ACTIVE_REFROZEN')):
+              raise SystemExit('SIGNALS_FEATURE_AUTHORITY_NOT_ACTIVE')
+          for rel in ('v2/gates/verify_development_auditor_work_unit_v2.py',
+                      'v2/tests/test_development_auditor_work_unit_v2_fail_closed.py'):
+              if not (root/rel).is_file():
+                  raise SystemExit('SIGNALS_AUDITOR_ENFORCEMENT_MISSING')
+
+          # Byte-identical frozen Gate: selecting its AST sub-block cannot
+          # silently drop future conditions, since any SHA/source drift blocks.
+          gate = root/'v2/gates/verify_project_gate.py'
+          blob_bytes = gate.read_bytes()
+          blob_sha = hashlib.sha1(b'blob '+str(len(blob_bytes)).encode()+
+                                  b'\0'+blob_bytes).hexdigest()
+          freeze = json.loads((root/'v2/gates/method_freeze_lock.json').read_text())
+          expected = '736a2e133836296105347f9164c6ab4666d6801c'
+          if (freeze.get('status') != 'FROZEN' or blob_sha != expected or
+              freeze.get('files', {}).get('v2/gates/verify_project_gate.py') != expected):
+              raise SystemExit('SIGNALS_FROZEN_GATE_SOURCE_MISMATCH')
+          src = blob_bytes.decode('utf-8')
+          parsed = ast.parse(src, filename=str(gate))
+          branches = [n for n in parsed.body if isinstance(n, ast.If) and
+                      ast.get_source_segment(src, n.test) ==
+                          '"--require-feature-build" in sys.argv']
+          if (len(branches) != 2 or branches[1].lineno != 50 or
+              branches[1].orelse or len(branches[1].body) < 20):
+              raise SystemExit('SIGNALS_GATE_AST_BOUNDARY_MISMATCH')
+          stmts = branches[1].body
+          start = stmts[7]
+          if (not isinstance(start, ast.Assign) or len(start.targets) != 1 or
+              not isinstance(start.targets[0], ast.Name) or
+              start.targets[0].id != 'feature' or
+              start.lineno != 59 or stmts[-1].end_lineno != 178):
+              raise SystemExit('SIGNALS_FEATURE_CHECK_SCOPE_INCOMPLETE')
+
+          # The first seven AST statements are Auditor prerequisites, proven
+          # above by the exact existing successful job and local authority.
+          # Execute EVERY subsequent feature-specific Gate statement unchanged.
+          def feature_fail(message):
+              raise SystemExit('SIGNALS_FEATURE_BUILD_BLOCK: '+message)
+          context = {
+              'ROOT': root, 'json': json, 'pathlib': pathlib,
+              'sys': SimpleNamespace(argv=[
+                  'verify_project_gate.py','--require-feature-build','--feature=signals']),
+              'evidence': json.loads((root/'v2/gates/evidence_inventory.json').read_text()),
+              'fail': feature_fail,
+          }
+          feature_module = ast.Module(body=stmts[7:], type_ignores=[])
+          ast.fix_missing_locations(feature_module)
+          exec(compile(feature_module, str(gate), 'exec'), context, context)
+          print('EXACT_FROZEN_SIGNALS_FEATURE_BUILD_ELIGIBILITY_PASS')
+          PY
+
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install existing Signals build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build cmake qt6-base-dev qt6-declarative-dev qt6-positioning-dev libqt6svg6-dev optipng libfreetype-dev libharfbuzz-dev libxkbcommon-dev libxkbcommon-x11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev python3-pip python3-venv rsync jq zlib1g-dev unzip
+          pip install 'protobuf<3.21' --break-system-packages
+
+      - name: Fetch pinned CoMaps and submodules
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin "$COMAPS_SHA"
+          git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          for attempt in 1 2 3 4 5 6; do
+            if git -C comaps submodule update --init --recursive --depth=1 --jobs=8; then break; fi
+            sleep $((attempt*15))
+          done
+          test -f comaps/3party/protobuf/protobuf/src/google/protobuf/arena.cc
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          test -z "$(git -C comaps status --porcelain --untracked-files=no)"
+
+      - name: Apply original CB6 identity/signals and source-scope preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 v2/baseline/apply_identity.py comaps
+          python3 v2/signals/apply_signals.py comaps
+          python3 v2/audits/preflight_gate1.py comaps out/GENERATED_SOURCE_SHA256.json
+          git -C comaps diff --check
+
+      - name: Test ONLY added/modified signal audit cases, not existing PASS suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - comaps <<'PY' | tee out/CHANGED_SIGNAL_TESTS.txt
+          import ast
+          from pathlib import Path
+          path = Path('v2/tests/signals_audit_selftest.py').resolve()
+          tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+          wanted = {
+              '500m-visibility', '200m-mwm-mark-gating',
+              'semantic-mwm-ambiguous', 'semantic-jni-identity',
+              'mwm-topology-normalization',
+              'semantic-mwm-original-coordinates', 'semantic-mwm-all-anchors',
+              'semantic-mwm-raw-overpass-dedup',
+              'semantic-jni-12-argument-order', 'semantic-jni-12-argument-type',
+              'semantic-java-12-argument-order',
+          }
+          matches = 0
+          for node in tree.body:
+              if not isinstance(node, ast.Assign) or not any(
+                  isinstance(t, ast.Name) and t.id == 'cases' for t in node.targets):
+                  continue
+              if not isinstance(node.value, ast.List):
+                  raise SystemExit('BLOCK: changed test list is not static')
+              selected = []
+              for item in node.value.elts:
+                  if not isinstance(item, ast.Tuple) or not item.elts or not isinstance(item.elts[0], ast.Constant):
+                      raise SystemExit('BLOCK: unexpected test case shape')
+                  if item.elts[0].value in wanted:
+                      selected.append(item)
+              if len(selected) != len(wanted) or {x.elts[0].value for x in selected} != wanted:
+                  raise SystemExit('BLOCK: changed audit cases do not match approved diff')
+              node.value.elts = selected
+              matches += 1
+          if matches != 1:
+              raise SystemExit('BLOCK: ambiguous test case list')
+          ast.fix_missing_locations(tree)
+          exec(compile(tree, str(path), 'exec'), {'__name__': '__main__', '__file__': str(path)})
+          PY
+
+      - name: Configure and verify generated source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd comaps && bash ./configure.sh --skip-map-download) 2>&1 | tee out/CONFIGURE.log
+          python3 v2/audits/preflight_gate1.py comaps out/GENERATED_SOURCE_SHA256.json --verify
+          git -C comaps diff --check
+
+      - name: Build Android arm64 web release exactly once
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd comaps/android
+          ./gradlew -Parm64 app:assembleWebRelease --no-daemon --stacktrace 2>&1 | tee ../../out/GRADLE.log
+
+      - name: Verify APK, package, arm64, original signing and SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out verify-apk
+          APK="$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | head -1)"
+          test -n "$APK"
+          test "$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | wc -l)" = '1'
+          cp "$APK" out/CB6-Signal-OneShot-arm64.apk
+          unzip -q out/CB6-Signal-OneShot-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
+          readelf -h verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -E 'AArch64|ARM aarch64'
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt2 | sort -V | tail -1)"
+          test -x "$AAPT"
+          "$AAPT" dump badging out/CB6-Signal-OneShot-arm64.apk | tee out/APK_BADGING.txt
+          grep -F "package: name='jp.cb6.navi'" out/APK_BADGING.txt
+          python3 v2/audits/audit_signals.py comaps --apk out/CB6-Signal-OneShot-arm64.apk | tee out/APK_SIGNAL_AUDIT.txt
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs out/CB6-Signal-OneShot-arm64.apk | tee out/SIGNATURE_VERIFY.txt
+          # Existing successful Signals Run 37559064432, artifact 11456861577.
+          # Reference APK SHA256: 560f13365a416b1f925662ad014ae0133419461bb1633b51aea8c1bebc51d475
+          # Reference CERT.RSA signer X.509 fingerprint (SHA-256):
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          evidence = Path('out/SIGNATURE_VERIFY.txt').read_text(encoding='utf-8')
+          expected = '0CCCC7C349BCC0005F53AA1A58F42B1C8EC6A387513F7C33576390842EAC301A'
+          signers = re.findall(r'^Signer #(\d+) certificate SHA-256 digest: ([0-9a-fA-F]{64})\s*$',
+                               evidence, re.MULTILINE)
+          count = re.findall(r'^Number of signers: (\d+)\s*$', evidence, re.MULTILINE)
+          if count != ['1'] or len(signers) != 1 or signers[0][0] != '1' or signers[0][1].upper() != expected:
+              raise SystemExit('CANONICAL_SIGNER_SHA256_MISMATCH_OR_MISSING')
+          print('CANONICAL_SIGNER_SHA256_MATCH', expected)
+          PY
+          (cd out && sha256sum CB6-Signal-OneShot-arm64.apk > SHA256SUMS.txt)
+
+      - name: Upload verified APK and text evidence (no new source archive)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-Signal-OneShot-Verified-APK
+          path: |
+            out/CB6-Signal-OneShot-arm64.apk
+            out/SHA256SUMS.txt
+            out/SOURCE_SHA.txt
+            out/SIGNATURE_VERIFY.txt
+            out/APK_BADGING.txt
+            out/APK_SIGNAL_AUDIT.txt
+            out/CHANGED_SIGNAL_TESTS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    name: Separate privileged release; disabled without new owner consent
+    needs: build
+    if: inputs.publish_release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_SHA: d1afd49da4ad35123877a35ec47cf28b3d7b2560
+    steps:
+      - name: Verify separate, earlier, unedited owner release approval
+        shell: bash
+        env:
+          APPROVAL_COMMENT_ID: ${{ inputs.release_approval_comment_id }}
+        run: |
+          set -euo pipefail
+          [[ "$APPROVAL_COMMENT_ID" =~ ^[1-9][0-9]*$ ]]
+          mkdir -p approval
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$APPROVAL_COMMENT_ID" > approval/comment.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > approval/run.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime
+          c = json.loads(Path('approval/comment.json').read_text())
+          run = json.loads(Path('approval/run.json').read_text())
+          expected = ('CB6-APPROVE-RELEASE CB6-SIG-APK-ACTIONS-ONEBUILD-20261016 '
+                      'd1afd49da4ad35123877a35ec47cf28b3d7b2560')
+          def t(s): return datetime.fromisoformat(s.replace('Z', '+00:00'))
+          ok = (c.get('user', {}).get('login') == 'kan1975-creator' and
+                c.get('user', {}).get('id') == 313684924 and
+                c.get('issue_url') == 'https://api.github.com/repos/kan1975-creator/CB6-Navi-Public-Build/issues/11' and
+                c.get('body') == expected and
+                c.get('created_at') == c.get('updated_at') and
+                t(c['created_at']) < t(run['created_at']))
+          if not ok: raise SystemExit('RELEASE_APPROVAL_MISSING_OR_UNTRUSTED')
+          print('OWNER_RELEASE_APPROVAL_PASS')
+          PY
+
+      - name: Retrieve verified artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CB6-Signal-OneShot-Verified-APK
+          path: verified
+
+      - name: Publish one verified APK only
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd verified
+          sha256sum --check SHA256SUMS.txt
+          test "$(cat SOURCE_SHA.txt)" = "$SOURCE_SHA"
+          test -s SIGNATURE_VERIFY.txt
+          test -s APK_SIGNAL_AUDIT.txt
+          test -s CHANGED_SIGNAL_TESTS.txt
+          TAG='cb6-signal-one-shot-d1afd49da4ad'
+          ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1
+          gh release create "$TAG" CB6-Signal-OneShot-arm64.apk SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$SOURCE_SHA" \
+            --title "CB6 Signal One-Shot d1afd49da4ad" \
+            --notes "Owner-approved one-shot arm64 APK from fixed d1afd49da4ad35123877a35ec47cf28b3d7b2560. Not formal adoption."
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets,url

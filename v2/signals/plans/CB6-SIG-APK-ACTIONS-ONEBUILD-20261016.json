@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "proposed_change_id": "CB6-SIG-APK-ACTIONS-ONEBUILD-20261016",
+  "basis_head": "cf54e3755353c97fd741b66b83441ee189023c2c",
+  "planned_paths": [
+    ".github/workflows/build_cb6_voice_final.yml",
+    ".github/workflows/cb6_signal_one_shot_apk.yml",
+    "v2/signals/plans/CB6-SIG-APK-ACTIONS-ONEBUILD-20261016.json"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    ".github/workflows/cb6_hourly_development_trigger.yml",
+    "v2/audits",
+    "v2/gates",
+    "v2/signals/java",
+    "v2/signals/native",
+    "v2/tests"
+  ],
+  "affected_domains": [
+    "github_actions_manual_apk",
+    "github_actions_voice_push_suppression",
+    "github_owner_approval_provenance",
+    "signals_apk_packaging"
+  ],
+  "fixed_source_head": "d1afd49da4ad35123877a35ec47cf28b3d7b2560",
+  "existing_pr_number": 13,
+  "approval_issue_number": 11,
+  "approval_required_before_pr_creation": true,
+  "voice_push_suppression": {
+    "strategy": "push.paths-ignore for exactly the three planned paths; keep workflow_dispatch and other existing triggers",
+    "ignored_paths": [
+      ".github/workflows/build_cb6_voice_final.yml",
+      ".github/workflows/cb6_signal_one_shot_apk.yml",
+      "v2/signals/plans/CB6-SIG-APK-ACTIONS-ONEBUILD-20261016.json"
+    ],
+    "expected_merge_changed_paths_exactly": [
+      ".github/workflows/build_cb6_voice_final.yml",
+      ".github/workflows/cb6_signal_one_shot_apk.yml",
+      "v2/signals/plans/CB6-SIG-APK-ACTIONS-ONEBUILD-20261016.json"
+    ],
+    "do_not_merge_if_changed_paths_differ": true,
+    "reference": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow"
+  },
+  "new_workflow": {
+    "path": ".github/workflows/cb6_signal_one_shot_apk.yml",
+    "event": "workflow_dispatch only",
+    "source_checkout_sha": "d1afd49da4ad35123877a35ec47cf28b3d7b2560",
+    "pinned_comaps_sha": "7113ccb5f086183f8884b2aa4e58c987466b6704",
+    "allowed_build_count": 1,
+    "allowed_arch": "arm64",
+    "package": "jp.cb6.navi",
+    "signature": "reuse existing only; fail closed if unavailable",
+    "existing_pass_retests": false,
+    "test_scope": "newly introduced signal and audit tests only, plus indispensable build validation",
+    "publish": "one validated APK release only",
+    "no_source_archives": true
+  },
+  "scope_controls": {
+    "no_change_to_pr_13": true,
+    "no_signal_source_changes": true,
+    "no_ruleset_changes": true,
+    "no_approval_verifier_changes": true,
+    "no_method_freeze_changes": true,
+    "no_retest_of_existing_passes": true,
+    "no_unapproved_workflow_runs": true,
+    "no_additional_zip_branch_or_pr": true,
+    "one_protected_merge_after_trusted_required_check": true,
+    "no_formal_adoption": true
+  },
+  "this_phase": "plan-only unreferenced commit; owner approval comment 1x to issue #11; no branch, PR, workflow implementation, Actions or build"
+}
