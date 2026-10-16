@@ -1,0 +1,37 @@
+{
+  "affected_domains": [
+    "failure_learning_prewrite",
+    "failure_learning_postcheck",
+    "failure_learning_recurrence"
+  ],
+  "basis_head": "4cc03f8b45cb4d4b9cceb82954d1e49949cec443",
+  "dependency_head_at_preparation": "0b77b50a9e752ade56e13865a24456b83d88d47d",
+  "dependency_pr": 18,
+  "existing_passes_reused": true,
+  "files_sha256": {
+    "failure_learning/operation_bridge.py": "8abbc5cf8472c2861254438af5d67d40a9ba164a763127d9c5046a43db72ff49",
+    "failure_learning/test_operation_bridge.py": "7e63ed60edd5dc8502c2e59b578b8b45b4cfbd98eb957b77f3e4a510e968da89"
+  },
+  "forbidden_scope": [
+    ".github/workflows",
+    "v2",
+    "PUBLIC_BUILD_NOTICE.md"
+  ],
+  "implementation_scope": "three new files on new branch from fixed main; not standalone until PR18 merged; do not merge before dependency PR18 and new independent review",
+  "known_limits": [
+    "Not automatically wired to existing GitHub file writers",
+    "No automatic ledger persistence",
+    "Non-atomic branch changes",
+    "Shell parser limited",
+    "Requires PR18 preflight module to run"
+  ],
+  "merge_release_apk_authorized": false,
+  "planned_paths": [
+    "failure_learning/bridge_plan_20261017.json",
+    "failure_learning/operation_bridge.py",
+    "failure_learning/test_operation_bridge.py"
+  ],
+  "proposed_change_id": "CB6-FAILURE-LEARNING-BRIDGE-DEPENDENT-20261017",
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "schema": 1
+}
