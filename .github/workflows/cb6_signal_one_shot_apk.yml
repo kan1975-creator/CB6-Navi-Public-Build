@@ -45,8 +45,86 @@ jobs:
           test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
           test "$GITHUB_REF" = 'refs/heads/main'
           test "$GITHUB_RUN_ATTEMPT" = '1'
-          gh api "repos/$GITHUB_REPOSITORY/actions/workflows/cb6_signal_one_shot_apk.yml/runs?event=workflow_dispatch&per_page=100" |
-            jq -e --argjson rid "$GITHUB_RUN_ID" '.total_count == 1 and (.workflow_runs | length) == 1 and .workflow_runs[0].id == $rid'
+          gh api "repos/$GITHUB_REPOSITORY/actions/workflows/cb6_signal_one_shot_apk.yml/runs?event=workflow_dispatch&per_page=100" > "$RUNNER_TEMP/CB6_DISPATCHES.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38839471742" > "$RUNNER_TEMP/CB6_OLD_RUN.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38839471742/jobs?per_page=100" > "$RUNNER_TEMP/CB6_OLD_JOBS.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38839471742/artifacts?per_page=100" > "$RUNNER_TEMP/CB6_OLD_ARTIFACTS.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/CB6_CURRENT_RUN.json"
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" > "$RUNNER_TEMP/CB6_RELEASES.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          from datetime import datetime
+          tmp=Path(os.environ['RUNNER_TEMP'])
+          def obj(filename):
+              return json.loads((tmp/filename).read_text(encoding='utf-8'))
+          history=obj('CB6_DISPATCHES.json')
+          old=obj('CB6_OLD_RUN.json')
+          jobs_doc=obj('CB6_OLD_JOBS.json')
+          artifacts=obj('CB6_OLD_ARTIFACTS.json')
+          current=obj('CB6_CURRENT_RUN.json')
+          releases=obj('CB6_RELEASES.json')
+          old_id=38839471742
+          new_id=int(os.environ['GITHUB_RUN_ID'])
+          source_head='a8780c47dcd24200a92e9298bc19fd9348def600'
+          allowed_workflow_paths = {
+              '.github/workflows/cb6_signal_one_shot_apk.yml',
+              '.github/workflows/cb6_signal_one_shot_apk.yml@main',
+          }
+          attempts=history.get('workflow_runs')
+          if (history.get('total_count') != 2 or
+              not isinstance(attempts,list) or len(attempts) != 2 or
+              {r.get('id') for r in attempts} != {old_id,new_id} or
+              new_id == old_id or
+              any(r.get('run_attempt') != 1 or
+                  r.get('event') != 'workflow_dispatch' or
+                  r.get('path') not in allowed_workflow_paths or
+                  r.get('head_branch') != 'main'
+                  for r in attempts)):
+              raise SystemExit('RECOVERY_REQUIRES_EXACTLY_TWO_DISTINCT_FIRST_ATTEMPT_RUNS')
+          if (old.get('id') != old_id or
+              old.get('run_attempt') != 1 or
+              old.get('status') != 'completed' or
+              old.get('conclusion') != 'failure' or
+              old.get('head_sha') != source_head or
+              current.get('id') != new_id or
+              current.get('run_attempt') != 1 or
+              current.get('head_sha') != os.environ['GITHUB_SHA'] or
+              current.get('head_sha') == source_head or
+              datetime.fromisoformat(old['created_at'].replace('Z','+00:00')) >=
+                datetime.fromisoformat(current['created_at'].replace('Z','+00:00'))):
+              raise SystemExit('RECOVERY_RUN_PROVENANCE_MISMATCH')
+          jobs=jobs_doc.get('jobs')
+          if (jobs_doc.get('total_count') != 2 or
+              not isinstance(jobs,list) or len(jobs) != 2):
+              raise SystemExit('FAILED_RUN_JOB_LIST_INCOMPLETE')
+          b=[j for j in jobs if j.get('id') == 116775983414]
+          p=[j for j in jobs if j.get('id') == 116777373140]
+          if (len(b)!=1 or len(p)!=1 or
+              b[0].get('run_id') != old_id or
+              b[0].get('conclusion') != 'failure' or
+              p[0].get('conclusion') != 'skipped'):
+              raise SystemExit('ORIGINAL_BUILD_AND_PUBLISH_OUTCOME_MISMATCH')
+          steps=b[0].get('steps')
+          if not isinstance(steps,list):
+              raise SystemExit('ORIGINAL_BUILD_STEPS_MISSING')
+          def require_step(name, result):
+              entries=[s for s in steps if s.get('name') == name]
+              if len(entries) != 1 or entries[0].get('conclusion') != result:
+                  raise SystemExit('ORIGINAL_JOB_STEP_MISMATCH: '+name)
+          require_step('Test ONLY added/modified signal audit cases, not existing PASS suite','failure')
+          require_step('Apply original CB6 identity/signals and source-scope preflight','success')
+          require_step('Build Android arm64 web release exactly once','skipped')
+          require_step('Verify APK, package, arm64, original signing and SHA-256','skipped')
+          require_step('Upload verified APK and text evidence (no new source archive)','skipped')
+          if (artifacts.get('total_count') != 0 or
+              artifacts.get('artifacts') != [] or
+              not isinstance(releases,list) or len(releases) >= 100 or
+              any(r.get('tag_name') ==
+                  'cb6-signal-one-shot-d1afd49da4ad' for r in releases)):
+              raise SystemExit('ORIGINAL_ARTIFACT_OR_RELEASE_MUST_BE_ABSENT')
+          print('EXACTLY_ONE_FAILED_PRIOR_RUN_AND_ONE_NEW_RECOVERY_ATTEMPT_PASS')
+          PY
 
       - name: Checkout exact source HEAD, never PR merge or moving branch
         uses: actions/checkout@v4
@@ -264,13 +342,26 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Old 500m destructive-case PASS is reused from authenticated job logs.
+          gh api "repos/$GITHUB_REPOSITORY/actions/jobs/116775983414/logs" > out/PRIOR_FAILED_JOB_LOG.txt
+          python3 - <<'PY'
+          from pathlib import Path
+          log=Path('out/PRIOR_FAILED_JOB_LOG.txt').read_text(encoding='utf-8')
+          proof=('PASS expected signal audit rejection: 500m-visibility -> '
+                 '500m signal visibility not disabled')
+          if (log.count(proof) != 1 or
+              'SIGNAL AUDIT SELFTEST FAIL 200m-mwm-mark-gating:' not in log or
+              'SIGNAL AUDIT FAIL: 100m MWM source mark restoration missing' not in log):
+              raise SystemExit('PRIOR_500M_CASE_PASS_EVIDENCE_MISSING')
+          print('PRIOR_RUN_500M_CASE_PASS_REUSED_WITHOUT_RETEST')
+          PY
           python3 - comaps <<'PY' | tee out/CHANGED_SIGNAL_TESTS.txt
           import ast
           from pathlib import Path
           path = Path('v2/tests/signals_audit_selftest.py').resolve()
           tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
           wanted = {
-              '500m-visibility', '200m-mwm-mark-gating',
+              '200m-mwm-mark-gating',
               'semantic-mwm-ambiguous', 'semantic-jni-identity',
               'mwm-topology-normalization',
               'semantic-mwm-original-coordinates', 'semantic-mwm-all-anchors',
@@ -290,6 +381,18 @@ jobs:
                   if not isinstance(item, ast.Tuple) or not item.elts or not isinstance(item.elts[0], ast.Constant):
                       raise SystemExit('BLOCK: unexpected test case shape')
                   if item.elts[0].value in wanted:
+                      if item.elts[0].value == '200m-mwm-mark-gating':
+                          if (len(item.elts) != 5 or
+                              not all(isinstance(item.elts[i], ast.Constant)
+                                      for i in (0,1,2,3,4)) or
+                              item.elts[1].value != 'android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc' or
+                              item.elts[2].value !=
+                                  'mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));' or
+                              item.elts[3].value != 'mark->SetShowAt200m(true);' or
+                              item.elts[4].value != '200m topology mark gating missing'):
+                              raise SystemExit('BLOCK: MWM_DESTRUCTIVE_TEST_FIXTURE_CHANGED')
+                          item.elts[4] = ast.Constant(
+                              value='100m MWM source mark restoration missing')
                       selected.append(item)
               if len(selected) != len(wanted) or {x.elts[0].value for x in selected} != wanted:
                   raise SystemExit('BLOCK: changed audit cases do not match approved diff')
