@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "change_id": "CB6-FAILURE-LEARNING-OPERATIONAL-WIRING-20261017",
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "basis_main_sha": "82c3e7bd0f5cb05c6d5f83b5be61227eaaa573f3",
+  "status": "ISOLATED_PROPOSAL_NOT_APPROVED_FOR_GITHUB_WRITES",
+  "purpose": "Make already-merged failure-learning functions the explicit entrypoint for approved file operations and produce failure drafts automatically after observed failures, without implying all clients are intercepted.",
+  "new_pr_required": true,
+  "proposed_paths": [
+    "failure_learning/operational_wiring_plan_20261017.json",
+    "failure_learning/guarded_operation.py",
+    "failure_learning/test_guarded_operation.py"
+  ],
+  "existing_file_changes": [],
+  "preserve": [
+    "failure_learning/preflight.py",
+    "failure_learning/test_preflight.py",
+    "failure_learning/operation_bridge.py",
+    "failure_learning/test_operation_bridge.py",
+    "failure_learning/failures_v1.json",
+    ".github/workflows",
+    "v2",
+    "Registry and existing 15 rules",
+    "Method Freeze and Freeze/BLOCK",
+    "Ruleset 24792110",
+    "main and cb6-v2-clean except separately approved PR merge",
+    "PR #13 and its approved signal changes"
+  ],
+  "execution_contract": {
+    "mode": "EXPLICIT_OPT_IN_ONLY",
+    "prewrite": "For an owner-approved file write, obtain authenticated GitHub user, PR, branch, main, ruleset and comment evidence; call existing operation_bridge.apply_approved_write on exact approved candidate bytes, fail closed on mismatch.",
+    "after_failure": "Capture exact failure code, operation, HEAD and evidence into a local pending JSON record; call existing recurrence logic only when record validates; label unverified root cause/prevention as pending review, never fabricate PASS or confirmed diagnosis.",
+    "persistence": "Save only a local draft in this phase; no automatic change to protected GitHub failure ledger. A later owner-approved PR is required to make a ledger record authoritative.",
+    "out_of_scope": "No interception of direct GitHub plugin writes, no automatic workflow trigger, no Ruleset edits, no automated issue comment, no direct main update, no merge or Release."
+  },
+  "new_scope_tests_only": [
+    "Mismatched actor, PR head, main, scope, approval evidence, Ruleset and draft digest BLOCK before write",
+    "Approved draft calls the existing bridge once; duplicate attempts and unknown outcomes require reconciliation",
+    "A failed write generates a local evidence draft without writing GitHub ledger",
+    "Same known cause_key is classified for recurrence review, not silently adopted",
+    "Missing evidence and unsupported failure shape never auto-publish",
+    "Existing code files and already-PASS test suites remain unmodified and unrerun"
+  ],
+  "authorization_sequence": [
+    "Owner explicitly approves narrowly scoped new PR plan",
+    "Commit canonical plan before PR creation",
+    "Record owner-authored unedited GitHub approval bound to plan commit and SHA before PR creation",
+    "Add only the two new implementation files; create one PR",
+    "Require existing trusted Required Check and separate-GPT delta-only review",
+    "Merge only on a second owner approval"
+  ],
+  "limitations": [
+    "The GitHub connector and other unmodified clients can bypass the opt-in runner",
+    "No automatic authoritative ledger persistence to GitHub",
+    "The GitHub Contents API does not atomically compare-and-swap branch HEAD",
+    "Existing limited shell parser is not a full Bash/YAML parser"
+  ],
+  "proposed_change_id": "CB6-FAILURE-LEARNING-OPERATIONAL-WIRING-20261017",
+  "basis_head": "82c3e7bd0f5cb05c6d5f83b5be61227eaaa573f3",
+  "planned_paths": [
+    "failure_learning/operational_wiring_plan_20261017.json",
+    "failure_learning/guarded_operation.py",
+    "failure_learning/test_guarded_operation.py"
+  ],
+  "forbidden_scope": [
+    ".github/workflows",
+    "v2",
+    "PUBLIC_BUILD_NOTICE.md"
+  ],
+  "affected_domains": [
+    "failure_learning_prewrite",
+    "failure_learning_postcheck",
+    "failure_learning_recurrence"
+  ]
+}
