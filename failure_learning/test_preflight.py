@@ -169,5 +169,312 @@ class NewPrewriteLearningTests(unittest.TestCase):
         with self.assertRaises(Blocked):
             learn_failure(LEDGER, wrong)
 
+class FailTwoOnlyRegressionTests(unittest.TestCase):
+    """Only new tests for the two independent-review failures."""
+    PATH = '.github/workflows/cb6_signal_one_shot_apk.yml'
+    BASE = '4cc03f8b45cb4d4b9cceb82954d1e49949cec443'
+
+    def draft(self, content):
+        return dict(path=self.PATH, approved_paths=[self.PATH], operation='create',
+                    fixed_main_head=self.BASE, observed_main_head=self.BASE,
+                    candidate_sha256=hashlib.sha256(content.encode()).hexdigest())
+
+    def assert_blocked(self, content):
+        with self.assertRaisesRegex(Blocked, 'UNESCAPED_GH_LOG'):
+            prewrite_review(LEDGER, self.draft(content), content)
+
+    def matching_cause(self):
+        record = copy.deepcopy(NewPrewriteLearningTests().make_new_failure())
+        record['cause_key'] = LEDGER['failures'][0].get('cause_key', LEDGER['failures'][0]['id'])
+        return record
+
+    def test_fail1_backslash_multiline_missing_flag_is_blocked(self):
+        self.assert_blocked('gh api \\\n    "repos/$GITHUB_REPOSITORY/actions/jobs/123/logs"\n')
+
+    def test_fail1_quoted_multiline_missing_flag_is_blocked(self):
+        self.assert_blocked('gh api "repos/$GITHUB_REPOSITORY/actions/jobs/\n123/logs"\n')
+
+    def test_fail1_flag_on_separate_command_does_not_mask_missing_flag(self):
+        self.assert_blocked('gh api --allow-escape-sequences repos/x/y\n'
+                            'gh api \\\n    "repos/$GITHUB_REPOSITORY/actions/jobs/123/logs"\n')
+
+    def test_fail1_multiline_flag_at_start_is_accepted(self):
+        content = ('gh api --allow-escape-sequences \\\n'
+                   '    "repos/$GITHUB_REPOSITORY/actions/jobs/123/logs"\n')
+        self.assertEqual(prewrite_review(LEDGER, self.draft(content), content)['status'],
+                         'CANDIDATE_PREFLIGHT_PASS_NOT_WRITE_AUTHORIZATION')
+
+    def test_fail1_multiline_flag_on_continuation_is_accepted(self):
+        content = ('gh api \\\n'
+                   '    --allow-escape-sequences \\\n'
+                   '    "repos/$GITHUB_REPOSITORY/actions/jobs/123/logs"\n')
+        self.assertEqual(prewrite_review(LEDGER, self.draft(content), content)['status'],
+                         'CANDIDATE_PREFLIGHT_PASS_NOT_WRITE_AUTHORIZATION')
+
+    def test_fail2_recurring_missing_evidence_is_blocked(self):
+        record = self.matching_cause()
+        record.pop('evidence')
+        with self.assertRaises(Blocked):
+            learn_failure(LEDGER, record)
+
+    def test_fail2_recurring_empty_evidence_is_blocked(self):
+        record = self.matching_cause()
+        record['evidence'] = []
+        with self.assertRaises(Blocked):
+            learn_failure(LEDGER, record)
+
+    def test_fail2_recurring_missing_prevention_is_blocked(self):
+        record = self.matching_cause()
+        record.pop('prevention')
+        with self.assertRaises(Blocked):
+            learn_failure(LEDGER, record)
+
+    def test_fail2_recurring_invalid_regression_cases_is_blocked(self):
+        record = self.matching_cause()
+        record['regression_cases'] = ['only one']
+        with self.assertRaises(Blocked):
+            learn_failure(LEDGER, record)
+
+    def test_fail2_recurring_invalid_status_is_blocked(self):
+        record = self.matching_cause()
+        record['status'] = 'PREVENTION_VERIFIED'
+        with self.assertRaises(Blocked):
+            learn_failure(LEDGER, record)
+
+    def test_fail2_recurring_blank_phase_and_evidence_are_blocked(self):
+        for field, value in [('phase', '  '), ('evidence', ['  '])]:
+            record = self.matching_cause()
+            record[field] = value
+            with self.subTest(field=field), self.assertRaises(Blocked):
+                learn_failure(LEDGER, record)
+
+    def test_fail2_recurring_valid_evidence_returns_review(self):
+        record = self.matching_cause()
+        result = learn_failure(LEDGER, record)
+        self.assertEqual(result['action'], 'RECURRING_CAUSE_REVIEW_LEARNING_MECHANISM')
+        self.assertEqual(result['existing_id'], LEDGER['failures'][0]['id'])
+        self.assertEqual(result['ledger'], LEDGER)
+
+class IndependentReviewFollowupTests(unittest.TestCase):
+    """ONLY tests added for the latest two shell-command review failures."""
+    PATH = '.github/workflows/cb6_signal_one_shot_apk.yml'
+    BASE = '4cc03f8b45cb4d4b9cceb82954d1e49949cec443'
+
+    def review(self, draft):
+        intent = dict(path=self.PATH, approved_paths=[self.PATH],
+                      operation='create', fixed_main_head=self.BASE,
+                      observed_main_head=self.BASE,
+                      candidate_sha256=hashlib.sha256(draft.encode()).hexdigest())
+        return prewrite_review(LEDGER, intent, draft)
+
+    def blocked(self, draft):
+        with self.assertRaisesRegex(Blocked, 'UNESCAPED_GH_LOG'):
+            self.review(draft)
+
+    def accepted(self, draft):
+        self.assertEqual(self.review(draft)['status'],
+                         'CANDIDATE_PREFLIGHT_PASS_NOT_WRITE_AUTHORIZATION')
+
+    def test_separate_semicolon_command_flag_cannot_mask_missing(self):
+        self.blocked('gh api repos/x/actions/jobs/1/logs; '
+                     'gh api --allow-escape-sequences repos/x\n')
+
+    def test_separate_semicolon_command_flag_before_unsafe(self):
+        self.blocked('gh api --allow-escape-sequences repos/x; '
+                     'gh api repos/x/actions/jobs/1/logs\n')
+
+    def test_comment_flag_does_not_count(self):
+        self.blocked('gh api repos/x/actions/jobs/1/logs # --allow-escape-sequences\n')
+
+    def test_comment_flag_on_previous_line_does_not_count(self):
+        self.blocked('# --allow-escape-sequences\n'
+                     'gh api repos/x/actions/jobs/1/logs\n')
+
+    def test_separate_line_with_flag_does_not_count(self):
+        self.blocked('gh api repos/x/actions/jobs/1/logs\n'
+                     'echo --allow-escape-sequences\n')
+
+    def test_backslash_multiline_with_comment_flag_still_blocked(self):
+        self.blocked('gh api \\\n    repos/x/actions/jobs/1/logs  # --allow-escape-sequences\n')
+
+    def test_echo_double_quoted_multiline_is_not_command(self):
+        self.accepted('echo "gh api\nrepos/x/actions/jobs/1/logs"\n')
+
+    def test_echo_single_quoted_multiline_is_not_command(self):
+        self.accepted("echo 'gh api\nrepos/x/actions/jobs/1/logs'\n")
+
+    def test_yaml_run_echo_multiline_is_not_command(self):
+        self.accepted('jobs:\n  build:\n    steps:\n'
+                      '      - run: |\n'
+                      '          echo "gh api\n'
+                      '          repos/x/actions/jobs/1/logs"\n')
+
+    def test_echo_unquoted_gh_words_is_not_command(self):
+        self.accepted('echo gh api repos/x/actions/jobs/1/logs\n')
+
+    def test_safe_command_after_echo_multiline_is_accepted(self):
+        self.accepted('echo "gh api\nrepos/x/actions/jobs/1/logs"; '
+                      'gh api --allow-escape-sequences repos/x/actions/jobs/1/logs\n')
+
+    def test_yaml_real_unsafe_gh_command_is_blocked(self):
+        self.blocked('jobs:\n  build:\n    steps:\n'
+                     '      - run: |\n'
+                     '          gh api repos/x/actions/jobs/1/logs\n')
+
+    def test_conditional_gh_command_is_blocked(self):
+        self.blocked('if ! gh api repos/x/actions/jobs/1/logs; then echo bad; fi\n')
+
+    def test_quoted_multiline_real_command_still_blocked(self):
+        self.blocked('gh api "repos/x/actions/jobs/\n1/logs"\n')
+
+    def test_quoted_hash_followed_by_unsafe_command_is_not_comment(self):
+        self.blocked('echo "#"; gh api repos/x/actions/jobs/1/logs\n')
+
+    def test_quoted_semicolon_in_echo_does_not_create_command(self):
+        self.accepted("echo '; gh api repos/x/actions/jobs/1/logs'\n")
+
+    def test_embedded_url_hash_does_not_turn_into_comment(self):
+        self.blocked('echo repos/x#frag; gh api repos/x/actions/jobs/1/logs\n')
+
+    def test_safe_real_command_with_comment_is_accepted(self):
+        self.accepted('gh api --allow-escape-sequences repos/x/actions/jobs/1/logs '
+                      '# harmless comment\n')
+
+    def test_safe_real_command_with_backslash_is_accepted(self):
+        self.accepted('gh api --allow-escape-sequences \\\n    repos/x/actions/jobs/1/logs\n')
+
+class ReviewResidualSubstitutionAndJqTests(unittest.TestCase):
+    """ONLY new FAIL tests: executable substitutions versus literal --jq text."""
+    PATH = '.github/workflows/cb6_signal_one_shot_apk.yml'
+    BASE = '4cc03f8b45cb4d4b9cceb82954d1e49949cec443'
+
+    def review(self, command):
+        intent = dict(path=self.PATH, approved_paths=[self.PATH],
+                      operation='create', fixed_main_head=self.BASE,
+                      observed_main_head=self.BASE,
+                      candidate_sha256=hashlib.sha256(command.encode()).hexdigest())
+        return prewrite_review(LEDGER, intent, command)
+
+    def blocked(self, command):
+        with self.assertRaisesRegex(Blocked, 'UNESCAPED_GH_LOG'):
+            self.review(command)
+
+    def accepted(self, command):
+        self.assertEqual(self.review(command)['status'],
+                         'CANDIDATE_PREFLIGHT_PASS_NOT_WRITE_AUTHORIZATION')
+
+    def test_unescaped_substitution_inside_double_quoted_echo_blocked(self):
+        self.blocked('echo "status: $(gh api repos/x/actions/jobs/1/logs)"\n')
+
+    def test_unescaped_substitution_in_double_quoted_assignment_blocked(self):
+        self.blocked('answer="$(gh api repos/x/actions/jobs/1/logs)"\n')
+
+    def test_unescaped_substitution_inside_printf_blocked(self):
+        self.blocked('printf "%s" "$(gh api repos/x/actions/jobs/1/logs)"\n')
+
+    def test_unescaped_substitution_unquoted_blocked(self):
+        self.blocked('answer=$(gh api repos/x/actions/jobs/1/logs)\n')
+
+    def test_unescaped_nested_substitution_blocked(self):
+        self.blocked('echo "$(printf "%s" "$(gh api repos/x/actions/jobs/1/logs)")"\n')
+
+    def test_safe_substitution_inside_double_quotes_accepted(self):
+        self.accepted('echo "$(gh api --allow-escape-sequences repos/x/actions/jobs/1/logs)"\n')
+
+    def test_literal_substitution_in_single_quotes_not_executed(self):
+        self.accepted("echo '$(gh api repos/x/actions/jobs/1/logs)'\n")
+
+    def test_escaped_substitution_in_double_quotes_not_executed(self):
+        self.accepted('echo "\\$(gh api repos/x/actions/jobs/1/logs)"\n')
+
+    def test_quoted_echo_gh_words_are_not_invocations(self):
+        self.accepted('echo "gh api repos/x/actions/jobs/1/logs"\n')
+
+    def test_flag_only_in_jq_value_does_not_count(self):
+        self.blocked('gh api repos/x/actions/jobs/1/logs --jq "--allow-escape-sequences"\n')
+
+    def test_jq_value_before_endpoint_does_not_count(self):
+        self.blocked('gh api --jq "--allow-escape-sequences" repos/x/actions/jobs/1/logs\n')
+
+    def test_short_q_value_does_not_count(self):
+        self.blocked('gh api repos/x/actions/jobs/1/logs -q "--allow-escape-sequences"\n')
+
+    def test_equals_jq_value_does_not_count(self):
+        self.blocked('gh api repos/x/actions/jobs/1/logs --jq=--allow-escape-sequences\n')
+
+    def test_cli_flag_before_jq_value_accepted(self):
+        self.accepted('gh api --allow-escape-sequences repos/x/actions/jobs/1/logs --jq .\n')
+
+    def test_cli_flag_after_jq_value_accepted(self):
+        self.accepted('gh api repos/x/actions/jobs/1/logs --jq . --allow-escape-sequences\n')
+
+    def test_jq_text_plus_other_unsafe_substitution_blocked(self):
+        self.blocked("echo \"$(gh api repos/x/actions/jobs/1/logs --jq '--allow-escape-sequences')\"\n")
+
+    def test_safe_real_gh_with_inert_jq_text_accepted(self):
+        self.accepted("echo \"$(gh api --allow-escape-sequences repos/x/actions/jobs/1/logs --jq 'x')\"\n")
+
+class ReviewEscapedNewlineDollarParenTests(unittest.TestCase):
+    """ONLY new residual FAIL-1 checks: executable $\\\n( substitution."""
+    PATH = '.github/workflows/cb6_signal_one_shot_apk.yml'
+    BASE = '4cc03f8b45cb4d4b9cceb82954d1e49949cec443'
+    ENDPOINT = 'repos/x/actions/jobs/1/logs'
+    CONTINUED_OPEN = '$' + '\\' + '\n' + '('
+
+    def review(self, command):
+        intent = dict(path=self.PATH, approved_paths=[self.PATH],
+                      operation='create', fixed_main_head=self.BASE,
+                      observed_main_head=self.BASE,
+                      candidate_sha256=hashlib.sha256(command.encode()).hexdigest())
+        return prewrite_review(LEDGER, intent, command)
+
+    def blocked(self, command):
+        with self.assertRaisesRegex(Blocked, 'UNESCAPED_GH_LOG'):
+            self.review(command)
+
+    def accepted(self, command):
+        self.assertEqual(self.review(command)['status'],
+                         'CANDIDATE_PREFLIGHT_PASS_NOT_WRITE_AUTHORIZATION')
+
+    def test_line_joined_substitution_inside_double_quotes_blocked(self):
+        self.blocked('echo "run: ' + self.CONTINUED_OPEN +
+                     'gh api ' + self.ENDPOINT + ')"\n')
+
+    def test_line_joined_substitution_unquoted_blocked(self):
+        self.blocked('answer=' + self.CONTINUED_OPEN +
+                     'gh api ' + self.ENDPOINT + ')\n')
+
+    def test_line_joined_substitution_in_printf_argument_blocked(self):
+        self.blocked('printf "%s" "' + self.CONTINUED_OPEN +
+                     'gh api ' + self.ENDPOINT + ')"\n')
+
+    def test_line_joined_substitution_inside_outer_substitution_blocked(self):
+        self.blocked('echo "$(printf "%s" "' + self.CONTINUED_OPEN +
+                     'gh api ' + self.ENDPOINT + ')")"\n')
+
+    def test_line_joined_substitution_double_continuation_blocked(self):
+        twice = '$' + '\\' + '\n' + '\\' + '\n' + '('
+        self.blocked('echo "' + twice + 'gh api ' + self.ENDPOINT + ')"\n')
+
+    def test_line_joined_substitution_with_flag_accepted(self):
+        self.accepted('echo "' + self.CONTINUED_OPEN +
+                      'gh api --allow-escape-sequences ' + self.ENDPOINT + ')"\n')
+
+    def test_line_joined_substitution_with_flag_only_in_jq_value_blocked(self):
+        self.blocked('echo "' + self.CONTINUED_OPEN +
+                     "gh api " + self.ENDPOINT + " --jq '--allow-escape-sequences')" + '"\n')
+
+    def test_line_joined_substitution_single_quoted_literal_accepted(self):
+        self.accepted("echo '" + self.CONTINUED_OPEN +
+                      'gh api ' + self.ENDPOINT + ")'\n")
+
+    def test_line_joined_substitution_escaped_dollar_literal_accepted(self):
+        literal = '\\' + self.CONTINUED_OPEN
+        self.accepted('echo "' + literal + 'gh api ' + self.ENDPOINT + ')"\n')
+
+    def test_comment_does_not_hide_next_line_executable_group(self):
+        self.blocked('# ' + self.CONTINUED_OPEN +
+                      'gh api ' + self.ENDPOINT + ')\n')
+
 if __name__ == '__main__':
     unittest.main()
