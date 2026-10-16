@@ -59,13 +59,16 @@ class FakeGH:
                                 'head': {'sha': HEAD, 'ref': BRANCH},
                                 'base': {'sha': MAIN}},
             root + 'rulesets/24792110': {
-                'enforcement': 'active', 'bypass_actors': [],
-                'conditions': {'ref_name': {'include': ['refs/heads/main',
+                'target': 'branch', 'enforcement': 'active', 'bypass_actors': [],
+                'conditions': {'ref_name': {'exclude': [], 'include': ['refs/heads/main',
                                                        'refs/heads/cb6-v2-clean']}},
-                'rules': [{'type': 'required_status_checks', 'parameters': {
+                'rules': [{'type': 'pull_request'}, {'type': 'deletion'},
+                          {'type': 'non_fast_forward'},
+                          {'type': 'required_status_checks', 'parameters': {
                     'required_status_checks': [{'context': target.CHECK,
                                                 'integration_id': target.APP_ID}]}}]},
             root + 'issues/comments/6221609820': {
+                'id': 6221609820,
                 'user': {'login': target.OWNER, 'id': target.OWNER_ID},
                 'issue_url': 'https://api.github.com/' + root + 'issues/11',
                 'created_at': '2026-10-17T00:00:00Z',
@@ -247,6 +250,127 @@ class BridgeOnlyNewTests(unittest.TestCase):
 
     def test_import_has_no_automatic_github_writes(self):
         self.assertFalse(hasattr(target, 'AUTO_RUN'))
+
+
+class ReviewFail2RegressionTests(unittest.TestCase):
+    """Only this class runs for the FAIL-1/FAIL-2 correction."""
+    def approved_fixture(self):
+        # Construct and freeze the body BEFORE GitHub assigns a comment ID.
+        draft = plan()
+        del draft['approval_comment_id']
+        body = target.plan_binding(draft)
+        issued_id = 90000001
+        p = dict(draft, approval_comment_id=issued_id)
+        gh = FakeGH(p)
+        root = 'repos/' + target.REPO + '/'
+        comment = {'id': issued_id,
+                   'user': {'login': target.OWNER, 'id': target.OWNER_ID},
+                   'issue_url': 'https://api.github.com/' + root + 'issues/11',
+                   'created_at': '2026-10-17T00:00:00Z',
+                   'updated_at': '2026-10-17T00:00:00Z', 'body': body}
+        endpoint = root + 'issues/comments/' + str(issued_id)
+        gh.tamper[endpoint] = comment
+        return p, gh, endpoint
+
+    def test_comment_created_before_id_allows_exactly_one_put(self):
+        p, gh, endpoint = self.approved_fixture()
+        original = copy.deepcopy(gh.tamper[endpoint])
+        result = target.apply_approved_write(gh, p, TEXT)
+        self.assertEqual(result['status'], 'WRITE_COMPLETE_NOT_MERGED')
+        self.assertEqual(len(gh.writes), 1)
+        self.assertEqual(gh.tamper[endpoint], original)
+
+    def test_operation_fields_remain_bound_after_id_is_attached(self):
+        mutations = {'repository': 'other/repo', 'pr_number': 20,
+                     'branch': 'feature/other', 'expected_head': '1'*40,
+                     'fixed_main_head': '2'*40, 'path': 'failure_learning/other.txt',
+                     'operation': 'update', 'approved_paths': [PATH, 'other.txt'],
+                     'candidate_sha256': '3'*64, 'owner_login': 'other', 'owner_id': 1}
+        for field, value in mutations.items():
+            with self.subTest(field=field):
+                p, gh, endpoint = self.approved_fixture()
+                p[field] = value
+                self.assertNotEqual(target.plan_binding(p), gh.tamper[endpoint]['body'])
+                root = 'repos/' + target.REPO + '/'
+                if field == 'pr_number':
+                    gh.tamper[root + 'pulls/' + str(value)] = gh.get(root + 'pulls/18')
+                elif field == 'branch':
+                    gh.tamper[root + 'branches/' + value] = {'commit': {'sha': HEAD}}
+                    pr = copy.deepcopy(gh.get(root + 'pulls/18'))
+                    pr['head']['ref'] = value
+                    gh.tamper[root + 'pulls/18'] = pr
+                with self.assertRaises(Blocked):
+                    target.apply_approved_write(gh, p, TEXT)
+                self.assertEqual(gh.writes, [])
+
+    def test_comment_locator_and_provenance_still_required(self):
+        for change in ({'id': 90000002}, {'id': None},
+                       {'user': {'login': target.OWNER, 'id': 1}},
+                       {'user': {'login': 'other', 'id': target.OWNER_ID}},
+                       {'issue_url': 'https://api.github.com/repos/'+target.REPO+'/issues/18'},
+                       {'updated_at': '2026-10-18T00:00:00Z'},
+                       {'body': 'CB6-BRIDGE-PLAN-SHA256 ' + '0'*64}):
+            with self.subTest(change=change):
+                p, gh, endpoint = self.approved_fixture()
+                gh.tamper[endpoint].update(change)
+                with self.assertRaisesRegex(Blocked, 'OWNER_APPROVAL_UNVERIFIED'):
+                    target.apply_approved_write(gh, p, TEXT)
+                self.assertEqual(gh.writes, [])
+
+    def test_excluded_or_missing_branch_scope_rejected_before_put(self):
+        for excluded in (['refs/heads/main'], ['refs/heads/cb6-v2-clean'],
+                         ['refs/heads/*'], None):
+            with self.subTest(exclude=excluded):
+                p, gh, _ = self.approved_fixture()
+                endpoint = 'repos/' + target.REPO + '/rulesets/24792110'
+                rules = copy.deepcopy(gh.get(endpoint))
+                if excluded is None:
+                    del rules['conditions']['ref_name']['exclude']
+                else:
+                    rules['conditions']['ref_name']['exclude'] = excluded
+                gh.tamper[endpoint] = rules
+                with self.assertRaisesRegex(Blocked, 'RULESET_INACTIVE_OR_BYPASS'):
+                    target.apply_approved_write(gh, p, TEXT)
+                self.assertEqual(gh.writes, [])
+
+    def test_each_required_protection_missing_rejected_before_put(self):
+        for missing in ('pull_request', 'deletion', 'non_fast_forward',
+                        'required_status_checks'):
+            with self.subTest(missing=missing):
+                p, gh, _ = self.approved_fixture()
+                endpoint = 'repos/' + target.REPO + '/rulesets/24792110'
+                rules = copy.deepcopy(gh.get(endpoint))
+                rules['rules'] = [r for r in rules['rules'] if r['type'] != missing]
+                gh.tamper[endpoint] = rules
+                with self.assertRaises(Blocked):
+                    target.apply_approved_write(gh, p, TEXT)
+                self.assertEqual(gh.writes, [])
+
+    def test_protection_weakened_at_write_boundary_rejected(self):
+        for weakening in ('exclude', 'pull_request', 'deletion', 'non_fast_forward'):
+            with self.subTest(weakening=weakening):
+                p, gh, _ = self.approved_fixture()
+                endpoint = 'repos/' + target.REPO + '/rulesets/24792110'
+                original_get = gh.get
+                reads = 0
+                def changing_get(url):
+                    nonlocal reads
+                    record = original_get(url)
+                    if url == endpoint:
+                        reads += 1
+                        if reads == 2:
+                            record = copy.deepcopy(record)
+                            if weakening == 'exclude':
+                                record['conditions']['ref_name']['exclude'] = ['refs/heads/main']
+                            else:
+                                record['rules'] = [r for r in record['rules']
+                                                   if r['type'] != weakening]
+                    return record
+                with patch.object(gh, 'get', side_effect=changing_get):
+                    with self.assertRaises(Blocked):
+                        target.apply_approved_write(gh, p, TEXT)
+                self.assertEqual(reads, 2)
+                self.assertEqual(gh.writes, [])
 
 
 if __name__ == '__main__':

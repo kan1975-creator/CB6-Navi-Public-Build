@@ -38,7 +38,10 @@ def insist(condition, reason):
 
 
 def canonical_plan_sha(plan):
-    return hashlib.sha256(json.dumps(plan, sort_keys=True, ensure_ascii=False,
+    # GitHub assigns this locator only after the unedited approval is posted.
+    # Bind all operation fields first; attach the locator after posting.
+    approved = {k: v for k, v in plan.items() if k != 'approval_comment_id'}
+    return hashlib.sha256(json.dumps(approved, sort_keys=True, ensure_ascii=False,
                                      separators=(',', ':')).encode('utf-8')).hexdigest()
 
 
@@ -109,16 +112,22 @@ def authenticated_evidence(api, plan):
            'PR_HEAD_BASE_OR_STATE_MISMATCH')
     rules = api.get(root + 'rulesets/' + str(RULESET))
     insist(rules.get('enforcement') == 'active' and rules.get('bypass_actors') == [] and
+           rules.get('target') == 'branch' and
+           rules.get('conditions', {}).get('ref_name', {}).get('exclude') == [] and
            {'refs/heads/main', 'refs/heads/cb6-v2-clean'}.issubset(set(
                rules.get('conditions', {}).get('ref_name', {}).get('include', []))),
            'RULESET_INACTIVE_OR_BYPASS')
+    insist({'pull_request', 'deletion', 'non_fast_forward'}.issubset(
+               {rule.get('type') for rule in rules.get('rules', [])}),
+           'RULESET_REQUIRED_PROTECTION_MISSING')
     required = [s for rule in rules.get('rules', [])
                 if rule.get('type') == 'required_status_checks'
                 for s in rule.get('parameters', {}).get('required_status_checks', [])]
     insist(any(s.get('context') == CHECK and s.get('integration_id') == APP_ID
                for s in required), 'REQUIRED_CHECK_NOT_CONFIGURED')
     c = api.get(root + 'issues/comments/' + str(plan['approval_comment_id']))
-    insist(c.get('user', {}).get('login') == OWNER and
+    insist(type(c.get('id')) is int and c['id'] == plan['approval_comment_id'] and
+           c.get('user', {}).get('login') == OWNER and
            c.get('user', {}).get('id') == OWNER_ID and
            c.get('issue_url') == 'https://api.github.com/' + root +
            'issues/11' and
