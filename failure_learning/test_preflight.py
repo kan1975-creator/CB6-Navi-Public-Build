@@ -2,9 +2,10 @@
 """Only new failure-learning candidate tests; does not rerun pre-existing PASS suites."""
 import copy
 import json
+import hashlib
 import unittest
 from pathlib import Path
-from preflight import Blocked, evaluate
+from preflight import Blocked, evaluate, prewrite_review, learn_failure, validate_ledger
 
 LEDGER = json.loads(Path(__file__).with_name('failures_v1.json').read_text(encoding='utf-8'))
 SHA = 'f087379c5ce646e65f0cec5e23083bf9d28cc787'
@@ -92,13 +93,81 @@ class FailureLearningTest(unittest.TestCase):
         dup['failures'].append(copy.deepcopy(dup['failures'][0]))
         with self.assertRaises(Blocked):
             evaluate(dup,GOOD['pr_creation'])
-    def test_new_failure_without_checker_is_blocked(self):
+    def test_new_failure_can_be_recorded_without_weakening_existing_phase(self):
         unknown=copy.deepcopy(LEDGER)
         new=copy.deepcopy(unknown['failures'][0])
         new['id']='unimplemented_future_failure'
         unknown['failures'].append(new)
+        validate_ledger(unknown)
+        self.assertEqual(evaluate(unknown,GOOD['pr_creation']),
+                         'OFFLINE_PREFLIGHT_PASS_NOT_AUTHORIZATION')
+
+class NewPrewriteLearningTests(unittest.TestCase):
+    """ONLY added test methods for pre-write learning; run this class in isolation."""
+    PATH = '.github/workflows/cb6_signal_one_shot_apk.yml'
+    BASE = '4cc03f8b45cb4d4b9cceb82954d1e49949cec443'
+    SAFE = ('gh api --allow-escape-sequences "repos/$GITHUB_REPOSITORY/actions/jobs/123/logs"\n'
+            "re.findall(r'^V2 Signer: certificate SHA-256 digest: ([0-9a-fA-F]{64})$', text)\n")
+
+    def intent(self, text, **override):
+        info = dict(path=self.PATH, approved_paths=[self.PATH],
+                    operation='create', fixed_main_head=self.BASE,
+                    observed_main_head=self.BASE,
+                    candidate_sha256=hashlib.sha256(text.encode('utf-8')).hexdigest())
+        info.update(override)
+        return info
+
+    def test_safe_draft_returns_digest_not_authorization(self):
+        out = prewrite_review(LEDGER, self.intent(self.SAFE), self.SAFE)
+        self.assertEqual(out['status'], 'CANDIDATE_PREFLIGHT_PASS_NOT_WRITE_AUTHORIZATION')
+        self.assertFalse(out['github_write_performed'])
+        self.assertFalse(out['owner_approval_authenticated_here'])
+
+    def test_unescaped_gh_log_rejected_before_write(self):
+        broken = self.SAFE.replace('gh api --allow-escape-sequences', 'gh api')
+        with self.assertRaisesRegex(Blocked, 'UNESCAPED_GH_LOG'):
+            prewrite_review(LEDGER, self.intent(broken), broken)
+
+    def test_old_signer_output_rejected_before_write(self):
+        broken = self.SAFE.replace('V2 Signer:', 'Signer #1')
+        with self.assertRaisesRegex(Blocked, 'WRONG_APKSIGNER_FORMAT'):
+            prewrite_review(LEDGER, self.intent(broken), broken)
+
+    def test_bad_head_scope_digest_rejected(self):
+        for override in ({'observed_main_head': 'f'*40},
+                         {'approved_paths': ['some_other_path.py']},
+                         {'candidate_sha256': '0'*64},
+                         {'path': '../outside'}):
+            with self.subTest(override=override), self.assertRaises(Blocked):
+                prewrite_review(LEDGER, self.intent(self.SAFE, **override), self.SAFE)
+
+    def make_new_failure(self):
+        return dict(id='new_failure_from_postcheck', cause_key='new_failure_from_postcheck',
+                    phase='file_prepare', root_cause='A new observed failure',
+                    evidence=['new job with observed failure'],
+                    affected_paths=[self.PATH],
+                    prevention='Do not repeat the failure',
+                    regression_cases=['valid passes', 'invalid rejected'],
+                    status='OPEN')
+
+    def test_new_failure_proposed_and_used_next_time(self):
+        result = learn_failure(LEDGER, self.make_new_failure())
+        self.assertEqual(result['action'], 'NEW_FAILURE_PROPOSED_NOT_COMMITTED')
+        self.assertEqual(len(result['ledger']['failures']), len(LEDGER['failures'])+1)
+        self.assertEqual(prewrite_review(result['ledger'], self.intent(self.SAFE), self.SAFE)
+                         ['status'], 'CANDIDATE_NEEDS_PREVENTION_REVIEW')
+
+    def test_same_cause_is_mechanism_regression_not_duplicate(self):
+        result = learn_failure(LEDGER, self.make_new_failure())
+        duplicate = learn_failure(result['ledger'], self.make_new_failure())
+        self.assertEqual(duplicate['action'], 'RECURRING_CAUSE_REVIEW_LEARNING_MECHANISM')
+        self.assertEqual(len(duplicate['ledger']['failures']), len(result['ledger']['failures']))
+
+    def test_invalid_failure_record_cannot_be_proposed(self):
+        wrong = self.make_new_failure()
+        wrong.pop('prevention')
         with self.assertRaises(Blocked):
-            evaluate(unknown,GOOD['pr_creation'])
+            learn_failure(LEDGER, wrong)
 
 if __name__ == '__main__':
     unittest.main()
