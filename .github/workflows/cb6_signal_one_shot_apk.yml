@@ -69,6 +69,7 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/38750137563" > out/TRUSTED_GATE_RUN.json
           gh api "repos/$GITHUB_REPOSITORY/commits/$SOURCE_SHA/check-runs?per_page=100" > out/TRUSTED_GATE_CHECKS.json
           gh api "repos/$GITHUB_REPOSITORY/pulls/13" > out/TRUSTED_PR13.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38750137563/jobs?per_page=100" > out/TRUSTED_GATE_JOBS.json
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -114,6 +115,106 @@ jobs:
                 '645132832a478025e162d0f9fea2e785bcba374e'):
               raise SystemExit('FIXED_SOURCE_PR13_CHANGED')
           print('AUTHENTICATED_PRIOR_PR13_DEVELOPMENT_GATE_PASS')
+          # Common governance checks already passed in the authenticated fixed-SHA
+          # run. The feature-only branch of the frozen Gate is checked below
+          # exactly as written, without rerunning any earlier PASS test.
+          import ast
+          import hashlib
+          import pathlib
+          from types import SimpleNamespace
+
+          jobs_doc = json.loads(Path('out/TRUSTED_GATE_JOBS.json').read_text())
+          jobs = jobs_doc.get('jobs')
+          if (jobs_doc.get('total_count') != 1 or
+              not isinstance(jobs, list) or len(jobs) != 1):
+              raise SystemExit('TRUSTED_GATE_JOB_COUNT_MISMATCH')
+          job = jobs[0]
+          if (job.get('id') != 116474072130 or
+              job.get('name') != 'gate' or
+              job.get('status') != 'completed' or
+              job.get('conclusion') != 'success' or
+              job.get('run_id') != 38750137563):
+              raise SystemExit('TRUSTED_GATE_JOB_IDENTITY_MISMATCH')
+          steps = job.get('steps')
+          if not isinstance(steps, list):
+              raise SystemExit('TRUSTED_GATE_STEPS_UNAVAILABLE')
+          common_passed = {
+              'Verify ACTIVE CB6 Development Auditor V2',
+              'Verify root invariants and repository-only reconstruction',
+              'Derive root certification from executable proofs',
+              'Verify frozen development method',
+              'Verify persistent CB6 project gate',
+              'Verify decision traceability and workflow coverage',
+              'Generic feature-contract destructive tests',
+          }
+          for label in common_passed:
+              hits = [step for step in steps if step.get('name') == label]
+              if (len(hits) != 1 or hits[0].get('status') != 'completed' or
+                  hits[0].get('conclusion') != 'success'):
+                  raise SystemExit('TRUSTED_COMMON_GATE_STEP_NOT_PASS: '+label)
+
+          root = Path.cwd()
+          state = json.loads((root/'v2/gates/project_state.json').read_text())
+          cert = json.loads((root/'v2/gates/root_invariants.json').read_text())['certification']
+          runtime = root/'v2/gates/development_auditor_runtime_adoption_evidence_v2.json'
+          if (state.get('schema') != 1 or state.get('branch') != 'cb6-v2-clean' or
+              state.get('stage') != 'IMPLEMENTATION_ENABLED' or
+              state.get('feature_builds_allowed') is not True or
+              state.get('design_verified') is not True or
+              cert.get('status') != 'CERTIFIED' or
+              cert.get('feature_execution_permitted') is not True or
+              not runtime.is_file() or
+              json.loads(runtime.read_text()).get('status') not in
+                 ('ADOPTED_PENDING_REFREEZE', 'ACTIVE_REFROZEN')):
+              raise SystemExit('SIGNALS_FEATURE_AUTHORITY_NOT_ACTIVE')
+          for rel in ('v2/gates/verify_development_auditor_work_unit_v2.py',
+                      'v2/tests/test_development_auditor_work_unit_v2_fail_closed.py'):
+              if not (root/rel).is_file():
+                  raise SystemExit('SIGNALS_AUDITOR_ENFORCEMENT_MISSING')
+
+          # Byte-identical frozen Gate: selecting its AST sub-block cannot
+          # silently drop future conditions, since any SHA/source drift blocks.
+          gate = root/'v2/gates/verify_project_gate.py'
+          blob_bytes = gate.read_bytes()
+          blob_sha = hashlib.sha1(b'blob '+str(len(blob_bytes)).encode()+
+                                  b'\0'+blob_bytes).hexdigest()
+          freeze = json.loads((root/'v2/gates/method_freeze_lock.json').read_text())
+          expected = '736a2e133836296105347f9164c6ab4666d6801c'
+          if (freeze.get('status') != 'FROZEN' or blob_sha != expected or
+              freeze.get('files', {}).get('v2/gates/verify_project_gate.py') != expected):
+              raise SystemExit('SIGNALS_FROZEN_GATE_SOURCE_MISMATCH')
+          src = blob_bytes.decode('utf-8')
+          parsed = ast.parse(src, filename=str(gate))
+          branches = [n for n in parsed.body if isinstance(n, ast.If) and
+                      ast.get_source_segment(src, n.test) ==
+                          '"--require-feature-build" in sys.argv']
+          if (len(branches) != 2 or branches[1].lineno != 50 or
+              branches[1].orelse or len(branches[1].body) < 20):
+              raise SystemExit('SIGNALS_GATE_AST_BOUNDARY_MISMATCH')
+          stmts = branches[1].body
+          start = stmts[7]
+          if (not isinstance(start, ast.Assign) or len(start.targets) != 1 or
+              not isinstance(start.targets[0], ast.Name) or
+              start.targets[0].id != 'feature' or
+              start.lineno != 59 or stmts[-1].end_lineno != 178):
+              raise SystemExit('SIGNALS_FEATURE_CHECK_SCOPE_INCOMPLETE')
+
+          # The first seven AST statements are Auditor prerequisites, proven
+          # above by the exact existing successful job and local authority.
+          # Execute EVERY subsequent feature-specific Gate statement unchanged.
+          def feature_fail(message):
+              raise SystemExit('SIGNALS_FEATURE_BUILD_BLOCK: '+message)
+          context = {
+              'ROOT': root, 'json': json, 'pathlib': pathlib,
+              'sys': SimpleNamespace(argv=[
+                  'verify_project_gate.py','--require-feature-build','--feature=signals']),
+              'evidence': json.loads((root/'v2/gates/evidence_inventory.json').read_text()),
+              'fail': feature_fail,
+          }
+          feature_module = ast.Module(body=stmts[7:], type_ignores=[])
+          ast.fix_missing_locations(feature_module)
+          exec(compile(feature_module, str(gate), 'exec'), context, context)
+          print('EXACT_FROZEN_SIGNALS_FEATURE_BUILD_ELIGIBILITY_PASS')
           PY
 
       - name: Java 21
