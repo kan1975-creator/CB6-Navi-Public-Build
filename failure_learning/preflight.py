@@ -10,6 +10,7 @@ import copy
 import datetime as dt
 import json
 import re
+import shlex
 import sys
 from pathlib import Path, PurePosixPath
 
@@ -39,6 +40,24 @@ def timestamp(value):
     require(result.tzinfo is not None, 'NAIVE_TIMESTAMP')
     return result.astimezone(dt.timezone.utc)
 
+def _validate_failure_record(item):
+    require(type(item) is dict, 'BAD_FAILURE_RECORD')
+    for key in ('id', 'phase', 'root_cause', 'evidence', 'affected_paths',
+                'prevention', 'regression_cases', 'status'):
+        require(item.get(key) is not None, 'INCOMPLETE_FAILURE_RECORD')
+    require(type(item['id']) is str and type(item['phase']) is str and
+            bool(item['phase'].strip()) and
+            type(item['root_cause']) is str and bool(item['root_cause'].strip()) and
+            type(item['prevention']) is str and bool(item['prevention'].strip()) and
+            type(item['evidence']) is list and bool(item['evidence']) and
+            all(type(x) is str and bool(x.strip()) for x in item['evidence']) and
+            type(item['affected_paths']) is list and bool(item['affected_paths']) and
+            all(type(x) is str and bool(x.strip()) for x in item['affected_paths']) and
+            type(item['regression_cases']) is list and len(item['regression_cases']) >= 2 and
+            all(type(x) is str and bool(x.strip()) for x in item['regression_cases']) and
+            item['status'] in ('PREVENTION_PROPOSED', 'PREVENTION_VERIFIED', 'OPEN'),
+            'INVALID_FAILURE_RECORD')
+
 def validate_ledger(ledger):
     require(type(ledger) is dict and ledger.get('schema') == 1 and
             ledger.get('candidate_only') is True, 'BAD_LEDGER')
@@ -46,21 +65,7 @@ def validate_ledger(ledger):
     require(type(entries) is list and len(entries) >= len(EXPECTED), 'MISSING_FAILURE_RECORDS')
     ids = []
     for item in entries:
-        require(type(item) is dict, 'BAD_FAILURE_RECORD')
-        for key in ('id', 'phase', 'root_cause', 'evidence', 'affected_paths',
-                    'prevention', 'regression_cases', 'status'):
-            require(item.get(key) is not None, 'INCOMPLETE_FAILURE_RECORD')
-        require(type(item['id']) is str and type(item['phase']) is str and
-                type(item['root_cause']) is str and bool(item['root_cause']) and
-                type(item['prevention']) is str and bool(item['prevention']) and
-                type(item['evidence']) is list and bool(item['evidence']) and
-                all(type(x) is str and bool(x) for x in item['evidence']) and
-                type(item['affected_paths']) is list and bool(item['affected_paths']) and
-                all(type(x) is str and bool(x) for x in item['affected_paths']) and
-                type(item['regression_cases']) is list and len(item['regression_cases']) >= 2 and
-                all(type(x) is str and bool(x) for x in item['regression_cases']) and
-                item['status'] in ('PREVENTION_PROPOSED', 'PREVENTION_VERIFIED', 'OPEN'),
-                'INVALID_FAILURE_RECORD')
+        _validate_failure_record(item)
         ids.append(item['id'])
     require(len(ids) == len(set(ids)) and set(EXPECTED).issubset(set(ids)),
             'MISSING_OR_DUPLICATE_FAILURE_ID')
@@ -138,6 +143,213 @@ def _safe_repo_path(path):
             not path.startswith('/') and not path.endswith('/'), 'INVALID_CANDIDATE_PATH')
     return path
 
+def _mask_command_substitutions(source):
+    """Return shell text with active $(...) masked plus nested commands to check.
+
+    Single-quoted and escaped substitutions are literal, double-quoted ones
+    execute.  A malformed substitution fails closed rather than being skipped.
+    """
+    def _substitution_open_after(text, pos):
+        # Bash removes backslash-newline BEFORE recognizing a $() command.
+        # E.g. "$\\\n(gh api .../logs)" still executes the gh command.
+        if text[pos] != '$':
+            return None
+        j = pos + 1
+        while text.startswith('\\\n', j):
+            j += 2
+        return j + 1 if j < len(text) and text[j] == '(' else None
+
+    def closing_paren(start):
+        quote = None
+        escape = False
+        comment = False
+        word_boundary = True
+        group_depth = 0
+        i = start
+        while i < len(source):
+            ch = source[i]
+            if comment:
+                if ch == '\n':
+                    comment = False
+                    word_boundary = True
+                i += 1
+                continue
+            if escape:
+                escape = False
+                word_boundary = False
+                i += 1
+                continue
+            if ch == '\\' and quote != "'":
+                escape = True
+                i += 1
+                continue
+            if ch == '#' and quote is None and word_boundary:
+                comment = True
+                i += 1
+                continue
+            opener = _substitution_open_after(source, i) if quote != "'" else None
+            if opener is not None:
+                i = closing_paren(opener) + 1
+                word_boundary = False
+                continue
+            if ch == "'" and quote != '"':
+                quote = None if quote == "'" else "'"
+            elif ch == '"' and quote != "'":
+                quote = None if quote == '"' else '"'
+            elif quote is None and ch == '(':
+                group_depth += 1
+            elif quote is None and ch == ')':
+                if group_depth == 0:
+                    return i
+                group_depth -= 1
+            word_boundary = ch.isspace() or (quote is None and ch in ';|&()')
+            i += 1
+        raise Blocked('UNPARSEABLE_WORKFLOW_SHELL_SUBSTITUTION')
+
+    result = []
+    substitutions = []
+    quote = None
+    escaped = False
+    comment = False
+    word_boundary = True
+    i = 0
+    while i < len(source):
+        ch = source[i]
+        if comment:
+            result.append(ch)
+            if ch == '\n':
+                comment = False
+                word_boundary = True
+            i += 1
+            continue
+        if escaped:
+            result.append(ch)
+            escaped = False
+            word_boundary = False
+            i += 1
+            continue
+        if ch == '\\' and quote != "'":
+            result.append(ch)
+            escaped = True
+            i += 1
+            continue
+        if ch == '#' and quote is None and word_boundary:
+            comment = True
+            result.append(ch)
+            i += 1
+            continue
+        opener = _substitution_open_after(source, i) if quote != "'" else None
+        if opener is not None:
+            end = closing_paren(opener)
+            substitutions.append(source[opener:end])
+            result.append('CB6_COMMAND_SUBSTITUTION')
+            i = end + 1
+            word_boundary = False
+            continue
+        if ch == "'" and quote != '"':
+            quote = None if quote == "'" else "'"
+        elif ch == '"' and quote != "'":
+            quote = None if quote == '"' else '"'
+        result.append(ch)
+        word_boundary = ch.isspace() or (quote is None and ch in ';|&()')
+        i += 1
+    return ''.join(result), substitutions
+
+
+def _gh_log_flag_active(args):
+    """Do not treat --jq's value as a gh CLI flag."""
+    value_flags = {'--jq', '-q'}
+    i = 0
+    while i < len(args):
+        arg = args[i]
+        if arg == '--':
+            return False
+        if arg in value_flags:
+            i += 2
+            continue
+        if arg.startswith('--jq=') or (arg.startswith('-q') and arg != '-q'):
+            i += 1
+            continue
+        if arg == '--allow-escape-sequences':
+            return True
+        i += 1
+    return False
+
+
+def _check_gh_log_commands(source):
+    """Inspect commands, without mistaking comments/echo strings for calls.
+
+    This is a limited shell lexer (not a complete Bash/YAML interpreter).
+    Results remain advisory and are never authorization to write to GitHub.
+    """
+    source, substitutions = _mask_command_substitutions(source)
+    for command in substitutions:
+        _check_gh_log_commands(command)
+    segments = []
+    part = []
+    quote = None
+    escaped = False
+    comment = False
+    word_boundary = True
+
+    def flush():
+        if part:
+            segments.append(''.join(part))
+            part.clear()
+
+    for ch in source:
+        if comment:
+            if ch == '\n':
+                flush()
+                comment = False
+                word_boundary = True
+            continue
+        if escaped:
+            # Backslash-newline is a shell continuation, not a command break.
+            if ch != '\n':
+                part.extend(('\\', ch))
+            escaped = False
+            word_boundary = False
+        elif ch == '\\' and quote != "'":
+            escaped = True
+        elif quote:
+            part.append(ch)
+            if ch == quote:
+                quote = None
+        elif ch in ("'", '"'):
+            quote = ch
+            part.append(ch)
+            word_boundary = False
+        elif ch == '#' and word_boundary:
+            comment = True
+        elif ch in ';\n&|()':
+            flush()
+            word_boundary = True
+        else:
+            part.append(ch)
+            word_boundary = ch.isspace()
+    require(not quote and not escaped, 'UNPARSEABLE_WORKFLOW_SHELL')
+    flush()
+    prefixes = {'run:', '-', 'if', 'elif', 'while', 'until', 'then', 'do',
+                '!', 'time', 'env', 'command', 'exec', 'sudo'}
+    for segment in segments:
+        try:
+            words = shlex.split(segment, posix=True, comments=False)
+        except ValueError as exc:
+            raise Blocked('UNPARSEABLE_WORKFLOW_SHELL') from exc
+        for i in range(len(words) - 1):
+            if words[i:i + 2] != ['gh', 'api']:
+                continue
+            before = words[:i]
+            # Printed text from `echo gh api ...` is not a CLI invocation.
+            if not all(word in prefixes or re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*=.*', word)
+                       for word in before):
+                continue
+            args = words[i + 2:]
+            if any('/logs' in arg for arg in args) and \
+                    not _gh_log_flag_active(args):
+                raise Blocked('KNOWN_FAILURE_UNESCAPED_GH_LOG')
+
 def prewrite_review(ledger, intent, proposed_content):
     """Assess a draft before GitHub write; does NOT authenticate owner approval.
 
@@ -162,10 +374,7 @@ def prewrite_review(ledger, intent, proposed_content):
     require(intent.get('candidate_sha256') == digest, 'CANDIDATE_BYTES_CHANGED')
     # Deterministic checks for observed past code-pattern mistakes.
     if path.startswith('.github/workflows/'):
-        for line in proposed_content.splitlines():
-            if 'gh api' in line and '/logs' in line and \
-               '--allow-escape-sequences' not in line:
-                raise Blocked('KNOWN_FAILURE_UNESCAPED_GH_LOG')
+        _check_gh_log_commands(proposed_content)
         if ('certificate SHA-256 digest:' in proposed_content and
                 'Signer #' in proposed_content):
             raise Blocked('KNOWN_FAILURE_WRONG_APKSIGNER_FORMAT')
@@ -195,6 +404,13 @@ def learn_failure(ledger, failure):
     """Propose updated ledger in memory; never commit or push automatically."""
     validate_ledger(ledger)
     require(type(failure) is dict, 'INVALID_NEW_FAILURE')
+    # Validate the evidence before the recurrence shortcut; incomplete
+    # records must not be accepted merely because their cause_key matches.
+    _validate_failure_record(failure)
+    require(type(failure['id']) is str and
+            bool(re.fullmatch(r'[a-z][a-z0-9_]{2,79}', failure['id'])),
+            'BAD_NEW_FAILURE_ID')
+    require(failure['status'] == 'OPEN', 'NEW_FAILURE_MUST_BE_OPEN')
     key = failure.get('cause_key')
     require(type(key) is str and bool(re.fullmatch(r'[a-z][a-z0-9_]{2,79}', key)),
             'MISSING_STABLE_CAUSE_KEY')
@@ -202,11 +418,8 @@ def learn_failure(ledger, failure):
         if existing.get('cause_key', existing['id']) == key:
             return {'action': 'RECURRING_CAUSE_REVIEW_LEARNING_MECHANISM',
                     'existing_id': existing['id'], 'ledger': copy.deepcopy(ledger)}
-    require(type(failure.get('id')) is str and bool(re.fullmatch(r'[a-z][a-z0-9_]{2,79}', failure['id'])),
-            'BAD_NEW_FAILURE_ID')
-    require(failure.get('id') not in [x['id'] for x in ledger['failures']],
+    require(failure['id'] not in [x['id'] for x in ledger['failures']],
             'DUPLICATE_FAILURE_ID')
-    require(failure.get('status') == 'OPEN', 'NEW_FAILURE_MUST_BE_OPEN')
     candidate = copy.deepcopy(ledger)
     candidate['failures'].append(copy.deepcopy(failure))
     validate_ledger(candidate)
