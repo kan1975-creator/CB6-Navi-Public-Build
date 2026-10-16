@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "proposed_change_id": "CB6-SIG-APK-THIRD-RUN-RECOVERY-20261016",
+  "basis_head": "f087379c5ce646e65f0cec5e23083bf9d28cc787",
+  "planned_paths": [
+    ".github/workflows/cb6_signal_one_shot_apk.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/build_cb6_voice_final.yml",
+    ".github/workflows/cb6_approval_enforcement.yml",
+    ".github/workflows/cb6_hourly_development_trigger.yml",
+    "v2/gates",
+    "v2/signals",
+    "v2/audits",
+    "v2/tests"
+  ],
+  "affected_domains": [
+    "github_actions_manual_apk",
+    "github_actions_third_attempt_guard",
+    "github_failed_run_evidence",
+    "github_release"
+  ],
+  "reviewed_workflow_head": "160669dc8a0dc073c72da622e127834dc8ac17bf",
+  "fixed_signals_head": "d1afd49da4ad35123877a35ec47cf28b3d7b2560",
+  "failed_runs": [
+    {
+      "run_id": 38839471742,
+      "status": "failure",
+      "artifact_count": 0
+    },
+    {
+      "run_id": 38850603797,
+      "status": "failure",
+      "artifact_count": 0
+    }
+  ],
+  "boundaries": {
+    "third_new_dispatch_only": true,
+    "fourth_or_rerun_forbidden": true,
+    "preexisting_workflow_diff_reused": true,
+    "prior_passes_reused": true,
+    "no_github_actions_manual_dispatch_before_separate_owner_authorization": true,
+    "pr16_unchanged": true,
+    "no_merge_or_release": true
+  }
+}
