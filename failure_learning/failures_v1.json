@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "candidate_only": true,
+  "scope": "personal_read_only_manual_advisory",
+  "policy": "Document root cause and exact evidence, add at least two targeted regression cases, refuse unsupported or missing inputs. Never claim self-reported evidence is authenticated GitHub fact.",
+  "execution": "python3 failure_learning/preflight.py --evidence path/to/locally-prepared-evidence.json",
+  "auto_required_check_wired": false,
+  "failures": [
+    {
+      "id": "approval_provenance",
+      "phase": "pr_creation",
+      "root_cause": "PR #16 lacked owner-authored pre-PR approval metadata and had no bound plan for its exact base SHA; a later comment cannot retroactively prove first local edit approval.",
+      "evidence": [
+        "PR #16",
+        "Required Check Run #38913765501, job #117015877726",
+        "owner comment #6217557109 and PR #17 recovery"
+      ],
+      "affected_paths": [
+        "PR description metadata",
+        "failure_learning/preflight.py"
+      ],
+      "prevention": "Before new PR creation require valid plan SHA, exact basis, owner comment, unedited timestamp plan<comment<PR and metadata binding; real GitHub provenance remains checked by existing Required Check.",
+      "regression_cases": [
+        "valid owner timeline PASS",
+        "missing/late/edited/unbound owner record BLOCK"
+      ],
+      "status": "PREVENTION_PROPOSED"
+    },
+    {
+      "id": "github_actions_log_transport",
+      "phase": "workflow_dispatch",
+      "root_cause": "Run #38850603797 failed reading GitHub job logs because gh api rejects terminal escape sequences without --allow-escape-sequences.",
+      "evidence": [
+        "Run #38850603797",
+        "PR #16 independent review PASS",
+        "Run #38916782780 third-run guard PASS"
+      ],
+      "affected_paths": [
+        ".github/workflows/cb6_signal_one_shot_apk.yml",
+        "failure_learning/preflight.py"
+      ],
+      "prevention": "Require explicit gh api --allow-escape-sequences for expected job logs, exact prior error evidence, distinct first attempts and complete run history; reject rerun.",
+      "regression_cases": [
+        "verified log method and distinct run IDs PASS",
+        "missing escape handling or rerun BLOCK"
+      ],
+      "status": "PREVENTION_PROPOSED"
+    },
+    {
+      "id": "duplicate_pull_request_head",
+      "phase": "pr_merge",
+      "root_cause": "Merging PR #17 also caused PR #16 (same HEAD) to be marked merged, despite owner intent to leave #16 open.",
+      "evidence": [
+        "PR #16",
+        "PR #17",
+        "merge commit 4cc03f8b45cb4d4b9cceb82954d1e49949cec443"
+      ],
+      "affected_paths": [
+        "PR merge preflight",
+        "failure_learning/preflight.py"
+      ],
+      "prevention": "Before merge collect all open PRs across paginated GitHub API results and BLOCK when any other open PR shares the target HEAD. Confirm fixed base SHA.",
+      "regression_cases": [
+        "unique-head candidate PASS",
+        "same-head or incomplete PR snapshot BLOCK"
+      ],
+      "status": "PREVENTION_PROPOSED"
+    },
+    {
+      "id": "apk_signer_output_parsing",
+      "phase": "apk_signature",
+      "root_cause": "Run #38916782780 APK compile passed, but verifier expected Signer #1 instead of apksigner's V2 Signer certificate output and incorrectly rejected the matching canonical SHA-256.",
+      "evidence": [
+        "Run #38916782780",
+        "Job #117026169877",
+        "artifact count 0; publish skipped"
+      ],
+      "affected_paths": [
+        ".github/workflows/cb6_signal_one_shot_apk.yml",
+        "failure_learning/preflight.py"
+      ],
+      "prevention": "Parse exactly one V2 Signer SHA-256 certificate; require v2 scheme true, signer count 1 and unchanged canonical fingerprint; reject unknown formats and duplicate/missing rows.",
+      "regression_cases": [
+        "real third-run apksigner output PASS",
+        "wrong fingerprint, multiple signers, v2 false or missing rows BLOCK"
+      ],
+      "status": "PREVENTION_PROPOSED"
+    }
+  ]
+}
