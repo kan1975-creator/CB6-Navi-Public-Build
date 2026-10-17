@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """CB6 opt-in, fail-closed file-write bridge and postcheck failure proposer.
 
-Candidate only. No GitHub workflow/caller is automatically wired to this module.
+Opt-in Git object writer with GraphQL updateRefs atomic beforeOid CAS.
 A caller must explicitly route an approved write through apply_approved_write();
 unrouted writes bypass this bridge. It NEVER merges, dispatches, or releases.
-The GitHub Contents API cannot atomically compare-and-swap a branch HEAD;
-concurrent branch changes may require manual reconciliation after the write.
+Concurrent advances fail at atomic old-HEAD compare-and-swap without retry.
 """
 import base64
 import datetime as dt
@@ -30,6 +29,11 @@ REQUIRED_FIELDS = frozenset({
 })
 SHA40 = re.compile(r'\A[0-9a-f]{40}\Z')
 SHA64 = re.compile(r'\A[0-9a-f]{64}\Z')
+
+
+def atomic_update_key(branch, before_oid, after_oid):
+    return hashlib.sha256((REPO + '\n' + branch + '\n' + before_oid + '\n' +
+                           after_oid).encode('utf-8')).hexdigest()
 
 
 def insist(condition, reason):
@@ -176,20 +180,62 @@ def apply_approved_write(api, plan, candidate):
     else:
         insist(type(existing) is dict and SHA40.fullmatch(existing.get('sha', '')),
                'MISSING_UPDATE_BLOB_SHA')
-    # Repeat live guards at the write boundary. This does not turn the
-    # non-CAS GitHub Contents API into an atomic compare-and-swap operation.
+    # Resolve the server-owned GraphQL repository identity; never accept a
+    # caller-provided ID for the atomic mutation.
+    repository = api.get(root[:-1])
+    insist(type(repository) is dict and repository.get('full_name') == REPO and
+           type(repository.get('node_id')) is str and
+           bool(repository['node_id']), 'GRAPHQL_REPOSITORY_ID_UNVERIFIED')
+    repository_id = repository['node_id']
+    # Git objects are staged under an immutable expected parent only.
     authenticated_evidence(api, plan)
-    payload = {'message': 'cb6: owner-approved guarded file write',
-               'content': base64.b64encode(candidate.encode('utf-8')).decode('ascii'),
-               'branch': plan['branch']}
-    if plan['operation'] == 'update':
-        payload['sha'] = existing['sha']
-    response = api.put(endpoint, payload)
-    commit = response.get('commit', {}).get('sha')
+    parent = api.get(root + 'git/commits/' + plan['expected_head'])
+    parent_tree = parent.get('tree', {}).get('sha')
+    insist(type(parent_tree) is str and SHA40.fullmatch(parent_tree),
+           'EXPECTED_PARENT_TREE_MISSING')
+    blob = api.post(root + 'git/blobs', {
+        'content': base64.b64encode(candidate.encode('utf-8')).decode('ascii'),
+        'encoding': 'base64'})
+    blob_sha = blob.get('sha')
+    insist(type(blob_sha) is str and SHA40.fullmatch(blob_sha),
+           'BLOB_CREATION_UNVERIFIED_RECONCILE')
+    tree = api.post(root + 'git/trees', {
+        'base_tree': parent_tree,
+        'tree': [{'path': plan['path'], 'mode': '100644',
+                  'type': 'blob', 'sha': blob_sha}]})
+    tree_sha = tree.get('sha')
+    insist(type(tree_sha) is str and SHA40.fullmatch(tree_sha),
+           'TREE_CREATION_UNVERIFIED_RECONCILE')
+    proposal = api.post(root + 'git/commits', {
+        'message': 'cb6: owner-approved guarded atomic file write',
+        'tree': tree_sha, 'parents': [plan['expected_head']]})
+    commit = proposal.get('sha')
     insist(type(commit) is str and SHA40.fullmatch(commit),
-           'WRITE_RESULT_UNKNOWN_RECONCILE_BEFORE_RETRY')
+           'COMMIT_CREATION_UNVERIFIED_RECONCILE')
+    insist(type(proposal.get('parents')) is list and
+           [p.get('sha') for p in proposal['parents']] == [plan['expected_head']],
+           'COMMIT_PARENT_MISMATCH')
+    # Never retry unknown results; even a successful staging call is not
+    # proof that the branch ref has moved.
+    authenticated_evidence(api, plan)
+    current = api.get(root + 'branches/' + plan['branch'])
+    insist(current.get('commit', {}).get('sha') == plan['expected_head'],
+           'BRANCH_HEAD_CHANGED')
+    # REST force=false is NOT atomic with the preceding read. GraphQL's
+    # beforeOid condition is evaluated atomically with this ref mutation.
+    answer = api.atomic_ref_update(repository_id, plan['branch'],
+                                   plan['expected_head'], commit)
+    expected_key = atomic_update_key(plan['branch'], plan['expected_head'], commit)
+    insist(type(answer) is dict and not answer.get('errors') and
+           type(answer.get('data')) is dict and
+           type(answer['data'].get('updateRefs')) is dict and
+           answer['data']['updateRefs'].get('clientMutationId') == expected_key,
+           'ATOMIC_REF_UPDATE_UNVERIFIED_RECONCILE')
+    branch_after = api.get(root + 'branches/' + plan['branch'])
+    insist(branch_after.get('commit', {}).get('sha') == commit,
+           'POSTWRITE_BRANCH_MISMATCH_RECONCILE')
     after = api.get(root + 'contents/' + plan['path'] + '?ref=' + commit)
-    insist(after.get('content') is not None and decode_contents(after) == candidate,
+    insist(after.get('sha') == blob_sha and decode_contents(after) == candidate,
            'POSTWRITE_FILE_MISMATCH_RECONCILE')
     return {'status': 'WRITE_COMPLETE_NOT_MERGED', 'commit_sha': commit,
             'path': plan['path'], 'candidate_sha256': plan['candidate_sha256']}
@@ -237,9 +283,27 @@ class GithubCLI:
         except json.JSONDecodeError as exc:
             raise Blocked('GITHUB_JSON_INVALID') from exc
 
-    def put(self, endpoint, data):
-        return self._call(['--method', 'PUT', endpoint, '--input', '-'],
+    def post(self, endpoint, data):
+        return self._call(['--method', 'POST', endpoint, '--input', '-'],
                           json.dumps(data, sort_keys=True))
+
+    def atomic_ref_update(self, repository_id, branch, before_oid, after_oid):
+        """Exactly one GraphQL CAS mutation, with no fallback and no retry."""
+        insist(type(repository_id) is str and bool(repository_id) and
+               type(branch) is str and branch.startswith('feature/') and
+               type(before_oid) is str and SHA40.fullmatch(before_oid) and
+               type(after_oid) is str and SHA40.fullmatch(after_oid),
+               'INVALID_ATOMIC_UPDATE_ARGUMENTS')
+        query = ('mutation CB6AtomicUpdate($input: UpdateRefsInput!) {'
+                 ' updateRefs(input: $input) { clientMutationId } }')
+        body = {'query': query, 'variables': {'input': {
+            'repositoryId': repository_id,
+            'clientMutationId': atomic_update_key(branch, before_oid, after_oid),
+            'refUpdates': [{'name': 'refs/heads/' + branch,
+                            'beforeOid': before_oid, 'afterOid': after_oid,
+                            'force': False}]}}}
+        return self._call(['graphql', '--input', '-'],
+                          json.dumps(body, sort_keys=True))
 
 
 if __name__ == '__main__':

@@ -1,0 +1,49 @@
+# Staged only. Inert unless separately owner-approved and explicitly enabled.
+# Never executes untrusted PR head or copies logs/exception text into records.
+name: CB6 Failure Learning Pending Capture
+on:
+  workflow_run:
+    workflows: ["CB6 Personal Approval Trusted Main Candidate"]
+    types: [completed]
+permissions:
+  actions: read
+  contents: read
+  issues: write
+concurrency:
+  group: cb6-failure-capture-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+  cancel-in-progress: false
+jobs:
+  capture-pending-only:
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'failure' &&
+          vars.CB6_FAILURE_CAPTURE_ENABLED == 'true' &&
+          vars.CB6_FAILURE_CAPTURE_ISSUE != '' &&
+          vars.CB6_FAILURE_CAPTURE_APPROVAL_COMMENT != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout trusted default-main only
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Validate provenance and capture owner-review candidate only
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CB6_RUN_ID: ${{ github.event.workflow_run.id }}
+          CB6_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          CB6_DEST_ISSUE: ${{ vars.CB6_FAILURE_CAPTURE_ISSUE }}
+          CB6_ACTIVATION_COMMENT: ${{ vars.CB6_FAILURE_CAPTURE_APPROVAL_COMMENT }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_EVENT_NAME" = 'workflow_run'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 -I -B failure_learning/auto_failure_ingest.py \
+            --run-id "$CB6_RUN_ID" \
+            --attempt "$CB6_RUN_ATTEMPT" \
+            --issue-id "$CB6_DEST_ISSUE" \
+            --approval-comment-id "$CB6_ACTIVATION_COMMENT"

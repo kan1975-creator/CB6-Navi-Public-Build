@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "change_id": "CB6-FAILURE-LEARNING-FULL-AUTOMATION-20261017",
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "basis_head": "ae93c9e2894ed2c618bdb8cf61b7921c26a06bab",
+  "status": "LOCAL_PLAN_ONLY_NOT_APPROVED_FOR_GITHUB_WRITE",
+  "purpose": "Complete approval-preserving automatic enforcement of supported GitHub write paths, race-safe branch-ref updates, and durable pending failure evidence without automatic adoption or release.",
+  "proposed_change_id": "CB6-FAILURE-LEARNING-FULL-AUTOMATION-20261017",
+  "planned_paths": [
+    ".github/workflows/cb6_failure_learning_capture.yml",
+    "failure_learning/operation_bridge.py",
+    "failure_learning/guarded_operation.py",
+    "failure_learning/auto_failure_ingest.py",
+    "failure_learning/test_atomic_operation.py",
+    "failure_learning/test_auto_failure_ingest.py",
+    "failure_learning/full_automation_plan_20261017.json"
+  ],
+  "forbidden_scope": [
+    "v2",
+    "PUBLIC_BUILD_NOTICE.md",
+    ".github/workflows/cb6_approval_enforcement.yml",
+    ".github/workflows/cb6_signal_one_shot_apk.yml",
+    "failure_learning/failures_v1.json"
+  ],
+  "affected_domains": [
+    "failure_learning_prewrite",
+    "failure_learning_write_boundary",
+    "failure_learning_postcheck",
+    "failure_learning_persistence"
+  ],
+  "functional_requirements": {
+    "write_boundary": [
+      "Use new tree + one-parent commit based on approved expected HEAD, then non-force ref update; no Contents PUT for this approved operation path.",
+      "Immediately before write confirm account, approval provenance, exact candidate hash and file scope, current main/branch and Ruleset.",
+      "Conflict, timeout, missing response or unknown outcome: fail closed, read-only reconcile and never blindly retry.",
+      "Read-after-write must compare exact committed blob bytes; no authorized update to main or cb6-v2-clean."
+    ],
+    "failure_capture": [
+      "Trusted default-branch code only, no checkout or execution of untrusted PR head, least-privilege GitHub token.",
+      "Observe only explicitly selected failures; redact tokens and unverified diagnostics.",
+      "Idempotency key binds workflow run ID, attempt, job ID and failure code; duplicate deliveries never create duplicate records.",
+      "Persist append-only pending evidence to an owner-approved dedicated GitHub issue or equivalent durable record only after explicit approval of that automation.",
+      "Never assert root cause verified or append to authoritative failures_v1.json automatically; owner approves any adoption."
+    ],
+    "route_enforcement": [
+      "Inventory GitHub App, GitHub CLI, Actions token, branch rulesets, local git and merge/update/delete paths.",
+      "A code-level opt-in wrapper alone is insufficient; complete only after owner-authorized repository permissions and ruleset enforcement are verified.",
+      "Preserve Ruleset 24792110; propose any additional ruleset only as a separate exact owner-approved administrative change.",
+      "Explicitly state any owner-admin override or ungoverned credential remaining; never label all routes protected without evidence."
+    ]
+  },
+  "scope_tests_new_only": [
+    "Approved exact parent commit + non-force ref update and exact committed bytes PASS.",
+    "Concurrent HEAD advancement, permission denial, 409/422, timeout, unknown PUT/patch outcome all BLOCK; no implicit retry.",
+    "Wrong actor, stale main, modified comment, wrong blob, Ruleset mismatch all BLOCK.",
+    "Failure ingestion: verified run metadata, idempotent duplicates, missing evidence, redacted secrets, untrusted event, ledger write forbidden.",
+    "One isolated authenticated write/negative validation only after new separate owner approval; never rerun existing PASS suites."
+  ],
+  "authorization_sequence": [
+    "Create isolated proposal against fixed basis; no writes on the basis of this local plan alone.",
+    "Commit exact canonical plan first only after specific owner approval of that single planning write.",
+    "Bind owner-authored unedited GitHub approval to plan SHA, commit SHA, main and seven-file scope before code writes.",
+    "Implement isolated delta, run only new tests, obtain separate-GPT independent delta review and trusted Required Check.",
+    "Merge only after another explicit owner authorization and live immutable checks.",
+    "Any administrative ruleset/permission change and controlled live write test require their own approval and rollback plan."
+  ],
+  "completion_criteria": [
+    "Protected branches and supported write paths confirmed against configured GitHub policies.",
+    "Approved Git ref update succeeds once; stale/concurrent updates fail without overwriting.",
+    "New failed run automatically creates one durable pending record, no secrets, duplicates or auto-adoption.",
+    "Any unprotected routes or admin override are disclosed instead of claiming completeness.",
+    "No Release, APK, Registry change, Method Freeze change or unapproved Actions dispatch."
+  ]
+}
