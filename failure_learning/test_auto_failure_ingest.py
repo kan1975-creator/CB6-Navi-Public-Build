@@ -22,14 +22,22 @@ class FakeAPI:
                       'status': 'completed', 'conclusion': 'failure'}]
         self.data = {
             ROOT + 'branches/main': {'protected': True},
+            ROOT + 'branches/cb6-v2-clean': {'protected': True},
             ROOT + 'rulesets/24792110': {
                 'enforcement': 'active', 'target': 'branch',
-                'bypass_actors': [],
+                'bypass_actors': [], 'current_user_can_bypass': 'never',
                 'conditions': {'ref_name': {'include': [
-                    'refs/heads/main', 'refs/heads/cb6-v2-clean']}},
-                'rules': [{'type': t} for t in (
-                    'deletion', 'non_fast_forward', 'pull_request',
-                    'required_status_checks')]},
+                    'refs/heads/main', 'refs/heads/cb6-v2-clean'], 'exclude': []}},
+                'rules': [{'type': 'deletion'}, {'type': 'non_fast_forward'},
+                          {'type': 'pull_request', 'parameters': {
+                              'required_approving_review_count': 0,
+                              'require_extra_approval_for_unattributed_changes': True,
+                              'allowed_merge_methods': ['merge', 'squash']}},
+                          {'type': 'required_status_checks', 'parameters': {
+                              'strict_required_status_checks_policy': False,
+                              'do_not_enforce_on_create': False,
+                              'required_status_checks': [{
+                                  'context': m.CHECK, 'integration_id': m.APP_ID}]}}]},
             ROOT + 'issues/101': {
                 'number': 101, 'state': 'open', 'user': {'id': m.OWNER_ID}},
             ROOT + 'issues/comments/222': {
@@ -171,6 +179,61 @@ class NewPendingCaptureTests(unittest.TestCase):
         self.api.data[ROOT + f'actions/runs/{RUN}']['head_sha'] = 'invalid'
         self.block()
 
+
+    def test_22_missing_exclude_is_blocked(self):
+        del self.api.data[ROOT + 'rulesets/24792110']['conditions']['ref_name']['exclude']
+        self.block()
+
+    def test_23_nonempty_exclude_is_blocked(self):
+        self.api.data[ROOT + 'rulesets/24792110']['conditions']['ref_name']['exclude'] = ['refs/heads/main']
+        self.block()
+
+    def test_24_wrong_required_check_name_is_blocked(self):
+        entry = self.api.data[ROOT + 'rulesets/24792110']['rules'][3]
+        entry['parameters']['required_status_checks'][0]['context'] = 'wrong'
+        self.block()
+
+    def test_25_wrong_required_check_app_is_blocked(self):
+        entry = self.api.data[ROOT + 'rulesets/24792110']['rules'][3]
+        entry['parameters']['required_status_checks'][0]['integration_id'] = 1
+        self.block()
+
+    def test_26_missing_required_check_parameters_is_blocked(self):
+        del self.api.data[ROOT + 'rulesets/24792110']['rules'][3]['parameters']
+        self.block()
+
+    def test_27_missing_pr_protection_parameters_is_blocked(self):
+        del self.api.data[ROOT + 'rulesets/24792110']['rules'][2]['parameters']
+        self.block()
+
+    def test_28_pr_protection_weakened_is_blocked(self):
+        self.api.data[ROOT + 'rulesets/24792110']['rules'][2]['parameters'][
+            'require_extra_approval_for_unattributed_changes'] = False
+        self.block()
+
+    def test_29_unprotected_clean_branch_is_blocked(self):
+        self.api.data[ROOT + 'branches/cb6-v2-clean']['protected'] = False
+        self.block()
+
+    def test_30_bypass_status_missing_is_blocked(self):
+        del self.api.data[ROOT + 'rulesets/24792110']['current_user_can_bypass']
+        self.block()
+
+    def test_31_status_check_creation_exemption_is_blocked(self):
+        self.api.data[ROOT + 'rulesets/24792110']['rules'][3]['parameters'][
+            'do_not_enforce_on_create'] = True
+        self.block()
+
+
+    def test_32_missing_ruleset_conditions_is_blocked(self):
+        del self.api.data[ROOT + 'rulesets/24792110']['conditions']
+        self.block()
+
+    def test_33_duplicate_trusted_check_context_is_blocked(self):
+        params = self.api.data[ROOT + 'rulesets/24792110']['rules'][3]['parameters']
+        params['required_status_checks'].append({'context': m.CHECK,
+                                                  'integration_id': 1})
+        self.block()
 
 if __name__ == '__main__':
     unittest.main()

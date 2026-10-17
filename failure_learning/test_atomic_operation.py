@@ -28,7 +28,7 @@ class FakeGit:
         self.reject_guard = False
         self.fail_step = None
         self.post_calls = []
-        self.patch_calls = []
+        self.atomic_calls = []
         self.value = None if operation == 'create' else {'sha': 'e' * 40}
         self.written = ''
 
@@ -36,6 +36,8 @@ class FakeGit:
         if path.startswith(ROOT + 'contents/failure_learning/failures_v1.json'):
             return {'encoding': 'base64',
                     'content': base64.b64encode(b'{"schema":1}').decode()}
+        if path == ROOT[:-1]:
+            return {'full_name': b.REPO, 'node_id': 'R_cb6_test_repository'}
         if path == ROOT + 'git/commits/' + HEAD:
             return {'tree': {'sha': 'f' * 40}}
         if path.startswith(ROOT + 'branches/'):
@@ -61,16 +63,21 @@ class FakeGit:
             return {'sha': COMMIT, 'parents': [{'sha': HEAD}]}
         raise AssertionError(path)
 
-    def patch(self, path, data):
-        self.patch_calls.append((path, data))
-        if self.fail_step == 'patch':
+    def atomic_ref_update(self, repository_id, branch, before_oid, after_oid):
+        self.atomic_calls.append((repository_id, branch, before_oid, after_oid))
+        if self.fail_step == 'atomic':
             raise TimeoutError()
-        if self.fail_step == 'conflict':
-            raise b.Blocked('BRANCH_UPDATE_REJECTED')
-        self.head = COMMIT
+        if self.fail_step in ('conflict', 'race'):
+            self.head = '9' * 40  # Another actor moves the ref after last read.
+        if self.head != before_oid:
+            raise b.Blocked('ATOMIC_CAS_CONFLICT')
+        self.head = after_oid
         if self.fail_step == 'ambiguous_result':
             return {}
-        return {'object': {'sha': COMMIT}}
+        if self.fail_step == 'graphql_error':
+            return {'errors': [{'message': 'CAS conflict'}]}
+        return {'data': {'updateRefs': {'clientMutationId':
+            b.atomic_update_key(branch, before_oid, after_oid)}}}
 
 
 class NewAtomicBoundaryTests(unittest.TestCase):
@@ -102,12 +109,13 @@ class NewAtomicBoundaryTests(unittest.TestCase):
         with self.assertRaises(b.Blocked):
             b.apply_approved_write(api, candidate_plan, CANDIDATE)
 
-    def test_01_valid_create_nonforce_once(self):
+    def test_01_valid_create_atomic_cas_once(self):
         api = FakeGit()
         result = b.apply_approved_write(api, plan(), CANDIDATE)
         self.assertEqual(result['commit_sha'], COMMIT)
-        self.assertEqual(len(api.patch_calls), 1)
-        self.assertIs(api.patch_calls[0][1]['force'], False)
+        self.assertEqual(len(api.atomic_calls), 1)
+        self.assertEqual(api.atomic_calls[0],
+                         ('R_cb6_test_repository', 'feature/safe', HEAD, COMMIT))
         self.assertEqual(api.post_calls[2][1]['parents'], [HEAD])
 
     def test_02_valid_update(self):
@@ -119,7 +127,7 @@ class NewAtomicBoundaryTests(unittest.TestCase):
         api = FakeGit()
         api.value = {'sha': 'e' * 40}
         self.block(api, plan())
-        self.assertEqual(api.patch_calls, [])
+        self.assertEqual(api.atomic_calls, [])
 
     def test_04_missing_update_block(self):
         self.block(FakeGit(), plan('update'))
@@ -141,27 +149,27 @@ class NewAtomicBoundaryTests(unittest.TestCase):
         api = FakeGit()
         api.fail_step = 'conflict'
         self.block(api, plan())
-        self.assertEqual(len(api.patch_calls), 1)
+        self.assertEqual(len(api.atomic_calls), 1)
 
     def test_09_unknown_ref_result_one_attempt(self):
         api = FakeGit()
         api.fail_step = 'ambiguous_result'
         self.block(api, plan())
-        self.assertEqual(len(api.patch_calls), 1)
+        self.assertEqual(len(api.atomic_calls), 1)
 
     def test_10_timeout_no_retry(self):
         api = FakeGit()
-        api.fail_step = 'patch'
+        api.fail_step = 'atomic'
         with self.assertRaises(TimeoutError):
             b.apply_approved_write(api, plan(), CANDIDATE)
-        self.assertEqual(len(api.patch_calls), 1)
+        self.assertEqual(len(api.atomic_calls), 1)
 
     def test_11_object_upload_failure_no_ref(self):
         api = FakeGit()
         api.fail_step = 'post'
         with self.assertRaises(TimeoutError):
             b.apply_approved_write(api, plan(), CANDIDATE)
-        self.assertEqual(api.patch_calls, [])
+        self.assertEqual(api.atomic_calls, [])
 
     def test_12_missing_parent_tree(self):
         api = FakeGit()
@@ -201,13 +209,13 @@ class NewAtomicBoundaryTests(unittest.TestCase):
             return result
         api.get = get
         self.block(api, plan())
-        self.assertEqual(len(api.patch_calls), 1)
+        self.assertEqual(len(api.atomic_calls), 1)
 
     def test_16_wrong_postwrite_branch(self):
         api = FakeGit()
         old_get = api.get
         def get(path):
-            if path == ROOT + 'branches/feature/safe' and api.patch_calls:
+            if path == ROOT + 'branches/feature/safe' and api.atomic_calls:
                 return {'commit': {'sha': HEAD}}
             return old_get(path)
         api.get = get
@@ -227,6 +235,44 @@ class NewAtomicBoundaryTests(unittest.TestCase):
                             'candidate_sha256': plan()['candidate_sha256']}):
             self.block(api, plan())
         self.assertEqual(api.post_calls, [])
+
+
+    def test_19_concurrent_advance_after_last_read_blocks(self):
+        api = FakeGit()
+        api.fail_step = 'race'
+        self.block(api, plan())
+        self.assertEqual(len(api.atomic_calls), 1)
+        self.assertEqual(api.head, '9' * 40)
+
+    def test_20_missing_graphql_repo_identity_blocks_without_objects(self):
+        api = FakeGit()
+        original_get = api.get
+        api.get = lambda path: ({'full_name': b.REPO} if path == ROOT[:-1]
+                                else original_get(path))
+        self.block(api, plan())
+        self.assertEqual(api.post_calls, [])
+        self.assertEqual(api.atomic_calls, [])
+
+    def test_21_graphql_errors_block_without_retry(self):
+        api = FakeGit()
+        api.fail_step = 'graphql_error'
+        self.block(api, plan())
+        self.assertEqual(len(api.atomic_calls), 1)
+
+    def test_22_graphql_payload_contains_before_oid_and_no_force(self):
+        with mock.patch('operation_bridge.subprocess.run') as call:
+            call.return_value.returncode = 0
+            call.return_value.stdout = '{"data":{"updateRefs":{"clientMutationId":"x"}}}'
+            b.GithubCLI().atomic_ref_update('R_cb6_test_repository',
+                                             'feature/safe', HEAD, COMMIT)
+        args = call.call_args.args[0]
+        self.assertEqual(args[:4], ['gh', 'api', 'graphql', '--input'])
+        import json
+        payload = json.loads(call.call_args.kwargs['input'])
+        updates = payload['variables']['input']['refUpdates']
+        self.assertEqual(updates, [{'name': 'refs/heads/feature/safe',
+                                    'beforeOid': HEAD, 'afterOid': COMMIT,
+                                    'force': False}])
 
 
 if __name__ == '__main__':

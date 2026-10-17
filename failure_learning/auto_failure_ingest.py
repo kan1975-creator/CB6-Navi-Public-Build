@@ -21,6 +21,8 @@ TRUSTED_WORKFLOW_ID = 383229001
 TRUSTED_WORKFLOW_NAME = 'CB6 Personal Approval Trusted Main Candidate'
 FAILURE_CODE = 'CB6_TRUSTED_APPROVAL_JOB_FAILED'
 RULESET = 24792110
+CHECK = 'cb6-personal-approval-trusted-candidate'
+APP_ID = 15368
 POSITIVE_ID = re.compile(r'^[1-9][0-9]{0,15}$')
 MAX_PAGES = 30
 
@@ -60,21 +62,67 @@ def pages(api, path):
     raise Blocked('PAGINATION_INCOMPLETE')
 
 
+def verify_capture_ruleset(rules):
+    """Fail closed unless the live branch policy enforces PR and trusted check."""
+    insist(type(rules) is dict and rules.get('enforcement') == 'active' and
+           rules.get('target') == 'branch' and
+           rules.get('bypass_actors') == [] and
+           rules.get('current_user_can_bypass') == 'never',
+           'RULESET_UNVERIFIED')
+    conditions = rules.get('conditions')
+    insist(type(conditions) is dict and
+           type(conditions.get('ref_name')) is dict,
+           'RULESET_CONDITIONS_INVALID')
+    ref_name = conditions['ref_name']
+    includes = ref_name.get('include')
+    insist(type(includes) is list and
+           all(type(x) is str for x in includes) and
+           {'refs/heads/main', 'refs/heads/cb6-v2-clean'}.issubset(set(includes)) and
+           ref_name.get('exclude') == [], 'RULESET_REF_SCOPE_UNVERIFIED')
+    rules_list = rules.get('rules')
+    insist(type(rules_list) is list and all(type(r) is dict for r in rules_list),
+           'RULESET_RULES_INVALID')
+    by_type = {}
+    for rule in rules_list:
+        kind = rule.get('type')
+        insist(type(kind) is str and kind not in by_type,
+               'RULESET_DUPLICATE_OR_INVALID_RULE')
+        by_type[kind] = rule
+    insist({'deletion', 'non_fast_forward', 'pull_request',
+            'required_status_checks'}.issubset(by_type),
+           'RULESET_REQUIRED_PROTECTION_MISSING')
+    pr = by_type['pull_request'].get('parameters')
+    insist(type(pr) is dict and
+           type(pr.get('required_approving_review_count')) is int and
+           pr['required_approving_review_count'] >= 0 and
+           pr.get('require_extra_approval_for_unattributed_changes') is True and
+           type(pr.get('allowed_merge_methods')) is list and
+           bool(pr['allowed_merge_methods']) and
+           all(x in ('merge', 'rebase', 'squash') for x in pr['allowed_merge_methods']),
+           'PULL_REQUEST_PROTECTION_UNVERIFIED')
+    params = by_type['required_status_checks'].get('parameters')
+    insist(type(params) is dict and
+           type(params.get('strict_required_status_checks_policy')) is bool and
+           params.get('do_not_enforce_on_create') is False and
+           type(params.get('required_status_checks')) is list,
+           'REQUIRED_CHECK_PARAMETERS_UNVERIFIED')
+    checks = params['required_status_checks']
+    insist(all(type(c) is dict and type(c.get('context')) is str and
+               type(c.get('integration_id')) is int for c in checks),
+           'REQUIRED_CHECK_ENTRY_INVALID')
+    selected = [c for c in checks if c['context'] == CHECK]
+    insist(len(selected) == 1 and selected[0]['integration_id'] == APP_ID,
+           'REQUIRED_CHECK_NAME_OR_APP_MISMATCH')
+
+
 def authorization(api, issue_id, comment_id):
     # An Actions token is not impersonation of the owner; an unedited
     # owner-authored, plan-bound comment supplies authorization evidence.
     main = get_repo(api, 'branches/main')
-    insist(main.get('protected') is True, 'MAIN_UNPROTECTED')
-    rules = get_repo(api, 'rulesets/' + str(RULESET))
-    insist(rules.get('enforcement') == 'active' and
-           rules.get('target') == 'branch' and
-           rules.get('bypass_actors') == [] and
-           {'refs/heads/main', 'refs/heads/cb6-v2-clean'}.issubset(
-             set(rules.get('conditions', {}).get('ref_name', {}).get('include', []))) and
-           {'deletion', 'non_fast_forward', 'pull_request',
-            'required_status_checks'}.issubset(
-             {r.get('type') for r in rules.get('rules', [])}),
-           'RULESET_UNVERIFIED')
+    clean = get_repo(api, 'branches/cb6-v2-clean')
+    insist(main.get('protected') is True and clean.get('protected') is True,
+           'PROTECTED_BRANCH_UNVERIFIED')
+    verify_capture_ruleset(get_repo(api, 'rulesets/' + str(RULESET)))
     issue = get_repo(api, 'issues/' + str(issue_id))
     insist(issue.get('number') == issue_id and issue.get('state') == 'open' and
            'pull_request' not in issue and

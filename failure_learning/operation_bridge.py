@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """CB6 opt-in, fail-closed file-write bridge and postcheck failure proposer.
 
-Opt-in Git data API writer with non-force branch-ref update.
+Opt-in Git object writer with GraphQL updateRefs atomic beforeOid CAS.
 A caller must explicitly route an approved write through apply_approved_write();
 unrouted writes bypass this bridge. It NEVER merges, dispatches, or releases.
-Concurrent branch advances fail closed without automatic retry.
+Concurrent advances fail at atomic old-HEAD compare-and-swap without retry.
 """
 import base64
 import datetime as dt
@@ -29,6 +29,11 @@ REQUIRED_FIELDS = frozenset({
 })
 SHA40 = re.compile(r'\A[0-9a-f]{40}\Z')
 SHA64 = re.compile(r'\A[0-9a-f]{64}\Z')
+
+
+def atomic_update_key(branch, before_oid, after_oid):
+    return hashlib.sha256((REPO + '\n' + branch + '\n' + before_oid + '\n' +
+                           after_oid).encode('utf-8')).hexdigest()
 
 
 def insist(condition, reason):
@@ -175,7 +180,14 @@ def apply_approved_write(api, plan, candidate):
     else:
         insist(type(existing) is dict and SHA40.fullmatch(existing.get('sha', '')),
                'MISSING_UPDATE_BLOB_SHA')
-    # Git data objects are staged, but the ref can advance only once.
+    # Resolve the server-owned GraphQL repository identity; never accept a
+    # caller-provided ID for the atomic mutation.
+    repository = api.get(root[:-1])
+    insist(type(repository) is dict and repository.get('full_name') == REPO and
+           type(repository.get('node_id')) is str and
+           bool(repository['node_id']), 'GRAPHQL_REPOSITORY_ID_UNVERIFIED')
+    repository_id = repository['node_id']
+    # Git objects are staged under an immutable expected parent only.
     authenticated_evidence(api, plan)
     parent = api.get(root + 'git/commits/' + plan['expected_head'])
     parent_tree = parent.get('tree', {}).get('sha')
@@ -209,10 +221,16 @@ def apply_approved_write(api, plan, candidate):
     current = api.get(root + 'branches/' + plan['branch'])
     insist(current.get('commit', {}).get('sha') == plan['expected_head'],
            'BRANCH_HEAD_CHANGED')
-    answer = api.patch(root + 'git/refs/heads/' + plan['branch'],
-                       {'sha': commit, 'force': False})
-    insist(answer.get('object', {}).get('sha') == commit,
-           'REF_UPDATE_UNVERIFIED_RECONCILE')
+    # REST force=false is NOT atomic with the preceding read. GraphQL's
+    # beforeOid condition is evaluated atomically with this ref mutation.
+    answer = api.atomic_ref_update(repository_id, plan['branch'],
+                                   plan['expected_head'], commit)
+    expected_key = atomic_update_key(plan['branch'], plan['expected_head'], commit)
+    insist(type(answer) is dict and not answer.get('errors') and
+           type(answer.get('data')) is dict and
+           type(answer['data'].get('updateRefs')) is dict and
+           answer['data']['updateRefs'].get('clientMutationId') == expected_key,
+           'ATOMIC_REF_UPDATE_UNVERIFIED_RECONCILE')
     branch_after = api.get(root + 'branches/' + plan['branch'])
     insist(branch_after.get('commit', {}).get('sha') == commit,
            'POSTWRITE_BRANCH_MISMATCH_RECONCILE')
@@ -269,9 +287,23 @@ class GithubCLI:
         return self._call(['--method', 'POST', endpoint, '--input', '-'],
                           json.dumps(data, sort_keys=True))
 
-    def patch(self, endpoint, data):
-        return self._call(['--method', 'PATCH', endpoint, '--input', '-'],
-                          json.dumps(data, sort_keys=True))
+    def atomic_ref_update(self, repository_id, branch, before_oid, after_oid):
+        """Exactly one GraphQL CAS mutation, with no fallback and no retry."""
+        insist(type(repository_id) is str and bool(repository_id) and
+               type(branch) is str and branch.startswith('feature/') and
+               type(before_oid) is str and SHA40.fullmatch(before_oid) and
+               type(after_oid) is str and SHA40.fullmatch(after_oid),
+               'INVALID_ATOMIC_UPDATE_ARGUMENTS')
+        query = ('mutation CB6AtomicUpdate($input: UpdateRefsInput!) {'
+                 ' updateRefs(input: $input) { clientMutationId } }')
+        body = {'query': query, 'variables': {'input': {
+            'repositoryId': repository_id,
+            'clientMutationId': atomic_update_key(branch, before_oid, after_oid),
+            'refUpdates': [{'name': 'refs/heads/' + branch,
+                            'beforeOid': before_oid, 'afterOid': after_oid,
+                            'force': False}]}}}
+        return self._call(['graphql', '--input', '-'],
+                          json.dumps(body, sort_keys=True))
 
 
 if __name__ == '__main__':
