@@ -38,7 +38,7 @@ jobs:
       SKIP_MAP_DOWNLOAD: "true"
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Permit one evidence-bound third dispatch; reject reruns
+      - name: Permit one evidence-bound fourth dispatch; reject reruns
         shell: bash
         run: |
           set -euo pipefail
@@ -53,6 +53,9 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/38850603797/jobs?per_page=100" > "$RUNNER_TEMP/CB6_SECOND_JOBS.json"
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/38850603797/artifacts?per_page=100" > "$RUNNER_TEMP/CB6_SECOND_ARTIFACTS.json"
           gh api --allow-escape-sequences "repos/$GITHUB_REPOSITORY/actions/jobs/116810740187/logs" > "$RUNNER_TEMP/CB6_SECOND_JOB_LOG.txt"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38916782780" > "$RUNNER_TEMP/CB6_THIRD_RUN.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38916782780/jobs?per_page=100" > "$RUNNER_TEMP/CB6_THIRD_JOBS.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38916782780/artifacts?per_page=100" > "$RUNNER_TEMP/CB6_THIRD_ARTIFACTS.json"
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/CB6_CURRENT_RUN.json"
           gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" > "$RUNNER_TEMP/CB6_RELEASES.json"
           python3 - <<'PY'
@@ -70,11 +73,16 @@ jobs:
           second_jobs_doc=obj('CB6_SECOND_JOBS.json')
           second_artifacts=obj('CB6_SECOND_ARTIFACTS.json')
           second_log=(tmp/'CB6_SECOND_JOB_LOG.txt').read_text(encoding='utf-8')
+          third=obj('CB6_THIRD_RUN.json')
+          third_jobs_doc=obj('CB6_THIRD_JOBS.json')
+          third_artifacts=obj('CB6_THIRD_ARTIFACTS.json')
           current=obj('CB6_CURRENT_RUN.json')
           releases=obj('CB6_RELEASES.json')
           old_id=38839471742
           second_id=38850603797
           second_head='f087379c5ce646e65f0cec5e23083bf9d28cc787'
+          third_id=38916782780
+          third_head='4cc03f8b45cb4d4b9cceb82954d1e49949cec443'
           new_id=int(os.environ['GITHUB_RUN_ID'])
           source_head='a8780c47dcd24200a92e9298bc19fd9348def600'
           allowed_workflow_paths = {
@@ -82,16 +90,16 @@ jobs:
               '.github/workflows/cb6_signal_one_shot_apk.yml@main',
           }
           attempts=history.get('workflow_runs')
-          if (history.get('total_count') != 3 or
-              not isinstance(attempts,list) or len(attempts) != 3 or
-              {r.get('id') for r in attempts} != {old_id,second_id,new_id} or
-              new_id in (old_id,second_id) or
+          if (history.get('total_count') != 4 or
+              not isinstance(attempts,list) or len(attempts) != 4 or
+              {r.get('id') for r in attempts} != {old_id,second_id,third_id,new_id} or
+              new_id in (old_id,second_id,third_id) or
               any(r.get('run_attempt') != 1 or
                   r.get('event') != 'workflow_dispatch' or
                   r.get('path') not in allowed_workflow_paths or
                   r.get('head_branch') != 'main'
                   for r in attempts)):
-              raise SystemExit('RECOVERY_REQUIRES_EXACTLY_THREE_DISTINCT_FIRST_ATTEMPT_RUNS')
+              raise SystemExit('RECOVERY_REQUIRES_EXACTLY_FOUR_DISTINCT_FIRST_ATTEMPT_RUNS')
           if (old.get('id') != old_id or
               old.get('run_attempt') != 1 or
               old.get('status') != 'completed' or
@@ -105,12 +113,26 @@ jobs:
               second.get('path') not in allowed_workflow_paths or
               second.get('head_branch') != 'main' or
               second.get('head_sha') != second_head or
+              third.get('id') != third_id or
+              third.get('run_attempt') != 1 or
+              third.get('status') != 'completed' or
+              third.get('conclusion') != 'failure' or
+              third.get('event') != 'workflow_dispatch' or
+              third.get('path') not in allowed_workflow_paths or
+              third.get('head_branch') != 'main' or
+              third.get('head_sha') != third_head or
               current.get('id') != new_id or
               current.get('run_attempt') != 1 or
+          type(current.get('run_number')) is not int or
+          current.get('run_number') != 4 or
               current.get('head_sha') != os.environ['GITHUB_SHA'] or
-              current.get('head_sha') in (source_head,second_head) or
+              current.get('event') != 'workflow_dispatch' or
+              current.get('path') not in allowed_workflow_paths or
+              current.get('head_branch') != 'main' or
+              current.get('head_sha') in (source_head,second_head,third_head) or
               not (datetime.fromisoformat(old['created_at'].replace('Z','+00:00')) <
                    datetime.fromisoformat(second['created_at'].replace('Z','+00:00')) <
+                   datetime.fromisoformat(third['created_at'].replace('Z','+00:00')) <
                    datetime.fromisoformat(current['created_at'].replace('Z','+00:00')))):
               raise SystemExit('RECOVERY_RUN_PROVENANCE_MISMATCH')
           jobs=jobs_doc.get('jobs')
@@ -167,13 +189,40 @@ jobs:
               second_log.count('the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway') != 1 or
               '##[error]Process completed with exit code 1.' not in second_log):
               raise SystemExit('SECOND_LOG_ESCAPE_ERROR_OR_ARTIFACT_MISMATCH')
+          third_jobs=third_jobs_doc.get('jobs')
+          if (third_jobs_doc.get('total_count') != 2 or
+              not isinstance(third_jobs,list) or len(third_jobs) != 2 or
+              {j.get('id') for j in third_jobs} != {117026169877,117034060595}):
+              raise SystemExit('THIRD_FAILED_RUN_JOB_LIST_MISMATCH')
+          third_build=next(j for j in third_jobs if j.get('id') == 117026169877)
+          third_publish=next(j for j in third_jobs if j.get('id') == 117034060595)
+          if (third_build.get('run_id') != third_id or
+              third_build.get('conclusion') != 'failure' or
+              third_publish.get('run_id') != third_id or
+              third_publish.get('conclusion') != 'skipped'):
+              raise SystemExit('THIRD_FAILED_RUN_OUTCOME_MISMATCH')
+          third_steps=third_build.get('steps')
+          if not isinstance(third_steps,list):
+              raise SystemExit('THIRD_FAILED_RUN_STEPS_MISSING')
+          for name, expected in (
+              ('Permit one evidence-bound third dispatch; reject reruns','success'),
+              ('Build Android arm64 web release exactly once','success'),
+              ('Verify APK, package, arm64, original signing and SHA-256','failure'),
+              ('Upload verified APK and text evidence (no new source archive)','skipped'),
+          ):
+              hit=[s for s in third_steps if s.get('name') == name]
+              if len(hit)!=1 or hit[0].get('conclusion') != expected:
+                  raise SystemExit('THIRD_FAILED_RUN_STEP_MISMATCH: '+name)
+          if (third_artifacts.get('total_count') != 0 or
+              third_artifacts.get('artifacts') != []):
+              raise SystemExit('THIRD_RUN_ARTIFACT_MUST_BE_ABSENT')
           if (artifacts.get('total_count') != 0 or
               artifacts.get('artifacts') != [] or
               not isinstance(releases,list) or len(releases) >= 100 or
               any(r.get('tag_name') ==
                   'cb6-signal-one-shot-d1afd49da4ad' for r in releases)):
               raise SystemExit('ORIGINAL_ARTIFACT_OR_RELEASE_MUST_BE_ABSENT')
-          print('TWO_FAILED_PRIOR_RUNS_AND_ONE_NEW_RECOVERY_ATTEMPT_PASS')
+          print('THREE_FAILED_PRIOR_RUNS_AND_ONE_NEW_FOURTH_ATTEMPT_PASS')
           PY
 
       - name: Checkout exact source HEAD, never PR merge or moving branch
