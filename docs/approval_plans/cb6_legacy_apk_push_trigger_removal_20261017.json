@@ -1,0 +1,26 @@
+{
+  "proposed_change_id": "CB6-LEGACY-APK-PUSH-TRIGGER-REMOVAL-20261017",
+  "basis_head": "d5cc967cc80113f0b1364db52c671f7d1333bddb",
+  "planned_paths": [
+    ".github/workflows/build_cb6_voice_final.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    ".github/workflows/cb6_signal_one_shot_apk.yml",
+    ".github/workflows/cb6_failure_learning_capture.yml",
+    "PUBLIC_BUILD_NOTICE.md",
+    "failure_learning/failures_v1.json",
+    "v2"
+  ],
+  "affected_domains": [
+    "legacy_apk_push_trigger"
+  ],
+  "repository": "kan1975-creator/CB6-Navi-Public-Build",
+  "operation": "Remove only the 8-line push trigger; preserve workflow_dispatch, permissions and all jobs byte-for-byte.",
+  "source_sha256": "d195bbe64a29352316a49e2ec12419fb1c3fd07ee0c3fdc6a657a5818301600b",
+  "candidate_sha256": "17e3add216fe44133fff631f88e4be79c117e85008609023569453b35425d117",
+  "patch_sha256": "d1d58a6d8fee98f031f5aa2d40f75405d9f8a53fb64a8491c1492276158ca373",
+  "independent_review": "PASS; mandatory corrections 0; static delta only; no execution test.",
+  "authorization_boundary": "Preparation only. GitHub planning commit, approval comment, implementation branch/commit and PR require explicit owner authorization. Merge, manual Actions, reruns, Release and settings changes excluded.",
+  "limits": "Disables automatic legacy APK runs on main push. Does not repair APK generation or disable manual dispatch."
+}
