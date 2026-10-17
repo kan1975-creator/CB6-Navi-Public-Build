@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "proposed_change_id": "CB6-APK-FOURTH-DISPATCH-GUARD-20261017",
+  "basis_head": "b6e00e2ddca38d97cae54eb5a701d1e855adf436",
+  "planned_paths": [
+    ".github/workflows/cb6_signal_one_shot_apk.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    ".github/workflows/cb6_failure_learning_capture.yml",
+    "failure_learning",
+    "v2"
+  ],
+  "affected_domains": [
+    "apk_dispatch_attempt_guard"
+  ],
+  "patch_sha256": "1df51db5f0fb944d4b47c47a80c0c94d364caf8fecf7d65c0fec06a83a39a250",
+  "original_workflow_blob_sha1": "ba9466e128916b8ace8951eac09fd5ac476241b5",
+  "canonical_plan_sha256": "88868b23d808b93bd0b0014157d6143b70ea6c7e4cdcf5ce204c16a3945960d7",
+  "approved_delta": "Permit fourth APK workflow dispatch only with strict integer run_number==4, exact history IDs and authenticated third-run failure evidence; reject fifth+ or reruns.",
+  "historical_runs": [
+    38839471742,
+    38850603797,
+    38916782780
+  ],
+  "prior_evidence": {
+    "local_tests": "16/16 PASS reused; do not rerun",
+    "independent_review": "PASS; 0 required fixes, new delta only",
+    "pr_26_signature_parser": "retain unchanged",
+    "future_apk_build_authorized": false
+  },
+  "status": "PLAN_ANCHOR_ONLY_NOT_APK_BUILD_OR_MERGE_AUTHORIZATION"
+}
