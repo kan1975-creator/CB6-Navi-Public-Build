@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "proposed_change_id": "CB6-APK-V2-SIGNER-PARSER-20261017",
+  "basis_head": "125eedc06d849e3a319ad90d736530a4e0b46da5",
+  "planned_paths": [
+    ".github/workflows/cb6_signal_one_shot_apk.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    ".github/workflows/cb6_failure_learning_capture.yml",
+    "PUBLIC_BUILD_NOTICE.md",
+    "failure_learning",
+    "v2"
+  ],
+  "affected_domains": [
+    "apk_signature_verification"
+  ],
+  "patch_sha256": "bfdcf3b37f7e6ae449cd8287d0a61ee657ddc80f55451d7fca4dddcd0f74cb12",
+  "original_workflow_blob_sha1": "9e020339e505668ad38b6c2c5ab2b81e0450ba3b",
+  "canonical_plan_sha256": "9c65c06c041e72bc2f0c9f0bb313b20db3d7523b1dc03ec45b4c14853565d1d9",
+  "approved_delta": "APK V2 Signer output parsing, original workflow lines 494-505 only. Keep 3-dispatch guard and signing identity unchanged.",
+  "prior_evidence": {
+    "failed_run": 38916782780,
+    "failed_job": 117026169877,
+    "local_scope_tests": "9/9 PASS reused",
+    "independent_review": "PASS; required fixes 0; no re-review",
+    "future_apk_build_authorized": false
+  },
+  "status": "PLAN_ANCHOR_ONLY_NOT_APK_BUILD_OR_MERGE_AUTHORIZATION"
+}
