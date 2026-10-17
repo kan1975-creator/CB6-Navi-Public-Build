@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """CB6 opt-in, fail-closed file-write bridge and postcheck failure proposer.
 
-Candidate only. No GitHub workflow/caller is automatically wired to this module.
+Opt-in Git data API writer with non-force branch-ref update.
 A caller must explicitly route an approved write through apply_approved_write();
 unrouted writes bypass this bridge. It NEVER merges, dispatches, or releases.
-The GitHub Contents API cannot atomically compare-and-swap a branch HEAD;
-concurrent branch changes may require manual reconciliation after the write.
+Concurrent branch advances fail closed without automatic retry.
 """
 import base64
 import datetime as dt
@@ -176,20 +175,49 @@ def apply_approved_write(api, plan, candidate):
     else:
         insist(type(existing) is dict and SHA40.fullmatch(existing.get('sha', '')),
                'MISSING_UPDATE_BLOB_SHA')
-    # Repeat live guards at the write boundary. This does not turn the
-    # non-CAS GitHub Contents API into an atomic compare-and-swap operation.
+    # Git data objects are staged, but the ref can advance only once.
     authenticated_evidence(api, plan)
-    payload = {'message': 'cb6: owner-approved guarded file write',
-               'content': base64.b64encode(candidate.encode('utf-8')).decode('ascii'),
-               'branch': plan['branch']}
-    if plan['operation'] == 'update':
-        payload['sha'] = existing['sha']
-    response = api.put(endpoint, payload)
-    commit = response.get('commit', {}).get('sha')
+    parent = api.get(root + 'git/commits/' + plan['expected_head'])
+    parent_tree = parent.get('tree', {}).get('sha')
+    insist(type(parent_tree) is str and SHA40.fullmatch(parent_tree),
+           'EXPECTED_PARENT_TREE_MISSING')
+    blob = api.post(root + 'git/blobs', {
+        'content': base64.b64encode(candidate.encode('utf-8')).decode('ascii'),
+        'encoding': 'base64'})
+    blob_sha = blob.get('sha')
+    insist(type(blob_sha) is str and SHA40.fullmatch(blob_sha),
+           'BLOB_CREATION_UNVERIFIED_RECONCILE')
+    tree = api.post(root + 'git/trees', {
+        'base_tree': parent_tree,
+        'tree': [{'path': plan['path'], 'mode': '100644',
+                  'type': 'blob', 'sha': blob_sha}]})
+    tree_sha = tree.get('sha')
+    insist(type(tree_sha) is str and SHA40.fullmatch(tree_sha),
+           'TREE_CREATION_UNVERIFIED_RECONCILE')
+    proposal = api.post(root + 'git/commits', {
+        'message': 'cb6: owner-approved guarded atomic file write',
+        'tree': tree_sha, 'parents': [plan['expected_head']]})
+    commit = proposal.get('sha')
     insist(type(commit) is str and SHA40.fullmatch(commit),
-           'WRITE_RESULT_UNKNOWN_RECONCILE_BEFORE_RETRY')
+           'COMMIT_CREATION_UNVERIFIED_RECONCILE')
+    insist(type(proposal.get('parents')) is list and
+           [p.get('sha') for p in proposal['parents']] == [plan['expected_head']],
+           'COMMIT_PARENT_MISMATCH')
+    # Never retry unknown results; even a successful staging call is not
+    # proof that the branch ref has moved.
+    authenticated_evidence(api, plan)
+    current = api.get(root + 'branches/' + plan['branch'])
+    insist(current.get('commit', {}).get('sha') == plan['expected_head'],
+           'BRANCH_HEAD_CHANGED')
+    answer = api.patch(root + 'git/refs/heads/' + plan['branch'],
+                       {'sha': commit, 'force': False})
+    insist(answer.get('object', {}).get('sha') == commit,
+           'REF_UPDATE_UNVERIFIED_RECONCILE')
+    branch_after = api.get(root + 'branches/' + plan['branch'])
+    insist(branch_after.get('commit', {}).get('sha') == commit,
+           'POSTWRITE_BRANCH_MISMATCH_RECONCILE')
     after = api.get(root + 'contents/' + plan['path'] + '?ref=' + commit)
-    insist(after.get('content') is not None and decode_contents(after) == candidate,
+    insist(after.get('sha') == blob_sha and decode_contents(after) == candidate,
            'POSTWRITE_FILE_MISMATCH_RECONCILE')
     return {'status': 'WRITE_COMPLETE_NOT_MERGED', 'commit_sha': commit,
             'path': plan['path'], 'candidate_sha256': plan['candidate_sha256']}
@@ -237,8 +265,12 @@ class GithubCLI:
         except json.JSONDecodeError as exc:
             raise Blocked('GITHUB_JSON_INVALID') from exc
 
-    def put(self, endpoint, data):
-        return self._call(['--method', 'PUT', endpoint, '--input', '-'],
+    def post(self, endpoint, data):
+        return self._call(['--method', 'POST', endpoint, '--input', '-'],
+                          json.dumps(data, sort_keys=True))
+
+    def patch(self, endpoint, data):
+        return self._call(['--method', 'PATCH', endpoint, '--input', '-'],
                           json.dumps(data, sort_keys=True))
 
 
