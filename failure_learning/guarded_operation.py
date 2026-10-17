@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Explicit CB6 guarded operation entrypoint; NOT a global GitHub write hook.
 
-This module delegates each approved write exactly once to the already-reviewed
-operation_bridge.apply_approved_write. On failure it can produce a local,
-private, non-authoritative incident draft requiring owner review. It does not
-write a GitHub ledger, invoke Actions, merge branches, or issue a Release.
+This module delegates an explicitly approved operation exactly once to
+operation_bridge.apply_approved_write, now using one non-force Git ref update.
+On failure it creates a private, non-authoritative local incident draft.
+It is not a global GitHub write interceptor and never merges, dispatches,
+updates the GitHub failure ledger, or issues a Release.
 """
 import argparse
 import datetime as dt
