@@ -496,10 +496,15 @@ jobs:
           from pathlib import Path
           evidence = Path('out/SIGNATURE_VERIFY.txt').read_text(encoding='utf-8')
           expected = '0CCCC7C349BCC0005F53AA1A58F42B1C8EC6A387513F7C33576390842EAC301A'
-          signers = re.findall(r'^Signer #(\d+) certificate SHA-256 digest: ([0-9a-fA-F]{64})\s*$',
-                               evidence, re.MULTILINE)
-          count = re.findall(r'^Number of signers: (\d+)\s*$', evidence, re.MULTILINE)
-          if count != ['1'] or len(signers) != 1 or signers[0][0] != '1' or signers[0][1].upper() != expected:
+          lines = evidence.splitlines()
+          v2 = [line for line in lines if line.startswith('Verified using v2 scheme')]
+          counts = [line for line in lines if line.startswith('Number of signers:')]
+          certs = [line for line in lines if 'certificate SHA-256 digest' in line]
+          signer = (re.fullmatch(r'V2 Signer: certificate SHA-256 digest: ([0-9a-fA-F]{64})',
+                                 certs[0]) if len(certs) == 1 else None)
+          if (v2 != ['Verified using v2 scheme (APK Signature Scheme v2): true'] or
+              counts != ['Number of signers: 1'] or signer is None or
+              signer.group(1).upper() != expected):
               raise SystemExit('CANONICAL_SIGNER_SHA256_MISMATCH_OR_MISSING')
           print('CANONICAL_SIGNER_SHA256_MATCH', expected)
           PY
