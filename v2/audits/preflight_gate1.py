@@ -14,6 +14,7 @@ a = p.parse_args()
 root = a.root.resolve()
 tracked = {
  'android/app/build.gradle', 'android/app/src/main/java/app/organicmaps/MwmActivity.java',
+ 'android/app/src/main/res/values/strings.xml', 'android/app/src/main/res/values-ja/strings.xml',
  'android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp',
  'android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
  'libs/map/user_mark.hpp', 'libs/map/user_mark.cpp',
@@ -39,6 +40,7 @@ else:
       'libs/map/cb6_signal_mark.hpp',
       'data/styles/default/light/symbols/cb6-signal-',
       'data/styles/default/dark/symbols/cb6-signal-',
+      'android/app/src/main/assets/cb6/hokkaido_signals_v1.zip',
     )
     if any(not x.startswith(allowed) for x in new):
         raise SystemExit('Unexpected untracked upstream surface: '+repr(new))
@@ -152,6 +154,57 @@ else:
         '  public void onLocationUpdated(@NonNull Location location)\n'
         '  {\n'
         '    if (mCb6Signals != null) mCb6Signals.onLocation(location);', 1)
+
+    activity_expected = activity_expected.replace(
+        '  private int mNavBarHeight;',
+        '  private int mNavBarHeight;\n  private ActivityResultLauncher<String[]> mCb6SignalsUpdatePicker;',1)
+    activity_expected = activity_expected.replace(
+        '    mShareLauncher = SharingUtils.RegisterLauncher(this);',
+        '    mShareLauncher = SharingUtils.RegisterLauncher(this);\n'
+        '    mCb6SignalsUpdatePicker = registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {\n'
+        '      if (uri != null && mCb6Signals != null) mCb6Signals.importSignedZip(uri, message ->\n'
+        '          android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_LONG).show());\n'
+        '    });',1)
+    activity_expected = activity_expected.replace(
+        '  public void onShareLocationOptionSelected()',
+        '  private void onCb6UpdateOptionSelected()\n'
+        '  {\n'
+        '    if (mCb6SignalsUpdatePicker != null) mCb6SignalsUpdatePicker.launch(new String[]{"application/zip", "application/octet-stream"});\n'
+        '  }\n\n'
+        '  public void onShareLocationOptionSelected()',1)
+    activity_expected = activity_expected.replace(
+        '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());',
+        '      items.add(new MenuBottomSheetItem(R.string.cb6_update_offline_signals, R.drawable.ic_download,\n'
+        '          this::onCb6UpdateOptionSelected));\n'
+        '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());',1)
+    activity_expected = activity_expected.replace(
+        '  public void onShareLocationOptionSelected()',
+        '  private void onCb6OsmAttributionOptionSelected()\n'
+        '  {\n'
+        '    new MaterialAlertDialogBuilder(this)\n'
+        '        .setMessage(R.string.cb6_osm_attribution)\n'
+        '        .setPositiveButton(R.string.ok, null).show();\n'
+        '  }\n\n'
+        '  public void onShareLocationOptionSelected()',1)
+    activity_expected = activity_expected.replace(
+        '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());',
+        '      items.add(new MenuBottomSheetItem(R.string.cb6_osm_attribution, R.drawable.ic_logo_monochrome,\n'
+        '          this::onCb6OsmAttributionOptionSelected));\n'
+        '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());',1)
+    for resource_path, anchor, line in (
+        ('android/app/src/main/res/values/strings.xml',
+         '    <string name="download_maps">Download Maps</string>',
+         '    <string name="cb6_update_offline_signals">Update Hokkaido traffic signals (ZIP)</string>'),
+        ('android/app/src/main/res/values-ja/strings.xml',
+         '    <string name="download_maps">マップをダウンロード</string>',
+         '    <string name="cb6_update_offline_signals">北海道信号機データ更新（ZIP）</string>')):
+        original = subprocess.check_output(['git','-C',str(root),'show','HEAD:'+resource_path],text=True)
+        expected_resource = original.replace(anchor,anchor+'\n'+line,1)
+        expected_resource = expected_resource.replace(line, line+'\n'
+            + '    <string name="cb6_osm_attribution">© OpenStreetMap contributors · ODbL 1.0</string>',1)
+        if expected_resource == original or (root/resource_path).read_text()!=expected_resource:
+            raise SystemExit('Unexpected CB6 offline string resource delta: '+resource_path)
+
     if activity_expected == activity_original or (root/activity).read_text() != activity_expected:
         raise SystemExit('Unexpected MwmActivity.java delta: only approved SignalController integration plus Sapporo MWM diagnostic Toast bridge is authorized')
     # Device-test-only update-check diagnostics: permit exactly the approved

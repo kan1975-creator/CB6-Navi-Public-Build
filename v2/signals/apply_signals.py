@@ -142,6 +142,7 @@ replace('android/sdk/src/main/java/app/organicmaps/sdk/Framework.java',
         '  // Signal-only snapshot. Main thread; arrays must have equal lengths.\n'
         '  public static native void nativeSetCb6Signals(double originLat, double originLon, long[] ids, double[] lat, double[] lon, boolean[] forward, double[] memberLat, double[] memberLon, double[] centerLat, double[] centerLon, long[] memberIds, long[] centerIds);\n' +
         '  public static native void nativeLogCb6MwmSignals(double lat, double lon);\n' +
+        '  public static native double[] nativeGetCb6SignalViewportBounds();\n' +
         '  public static native void nativeLogCb6MwmDirectDuplicateCandidates(double lat, double lon, long[] ids, double[] lats, double[] lons);')
 activity = 'android/app/src/main/java/app/organicmaps/MwmActivity.java'
 replace(activity, '  private int mNavBarHeight;',
@@ -163,6 +164,70 @@ replace(activity, '  public void onRenderingInitializationFinished()\n  {',
 replace(activity, '  public void onLocationUpdated(@NonNull Location location)\n  {',
         '  public void onLocationUpdated(@NonNull Location location)\n  {\n'
         '    if (mCb6Signals != null) mCb6Signals.onLocation(location);')
+
+
+# Hokkaido offline: Android document picker reuses the existing MwmActivity and menu.
+replace(activity,
+    '    mShareLauncher = SharingUtils.RegisterLauncher(this);',
+    '    mShareLauncher = SharingUtils.RegisterLauncher(this);\n'
+    '    mCb6SignalsUpdatePicker = registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {\n'
+    '      if (uri != null && mCb6Signals != null) mCb6Signals.importSignedZip(uri, message ->\n'
+    '          android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_LONG).show());\n'
+    '    });')
+replace(activity,
+    '  private int mNavBarHeight;',
+    '  private int mNavBarHeight;\n  private ActivityResultLauncher<String[]> mCb6SignalsUpdatePicker;')
+replace(activity,
+    '  public void onShareLocationOptionSelected()',
+    '  private void onCb6UpdateOptionSelected()\n'
+    '  {\n'
+    '    if (mCb6SignalsUpdatePicker != null) mCb6SignalsUpdatePicker.launch(new String[]{"application/zip", "application/octet-stream"});\n'
+    '  }\n\n'
+    '  public void onShareLocationOptionSelected()')
+replace(activity,
+    '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());',
+    '      items.add(new MenuBottomSheetItem(R.string.cb6_update_offline_signals, R.drawable.ic_download,\n'
+    '          this::onCb6UpdateOptionSelected));\n'
+    '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());')
+replace(activity,
+    '  public void onShareLocationOptionSelected()',
+    '  private void onCb6OsmAttributionOptionSelected()\n'
+    '  {\n'
+    '    new MaterialAlertDialogBuilder(this)\n'
+    '        .setMessage(R.string.cb6_osm_attribution)\n'
+    '        .setPositiveButton(R.string.ok, null).show();\n'
+    '  }\n\n'
+    '  public void onShareLocationOptionSelected()')
+replace(activity,
+    '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());',
+    '      items.add(new MenuBottomSheetItem(R.string.cb6_osm_attribution, R.drawable.ic_logo_monochrome,\n'
+    '          this::onCb6OsmAttributionOptionSelected));\n'
+    '      mDonatesUrl = Utils.getDonateUrl(getApplicationContext());')
+for rel, anchor, addition in (
+    ('android/app/src/main/res/values/strings.xml',
+     '    <string name="download_maps">Download Maps</string>',
+     '    <string name="cb6_update_offline_signals">Update Hokkaido traffic signals (ZIP)</string>'),
+    ('android/app/src/main/res/values-ja/strings.xml',
+     '    <string name="download_maps">マップをダウンロード</string>',
+     '    <string name="cb6_update_offline_signals">北海道信号機データ更新（ZIP）</string>'),
+):
+    replace(rel, anchor, anchor + '\n' + addition)
+for rel, anchor, addition in (
+    ('android/app/src/main/res/values/strings.xml',
+     '    <string name="cb6_update_offline_signals">Update Hokkaido traffic signals (ZIP)</string>',
+     '    <string name="cb6_osm_attribution">© OpenStreetMap contributors · ODbL 1.0</string>'),
+    ('android/app/src/main/res/values-ja/strings.xml',
+     '    <string name="cb6_update_offline_signals">北海道信号機データ更新（ZIP）</string>',
+     '    <string name="cb6_osm_attribution">© OpenStreetMap contributors · ODbL 1.0</string>'),
+):
+    replace(rel, anchor, anchor + '\n' + addition)
+# Initial signed asset is intentionally ABSENT until the owner later approves
+# signing and the complete data ZIP. Never auto-generate or bypass signatures.
+initial_zip = MODULE / 'offline/data/hokkaido_signals_v1.zip'
+if initial_zip.is_file():
+    dest = ROOT / 'android/app/src/main/assets/cb6/hokkaido_signals_v1.zip'
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(initial_zip, dest)
 
 for p in (MODULE / 'java').glob('*.java'):
     dst = ROOT / 'android/app/src/main/java/app/organicmaps/cb6/signals' / p.name
