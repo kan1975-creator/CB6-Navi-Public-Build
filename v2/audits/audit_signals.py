@@ -95,7 +95,7 @@ require(len(cpp_args) == 14 and re.fullmatch(r'JNIEnv\s*\*\s*env', cpp_args[0])
 identity_decl = 'public static native void nativeSetCb6Signals(' + ', '.join(expected_java) + ');'
 require(identity_decl in applier_semantic, 'generated JNI identity declaration missing')
 jcall = re.search(r'Framework\.nativeSetCb6Signals\s*\((.*?)\);', controller_semantic, re.S)
-expected_call = ['location.getLatitude()', 'location.getLongitude()', 'ids', 'lats', 'lons',
+expected_call = ['(b[0]+b[2])/2.0', '(b[1]+b[3])/2.0', 'ids', 'lats', 'lons',
                  'forward', 'memberLats', 'memberLons', 'centerLats', 'centerLons',
                  'memberIds', 'centerIds']
 require(jcall is not None and [x.strip() for x in jcall.group(1).split(',')] == expected_call,
@@ -129,7 +129,8 @@ for (size_t mwmIndex = 0; mwmIndex < mwmSignals.size(); ++mwmIndex)
 """)
 require(mwm_draw == expected_mwm_draw and 'normalizedMwmSignals' not in jni_semantic,
         '100m MWM source mark restoration missing')
-require(re.search(r'for \(auto const & mwm : mwmSignals\)\s*\{\s*if \(distanceMeters\(mwm\.m_lat,\s*mwm\.m_lon,\s*lats\[i\],\s*lons\[i\]\) <= kDirectDuplicateM\)', jni_semantic),
+require('nearby(lats[i], lons[i], cb6MwmCells' in jni_semantic
+        and 'distanceMeters(mwm.m_lat, mwm.m_lon, lats[i], lons[i]) <= kDirectDuplicateM' in jni_semantic,
         'MWM/Overpass direct duplicate must use raw MWM coordinates')
 
 # Only confirmed topology identity thins z15, unknowns stay visible.
@@ -143,7 +144,8 @@ require('if (groupId == 0) return true;' in jni_semantic
 require('if (matchedGroup != 0 && matchedGroup != centerIds[t]) return 0;' in jni_semantic
         and 'if (!reliableGroupId(centerIds[t])) return 0;' in jni_semantic
         and 'memberIds[t] == pointId' in jni_semantic
-        and 'centerIds[t] == pointId' in jni_semantic,
+        and 'group.id == pointId' in jni_semantic
+        and 'cb6MemberIdIndex' in jni_semantic,
         '200m intersection identity conflict not fail-open')
 require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));' in jni_semantic
         and 'mark->SetShowAt200m(keepAt200m(ids[i], lats[i], lons[i], 0));' in jni_semantic,
@@ -196,7 +198,8 @@ require('if (m_showAt200m)\n      symbols->insert({15, "cb6-signal-xs"});' in ma
         '100m unchanged mark restoration missing')
 require('std::vector<jlong> shown200mGroupIds;' in jni
         and 'memberIds[t] == pointId' in jni
-        and 'centerIds[t] == pointId' in jni
+        and 'group.id == pointId' in jni
+        and 'cb6GroupIndex' in jni
         and 'mwmGroupIds[mwmIndex] = mappedGroup;' in jni,
         '200m confirmed-topology display gating missing')
 require('mark->SetShowAt200m(keepAt200m(0, mwm.m_lat, mwm.m_lon, mwmGroupIds[mwmIndex]));' in jni
@@ -213,7 +216,10 @@ for name,value in policy_values.items():
     require(f'{name} = {value}' in policy, 'current-spec constant '+name)
 for token in acq['osm_queries']:
     require('['+token+']' in provider, 'current-spec query '+token)
-require('new CompositeSignalProvider(' in controller and 'new VerifiedSignalProvider()' in controller, 'composite/supplement acquisition not wired')
+require('new OfflineSignalProvider(' in controller and 'nativeGetCb6SignalViewportBounds()' in controller,
+        'offline viewport acquisition missing')
+require('new CompositeSignalProvider(' not in controller and 'new OverpassSignalProvider()' not in controller,
+        'offline network fallback reintroduced')
 require((module/'java/CompositeSignalProvider.java').exists() and (module/'java/VerifiedSignalProvider.java').exists(), 'supplement provider source missing')
 verified = (module/'java/VerifiedSignalProvider.java').read_text()
 composite = (module/'java/CompositeSignalProvider.java').read_text()
@@ -226,14 +232,66 @@ require('topologyMembers.addAll(a.topologyMembers)' in composite and 'new Signal
 require('primaryError != null && (b == null || b.points.isEmpty())' in composite, 'primary failure can be masked by empty supplement')
 require('hasBearing()' in controller and 'token != generation' in controller, 'direction/lifecycle guard')
 require('snapshot.displayPoints()' in controller, 'signal display publication missing')
-require('location == null' in controller and 'nativeSetCb6Signals(location.getLatitude(), location.getLongitude(),' in controller,
-        'MWM-anchor publication must run from current location even with empty Overpass snapshot')
+require('if (!active || !renderingReady || b==null) return;' in controller
+        and 'Framework.nativeSetCb6Signals((b[0]+b[2])/2.0,(b[1]+b[3])/2.0,' in controller
+        and 'public static native void nativeSetCb6Signals(' in applier_semantic,
+        'offline viewport MWM-anchor publication missing')
 snapshot = (module/'java/SignalSnapshot.java').read_text()
 require('return points;' in snapshot, 'snapshot display must publish normalized retained points')
 require('topologyMembers.size() - centres.size()' in snapshot, 'clustered count does not reflect topology normalization')
 require('DISPLAY_CLUSTER_M' not in snapshot and 'latSum' not in snapshot and 'lonSum' not in snapshot,
         'proximity-only clustering/coordinate relocation reintroduced')
 require('Executors.newSingleThreadExecutor()' in controller and 'inFlight' in controller, 'single-flight background acquisition')
+
+# Offline-only additional guarantees: never waive original 12-argument or MWM gates.
+offline_store = (module/'java/OfflineSignalStore.java').read_text()
+offline_provider = (module/'java/OfflineSignalProvider.java').read_text()
+builder = (module/'offline/build_hokkaido_signals.py').read_text()
+offspec = spec['offline']
+require(offspec['allow_network_fallback'] is False and offspec['confirmed_group_only'] is True,
+        'offline immutable contract missing')
+require('PUBLIC_KEY_X509_BASE64 = ""' in offline_store
+        and 'if (!configured()) throw new SecurityException(' in offline_store
+        and 'verifier.verify(signature)' in offline_store,
+        'offline unsigned update bypass')
+require('SHA256withECDSA' in offline_store and 'sqlite_sha256' in offline_store
+        and 'version<=current' in offline_store and 'putString("previous", previous)' in offline_store,
+        'offline signature/hash/rollback/old-db retention missing')
+require('File.createTempFile(' in offline_store and 'PRAGMA integrity_check' in offline_store
+        and 'signal_index' in offline_store,
+        'offline database validation missing')
+require('query(double south, double west, double north, double east)' in offline_store
+        and 'new OfflineSignalProvider(' in controller,
+        'offline viewport acquisition missing')
+require('nativeGetCb6SignalViewportBounds' in jni and 'GetCurrentViewport()' in jni
+        and 'nativeGetCb6SignalViewportBounds' in applier_semantic,
+        'offline viewport JNI missing')
+require('n > 50000' in jni and 'topologyN > 50000' in jni,
+        'offline viewport data truncated')
+require(spec['acquisition']['sources'] == ['osm_hokkaido_signed_offline']
+        and spec['display']['ownership']['overpass_role'] == 'disabled-offline-only'
+        and spec['offline']['allow_network_fallback'] is False,
+        'offline authority/legacy Overpass contract mismatch')
+require('cb6GroupIndex' in jni and 'cb6MemberIdIndex' in jni
+        and 'cb6MemberCells' in jni and 'cb6MwmCells' in jni
+        and 'shown200mIndex' in jni and 'nearby(lats[i], lons[i]' in jni,
+        'offline 50k pre-indexing missing')
+require('AND s.lat>=? AND s.lat<=? AND s.lon>=? AND s.lon<=?' in offline_store
+        and 'ORDER BY s.id LIMIT 50001' in offline_store,
+        'offline exact viewport SQL before LIMIT missing')
+require('CERTIFIED_ROADS' in builder and 'node_road_ways' in builder
+        and 'len(node_road_ways.get(n, ())) >= 2' in builder
+        and 'TopologyWays().apply_file' in builder,
+        'offline topology proof not restricted to connected road ways')
+require('MAX_VIEWPORT_POINTS=50000' in snapshot and 'MAX_POINTS' not in snapshot,
+        'offline viewport snapshot silently truncated')
+require('FIXED_PBF_SHA256' in builder and offspec['pbf_sha256'] in builder
+        and 'derive_confirmed_groups' in builder,
+        'offline build provenance/topology missing')
+require('OpenDocument' in applier_semantic and 'cb6_update_offline_signals' in applier_semantic
+        and 'hokkaido_signals_v1.zip' in applier_semantic,
+        'offline Android picker/asset injection missing')
+
 require('main.post(() ->' in controller, 'main-thread publication')
 require('[highway=traffic_signals]' in provider and '[crossing=traffic_signals]' in provider, 'road/crossing signal queries')
 require('way(around:' in provider and '[crossing=traffic_signals]' in provider and ');out center geom;' in provider, 'signalized crossing way acquisition')
