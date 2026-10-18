@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "proposed_change_id": "CB6-JAPAN-OVERPASS-PRIORITY-20261018",
+  "basis_head": "d1afd49da4ad35123877a35ec47cf28b3d7b2560",
+  "planned_paths": [
+    "v2/signals/java/OverpassSignalProvider.java"
+  ],
+  "forbidden_scope": [
+    ".github",
+    "docs",
+    "failure_learning",
+    "v2/audits",
+    "v2/gates",
+    "v2/signals/native",
+    "v2/tests"
+  ],
+  "affected_domains": [
+    "japan_overpass_endpoint_priority"
+  ],
+  "original_file_blob_sha1": "f67d90211417f4985213efdb59ac85558529de36",
+  "patch_sha256": "927a69d64817f6fc3c8127aaec64501583b1db4343f6c5b6ae360225fe76e224",
+  "fixed_main_at_authorization": "ca8be4d281d597de270ee94845a0fa6842885b7c",
+  "original_pr_number": 13,
+  "original_pr_head_must_remain": "d1afd49da4ad35123877a35ec47cf28b3d7b2560",
+  "change_summary": "Prioritize https://overpass.openstreetmap.jp/api/interpreter first; preserve existing three overseas endpoint order, fallback, and all other source files.",
+  "prior_evidence": {
+    "independent_static_review": "PASS; mandatory fixes 0; reused without rerun",
+    "existing_tests": "PASS reused; no retest",
+    "method_freeze": "all 92 protected files unchanged"
+  },
+  "build_authorized": false,
+  "existing_workflow_unchanged": true,
+  "note": "Plan-only anchor; PR is based on original PR #13 branch and its custom base is outside current trusted auto-approval PR base policy. No auto-check claim or merge permission.",
+  "canonical_plan_sha256": "fc19bbd4f6ff418d04115bd4f1ecf6713ffdf79ee2dd3294ab89395389fc615a"
+}
