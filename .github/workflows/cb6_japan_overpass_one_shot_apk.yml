@@ -1,0 +1,303 @@
+# CB6-JAPAN-OVERPASS-ONESHOT-APK-20261018 — candidate only, NOT deployed.
+# Deliberately separate from the already consumed fourth-dispatch APK workflow.
+name: CB6 Japan Overpass One-Shot APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_approval_comment_id:
+        description: 'Separate unedited owner approval for this exact workflow digest and source'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: cb6-japan-overpass-oneshot-apk-20261018
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Japan-priority fixed-source arm64 APK (initial attempt ONLY)
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_SHA: '905762c3db855d62079ec879280591b76ea86aa1'
+      BASE_SOURCE_SHA: 'd1afd49da4ad35123877a35ec47cf28b3d7b2560'
+      SOURCE_FILE: 'v2/signals/java/OverpassSignalProvider.java'
+      SOURCE_BLOB: '44cc5d79d02aeb89c92f5db050afb90270f7aa52'
+      BASE_SOURCE_BLOB: 'f67d90211417f4985213efdb59ac85558529de36'
+      WORKFLOW_FILE: '.github/workflows/cb6_japan_overpass_one_shot_apk.yml'
+      PLAN_SHA: 'fc19bbd4f6ff418d04115bd4f1ecf6713ffdf79ee2dd3294ab89395389fc615a'
+      PLAN_COMMIT: '191655d08629723992006d9dc113da641464a0fc'
+      APPROVAL_ID: '6244028091'
+      PRIOR_SUCCESS_RUN: '39078178589'
+      COMAPS_SHA: '7113ccb5f086183f8884b2aa4e58c987466b6704'
+      SKIP_MAP_DOWNLOAD: 'true'
+    steps:
+      - name: Deny every run except first dispatch and first attempt
+        shell: bash
+        env:
+          BUILD_APPROVAL_COMMENT_ID: ${{ inputs.build_approval_comment_id }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$GITHUB_EVENT_NAME" = 'workflow_dispatch'
+          test "$GITHUB_ACTOR" = 'kan1975-creator'
+          test "$GITHUB_TRIGGERING_ACTOR" = 'kan1975-creator'
+          test "$GITHUB_RUN_NUMBER" = '1'
+          test "$GITHUB_RUN_ATTEMPT" = '1'
+          [[ "$BUILD_APPROVAL_COMMENT_ID" =~ ^[1-9][0-9]*$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/CB6_JAPAN_RUN_IDENTITY.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          run = json.loads(Path(os.environ['RUNNER_TEMP'], 'CB6_JAPAN_RUN_IDENTITY.json').read_text())
+          expected = '.github/workflows/cb6_japan_overpass_one_shot_apk.yml'
+          if not (
+              run.get('id') == int(os.environ['GITHUB_RUN_ID']) and
+              run.get('run_number') == 1 and
+              run.get('run_attempt') == 1 and
+              run.get('event') == 'workflow_dispatch' and
+              run.get('head_branch') == 'main' and
+              run.get('head_sha') == os.environ['GITHUB_SHA'] and
+              run.get('path') in (expected, expected + '@main') and
+              run.get('actor', {}).get('login') == 'kan1975-creator' and
+              run.get('triggering_actor', {}).get('login') == 'kan1975-creator' and
+              run.get('repository', {}).get('full_name') == os.environ['GITHUB_REPOSITORY']
+          ):
+              raise SystemExit('BLOCK_UNKNOWN_RUN_IDENTITY_OR_REUSED_DISPATCH')
+          print('FIRST_DISPATCH_FIRST_ATTEMPT_ATTESTED')
+          PY
+
+      - name: Checkout pinned Japan-priority source at immutable commit
+        uses: actions/checkout@v4
+        with:
+          ref: 905762c3db855d62079ec879280591b76ea86aa1
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Checkout workflow's exact trusted main snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify separate owner build approval, reviewed plan, and source delta
+        shell: bash
+        env:
+          BUILD_APPROVAL_COMMENT_ID: ${{ inputs.build_approval_comment_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          cp "$RUNNER_TEMP/CB6_JAPAN_RUN_IDENTITY.json" out/RUN_IDENTITY.json
+          test "$(git -C trusted rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          test "$(git rev-parse HEAD^)" = "$BASE_SOURCE_SHA"
+          test "$(git rev-parse "HEAD:$SOURCE_FILE")" = "$SOURCE_BLOB"
+          test "$(git rev-parse "$BASE_SOURCE_SHA:$SOURCE_FILE")" = "$BASE_SOURCE_BLOB"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          test "$(git diff --name-only "$BASE_SOURCE_SHA" "$SOURCE_SHA")" = "$SOURCE_FILE"
+          git diff --check "$BASE_SOURCE_SHA" "$SOURCE_SHA"
+          test "$(git diff --numstat "$BASE_SOURCE_SHA" "$SOURCE_SHA" -- "$SOURCE_FILE")" = "$(printf '1\t0\t%s' "$SOURCE_FILE")"
+          test -f "trusted/$WORKFLOW_FILE"
+          sha256sum "trusted/$WORKFLOW_FILE" > out/WORKFLOW_SHA256.txt
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$BUILD_APPROVAL_COMMENT_ID" > out/BUILD_APPROVAL.json
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$APPROVAL_ID" > out/SOURCE_APPROVAL.json
+          gh api "repos/$GITHUB_REPOSITORY/pulls/13" > out/PR13.json
+          gh api "repos/$GITHUB_REPOSITORY/pulls/28" > out/PR28.json
+          gh api "repos/$GITHUB_REPOSITORY/contents/docs/approval_plans/CB6-JAPAN-OVERPASS-PRIORITY-20261018.json?ref=$PLAN_COMMIT" > out/PLAN_BLOB.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PRIOR_SUCCESS_RUN" > out/PRIOR_SUCCESS_RUN.json
+          python3 - <<'PY'
+          import base64, hashlib, json, os
+          from datetime import datetime
+          from pathlib import Path
+          def load(name): return json.loads(Path('out/'+name).read_text())
+          def dt(s): return datetime.fromisoformat(s.replace('Z', '+00:00'))
+          source = Path(os.environ['SOURCE_FILE']).read_bytes()
+          import subprocess
+          original = subprocess.check_output(['git', 'show', os.environ['BASE_SOURCE_SHA']+':'+os.environ['SOURCE_FILE']])
+          new_line = b'      "https://overpass.openstreetmap.jp/api/interpreter",\n'
+          anchor = b'  private static final String[] ENDPOINTS = {\n'
+          assert original.count(anchor) == 1, 'NO_UNIQUE_ENDPOINT_ANCHOR'
+          assert source == original.replace(anchor, anchor+new_line, 1), 'NOT_EXACT_ONE_LINE'
+          assert source.count(new_line) == 1, 'DUPLICATE_JAPAN_ENDPOINT'
+          assert original.find(new_line) < 0, 'ORIGINAL_ALREADY_CONTAINS_JAPAN'
+          assert source.count(b'"https://overpass-api.de/api/interpreter"') == 1, 'OLD_FIRST_ENDPOINT_CHANGED'
+          blob = load('PLAN_BLOB.json')
+          assert blob.get('type') == 'file' and blob.get('encoding') == 'base64', 'PLAN_NOT_CANONICAL_FILE'
+          plan = json.loads(base64.b64decode(blob['content']).decode('utf-8'))
+          keys = ('proposed_change_id', 'basis_head', 'planned_paths', 'forbidden_scope', 'affected_domains')
+          canonical = {k: plan[k] for k in keys}
+          for k in ('planned_paths','forbidden_scope','affected_domains'): canonical[k] = sorted(canonical[k])
+          digest = hashlib.sha256(json.dumps(canonical, sort_keys=True, ensure_ascii=False, separators=(',',':')).encode()).hexdigest()
+          assert digest == os.environ['PLAN_SHA'], 'PLAN_DIGEST_MISMATCH'
+          assert (plan['proposed_change_id'] == 'CB6-JAPAN-OVERPASS-PRIORITY-20261018' and
+                  plan['basis_head'] == os.environ['BASE_SOURCE_SHA'] and
+                  plan['planned_paths'] == [os.environ['SOURCE_FILE']] and
+                  plan['patch_sha256'] == '927a69d64817f6fc3c8127aaec64501583b1db4343f6c5b6ae360225fe76e224'), 'PLAN_SCOPE_MISMATCH'
+          owner_id = 313684924
+          source_comment = load('SOURCE_APPROVAL.json')
+          source_body = ('CB6-APPROVE CB6-JAPAN-OVERPASS-PRIORITY-20261018 '+
+                         os.environ['PLAN_SHA']+' '+os.environ['PLAN_COMMIT']+'\n'+
+                         'CB6-APPROVED-SUMMARY Prioritize Japan Overpass endpoint first; preserve three fallback servers and fixed PR13 source')
+          assert (source_comment.get('id') == int(os.environ['APPROVAL_ID']) and
+                  source_comment.get('user', {}).get('id') == owner_id and
+                  source_comment.get('issue_url', '').endswith('/issues/11') and
+                  source_comment.get('created_at') == source_comment.get('updated_at') and
+                  source_comment.get('body') == source_body), 'SOURCE_APPROVAL_INVALID'
+          pr13, pr28 = load('PR13.json'), load('PR28.json')
+          assert (pr13.get('number') == 13 and pr13.get('state') == 'open' and
+                  pr13.get('merged') is False and pr13['head']['sha'] == os.environ['BASE_SOURCE_SHA']), 'PR13_CHANGED'
+          assert (pr28.get('number') == 28 and pr28.get('state') == 'open' and
+                  pr28.get('merged') is False and pr28['head']['sha'] == os.environ['SOURCE_SHA'] and
+                  pr28['base']['sha'] == os.environ['BASE_SOURCE_SHA'] and
+                  pr28.get('changed_files') == 1), 'PR28_CHANGED'
+          prior = load('PRIOR_SUCCESS_RUN.json')
+          assert (prior.get('id') == int(os.environ['PRIOR_SUCCESS_RUN']) and
+                  prior.get('run_number') == 4 and prior.get('run_attempt') == 1 and
+                  prior.get('status') == 'completed' and prior.get('conclusion') == 'success' and
+                  prior.get('head_sha') == 'ca8be4d281d597de270ee94845a0fa6842885b7c' and
+                  prior.get('path') in ('.github/workflows/cb6_signal_one_shot_apk.yml',
+                                       '.github/workflows/cb6_signal_one_shot_apk.yml@main')), 'PRIOR_SUCCESS_EVIDENCE_INVALID'
+          # A SEPARATE build approval (not the source-edit approval) must pin this
+          # exact immutable trusted-workflow-file digest, including these checks.
+          wf_digest = hashlib.sha256(Path('trusted/'+os.environ['WORKFLOW_FILE']).read_bytes()).hexdigest()
+          build_comment = load('BUILD_APPROVAL.json')
+          run = load('RUN_IDENTITY.json')
+          expected_body = 'CB6-APPROVE-APK-JAPAN-ONESHOT '+os.environ['SOURCE_SHA']+' '+wf_digest
+          assert (build_comment.get('id') == int(os.environ['BUILD_APPROVAL_COMMENT_ID']) and
+                  build_comment.get('user', {}).get('id') == owner_id and
+                  build_comment.get('issue_url', '').endswith('/issues/11') and
+                  build_comment.get('created_at') == build_comment.get('updated_at') and
+                  build_comment.get('body') == expected_body and
+                  dt(build_comment['created_at']) < dt(run['created_at'])), 'BUILD_APPROVAL_INVALID'
+          Path('out/SOURCE_SHA.txt').write_text(os.environ['SOURCE_SHA']+'\n')
+          Path('out/NEW_SOURCE_DIFF.txt').write_text('SOURCE_DELTA_ONE_LINE_VERIFIED\n')
+          Path('out/BUILD_AUTHORIZATION.txt').write_text('OWNER_AUTHORIZATION_AND_WORKFLOW_SHA256_VERIFIED\n')
+          print('TRUSTED_SOURCE_DELTA_AND_SEPARATE_BUILD_APPROVAL_PASS')
+          PY
+
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install existing Signals build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build cmake qt6-base-dev qt6-declarative-dev qt6-positioning-dev libqt6svg6-dev optipng libfreetype-dev libharfbuzz-dev libxkbcommon-dev libxkbcommon-x11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev python3-pip python3-venv rsync jq zlib1g-dev unzip
+          pip install 'protobuf<3.21' --break-system-packages
+
+      - name: Fetch pinned CoMaps and submodules
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin "$COMAPS_SHA"
+          git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          for attempt in 1 2 3 4 5 6; do
+            if git -C comaps submodule update --init --recursive --depth=1 --jobs=8; then break; fi
+            sleep $((attempt*15))
+          done
+          test -f comaps/3party/protobuf/protobuf/src/google/protobuf/arena.cc
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          test -z "$(git -C comaps status --porcelain --untracked-files=no)"
+
+      - name: Apply existing CB6 identity and signals to pinned CoMaps
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 v2/baseline/apply_identity.py comaps
+          python3 v2/signals/apply_signals.py comaps
+          # Only verify identity/scope of newly generated sources; do not rerun prior PASS suites.
+          python3 v2/audits/preflight_gate1.py comaps out/GENERATED_SOURCE_SHA256.json
+          git -C comaps diff --check
+
+      - name: Configure and verify newly generated source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd comaps && bash ./configure.sh --skip-map-download) 2>&1 | tee out/CONFIGURE.log
+          python3 v2/audits/preflight_gate1.py comaps out/GENERATED_SOURCE_SHA256.json --verify
+          git -C comaps diff --check
+
+      - name: Build Android arm64 exactly once
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd comaps/android
+          ./gradlew -Parm64 app:assembleWebRelease --no-daemon --stacktrace 2>&1 | tee ../../out/GRADLE.log
+
+      - name: Verify new APK, arm64, original signer, and SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out verify-apk
+          APK="$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | head -1)"
+          test -n "$APK"
+          test "$(find comaps/android/app/build/outputs/apk/web/release -type f -name '*.apk' | wc -l)" = '1'
+          cp "$APK" out/CB6-JapanOverpass-OneShot-arm64.apk
+          unzip -q out/CB6-JapanOverpass-OneShot-arm64.apk 'lib/arm64-v8a/liborganicmaps.so' -d verify-apk
+          readelf -h verify-apk/lib/arm64-v8a/liborganicmaps.so | grep -E 'AArch64|ARM aarch64'
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt2 | sort -V | tail -1)"
+          test -x "$AAPT"
+          "$AAPT" dump badging out/CB6-JapanOverpass-OneShot-arm64.apk | tee out/APK_BADGING.txt
+          grep -F "package: name='jp.cb6.navi'" out/APK_BADGING.txt
+          python3 v2/audits/audit_signals.py comaps --apk out/CB6-JapanOverpass-OneShot-arm64.apk | tee out/APK_SIGNAL_AUDIT.txt
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs out/CB6-JapanOverpass-OneShot-arm64.apk | tee out/SIGNATURE_VERIFY.txt
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          evidence = Path('out/SIGNATURE_VERIFY.txt').read_text(encoding='utf-8')
+          expected = '0CCCC7C349BCC0005F53AA1A58F42B1C8EC6A387513F7C33576390842EAC301A'
+          lines = evidence.splitlines()
+          v2 = [line for line in lines if line.startswith('Verified using v2 scheme')]
+          counts = [line for line in lines if line.startswith('Number of signers:')]
+          certs = [line for line in lines if 'certificate SHA-256 digest' in line]
+          signer = (re.fullmatch(r'V2 Signer: certificate SHA-256 digest: ([0-9a-fA-F]{64})',
+                                 certs[0]) if len(certs) == 1 else None)
+          if (v2 != ['Verified using v2 scheme (APK Signature Scheme v2): true'] or
+              counts != ['Number of signers: 1'] or signer is None or
+              signer.group(1).upper() != expected):
+              raise SystemExit('CANONICAL_SIGNER_SHA256_MISMATCH_OR_MISSING')
+          print('CANONICAL_SIGNER_SHA256_MATCH', expected)
+          PY
+          (cd out && sha256sum CB6-JapanOverpass-OneShot-arm64.apk > SHA256SUMS.txt)
+          (cd out && sha256sum --check SHA256SUMS.txt)
+
+      - name: Upload new verified APK and audit evidence (no Release or Tag)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-JapanOverpass-OneShot-Verified-APK
+          path: |
+            out/CB6-JapanOverpass-OneShot-arm64.apk
+            out/SHA256SUMS.txt
+            out/SOURCE_SHA.txt
+            out/WORKFLOW_SHA256.txt
+            out/NEW_SOURCE_DIFF.txt
+            out/BUILD_AUTHORIZATION.txt
+            out/SIGNATURE_VERIFY.txt
+            out/APK_BADGING.txt
+            out/APK_SIGNAL_AUDIT.txt
+          if-no-files-found: error
+          retention-days: 30
