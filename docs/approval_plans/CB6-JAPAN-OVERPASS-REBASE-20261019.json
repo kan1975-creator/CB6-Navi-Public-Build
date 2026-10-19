@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "proposed_change_id": "CB6-JAPAN-OVERPASS-REBASE-20261019",
+  "basis_head": "62d98ebb869402784a8e14723e08068f8fd1b8ea",
+  "planned_paths": [
+    "v2/signals/java/OverpassSignalProvider.java"
+  ],
+  "forbidden_scope": [
+    ".github",
+    "docs",
+    "failure_learning",
+    "v2/audits",
+    "v2/gates",
+    "v2/signals/native",
+    "v2/tests"
+  ],
+  "affected_domains": [
+    "japan_overpass_endpoint_priority"
+  ]
+}
