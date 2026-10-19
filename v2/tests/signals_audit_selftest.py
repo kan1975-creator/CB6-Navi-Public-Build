@@ -24,6 +24,12 @@ if ok.returncode!=0:
  raise SystemExit("SIGNAL AUDIT SELFTEST BASELINE FAIL:\n"+ok.stdout+ok.stderr)
 
 cases=[
+ ("offline-viewport-jni", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+  "nativeGetCb6SignalViewportBounds", "nativeGetCb6DisabledViewport", "offline viewport JNI missing"),
+ ("offline-no-network", "android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java",
+  "new OfflineSignalProvider(", "new OfflineSignalProviderDisabled(", "offline viewport acquisition missing"),
+ ("offline-signer-fail-closed", "android/app/src/main/java/app/organicmaps/cb6/signals/OfflineSignalStore.java",
+  "if (!configured()) throw new SecurityException(", "if (configured()) throw new SecurityException(", "offline unsigned update bypass"),
  ("publisher-group", "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
   "ClearGroup(UserMark::Type::CB6_SIGNAL)", "ClearGroup(UserMark::Type::DEBUG_MARK)", "publisher clears unrelated state"),
  ("symbol-zoom", "libs/map/cb6_signal_mark.hpp",
