@@ -25,6 +25,7 @@ public final class OverpassSignalProvider implements SignalProvider
   private static final long RELATION_RAW_ID_LIMIT = 1L << 61;
   private static final int TOPOLOGY_BATCH_SIZE = 64;
   private static final String[] ENDPOINTS = {
+      "https://overpass.openstreetmap.jp/api/interpreter",
       "https://overpass-api.de/api/interpreter",
       "https://overpass.kumi.systems/api/interpreter",
       "https://overpass.nchc.org.tw/api/interpreter"
