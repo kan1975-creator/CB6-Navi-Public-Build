@@ -1,0 +1,29 @@
+{
+  "proposed_change_id": "CB6-HOKKAIDO-OFFLINE12-SUCCESSOR-PR-20261019",
+  "basis_head": "e570f80849d95a0fce2906e8d3cc265d30b5b73a",
+  "planned_paths": [
+    "v2/audits/audit_signals.py",
+    "v2/audits/preflight_gate1.py",
+    "v2/gates/current_spec.json",
+    "v2/signals/apply_signals.py",
+    "v2/signals/java/OfflineSignalProvider.java",
+    "v2/signals/java/OfflineSignalStore.java",
+    "v2/signals/java/SignalController.java",
+    "v2/signals/java/SignalSnapshot.java",
+    "v2/signals/native/cb6_signal_jni.inc",
+    "v2/signals/offline/build_hokkaido_signals.py",
+    "v2/tests/signals_audit_selftest.py",
+    "v2/tests/test_hokkaido_offline_signals.py"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/user_approval_before_fix_contract.json",
+    "v2/gates/verify_user_approval_before_fix.py"
+  ],
+  "affected_domains": [
+    "hokkaido_offline_signal_data",
+    "android_signal_display",
+    "native_jni_signal_bridge",
+    "signal_audit_and_tests"
+  ]
+}
