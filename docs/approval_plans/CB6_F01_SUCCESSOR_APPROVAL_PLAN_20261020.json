@@ -1,0 +1,92 @@
+{
+  "proposed_change_id": "CB6-F01-SUCCESSOR-DOC-20261020",
+  "basis_head": "7b2485f50064379019f89a7b29c4de73b8533556",
+  "planned_paths": [
+    "docs/CB6_F01_FAILURE_PREVENTION_20261020.md"
+  ],
+  "forbidden_scope": [
+    "v2/gates/verify_user_approval_before_fix.py",
+    "v2/gates/user_approval_before_fix_contract.json",
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/operational_rule_registry_v21.json"
+  ],
+  "affected_domains": [
+    "documentation",
+    "failure_prevention"
+  ],
+  "proposal_metadata": {
+    "status": "LOCAL_DRAFT_NOT_APPROVED_NOT_REGISTERED",
+    "repository": "kan1975-creator/CB6-Navi-Public-Build",
+    "base_branch": "cb6-v2-clean",
+    "predecessor_pr": 33,
+    "predecessor_pr_disposition": "DO_NOT_MERGE",
+    "document_source_head": "03936da9e1a59a994eadd871a3470c942734dd7c",
+    "plan_registration": "Create a dedicated plan-only branch from fixed base 7b2485f50064379019f89a7b29c4de73b8533556; add only the plan JSON at docs/approval_plans/CB6_F01_SUCCESSOR_APPROVAL_PLAN_20261020.json and commit it. Keep cb6-v2-clean untouched. Record the immutable plan commit SHA and path for the later owner approval and successor PR metadata. Separate owner authorization required before any GitHub write.",
+    "canonical_sha256_rule": "Take only proposed_change_id,basis_head,planned_paths,forbidden_scope,affected_domains; sort the three array values; serialize with json.dumps(sort_keys=True,ensure_ascii=False,separators=(comma,colon)); SHA256 UTF-8 bytes. This draft does not compute a digest.",
+    "owner_approval_comment_template": [
+      "CB6-APPROVE CB6-F01-SUCCESSOR-DOC-20261020 <CANONICAL_PLAN_SHA256> <PLAN_COMMIT_SHA>",
+      "CB6-APPROVED-SUMMARY <OWNER_APPROVED_SUMMARY>"
+    ],
+    "pr_body_required_fields": [
+      "CB6-APPROVAL-REF issue-comment:<COMMENT_ID>",
+      "CB6-APPROVED-AT <GITHUB_COMMENT_CREATED_AT>",
+      "CB6-PROPOSED-CHANGE CB6-F01-SUCCESSOR-DOC-20261020",
+      "CB6-APPROVED-SUMMARY <OWNER_APPROVED_SUMMARY>",
+      "CB6-PLAN-SHA256 <CANONICAL_PLAN_SHA256>",
+      "CB6-PLAN-COMMIT <PLAN_COMMIT_SHA>",
+      "CB6-PLAN-PATH <PLAN_PATH>"
+    ],
+    "preconditions": [
+      "The plan is fixed in GitHub before the owner comment.",
+      "Owner comment must predate successor PR creation.",
+      "Plan basis_head must equal successor PR base SHA.",
+      "Successor PR changed-file set must equal planned_paths.",
+      "Preexisting edits are not retroactively certified as pre-implementation approved.",
+      "Independent review PASS is inherited only for identical document content; new differences require separate assessment."
+    ],
+    "unknowns": [
+      "Plan commit SHA and plan path are not established.",
+      "Canonical plan digest not computed.",
+      "Owner GitHub approval comment ID and timestamp do not exist for this proposal.",
+      "Successor PR branch/head and Required Check result not established.",
+      "Proposed plan-only and successor branch names are not created; availability and permissions are unverified.",
+      "The plan commit and successor PR must remain separately authorized and unexecuted until owner approval."
+    ],
+    "plan_registration_route": {
+      "branch_candidate": "cb6-f01-successor-plan-20261020",
+      "starting_ref": "cb6-v2-clean",
+      "starting_sha": "7b2485f50064379019f89a7b29c4de73b8533556",
+      "planned_commit_scope": [
+        "docs/approval_plans/CB6_F01_SUCCESSOR_APPROVAL_PLAN_20261020.json"
+      ],
+      "immutable_lookup": "GitHub contents API path with ?ref=<PLAN_COMMIT_SHA>",
+      "base_mutation": "FORBIDDEN: do not merge plan-only branch into cb6-v2-clean or main",
+      "approval_order": [
+        "fix plan JSON in separate commit",
+        "record plan commit SHA and canonical plan digest without retroactive claims",
+        "owner posts exact two-line approval comment on repository Issue",
+        "create successor PR after owner comment"
+      ],
+      "status": "PROPOSAL_ONLY_NOT_EXECUTED"
+    },
+    "successor_pr_route": {
+      "branch_candidate": "cb6-f01-successor-doc-20261020",
+      "starting_ref": "cb6-v2-clean",
+      "starting_sha": "7b2485f50064379019f89a7b29c4de73b8533556",
+      "source_commit": "03936da9e1a59a994eadd871a3470c942734dd7c",
+      "source_path": "docs/CB6_F01_FAILURE_PREVENTION_20261020.md",
+      "transfer_method": "Copy the exact source file content from the fixed source commit into a new branch based on the fixed base, then commit only that document path. Do not cherry-pick a commit that changes other paths. Do not include plan JSON in successor PR diff.",
+      "scope_requirement": "PR changed-file path set must equal the single planned_paths entry; document bytes must match fixed source to inherit F01-R8 PASS",
+      "approval_requirement": "Create successor PR only after GitHub owner approval comment, and include all seven required PR body fields",
+      "stop_conditions": [
+        "base SHA changed",
+        "source content differs",
+        "additional changed paths",
+        "approval comment is not earlier than PR creation",
+        "plan commit or plan SHA mismatch",
+        "Required Check failure"
+      ],
+      "status": "PROPOSAL_ONLY_NOT_EXECUTED"
+    }
+  }
+}
