@@ -14,7 +14,7 @@
     "v2/gates/root_invariants.json": "5ba23da5a4bfb1387a23b25b1cf0685ad4c98f40",
     "v2/gates/verify_method_freeze.py": "2d716389a4c3d80fea375a066fd87f964a9ebd35",
     "v2/gates/verify_project_gate.py": "736a2e133836296105347f9164c6ab4666d6801c",
-    "v2/gates/verify_project_integrity.py": "4879edb89349852312acf90cf0263a4a91caf1b3",
+    "v2/gates/verify_project_integrity.py": "936a16c1999e08ab7d5798dc5e8d0255deb1e9a1",
     "v2/gates/verify_root_invariants.py": "da25eb4ce62e9c6460ff0f93082f2776a7a8191a",
     "v2/tests/test_apk_evidence_fail_closed.py": "b11a28727243e2dbc5189fdec8ced6cbe3682d85",
     "v2/tests/test_device_evidence_fail_closed.py": "7b14b783aeeb75ca4e55c366c53ad30413e4273b",
