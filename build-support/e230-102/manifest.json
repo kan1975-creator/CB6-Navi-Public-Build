@@ -1,0 +1,292 @@
+{
+  "filename": "CB6_E230_166_RECOVERY_APK_UNGENERATED.zip",
+  "bytes": 33787652,
+  "sha256": "c9265b24cfe7f02a8659105857a6f3a7cdec0b4aeff2ff9f3ca83d9d419e734c",
+  "parts": [
+    {
+      "name": "handoff.zip.part001",
+      "bytes": 600000,
+      "sha256": "32784b78ca831c0e3dfbb82d399540ac7114c1a7812df8a74ecf62c1892c2048"
+    },
+    {
+      "name": "handoff.zip.part002",
+      "bytes": 600000,
+      "sha256": "68dfb3a3a61867b638a1f28902e6715c51b360b1cc465ad745184afb00d72962"
+    },
+    {
+      "name": "handoff.zip.part003",
+      "bytes": 600000,
+      "sha256": "7e76cd9353a0b4ca32b42dd8a02fb3d2c9d8c5307d8c8c5267111685fdc0c20b"
+    },
+    {
+      "name": "handoff.zip.part004",
+      "bytes": 600000,
+      "sha256": "bd92e515465114fb6d44ba3e82eaa0048e65162c83120731c27400e820446e74"
+    },
+    {
+      "name": "handoff.zip.part005",
+      "bytes": 600000,
+      "sha256": "0d19521eab4323805340c5b370dfe96e7dd9b19e6b4fbe48409ad36e4e4e007e"
+    },
+    {
+      "name": "handoff.zip.part006",
+      "bytes": 600000,
+      "sha256": "2a1731bd06bc7b2cebda9a16a5699b63776a5aa88b6f94bf30c0b2db0c959d3a"
+    },
+    {
+      "name": "handoff.zip.part007",
+      "bytes": 600000,
+      "sha256": "041efddae664d9a7a5430186d19932d811fd4ff212fadcbda13bb36df7e419ac"
+    },
+    {
+      "name": "handoff.zip.part008",
+      "bytes": 600000,
+      "sha256": "42d43a28f5170a21eb49fe9f7531d786b91d2f7df9984832c976ece1b26fbd47"
+    },
+    {
+      "name": "handoff.zip.part009",
+      "bytes": 600000,
+      "sha256": "1ee83a4be86d1281aed71804a3db42cb9d8120cc8ed7e85077ccc72b00f26f9c"
+    },
+    {
+      "name": "handoff.zip.part010",
+      "bytes": 600000,
+      "sha256": "00dd87b9a9806ba8a8d9ea575a74b28ce820c79ef457d12e471ed1840cda8c98"
+    },
+    {
+      "name": "handoff.zip.part011",
+      "bytes": 600000,
+      "sha256": "53be3754e06dfae5b546b59dd968a1df4552c5b0435be81be3633a8e4cb1b43c"
+    },
+    {
+      "name": "handoff.zip.part012",
+      "bytes": 600000,
+      "sha256": "1f8bd2975d599df66e5af053f6e8b0a32d63f9ef052963f18049cef02950a707"
+    },
+    {
+      "name": "handoff.zip.part013",
+      "bytes": 600000,
+      "sha256": "e71877fedbeda9ad8c5dfa6237f64aac9ac4c4fa98b190188aed5c06cc3c4f65"
+    },
+    {
+      "name": "handoff.zip.part014",
+      "bytes": 600000,
+      "sha256": "f5dd431acdfd33e18e85c62c3c3b9b9ea27abcb8106e66dd43fecb6a7f735185"
+    },
+    {
+      "name": "handoff.zip.part015",
+      "bytes": 600000,
+      "sha256": "502a6895d45438c66ed259c5391adcf4dc23553ff2b39fc77a1c3e3820b0d797"
+    },
+    {
+      "name": "handoff.zip.part016",
+      "bytes": 600000,
+      "sha256": "4e94bb6778be388e7ab4ce8ada23b734229bc3e3bca79584d62808e576851f50"
+    },
+    {
+      "name": "handoff.zip.part017",
+      "bytes": 600000,
+      "sha256": "ef0189f47716dae2277ee875b741ff2bd631303666db6646dbd89d963e163531"
+    },
+    {
+      "name": "handoff.zip.part018",
+      "bytes": 600000,
+      "sha256": "b9cc77b4642ed577d618edac23ebdd08537a654a33c4cdbf72c9c96b7786a816"
+    },
+    {
+      "name": "handoff.zip.part019",
+      "bytes": 600000,
+      "sha256": "8ba906cb34ba5bab3bf88c599c666e7cb4f0c351af8055b5e70b7820f6de9270"
+    },
+    {
+      "name": "handoff.zip.part020",
+      "bytes": 600000,
+      "sha256": "15bb28e53c610804e9290fa7329538c32f5684197eaad28a4307d8d7341a5596"
+    },
+    {
+      "name": "handoff.zip.part021",
+      "bytes": 600000,
+      "sha256": "2eb6a1669fceca141821b100f0a1578f71bcc78748f29d90727a266b6a564d08"
+    },
+    {
+      "name": "handoff.zip.part022",
+      "bytes": 600000,
+      "sha256": "2d7c390df7833489e447600710f82750d6854ccc311e37f69555d4e08d8ce452"
+    },
+    {
+      "name": "handoff.zip.part023",
+      "bytes": 600000,
+      "sha256": "83f1a21f67885d0f7402282342f6494c1536678c931c90a9778fdf30d8171f3c"
+    },
+    {
+      "name": "handoff.zip.part024",
+      "bytes": 600000,
+      "sha256": "0b07ce4b1783f061489b9072292926ff036d80dcb9dfe75003b865ca7c3ec7cb"
+    },
+    {
+      "name": "handoff.zip.part025",
+      "bytes": 600000,
+      "sha256": "004169afbd81a0f07d60b2b6d6c7a1214156c542feb9716bbe4928d82bb39be4"
+    },
+    {
+      "name": "handoff.zip.part026",
+      "bytes": 600000,
+      "sha256": "4a66f83704942a0e4cb99272acf17b05cca4ca4677d853fc1e1f0e56a42e8257"
+    },
+    {
+      "name": "handoff.zip.part027",
+      "bytes": 600000,
+      "sha256": "4d8dfe9d0b91e2d2ab7d646f140ee58abe580f0448cfa89c5eea642c7f5f95c7"
+    },
+    {
+      "name": "handoff.zip.part028",
+      "bytes": 600000,
+      "sha256": "6c4e6415cc66e4a1e26a51fa1b8892c32fc906cc0b7d5208d114da3ca98cab50"
+    },
+    {
+      "name": "handoff.zip.part029",
+      "bytes": 600000,
+      "sha256": "793543405bafeae148db12c870d8bec04da95c414cb2212fba7626776e188203"
+    },
+    {
+      "name": "handoff.zip.part030",
+      "bytes": 600000,
+      "sha256": "c7f02a8654e67f6b19e6f312b63e76173b15847a4190a1830d5dc13396ba08d8"
+    },
+    {
+      "name": "handoff.zip.part031",
+      "bytes": 600000,
+      "sha256": "6be581d17475c9ef1d9b1a72e9f5a8a2b69265d17769f512e957e9bd1abf8fe5"
+    },
+    {
+      "name": "handoff.zip.part032",
+      "bytes": 600000,
+      "sha256": "ca0c6003123df2dbb915ceb570054be77d7782d3a41c6c074b5fde4bd29fdcb5"
+    },
+    {
+      "name": "handoff.zip.part033",
+      "bytes": 600000,
+      "sha256": "ec2edaf567750a255826eb00229ad7c8824843ef2fb3d4cbdcc321a5bebfd27a"
+    },
+    {
+      "name": "handoff.zip.part034",
+      "bytes": 600000,
+      "sha256": "ed364499b4865a3063ff59eb13a7ccc5d36d59ef4109c2c3e70bd0bc55c6f3d1"
+    },
+    {
+      "name": "handoff.zip.part035",
+      "bytes": 600000,
+      "sha256": "e61cc64d93477978dff106b5c3ed004ef83c211ebcb3360469148e4b2365587c"
+    },
+    {
+      "name": "handoff.zip.part036",
+      "bytes": 600000,
+      "sha256": "a1d87b9d65b6a43bca0007c45b10ec690dee155a93ede167a9533f168da5592a"
+    },
+    {
+      "name": "handoff.zip.part037",
+      "bytes": 600000,
+      "sha256": "b9cedad82dc0802bf5bcc712f5bf0ac093c07c150103bd56ca9cf253af5913fd"
+    },
+    {
+      "name": "handoff.zip.part038",
+      "bytes": 600000,
+      "sha256": "f8222b31683fb404825c2dfd13978b2da53257e51e14e3c8e75e00f399f005a1"
+    },
+    {
+      "name": "handoff.zip.part039",
+      "bytes": 600000,
+      "sha256": "34ec1c03fcb4155e669f48577bb93d2123cafa35fad898078f701be69d0cfcb4"
+    },
+    {
+      "name": "handoff.zip.part040",
+      "bytes": 600000,
+      "sha256": "68fd72837c6db57c38b7e10a46578cfb5a03c907493eeac01340ae9af522aa6d"
+    },
+    {
+      "name": "handoff.zip.part041",
+      "bytes": 600000,
+      "sha256": "887320f9d68a1dc4217b10d3dfba972024b031725f1565bec9f7e991e147576d"
+    },
+    {
+      "name": "handoff.zip.part042",
+      "bytes": 600000,
+      "sha256": "5bd43ee504d77e7f0d164a6c12bf703c48813dc44d60414eb25df569bc1d3a54"
+    },
+    {
+      "name": "handoff.zip.part043",
+      "bytes": 600000,
+      "sha256": "c2d0d36936325bb948312d57bc235006134d657a872c364940841ed445beffaa"
+    },
+    {
+      "name": "handoff.zip.part044",
+      "bytes": 600000,
+      "sha256": "80146da91a0fd270eb78d03a17fba3b038d2fa25bc67d4020e69fc7e76de81e6"
+    },
+    {
+      "name": "handoff.zip.part045",
+      "bytes": 600000,
+      "sha256": "ddbcb938770788d5ffe44b48a8f9e0e40c9e3af89657faf80fb26e2448487e44"
+    },
+    {
+      "name": "handoff.zip.part046",
+      "bytes": 600000,
+      "sha256": "ba0424f7f4cbae77f32b008911d48c56700e449cc33bd0ad94ca20a4a927d8fc"
+    },
+    {
+      "name": "handoff.zip.part047",
+      "bytes": 600000,
+      "sha256": "07f6db77ca0cbdb012b13e7237de882a22b24cd8e31ea188ad0dd72640c117f7"
+    },
+    {
+      "name": "handoff.zip.part048",
+      "bytes": 600000,
+      "sha256": "f1e3fc129b22edbddd32f9597144ae538872ec5e1cc8250ec7c8fb8cd744fe67"
+    },
+    {
+      "name": "handoff.zip.part049",
+      "bytes": 600000,
+      "sha256": "08436e18cba0854779100244d72c1bb88861d2c9c97880d1ece5843b4392927b"
+    },
+    {
+      "name": "handoff.zip.part050",
+      "bytes": 600000,
+      "sha256": "049a7c93e8b1cde5461ea88337ec01b1b2bbff410f1afbc3acea5bff83ccca67"
+    },
+    {
+      "name": "handoff.zip.part051",
+      "bytes": 600000,
+      "sha256": "26962e64d290d199dc9c767fc65d44cb322eb143276eaf40f7bb41093a8995ef"
+    },
+    {
+      "name": "handoff.zip.part052",
+      "bytes": 600000,
+      "sha256": "b2eb583a7b23256c3d5ed66376cc318a8af7f83cc3071fb9e90d6104a4e5081d"
+    },
+    {
+      "name": "handoff.zip.part053",
+      "bytes": 600000,
+      "sha256": "1e49234f9d4e103271fc37bf484e6258d0d0a1baeca4e60ac6124beb12a24d03"
+    },
+    {
+      "name": "handoff.zip.part054",
+      "bytes": 600000,
+      "sha256": "e4a22a1579cb727d08315bd0396dfb3fc628e4d3c52d2dd0ee9d96f098a3fa57"
+    },
+    {
+      "name": "handoff.zip.part055",
+      "bytes": 600000,
+      "sha256": "0f74fcbc72c753cbaf8c74fc6f36b6b2b86bb5efdd1b84ea352d0c7a6381d0d1"
+    },
+    {
+      "name": "handoff.zip.part056",
+      "bytes": 600000,
+      "sha256": "b98cbe1c2763291aafac064a25adf32ca4f3977f181792abe72c6f2786a9f248"
+    },
+    {
+      "name": "handoff.zip.part057",
+      "bytes": 187652,
+      "sha256": "6cb5a56308e49352e38d7947a18ac228174b0a20b3a0953eb19a37f26f522bed"
+    }
+  ]
+}
