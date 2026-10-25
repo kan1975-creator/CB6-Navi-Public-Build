@@ -38,7 +38,7 @@ jobs:
           test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
           test "$GITHUB_ACTOR" = 'kan1975-creator'
           test "$GITHUB_TRIGGERING_ACTOR" = 'kan1975-creator'
-          test "$GITHUB_RUN_NUMBER" = '1'
+          test "$GITHUB_RUN_NUMBER" = '2'
           test "$GITHUB_RUN_ATTEMPT" = '1'
           test "$APPROVED_COMMIT" = "$GITHUB_SHA"
       - uses: actions/checkout@v4
