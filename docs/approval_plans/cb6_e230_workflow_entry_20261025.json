@@ -1,0 +1,15 @@
+{
+  "proposed_change_id": "CB6-E230-WORKFLOW-ENTRY-20261025",
+  "basis_head": "7501ef6ecc0499b1c8b3e147ad2d861f00a4e440",
+  "planned_paths": [
+    ".github/workflows/cb6_e230_work_102_arm64.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/verify_user_approval_before_fix.py",
+    "v2/gates/user_approval_before_fix_contract.json"
+  ],
+  "affected_domains": [
+    "github-actions-workflow-entrypoint"
+  ]
+}
