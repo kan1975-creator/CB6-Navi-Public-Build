@@ -1,0 +1,124 @@
+name: CB6 E230 Work 102 arm64 APK candidate
+on:
+  workflow_dispatch:
+    inputs:
+      approved_commit:
+        description: 'Exact dedicated-branch commit SHA separately approved for ONE APK build'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cb6-e230-work-102-one-build
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-e230-work-handoff-102'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
+      SKIP_MAP_DOWNLOAD: '1'
+      SKIP_GENERATE_SYMBOLS: '1'
+      SKIP_GENERATE_DRULES: '1'
+      SKIP_GENERATE_JSON_STRINGS: '1'
+      SKIP_GENERATE_STRINGS: '1'
+      SKIP_GENERATE_SERBIAN_LATIN_STRINGS: '1'
+      SKIP_PYTHON_VENV: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Permit first run and first attempt only
+        env:
+          APPROVED_COMMIT: ${{ inputs.approved_commit }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_ACTOR" = 'kan1975-creator'
+          test "$GITHUB_TRIGGERING_ACTOR" = 'kan1975-creator'
+          test "$GITHUB_RUN_NUMBER" = '1'
+          test "$GITHUB_RUN_ATTEMPT" = '1'
+          test "$APPROVED_COMMIT" = "$GITHUB_SHA"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          path: handoff
+      - name: Create evidence directory
+        run: mkdir -p handoff/build-support/e230-102/out
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.4'
+          cache-disabled: true
+      - uses: android-actions/setup-android@v3
+      - name: Install fixed Android tools and host dependencies
+        run: |
+          set -euo pipefail
+          sdkmanager 'platforms;android-36' 'build-tools;35.0.0' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1' 2>&1 | tee handoff/build-support/e230-102/out/sdk.log
+          sudo apt-get update
+          sudo apt-get install -y ninja-build cmake build-essential python3-venv zlib1g-dev
+          python3 -m venv "$RUNNER_TEMP/cb6-python"
+          "$RUNNER_TEMP/cb6-python/bin/pip" install protobuf==3.20.3
+          echo "$RUNNER_TEMP/cb6-python/bin" >> "$GITHUB_PATH"
+      - name: Fetch immutable CoMaps source and pinned submodules
+        run: |
+          set -euo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin "$COMAPS_SHA"
+          git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          git -C comaps submodule update --init --recursive --depth=1 --jobs=4 2>&1 | tee handoff/build-support/e230-102/out/submodules.log
+          git -C comaps submodule status --recursive > handoff/build-support/e230-102/out/submodules.txt
+          if grep -E '^[+U-]' handoff/build-support/e230-102/out/submodules.txt; then exit 1; fi
+      - name: Apply exact Work patch and previously generated assets
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/apply_handoff.py comaps
+          if [ ! -d comaps/3party/boost/boost ]; then
+            (cd comaps/3party/boost && ./bootstrap.sh && ./b2 headers)
+          fi
+          printf 'sdk.dir=%s\n' "$ANDROID_HOME" > comaps/android/local.properties
+          git -C comaps diff --stat > handoff/build-support/e230-102/out/source_diff_stat.txt
+          git -C comaps rev-parse HEAD > handoff/build-support/e230-102/out/comaps_head.txt
+          printf '%s\n' "$GITHUB_SHA" > handoff/build-support/e230-102/out/handoff_commit.txt
+      - name: Resolve missing Gradle dependencies without feature tests
+        run: |
+          set -euo pipefail
+          SUPPORT="$GITHUB_WORKSPACE/handoff/build-support/e230-102"
+          cd comaps/android
+          gradle --no-daemon --max-workers=2 -I "$SUPPORT/dependencies.init.gradle" -Parm64 -Pnjobs=2 cb6ResolveBuildDependencies 2>&1 | tee "$SUPPORT/out/dependencies.log"
+      - name: Build arm64 APK exactly once with upstream debug signing
+        run: |
+          set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/handoff/build-support/e230-102/out"
+          test ! -e "$OUT/build_attempted"
+          touch "$OUT/build_attempted"
+          cd comaps/android
+          set +e
+          gradle --no-daemon --max-workers=2 -Parm64 -Pnjobs=2 app:assembleWebRelease 2>&1 | tee "$OUT/build.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$result" > "$OUT/build.exit"
+          exit "$result"
+      - name: Verify generated APK signature and arm64 assets
+        run: python3 handoff/build-support/e230-102/verify_apk.py comaps handoff/build-support/e230-102/out
+      - name: Save APK and logs, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-E230-102-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: |
+            handoff/build-support/e230-102/out/
+            comaps/android/app/build/outputs/apk/web/release/*.apk
+          if-no-files-found: warn
+          retention-days: 30
