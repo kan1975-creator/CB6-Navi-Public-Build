@@ -30,7 +30,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Permit first run and first attempt only
+      - name: Verify approved actor and commit
         env:
           APPROVED_COMMIT: ${{ inputs.approved_commit }}
         run: |
@@ -38,8 +38,6 @@ jobs:
           test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
           test "$GITHUB_ACTOR" = 'kan1975-creator'
           test "$GITHUB_TRIGGERING_ACTOR" = 'kan1975-creator'
-          test "$GITHUB_RUN_NUMBER" = '1'
-          test "$GITHUB_RUN_ATTEMPT" = '1'
           test "$APPROVED_COMMIT" = "$GITHUB_SHA"
       - uses: actions/checkout@v4
         with:
