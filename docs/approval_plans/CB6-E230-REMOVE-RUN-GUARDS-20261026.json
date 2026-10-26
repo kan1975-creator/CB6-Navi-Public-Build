@@ -1,0 +1,17 @@
+{
+  "proposed_change_id": "CB6-E230-REMOVE-RUN-GUARDS-20261026",
+  "basis_head": "13d8113d9eaa433d6ce8209eaf1fd2e56eeb367d",
+  "planned_paths": [
+    ".github/workflows/cb6_e230_work_102_arm64.yml"
+  ],
+  "forbidden_scope": [
+    "v2",
+    "app",
+    "android",
+    "docs",
+    ".github/ISSUE_TEMPLATE"
+  ],
+  "affected_domains": [
+    "apk-build-workflow"
+  ]
+}
