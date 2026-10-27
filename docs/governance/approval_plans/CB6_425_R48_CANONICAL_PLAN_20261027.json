@@ -1,0 +1,14 @@
+{
+  "proposed_change_id": "CB6-GOV-425-R36-20261026",
+  "basis_head": "4a1bafab8ffa415797a09c428fd6ee3f2b0506a1",
+  "planned_paths": [
+    "docs/governance/CB6_425_R36_CONSOLIDATED_PROPOSED_20261026.md",
+    "docs/governance/CB6_425_R36_REGISTRATION_PROPOSAL_20261026.json"
+  ],
+  "forbidden_scope": [
+    "v2/gates/operational_rule_registry_v21.json"
+  ],
+  "affected_domains": [
+    "governance"
+  ]
+}
