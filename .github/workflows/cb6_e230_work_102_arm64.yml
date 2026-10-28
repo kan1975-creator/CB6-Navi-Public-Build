@@ -97,13 +97,8 @@ jobs:
           marker = "# CB6 Gold correction: organicmaps-only IPO disable"
           if marker in source:
               raise SystemExit("STOP: Gold correction already present")
-          patch = (marker + "\\n"
-                   + "if(ANDROID AND PROJECT_NAME STREQUAL \\"organicmaps\\")\\n"
-                   + "  set_target_properties(${PROJECT_NAME} PROPERTIES\\n"
-                   + "    INTERPROCEDURAL_OPTIMIZATION FALSE\\n"
-                   + "    INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO FALSE)\\n"
-                   + "endif()")
-          p.write_text(source.replace(anchor, anchor + "\\n\\n" + patch, 1))
+          patch = """\nif(ANDROID AND PROJECT_NAME STREQUAL "organicmaps")\n  set_target_properties(${PROJECT_NAME} PROPERTIES\n    INTERPROCEDURAL_OPTIMIZATION FALSE\n    INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO FALSE)\nendif()"""
+          p.write_text(source.replace(anchor, anchor + "\n\n" + marker + patch, 1))
           PY
           if [ ! -d comaps/3party/boost/boost ]; then
             (cd comaps/3party/boost && ./bootstrap.sh && ./b2 headers)
