@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-e230-work-handoff-102'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-gold-fix-isolated-20261028'
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
@@ -38,7 +38,6 @@ jobs:
           test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
           test "$GITHUB_ACTOR" = 'kan1975-creator'
           test "$GITHUB_TRIGGERING_ACTOR" = 'kan1975-creator'
-          test "$GITHUB_RUN_NUMBER" = '3'
           test "$GITHUB_RUN_ATTEMPT" = '1'
           test "$APPROVED_COMMIT" = "$GITHUB_SHA"
       - uses: actions/checkout@v4
@@ -86,6 +85,26 @@ jobs:
         run: |
           set -euo pipefail
           python3 handoff/build-support/e230-102/apply_handoff.py comaps
+          # Gold correction: isolate IPO disable to the organicmaps shared-library target.
+          # Apply after handoff integration; fail closed if the expected anchor changed.
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("comaps/android/sdk/src/main/cpp/CMakeLists.txt")
+          source = p.read_text()
+          anchor = "omim_add_library(${PROJECT_NAME} SHARED ${SRC})"
+          if source.count(anchor) != 1:
+              raise SystemExit("STOP: organicmaps target anchor not unique")
+          marker = "# CB6 Gold correction: organicmaps-only IPO disable"
+          if marker in source:
+              raise SystemExit("STOP: Gold correction already present")
+          patch = (marker + "\\n"
+                   + "if(ANDROID AND PROJECT_NAME STREQUAL \\"organicmaps\\")\\n"
+                   + "  set_target_properties(${PROJECT_NAME} PROPERTIES\\n"
+                   + "    INTERPROCEDURAL_OPTIMIZATION FALSE\\n"
+                   + "    INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO FALSE)\\n"
+                   + "endif()")
+          p.write_text(source.replace(anchor, anchor + "\\n\\n" + patch, 1))
+          PY
           if [ ! -d comaps/3party/boost/boost ]; then
             (cd comaps/3party/boost && ./bootstrap.sh && ./b2 headers)
           fi
