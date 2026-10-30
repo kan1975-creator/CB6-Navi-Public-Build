@@ -22,11 +22,97 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Fetch Jules status and evidence (ephemeral only)
+      - name: Install age
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends age
+      - name: Verify recipient before READ
+        shell: bash
+        env:
+          AGE_RECIPIENT: ${{ vars.CB6_JULES_AGE_RECIPIENT }}
+          EXPECTED_SHA256: '47d8d975828b1d8c3d622a9c1c8761f944d171a0080a30b9cf960961b8fba7f4'
+        run: |
+          set -euo pipefail
+          # Hash the exact UTF-8 value without trimming or adding a newline.
+          python - <<'PY'
+          import hashlib, os, re
+          recipient = os.environ['AGE_RECIPIENT']
+          if not re.fullmatch(r'age1[023456789acdefghjklmnpqrstuvwxyz]{58}', recipient):
+              raise SystemExit('Invalid age recipient format')
+          if hashlib.sha256(recipient.encode('utf-8')).hexdigest() != os.environ['EXPECTED_SHA256']:
+              raise SystemExit('Recipient SHA-256 mismatch')
+          PY
+          # Let age itself validate the checksum and recipient before any API call.
+          if ! age --encrypt --recipient "$AGE_RECIPIENT" < /dev/null > /dev/null 2>&1; then
+            echo 'age rejected recipient' >&2
+            exit 1
+          fi
+      - name: READ and encrypt evidence
+        id: evidence
+        shell: bash
         env:
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           SESSION_ID: ${{ inputs.session_id }}
+          AGE_RECIPIENT: ${{ vars.CB6_JULES_AGE_RECIPIENT }}
         run: |
-          python tools/jules_bridge.py --mode read --session "$SESSION_ID" --output "$RUNNER_TEMP/jules_evidence.json"
-      # Raw evidence is NOT uploaded to public Actions artifacts.
-      # For automated archival, configure a private destination separately.
+          set -euo pipefail
+          umask 077
+          work="$RUNNER_TEMP/cb6-jules-read-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -m 700 -- "$work"
+          plain="$work/jules_evidence.json"
+          cipher="$work/jules_evidence.json.age"
+          cleanup() {
+            status=$?
+            trap - EXIT
+            rm -f -- "$plain"
+            if [ "$status" -ne 0 ]; then
+              rm -f -- "$cipher" "$cipher.tmp"
+            fi
+            exit "$status"
+          }
+          trap cleanup EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          if ! python tools/jules_bridge.py --mode read --session "$SESSION_ID" --output "$plain" > /dev/null 2>&1; then
+            echo 'Jules READ failed; output suppressed' >&2
+            exit 1
+          fi
+          if ! python - "$plain" > /dev/null 2>&1 <<'PY'
+          import json, sys
+          from pathlib import Path
+          p = Path(sys.argv[1])
+          if not 0 < p.stat().st_size <= 10_000_000:
+              raise SystemExit(1)
+          with p.open(encoding='utf-8') as f:
+              value = json.load(f)
+          if not isinstance(value, dict) or not isinstance(value.get('session'), dict) or not isinstance(value.get('activities'), list):
+              raise SystemExit(1)
+          PY
+          then
+            echo 'Invalid evidence JSON; output suppressed' >&2
+            exit 1
+          fi
+          if ! age --encrypt --recipient "$AGE_RECIPIENT" --output "$cipher.tmp" "$plain" > /dev/null 2>&1; then
+            echo 'Evidence encryption failed' >&2
+            exit 1
+          fi
+          test -s "$cipher.tmp"
+          mv -- "$cipher.tmp" "$cipher"
+          rm -f -- "$plain"
+          test ! -e "$plain"
+      - name: Upload encrypted evidence only
+        if: ${{ success() && steps.evidence.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: jules-evidence-encrypted-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cb6-jules-read-${{ github.run_id }}-${{ github.run_attempt }}/jules_evidence.json.age
+          if-no-files-found: error
+          retention-days: 1
+      - name: Remove local evidence on every outcome
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/cb6-jules-read-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
