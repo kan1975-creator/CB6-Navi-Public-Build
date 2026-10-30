@@ -1,0 +1,47 @@
+name: CB6 Jules SEND (approval required)
+on:
+  workflow_dispatch:
+    inputs:
+      session_id:
+        description: Jules session numeric ID
+        required: true
+        default: '8061497760758145992'
+      message:
+        description: Exact Jules message; review before approving protected job
+        required: true
+        type: string
+      message_sha256:
+        description: SHA-256 of UTF-8 message (no newline added)
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: cb6-jules-send
+  cancel-in-progress: false
+jobs:
+  send:
+    environment: cb6-jules-send-approval
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Send only exact approved message
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          CB6_SEND_APPROVED: 'true'
+          SESSION_ID: ${{ inputs.session_id }}
+          APPROVED_SHA256: ${{ inputs.message_sha256 }}
+          MESSAGE: ${{ inputs.message }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          Path(os.environ['RUNNER_TEMP'],'approved_message.txt').write_bytes(os.environ['MESSAGE'].encode('utf-8'))
+          PY
+          python tools/jules_bridge.py --mode send --session "$SESSION_ID" --message-file "$RUNNER_TEMP/approved_message.txt" --approved-sha256 "$APPROVED_SHA256"
