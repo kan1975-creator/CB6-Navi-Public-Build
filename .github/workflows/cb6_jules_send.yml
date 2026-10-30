@@ -1,0 +1,100 @@
+name: CB6 Jules SEND (owner approval)
+on:
+  workflow_dispatch:
+    inputs:
+      session_id:
+        description: 'Jules numeric session ID'
+        required: true
+        default: '8061497760758145992'
+        type: string
+      message:
+        description: 'Exact UTF-8 message to send (single-line input; no secrets)'
+        required: true
+        type: string
+      approved_sha256:
+        description: 'SHA-256 of exact UTF-8 message, lowercase hex'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: cb6-jules-send
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      message_sha256: ${{ steps.validate.outputs.sha256 }}
+    steps:
+      - name: Validate request and display digest for reviewer
+        id: validate
+        shell: bash
+        env:
+          SESSION_ID: ${{ inputs.session_id }}
+          MESSAGE: ${{ inputs.message }}
+          APPROVED_SHA256: ${{ inputs.approved_sha256 }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, os, re
+          session = os.environ['SESSION_ID']
+          msg = os.environ['MESSAGE'].encode('utf-8')
+          claimed = os.environ['APPROVED_SHA256']
+          if not re.fullmatch(r'[0-9]{1,20}', session):
+              raise SystemExit('Invalid session ID')
+          if not 1 <= len(msg) <= 20000 or not msg.decode('utf-8').strip():
+              raise SystemExit('Invalid message')
+          if not re.fullmatch(r'[0-9a-f]{64}', claimed):
+              raise SystemExit('Invalid digest format')
+          actual = hashlib.sha256(msg).hexdigest()
+          if actual != claimed:
+              raise SystemExit('Message SHA-256 mismatch')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('sha256=' + actual + '\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('### CB6 Jules SEND approval request\n')
+              f.write('Session: `' + session + '`\n\n')
+              f.write('Message SHA-256: `' + actual + '`\n\n')
+              f.write('Approve only if the dispatch message and digest match the intended instruction.\n')
+          PY
+  send:
+    needs: prepare
+    if: ${{ needs.prepare.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: cb6-jules-send-approval
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Send exactly once after environment approval
+        shell: bash
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          SESSION_ID: ${{ inputs.session_id }}
+          MESSAGE: ${{ inputs.message }}
+          APPROVED_SHA256: ${{ needs.prepare.outputs.message_sha256 }}
+          CB6_SEND_APPROVED: 'true'
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_RUN_ATTEMPT" != "1" ]; then
+            echo "SEND rerun prohibited to prevent duplicate delivery" >&2
+            exit 1
+          fi
+          umask 077
+          work="$(mktemp -d "$RUNNER_TEMP/cb6-jules-send.XXXXXXXX")"
+          cleanup() { rm -rf -- "$work"; }
+          trap cleanup EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          python3 - "$work/message.txt" <<'PY'
+          import os, sys
+          with open(sys.argv[1], 'wb') as f:
+              f.write(os.environ['MESSAGE'].encode('utf-8'))
+          PY
+          python3 tools/jules_bridge.py --mode send --session "$SESSION_ID" \
+            --message-file "$work/message.txt" --approved-sha256 "$APPROVED_SHA256"
