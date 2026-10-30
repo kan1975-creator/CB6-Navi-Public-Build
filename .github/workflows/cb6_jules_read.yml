@@ -1,0 +1,32 @@
+name: CB6 Jules READ (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      session_id:
+        description: Jules session numeric ID
+        required: true
+        default: '8061497760758145992'
+permissions:
+  contents: read
+concurrency:
+  group: cb6-jules-read
+  cancel-in-progress: false
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch Jules status and evidence (ephemeral only)
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          SESSION_ID: ${{ inputs.session_id }}
+        run: |
+          python tools/jules_bridge.py --mode read --session "$SESSION_ID" --output "$RUNNER_TEMP/jules_evidence.json"
+      # Raw evidence is NOT uploaded to public Actions artifacts.
+      # For automated archival, configure a private destination separately.
