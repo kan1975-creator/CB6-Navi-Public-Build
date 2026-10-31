@@ -80,8 +80,14 @@ jobs:
             python - "$work/read.stderr" <<'PY'
           import pathlib, re, sys
           raw = pathlib.Path(sys.argv[1]).read_bytes()[:4096].decode('utf-8', 'replace')
-          if raw.strip() == 'ERROR: JULES_API_KEY not configured':
-              print('Jules READ failed: API key not configured', file=sys.stderr)
+          known = {
+              'ERROR: JULES_API_KEY not configured': 'API key not configured',
+              'ERROR: Jules API network error': 'network error',
+              'ERROR: Jules API timeout': 'timeout',
+              'ERROR: Jules API invalid JSON response': 'invalid JSON response',
+          }
+          if raw.strip() in known:
+              print('Jules READ failed: ' + known[raw.strip()], file=sys.stderr)
           else:
               match = re.fullmatch(r'ERROR: Jules API HTTP (\d{3})\s*', raw)
               allowed = {'400', '401', '403', '404', '408', '429', '500', '502', '503', '504'}

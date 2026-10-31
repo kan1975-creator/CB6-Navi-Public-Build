@@ -19,6 +19,13 @@ def api(path, payload=None):
             return json.loads(raw) if raw.strip() else {}
     except urllib.error.HTTPError as exc:
         raise RuntimeError(f'Jules API HTTP {exc.code}') from None
+    except urllib.error.URLError:
+        # Never expose URLs, proxy details, or connection diagnostics in public logs.
+        raise RuntimeError('Jules API network error') from None
+    except TimeoutError:
+        raise RuntimeError('Jules API timeout') from None
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise RuntimeError('Jules API invalid JSON response') from None
 
 def read(session, output):
     info = api(f'/sessions/{session}')
