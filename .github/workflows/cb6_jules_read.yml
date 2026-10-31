@@ -66,7 +66,7 @@ jobs:
           cleanup() {
             status=$?
             trap - EXIT
-            rm -f -- "$plain"
+            rm -f -- "$plain" "$work/read.stderr"
             if [ "$status" -ne 0 ]; then
               rm -f -- "$cipher" "$cipher.tmp"
             fi
@@ -75,10 +75,24 @@ jobs:
           trap cleanup EXIT
           trap 'exit 130' INT
           trap 'exit 143' TERM
-          if ! python tools/jules_bridge.py --mode read --session "$SESSION_ID" --output "$plain" > /dev/null 2>&1; then
-            echo 'Jules READ failed; output suppressed' >&2
+          if ! python tools/jules_bridge.py --mode read --session "$SESSION_ID" --output "$plain" > /dev/null 2> "$work/read.stderr"; then
+            # Emit only hard-coded classifications; never print captured stderr.
+            python - "$work/read.stderr" <<'PY'
+          import pathlib, re, sys
+          raw = pathlib.Path(sys.argv[1]).read_bytes()[:4096].decode('utf-8', 'replace')
+          if raw.strip() == 'ERROR: JULES_API_KEY not configured':
+              print('Jules READ failed: API key not configured', file=sys.stderr)
+          else:
+              match = re.fullmatch(r'ERROR: Jules API HTTP (\d{3})\s*', raw)
+              allowed = {'400', '401', '403', '404', '408', '429', '500', '502', '503', '504'}
+              if match and match.group(1) in allowed:
+                  print('Jules READ failed: HTTP ' + match.group(1), file=sys.stderr)
+              else:
+                  print('Jules READ failed: unclassified error (details suppressed)', file=sys.stderr)
+          PY
             exit 1
           fi
+          rm -f -- "$work/read.stderr"
           if ! python - "$plain" > /dev/null 2>&1 <<'PY'
           import json, sys
           from pathlib import Path
