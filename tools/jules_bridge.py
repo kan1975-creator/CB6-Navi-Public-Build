@@ -28,25 +28,61 @@ def api(path, payload=None):
         raise RuntimeError('Jules API invalid JSON response') from None
 
 def read(session, output):
-    info = api(f'/sessions/{session}')
-    activities=[]; token=None
-    for _ in range(20):
-        query = {'pageSize':'100'}
-        if token: query['pageToken']=token
-        page=api(f'/sessions/{session}/activities?'+urllib.parse.urlencode(query))
-        activities.extend(page.get('activities',[]))
-        if len(activities)>2000: raise RuntimeError('activity count limit exceeded')
-        token=page.get('nextPageToken')
-        if not token: break
-    else: raise RuntimeError('pagination limit exceeded')
-    evidence={'session':info,'activities':activities,'evidence_grade':'raw API response; PASS not independently verified'}
-    encoded=json.dumps(evidence,ensure_ascii=False,indent=2).encode('utf-8')
-    if len(encoded)>10_000_000: raise RuntimeError('evidence size limit exceeded')
-    Path(output).write_bytes(encoded)
-    print('Session state:',info.get('state','UNKNOWN'))
-    print('Activities:',len(activities))
-    print('Evidence SHA-256:',hashlib.sha256(encoded).hexdigest())
-    print('Evidence retained locally only:',output)
+    # Fixed stage/type diagnostics only; never include API response bodies or URLs.
+    stage = 'session'
+    try:
+        info = api(f'/sessions/{session}')
+        if not isinstance(info, dict):
+            raise ValueError('unexpected session response')
+        stage = 'activities'
+        activities=[]; token=None
+        for _ in range(20):
+            query = {'pageSize':'100'}
+            if token: query['pageToken']=token
+            page=api(f'/sessions/{session}/activities?'+urllib.parse.urlencode(query))
+            if not isinstance(page, dict) or not isinstance(page.get('activities', []), list):
+                raise ValueError('unexpected activities response')
+            activities.extend(page.get('activities',[]))
+            if len(activities)>2000: raise RuntimeError('activity count limit exceeded')
+            token=page.get('nextPageToken')
+            if not token: break
+        else: raise RuntimeError('pagination limit exceeded')
+        stage = 'serialize'
+        evidence={'session':info,'activities':activities,'evidence_grade':'raw API response; PASS not independently verified'}
+        encoded=json.dumps(evidence,ensure_ascii=False,indent=2).encode('utf-8')
+        if len(encoded)>10_000_000: raise RuntimeError('evidence size limit exceeded')
+        stage = 'write'
+        Path(output).write_bytes(encoded)
+        print('Session state:',info.get('state','UNKNOWN'))
+        print('Activities:',len(activities))
+        print('Evidence SHA-256:',hashlib.sha256(encoded).hexdigest())
+        print('Evidence retained locally only:',output)
+    except Exception as exc:
+        # Preserve only a fixed class, not exception text (may contain secrets).
+        if isinstance(exc, RuntimeError) and str(exc).startswith('Jules API HTTP '):
+            code = str(exc).removeprefix('Jules API HTTP ')
+            category = 'HTTP_' + code if code in {'400','401','403','404','405','408','409','422','429','500','502','503','504'} else 'HTTP_OTHER'
+        elif isinstance(exc, RuntimeError) and str(exc) in {
+            'Jules API network error', 'Jules API timeout', 'Jules API invalid JSON response',
+            'activity count limit exceeded', 'pagination limit exceeded',
+            'evidence size limit exceeded', 'API response size limit exceeded'
+        }:
+            category = {
+                'Jules API network error': 'NETWORK',
+                'Jules API timeout': 'TIMEOUT',
+                'Jules API invalid JSON response': 'INVALID_JSON',
+                'activity count limit exceeded': 'ACTIVITY_LIMIT',
+                'pagination limit exceeded': 'PAGINATION_LIMIT',
+                'evidence size limit exceeded': 'EVIDENCE_LIMIT',
+                'API response size limit exceeded': 'RESPONSE_LIMIT',
+            }[str(exc)]
+        elif isinstance(exc, (TypeError, ValueError, KeyError, AttributeError, IndexError)):
+            category = 'RESPONSE_SHAPE'
+        elif isinstance(exc, OSError):
+            category = 'IO'
+        else:
+            category = 'OTHER'
+        raise RuntimeError(f'Jules READ stage {stage} category {category}') from None
 
 def send(session, message_file, approved_digest):
     if os.environ.get('CB6_SEND_APPROVED')!='true': raise RuntimeError('SEND approval gate missing')
