@@ -86,7 +86,10 @@ jobs:
               'ERROR: Jules API timeout': 'timeout',
               'ERROR: Jules API invalid JSON response': 'invalid JSON response',
           }
-          if raw.strip() in known:
+          stage_match = re.fullmatch(r'ERROR: Jules READ stage (session|activities|serialize|write) category (HTTP_(?:400|401|403|404|405|408|409|422|429|500|502|503|504|OTHER)|NETWORK|TIMEOUT|INVALID_JSON|ACTIVITY_LIMIT|PAGINATION_LIMIT|EVIDENCE_LIMIT|RESPONSE_LIMIT|RESPONSE_SHAPE|IO|OTHER)\s*', raw)
+          if stage_match:
+              print('Jules READ failed: stage ' + stage_match.group(1) + ', category ' + stage_match.group(2), file=sys.stderr)
+          elif raw.strip() in known:
               print('Jules READ failed: ' + known[raw.strip()], file=sys.stderr)
           else:
               match = re.fullmatch(r'ERROR: Jules API HTTP (\d{3})\s*', raw)
