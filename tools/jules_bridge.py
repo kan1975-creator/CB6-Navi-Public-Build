@@ -14,8 +14,8 @@ def api(path, payload=None):
     req = urllib.request.Request(BASE + path, data=body, headers={'x-goog-api-key':key, 'Content-Type':'application/json'}, method='POST' if payload is not None else 'GET')
     try:
         with urllib.request.urlopen(req, timeout=25) as response:
-            raw = response.read(5_000_001)
-            if len(raw) > 5_000_000: raise RuntimeError('API response size limit exceeded')
+            raw = response.read(50_000_001)
+            if len(raw) > 50_000_000: raise RuntimeError('API response size limit exceeded')
             return json.loads(raw) if raw.strip() else {}
     except urllib.error.HTTPError as exc:
         raise RuntimeError(f'Jules API HTTP {exc.code}') from None
@@ -50,7 +50,7 @@ def read(session, output):
         stage = 'serialize'
         evidence={'session':info,'activities':activities,'evidence_grade':'raw API response; PASS not independently verified'}
         encoded=json.dumps(evidence,ensure_ascii=False,indent=2).encode('utf-8')
-        if len(encoded)>10_000_000: raise RuntimeError('evidence size limit exceeded')
+        if len(encoded)>100_000_000: raise RuntimeError('evidence size limit exceeded')
         stage = 'write'
         Path(output).write_bytes(encoded)
         print('Session state:',info.get('state','UNKNOWN'))
