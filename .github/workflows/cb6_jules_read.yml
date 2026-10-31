@@ -106,7 +106,7 @@ jobs:
           import json, sys
           from pathlib import Path
           p = Path(sys.argv[1])
-          if not 0 < p.stat().st_size <= 10_000_000:
+          if not 0 < p.stat().st_size <= 100_000_000:
               raise SystemExit(1)
           with p.open(encoding='utf-8') as f:
               value = json.load(f)
