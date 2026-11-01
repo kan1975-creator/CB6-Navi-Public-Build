@@ -1,0 +1,18 @@
+{
+  "proposed_change_id": "CB6-GOV-425-R36-20261026",
+  "basis_head": "222427fd64c61a591b086938ded1d47318fc6bfb",
+  "planned_paths": [
+    "docs/governance/CB6_425_R36_REGISTRATION_PROPOSAL_v22_candidate.json",
+    "v2/gates/operational_rule_registry_v22_candidate.json",
+    "v2/gates/verify_governance_r36_candidate.py",
+    "v2/gates/verify_project_gate_v22_candidate.py",
+    "v2/gates/verify_rule_coverage_v4_candidate.py"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/operational_rule_registry_v21.json"
+  ],
+  "affected_domains": [
+    "governance"
+  ]
+}
