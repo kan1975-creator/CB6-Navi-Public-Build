@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "proposal_id": "CB6-GOV-425-R36-20261026",
+  "version": 22,
+  "status": "PROPOSED",
+  "authority": "CB6_E230_425R_ACCOUNTABILITY_20261026.md version 29",
+  "document_source": "docs/governance/CB6_425_R36_CONSOLIDATED_PROPOSED_20261026.md",
+  "governance_sections": {
+    "A": "Display Rule (Mandatory step number, PASS/FAIL/UNVERIFIED/STOP distinction, executed/unexecuted operations)",
+    "B": "Button Rule (Function-matched buttons, explicit approval for new approvals, no execution-guarantee claim)",
+    "C": "Pre-STOP and Pre-Instruction Chat Verification Gate (Mandatory check of current and available past chat history)",
+    "D": "Per-Response Verification Record (4-point summary: past history match, deduplication, feasibility, display/button/STOP)",
+    "B_ADD": "Button Operation Explanation Pairing (Explicit pairing of button action, user next step, and unexecuted scope)",
+    "E": "Actual Violation Record (Mandatory logging of fail occurrences and causes without claiming automatic compliance)",
+    "F": "Mandatory Per-Response Checklist (6-item pre-flight and pre-send verification)",
+    "G": "Governance Re-Verification and Applied Record (Verification of actual document contents against past records)",
+    "H": "Shortest Remaining Work and Progress Condition Registration (Local governance recording of remaining steps)",
+    "I": "Mandatory Progress Rule Freeze (Fixation of top-priority operational rules without false PASS assertions)",
+    "J": "Button Mode Update ('進める', '承認して進める', 'コピー' differentiation)",
+    "K": "Limitation of Button Omission Conditions (Button omission permitted only when zero safe and executable path exists)",
+    "L": "Attachment File Operational Rule (Verification of existing attachments before requesting re-attachments)",
+    "M": "Chat History Scope Clarification (Broad scope covering current chat, accessible past chats, work records, attachments)"
+  },
+  "invariants": {
+    "v21_active_unmodified": true,
+    "no_unauthorized_github_writes": true,
+    "no_unauthorized_actions_trigger": true,
+    "no_unauthorized_apk_build": true,
+    "method_freeze_maintained": true,
+    "all_stop_conditions_preserved": true
+  }
+}
