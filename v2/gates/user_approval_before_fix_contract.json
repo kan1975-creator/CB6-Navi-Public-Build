@@ -15,5 +15,22 @@
     "post_hoc_approval": true,
     "approval_reuse_for_different_change": true,
     "missing_change_binding": true
+  },
+  "personal_issuer_relaxation_candidate": {
+    "status": "PROPOSED_NOT_ADOPTED",
+    "scope": "PERSONAL_DEVELOPMENT_ONLY",
+    "external_issuer_required": false,
+    "independent_required_check_required": false,
+    "independent_github_admin_required": false,
+    "prior_user_approval_required": true,
+    "separate_gpt_review_required": true,
+    "affected_scope_tests_required": true,
+    "does_not_override_active_rules": true,
+    "user_completion_criteria_decision": {
+      "status": "USER_APPROVED_POLICY_ONLY",
+      "decision_date": "2026-10-13",
+      "deployment_status": "NOT_DEPLOYED",
+      "active_rules_unchanged": true
+    }
   }
 }

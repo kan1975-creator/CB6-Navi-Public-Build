@@ -1,0 +1,63 @@
+# ISOLATED CANDIDATE ONLY. NOT DEPLOYED. ADVISORY CHECK, NOT a Required Check.
+# Manual read-only workflow avoids pull_request_target and does not execute PR code.
+name: CB6 Personal Approval Manual Candidate (Nonmandatory)
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to inspect
+        type: string
+        required: true
+      comment_id:
+        description: GitHub approval comment ID
+        type: string
+        required: true
+      plan_sha256:
+        description: Approved canonical plan SHA-256
+        type: string
+        required: true
+      plan_commit_sha:
+        description: Commit containing canonical plan
+        type: string
+        required: true
+      plan_path:
+        description: Repository-relative canonical plan path
+        type: string
+        required: true
+      expected_pr_head:
+        description: Expected PR HEAD commit SHA
+        type: string
+        required: true
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+jobs:
+  personal-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Require trusted default branch
+        env:
+          EXPECTED_REF: refs/heads/main
+          ACTUAL_REF: ${{ github.ref }}
+        run: test "$ACTUAL_REF" = "$EXPECTED_REF"
+      - name: Checkout trusted main only
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Inspect the GitHub user approval and PR scope read-only
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR: ${{ inputs.pr_number }}
+          COMMENT: ${{ inputs.comment_id }}
+          PLAN_SHA: ${{ inputs.plan_sha256 }}
+          PLAN_COMMIT: ${{ inputs.plan_commit_sha }}
+          PLAN_PATH: ${{ inputs.plan_path }}
+          EXPECTED_HEAD: ${{ inputs.expected_pr_head }}
+        run: |
+          python3 -I -B v2/gates/verify_user_approval_before_fix.py --personal-manual \
+            --pr "$PR" --comment-id "$COMMENT" \
+            --plan-sha "$PLAN_SHA" --plan-commit "$PLAN_COMMIT" \
+            --plan-path "$PLAN_PATH" --expected-head "$EXPECTED_HEAD"
