@@ -103,12 +103,16 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment
     File file = new File(new File(context.getFilesDir(), "cb6-signal-db"), name);
     if (!file.isFile()) return "信号機データ：ファイルなし" + stores;
     try (SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null,
-             SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
-         Cursor c = db.rawQuery("SELECT COUNT(*) FROM signals", null))
+             SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS))
     {
-      if (!c.moveToFirst()) throw new IllegalStateException("Count unavailable");
+      long count;
+      try (Cursor c = db.rawQuery("SELECT COUNT(*) FROM signals", null))
+      {
+        if (!c.moveToFirst()) throw new IllegalStateException("Count unavailable");
+        count = c.getLong(0);
+      }
       String modified = DateFormat.getDateTimeInstance().format(new Date(file.lastModified()));
-      return "信号機データ：登録あり\n信号機件数：" + c.getLong(0)
+      return "信号機データ：登録あり\n信号機件数：" + count
           + " 件\n更新日時：" + modified + "\nDBバージョン：" + db.getVersion()
           + "\n状態：読み取り可能（描画は未検証）" + stores;
     }
