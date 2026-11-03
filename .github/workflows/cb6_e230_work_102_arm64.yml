@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-gold-fix-isolated-20261028'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-apk-136-diagnostic-20261103'
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
@@ -85,6 +85,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 handoff/build-support/e230-102/apply_handoff.py comaps
+          cp -a handoff/build-support/e230-102/overlay136/. comaps/
           # Gold correction: isolate IPO disable to the organicmaps shared-library target.
           # Apply after handoff integration; fail closed if the expected anchor changed.
           python3 - <<'PY'
