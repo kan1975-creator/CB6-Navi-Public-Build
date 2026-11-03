@@ -28,6 +28,9 @@ with zipfile.ZipFile(archive) as z:
         'Cb6OverpassDiagnostics.java',
     }
     needs_data_dir=False
+    overpass_rel=Path('android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java')
+    expected_existing_sha256='cff09b6b2ece75440a5d23500c79e67572d71bdea2a4bed1ba83728b945cd502'
+    expected_candidate_sha256='f3c87bf4feef8c3088799c3d00df11c76fa0a51349fd487ed9a1d3ed2c3c5dd9'
     for name in entries:
         rel=Path(name)
         if '..' in rel.parts or rel.is_absolute():
@@ -42,9 +45,16 @@ with zipfile.ZipFile(archive) as z:
                     or new_data_dir.exists()):
                 raise SystemExit('STOP: expected target directory absent: '+str(dest.parent))
             needs_data_dir=True
-        if dest.exists() or dest.is_symlink():
-            raise SystemExit('STOP: target already exists: '+str(dest))
         data=z.read(name)
+        if rel == overpass_rel:
+            if dest.is_symlink() or not dest.is_file():
+                raise SystemExit('STOP: expected existing Overpass file absent or unsafe: '+str(dest))
+            if hashlib.sha256(dest.read_bytes()).hexdigest()!=expected_existing_sha256:
+                raise SystemExit('STOP: existing Overpass SHA-256 mismatch')
+            if hashlib.sha256(data).hexdigest()!=expected_candidate_sha256:
+                raise SystemExit('STOP: candidate Overpass SHA-256 mismatch')
+        elif dest.exists() or dest.is_symlink():
+            raise SystemExit('STOP: target already exists: '+str(dest))
         staged.append((dest,data))
     # Only after all checks pass, write to disposable CoMaps workspace.
     if needs_data_dir:
