@@ -29,7 +29,7 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment
   public void onCreatePreferences(Bundle bundle, String root)
   {
     super.onCreatePreferences(bundle, root);
-    if (getPreferenceScreen() != null && findPreference(CB6_DATA_INFO_KEY) == null)
+    if (root == null && getPreferenceScreen() != null && findPreference(CB6_DATA_INFO_KEY) == null)
     {
       Preference info = new Preference(requireContext());
       info.setKey(CB6_DATA_INFO_KEY);
@@ -87,8 +87,16 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment
   /** Read-only status: does not activate, import, or mutate a signal DB. */
   private static String readSignalDatabaseStatus(@NonNull Context context)
   {
-    String name = context.getSharedPreferences("cb6_signal_db", Context.MODE_PRIVATE)
-        .getString("active_file", null);
+    final String name;
+    try
+    {
+      name = context.getSharedPreferences("cb6_signal_db", Context.MODE_PRIVATE)
+          .getString("active_file", null);
+    }
+    catch (RuntimeException e)
+    {
+      return "信号機データ：設定を読み取れません" + "\\n\\nコンビニ6種：準備のみ（未実装）";
+    }
     String stores = "\n\nコンビニ6種：準備のみ（未実装）";
     if (name == null || !name.matches("signals-[0-9a-f]{64}\\.sqlite"))
       return "信号機データ：未設定" + stores;
