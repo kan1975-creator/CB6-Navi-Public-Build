@@ -31,6 +31,9 @@ with zipfile.ZipFile(archive) as z:
     overpass_rel=Path('android/app/src/main/java/app/organicmaps/cb6/signals/OverpassSignalProvider.java')
     expected_existing_sha256='cff09b6b2ece75440a5d23500c79e67572d71bdea2a4bed1ba83728b945cd502'
     expected_candidate_sha256='f3c87bf4feef8c3088799c3d00df11c76fa0a51349fd487ed9a1d3ed2c3c5dd9'
+    prefs_rel=Path('android/app/src/main/res/xml/prefs_data_management.xml')
+    prefs_existing_sha256='2b66299c32112c611086b27193638bee2940ddc507e007f43331662426800646'
+    prefs_candidate_sha256='bcc60cf5fa671396a3115efcdefad21a777fb4ff17865912aa5f40c58f01ae09'
     for name in entries:
         rel=Path(name)
         if '..' in rel.parts or rel.is_absolute():
@@ -53,6 +56,13 @@ with zipfile.ZipFile(archive) as z:
                 raise SystemExit('STOP: existing Overpass SHA-256 mismatch')
             if hashlib.sha256(data).hexdigest()!=expected_candidate_sha256:
                 raise SystemExit('STOP: candidate Overpass SHA-256 mismatch')
+        elif rel == prefs_rel:
+            if dest.is_symlink() or not dest.is_file():
+                raise SystemExit('STOP: expected existing prefs XML absent or unsafe: '+str(dest))
+            if hashlib.sha256(dest.read_bytes()).hexdigest()!=prefs_existing_sha256:
+                raise SystemExit('STOP: existing prefs XML SHA-256 mismatch')
+            if hashlib.sha256(data).hexdigest()!=prefs_candidate_sha256:
+                raise SystemExit('STOP: candidate prefs XML SHA-256 mismatch')
         elif dest.exists() or dest.is_symlink():
             raise SystemExit('STOP: target already exists: '+str(dest))
         staged.append((dest,data))
