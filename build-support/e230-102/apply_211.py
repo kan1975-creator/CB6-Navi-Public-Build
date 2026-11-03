@@ -20,16 +20,35 @@ with zipfile.ZipFile(archive) as z:
         raise SystemExit('STOP: overlay136 SignalController anchor missing/non-unique')
     # Validate all targets before any write, avoid path traversal and unexpected replacements.
     staged=[]
+    new_data_dir=root/'android/app/src/main/java/app/organicmaps/cb6/data'
+    cb6_dir=new_data_dir.parent
+    allowed_data_files={
+        'Cb6DataStatusRepository.java',
+        'Cb6FacilityStatusContract.java',
+        'Cb6OverpassDiagnostics.java',
+    }
+    needs_data_dir=False
     for name in entries:
         rel=Path(name)
         if '..' in rel.parts or rel.is_absolute():
             raise SystemExit('STOP: unsafe archive path')
         dest=root/rel
         if not dest.parent.is_dir():
-            raise SystemExit('STOP: expected target directory absent: '+str(dest.parent))
+            if (dest.parent != new_data_dir
+                    or dest.name not in allowed_data_files
+                    or not cb6_dir.is_dir()
+                    or cb6_dir.is_symlink()
+                    or new_data_dir.is_symlink()
+                    or new_data_dir.exists()):
+                raise SystemExit('STOP: expected target directory absent: '+str(dest.parent))
+            needs_data_dir=True
+        if dest.exists() or dest.is_symlink():
+            raise SystemExit('STOP: target already exists: '+str(dest))
         data=z.read(name)
         staged.append((dest,data))
     # Only after all checks pass, write to disposable CoMaps workspace.
+    if needs_data_dir:
+        new_data_dir.mkdir()
     for dest,data in staged:
         dest.write_bytes(data)
     target.write_text(content.replace(before,after,1),encoding='utf-8')
