@@ -1,0 +1,13 @@
+{
+  "proposed_change_id": "CB6-426-APK-228-DRYRUN-REGISTRATION",
+  "basis_head": "a47f85c32e2e37c0746eabc4f2197998008a7e35",
+  "planned_paths": [
+    ".github/workflows/cb6_228_dry_run_only.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_e230_work_102_arm64.yml"
+  ],
+  "affected_domains": [
+    "github-actions-dry-run-registration"
+  ]
+}
