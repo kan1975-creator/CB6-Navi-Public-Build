@@ -1,0 +1,14 @@
+{
+  "proposed_change_id": "CB6-HOKKAIDO-MAIN-GUARD-20261104",
+  "basis_head": "fdda425956b11ca9542db968a5ecc73c640d0768",
+  "planned_paths": [
+    ".github/workflows/cb6_hokkaido_sqlite.yml"
+  ],
+  "forbidden_scope": [
+    "v2/gates/verify_user_approval_before_fix.py",
+    ".github/workflows/cb6_approval_enforcement.yml"
+  ],
+  "affected_domains": [
+    "github-actions-workflow-registration"
+  ]
+}
