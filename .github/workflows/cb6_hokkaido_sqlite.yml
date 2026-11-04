@@ -1,0 +1,15 @@
+name: CB6 Hokkaido SQLite
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  main-guard:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No processing on main
+        run: echo "CB6 SQLite processing is disabled on main."
