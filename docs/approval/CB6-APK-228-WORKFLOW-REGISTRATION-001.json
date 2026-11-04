@@ -1,0 +1,11 @@
+{
+  "proposed_change_id": "CB6-APK-228-WORKFLOW-REGISTRATION-001",
+  "basis_head": "c66f15d85c3294656c33a9672a40fc557fea8e2f",
+  "planned_paths": [
+    ".github/workflows/cb6_228_apk_candidate.yml"
+  ],
+  "forbidden_scope": [],
+  "affected_domains": [
+    "github-actions-workflow-registration"
+  ]
+}
