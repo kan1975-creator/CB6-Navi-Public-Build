@@ -103,6 +103,7 @@ jobs:
           printf 'sdk.dir=%s\n' "$ANDROID_HOME" > comaps/android/local.properties
           echo "722fa05ed4de73fcc1b7c47161b66933d88efdd1b99c606195d0746e5933073a" | awk '{print $1 "  handoff/build-support/e230-102/candidate211.zip"}' | sha256sum -c -
           python3 handoff/build-support/e230-102/apply_211.py handoff/build-support/e230-102/candidate211.zip comaps
+          python3 handoff/build-support/e230-102/stage105/apply_105_after_211.py comaps handoff/build-support/e230-102/stage105/Cb6DataStatusFragment.java
       - name: Resolve missing Gradle dependencies without feature tests
         run: |
           set -euo pipefail
