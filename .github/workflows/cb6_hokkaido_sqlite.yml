@@ -1,0 +1,57 @@
+name: CB6 Hokkaido SQLite candidate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PBF parser
+        run: python -m pip install --disable-pip-version-check pyosmium
+      - name: Download and verify fixed PBF
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          curl --fail --location --retry 3 --output work/hokkaido.osm.pbf https://download.geofabrik.de/asia/japan/hokkaido-261028.osm.pbf
+          test "$(stat -c%s work/hokkaido.osm.pbf)" = "189933423"
+          echo '5bdc970d577f55e662296a45c057af602bad746fcfced6d9a96dc8cc6041d447  work/hokkaido.osm.pbf' | sha256sum -c -
+      - name: Count matching generator semantics
+        run: python tools/count_hokkaido_pbf.py work/hokkaido.osm.pbf work/counts.json
+      - name: Generate old SQLite and convert to V2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess,sys
+          d=json.load(open('work/counts.json',encoding='utf-8'))
+          cmd=[sys.executable,'tools/build_hokkaido_signals.py', 'work/hokkaido.osm.pbf','work/hokkaido_signals_old.sqlite',
+            '--future-sha256','5bdc970d577f55e662296a45c057af602bad746fcfced6d9a96dc8cc6041d447',
+            '--future-bytes','189933423','--future-date','2026-10-28',
+            '--future-node-count',str(d['signal_nodes']),'--future-way-count',str(d['signal_ways']),
+            '--future-highway-way-count',str(d['highway_ways']),
+            '--future-geofabrik-url','https://download.geofabrik.de/asia/japan/hokkaido-261028.osm.pbf']
+          subprocess.run(cmd,check=True)
+          subprocess.run([sys.executable,'tools/convert_hokkaido_signals_v2.py',
+            'work/hokkaido_signals_old.sqlite','work/hokkaido_signals_v2.sqlite'],check=True)
+          PY
+      - name: Prepare bounded artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s work/hokkaido_signals_v2.sqlite
+          test "$(stat -c%s work/hokkaido_signals_v2.sqlite)" -le 104857600
+          sha256sum work/hokkaido_signals_v2.sqlite > work/v2.sha256
+      - name: Upload V2 candidate only
+        uses: actions/upload-artifact@v4
+        with:
+          name: cb6-hokkaido-v2-unsigned-candidate
+          path: |
+            work/hokkaido_signals_v2.sqlite
+            work/counts.json
+            work/v2.sha256
+          retention-days: 1
+          if-no-files-found: error
