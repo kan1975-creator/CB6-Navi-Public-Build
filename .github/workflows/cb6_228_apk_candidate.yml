@@ -1,0 +1,17 @@
+# Registration-only entrypoint on the default branch. Never builds on main.
+# The real candidate implementation is on cb6-apk-228-dry-run-only.
+name: CB6 228 arm64 APK candidate
+on:
+  workflow_dispatch:
+    inputs:
+      approved_commit:
+        description: Exact SHA of separately approved isolated branch commit
+        required: true
+        type: string
+permissions: {}
+jobs:
+  registration-only:
+    if: ${{ false }}
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo 'Registration only; never execute on main.'
