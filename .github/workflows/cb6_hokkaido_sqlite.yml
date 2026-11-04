@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install PBF parser
-        run: python -m pip install --disable-pip-version-check pyosmium
+        run: python -m pip install --disable-pip-version-check osmium
       - name: Download and verify fixed PBF
         shell: bash
         run: |
