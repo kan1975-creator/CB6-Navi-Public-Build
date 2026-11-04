@@ -1,0 +1,12 @@
+--- a/android/app/src/main/java/app/organicmaps/cb6/signals/Cb6SignalUpdateCoordinator.java
++++ b/android/app/src/main/java/app/organicmaps/cb6/signals/Cb6SignalUpdateCoordinator.java
+@@ -65,7 +65,8 @@
+       };
+       if (Looper.myLooper() == Looper.getMainLooper()) action.run();
+       else if (!MAIN.post(action)) {
+-        remember(error);
++        try { remember(error); }
++        catch (RuntimeException storageError) { Log.e(TAG, "Update result storage failed after main handler rejection", storageError); }
+         Log.e(TAG, "Main handler rejected completion");
+       }
+     }

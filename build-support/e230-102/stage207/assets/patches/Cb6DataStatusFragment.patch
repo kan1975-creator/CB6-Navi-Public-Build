@@ -1,0 +1,49 @@
+--- a/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
++++ b/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
+@@ -11,6 +11,8 @@
+ import androidx.annotation.Nullable;
+ import androidx.preference.Preference;
+ import app.organicmaps.R;
++import app.organicmaps.cb6.signals.Cb6SignalDistributionConfig;
++import app.organicmaps.cb6.signals.Cb6SignalUpdateCoordinator;
+ import app.organicmaps.cb6.data.Cb6DataStatusRepository;
+ import app.organicmaps.cb6.data.Cb6DataStatusRepository.Kind;
+ import app.organicmaps.cb6.data.Cb6DataStatusRepository.Status;
+@@ -30,7 +32,36 @@
+       if (update == null) continue;
+       update.setEnabled(false);
+       update.setSummary("更新先または安全な更新接続が未確定のため利用できません");
++      if (kind == Kind.SIGNAL_SQLITE) {
++        update.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
++        update.setSummary("署名検証済み北海道信号機SQLiteを取得（候補・未検証）");
++        update.setOnPreferenceClickListener(preference -> {
++          final app.organicmaps.cb6.signals.SignalController controller = Cb6SignalDistributionConfig.current();
++          if (controller == null || Cb6SignalUpdateCoordinator.inFlight()) return true;
++          preference.setEnabled(false);
++          preference.setSummary("更新処理中");
++          final int token = generation;
++          Cb6SignalUpdateCoordinator.start(requireContext(), controller, new Cb6SignalUpdateCoordinator.Completion() {
++            @Override public void success() {
++              if (token != generation || !isAdded() || getView() == null) return;
++              preference.setSummary("信号機SQLite更新完了");
++              refresh();
++              preference.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
++            }
++            @Override public void failure(Exception error) {
++              if (token != generation || !isAdded() || getView() == null) return;
++              preference.setSummary("更新失敗: " + error.getClass().getSimpleName());
++              preference.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
++            }
++          });
++          return true;
++        });
++      }
+     }
+   }
++  private void syncSignalUpdateAvailability() {
++    Preference update = findPreference("cb6_update_signal_sqlite");
++    if (update != null) update.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
++  }
+-  @Override public void onResume() { super.onResume(); if(repository!=null) refresh(); }
++  @Override public void onResume() { super.onResume(); syncSignalUpdateAvailability(); if(repository!=null) refresh(); }
+   @Override public void onDestroy() {

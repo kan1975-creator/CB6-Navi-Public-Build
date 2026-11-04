@@ -1,0 +1,20 @@
+--- a/android/app/src/main/java/app/organicmaps/MwmActivity.java
++++ b/android/app/src/main/java/app/organicmaps/MwmActivity.java
+@@ -582,2 +582,3 @@
+     mCb6Signals = new app.organicmaps.cb6.signals.SignalController(getApplicationContext());
++    app.organicmaps.cb6.signals.Cb6SignalDistributionConfig.register(mCb6Signals);
+     mCb6ManualImport = new app.organicmaps.cb6.signals.ManualSignalDatabaseImport(this, mCb6Signals);
+@@ -1274,2 +1275,3 @@
+     if (mCb6Signals != null) mCb6Signals.start(Map.isEngineCreated());
++    app.organicmaps.cb6.signals.Cb6SignalDistributionConfig.onControllerStarted(mCb6Signals);
+     Framework.nativePlacePageActivationListener(this);
+@@ -1288,3 +1290,4 @@
+     app.organicmaps.sdk.downloader.ChunkTask.setDiagnosticListener(null);
++    app.organicmaps.cb6.signals.Cb6SignalDistributionConfig.onControllerStopping(mCb6Signals);
+     if (mCb6Signals != null) mCb6Signals.stop();
+     super.onStop();
+@@ -1315,3 +1318,4 @@
+   protected void onSafeDestroy()
+   {
++    app.organicmaps.cb6.signals.Cb6SignalDistributionConfig.unregister(mCb6Signals);
+     super.onSafeDestroy();

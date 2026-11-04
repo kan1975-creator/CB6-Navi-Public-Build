@@ -1,0 +1,202 @@
+--- a/android/app/src/main/java/app/organicmaps/cb6/signals/Cb6SignalUpdateCoordinator.java
++++ b/android/app/src/main/java/app/organicmaps/cb6/signals/Cb6SignalUpdateCoordinator.java
+@@ -19,22 +19,55 @@
+   private static final ExecutorService WORK = Executors.newSingleThreadExecutor();
+   private static final Handler MAIN = new Handler(Looper.getMainLooper());
+   private static final String TAG = "Cb6SignalUpdate";
++  private static final String RESULT_PREFS = "cb6_signal_update_result";
++  private static final java.util.Set<Runnable> observers = new java.util.HashSet<>();
++  // Registration, state changes and callbacks are serialized on the main thread.
++  public static void observe(Runnable observer) { observers.add(observer); }
++  public static void unobserve(Runnable observer) { observers.remove(observer); }
++  public static String lastResult(Context context) {
++    return context.getSharedPreferences(RESULT_PREFS, Context.MODE_PRIVATE).getString("latest", null);
++  }
++  private static void changed() {
++    for (Runnable observer : new java.util.ArrayList<>(observers)) {
++      try { observer.run(); }
++      catch (RuntimeException error) { Log.e(TAG, "Update observer failed", error); }
++    }
++  }
++  public static void start(Context context, SignalController controller) {
++    start(context, controller, new Completion() {
++      public void success() {}
++      public void failure(Exception error) {}
++    });
++  }
+   private Cb6SignalUpdateCoordinator() {}
+   // A completion is attempted at most once. Handler rejection is observable, not silently ignored.
+   private static final class Terminal {
+     private final Completion callback;
+     private final AtomicBoolean delivered = new AtomicBoolean();
+-    Terminal(Completion callback) { this.callback = callback; }
++    private final Context app;
++    Terminal(Context app, Completion callback) { this.app = app; this.callback = callback; }
++    private void remember(Exception error) {
++      try {
++        String result = error == null ? "信号機SQLite更新完了" : "更新失敗: " + error.getClass().getSimpleName();
++        app.getSharedPreferences(RESULT_PREFS, Context.MODE_PRIVATE).edit().putString("latest", result).apply();
++      } finally { IN_FLIGHT.set(false); }
++    }
+     void success() { deliver(null); }
+     void failure(Exception error) { deliver(error); }
+     private void deliver(Exception error) {
+       if (!delivered.compareAndSet(false, true)) return;
+       Runnable action = () -> {
++        try { remember(error); }
++        catch (RuntimeException storageError) { Log.e(TAG, "Update result storage failed", storageError); }
++        changed();
+         try { if (error == null) callback.success(); else callback.failure(error); }
+         catch (RuntimeException callbackError) { Log.e(TAG, "Completion callback failed", callbackError); }
+       };
+       if (Looper.myLooper() == Looper.getMainLooper()) action.run();
+-      else if (!MAIN.post(action)) Log.e(TAG, "Main handler rejected completion");
++      else if (!MAIN.post(action)) {
++        remember(error);
++        Log.e(TAG, "Main handler rejected completion");
++      }
+     }
+   }
+   public static boolean inFlight() { return IN_FLIGHT.get(); }
+@@ -51,19 +84,18 @@
+         activation.shutdown();
+       } catch (RuntimeException shutdownError) {
+         Log.w(TAG, "Activation shutdown exception", shutdownError);
+-      } finally {
+-        IN_FLIGHT.set(false);
+       }
+     }
+   }
+   public static void start(Context context, SignalController controller, Completion callback) {
+     if (Looper.myLooper() != Looper.getMainLooper()) throw new IllegalStateException("Main thread required");
+     if (controller == null || callback == null) throw new IllegalArgumentException("Missing input");
++    Context app = context.getApplicationContext();
++    if (app == null) throw new IllegalStateException("Application context unavailable");
+     if (!IN_FLIGHT.compareAndSet(false, true)) return;
+-    final Terminal terminal = new Terminal(callback);
++    final Terminal terminal = new Terminal(app, callback);
++    changed();
+     try {
+-      Context app = context.getApplicationContext();
+-      if (app == null) throw new IllegalStateException("Application context unavailable");
+       WORK.execute(() -> {
+       File db = null;
+       try {
+@@ -117,12 +149,10 @@
+           try { if (db.exists() && !db.delete()) Log.w(TAG, "Temporary SQLite deletion failed: " + db.getName()); }
+           catch (RuntimeException cleanupError) { Log.w(TAG, "Temporary SQLite cleanup exception", cleanupError); }
+         }
+-        IN_FLIGHT.set(false);
+         terminal.failure(error);
+       }
+     });
+     } catch (RuntimeException schedulingError) {
+-      IN_FLIGHT.set(false);
+       terminal.failure(schedulingError);
+     }
+   }
+--- a/android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java
++++ b/android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java
+@@ -23,6 +23,7 @@
+   private boolean[] publishedForward;
+   private Location location;
+   private boolean active, renderingReady, inFlight, attempted, failed;
++  private String invalidatedDatabase;
+   private int generation;
+   private long lastAttempt;
+   private double lastLat, lastLon;
+@@ -93,6 +94,16 @@
+   public void onSignalDatabaseActivated()
+   {
+     if (!active) return;
++    // The active pointer names the immutable, verified content. The tick also
++    // reconciles it if publication outlives its originating Activity.
++    String selected = context.getSharedPreferences("cb6_signal_db", Context.MODE_PRIVATE)
++        .getString("active_file", null);
++    if (selected == null) { invalidatedDatabase = null; return; }
++    if (selected.equals(invalidatedDatabase)) return;
++    final String database;
++    try { database = SQLiteSignalProvider.activeFile(context).getName(); }
++    catch (IllegalStateException unavailable) { return; }
++    if (database.equals(invalidatedDatabase)) return;
+     // Invalidate results from any acquisition started before the database switch.
+     ++generation;
+     inFlight = false;
+@@ -101,6 +112,7 @@
+     published = null;
+     publishedForward = null;
+     requestIfNeeded();
++    invalidatedDatabase = database;
+   }
+ 
+   private final Runnable tick = new Runnable()
+@@ -108,6 +120,7 @@
+     @Override public void run()
+     {
+       if (!active) return;
++      onSignalDatabaseActivated();
+       requestIfNeeded();
+       main.postDelayed(this, 1000);
+     }
+--- a/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
++++ b/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
+@@ -33,37 +33,38 @@
+       update.setEnabled(false);
+       update.setSummary("更新先または安全な更新接続が未確定のため利用できません");
+       if (kind == Kind.SIGNAL_SQLITE) {
+-        update.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
+-        update.setSummary("署名検証済み北海道信号機SQLiteを取得（候補・未検証）");
+         update.setOnPreferenceClickListener(preference -> {
+           final app.organicmaps.cb6.signals.SignalController controller = Cb6SignalDistributionConfig.current();
+-          if (controller == null || Cb6SignalUpdateCoordinator.inFlight()) return true;
+-          preference.setEnabled(false);
+-          preference.setSummary("更新処理中");
+-          final int token = generation;
+-          Cb6SignalUpdateCoordinator.start(requireContext(), controller, new Cb6SignalUpdateCoordinator.Completion() {
+-            @Override public void success() {
+-              if (token != generation || !isAdded() || getView() == null) return;
+-              preference.setSummary("信号機SQLite更新完了");
+-              refresh();
+-              preference.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
+-            }
+-            @Override public void failure(Exception error) {
+-              if (token != generation || !isAdded() || getView() == null) return;
+-              preference.setSummary("更新失敗: " + error.getClass().getSimpleName());
+-              preference.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
+-            }
+-          });
++          if (controller != null && !Cb6SignalUpdateCoordinator.inFlight())
++            Cb6SignalUpdateCoordinator.start(requireContext(), controller);
+           return true;
+         });
+       }
+     }
+   }
++  private final Runnable updateStateChanged = () -> {
++    if (!isAdded() || getView() == null) return;
++    syncSignalUpdateAvailability();
++    if (!Cb6SignalUpdateCoordinator.inFlight() && repository != null) refresh();
++  };
+   private void syncSignalUpdateAvailability() {
+     Preference update = findPreference("cb6_update_signal_sqlite");
+-    if (update != null) update.setEnabled(Cb6SignalDistributionConfig.current() != null && !Cb6SignalUpdateCoordinator.inFlight());
++    if (update == null) return;
++    boolean busy = Cb6SignalUpdateCoordinator.inFlight();
++    String last = Cb6SignalUpdateCoordinator.lastResult(requireContext());
++    update.setEnabled(Cb6SignalDistributionConfig.current() != null && !busy);
++    update.setSummary(busy ? "更新処理中" : last != null ? last : "署名検証済み北海道信号機SQLiteを取得（候補・未検証）");
+   }
+-  @Override public void onResume() { super.onResume(); syncSignalUpdateAvailability(); if(repository!=null) refresh(); }
++  @Override public void onResume() {
++    super.onResume();
++    Cb6SignalUpdateCoordinator.observe(updateStateChanged);
++    syncSignalUpdateAvailability();
++    if (repository != null) refresh();
++  }
++  @Override public void onPause() {
++    Cb6SignalUpdateCoordinator.unobserve(updateStateChanged);
++    super.onPause();
++  }
+   @Override public void onDestroy() {
+     generation++;
+     worker.shutdownNow();
