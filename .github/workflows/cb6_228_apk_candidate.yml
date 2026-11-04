@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-apk-228-dry-run-only'
+    if: github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/cb6-apk-228-dry-run-only' || github.ref == 'refs/heads/cb6-apk-228-r8-fragment-keep-20261104')
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
