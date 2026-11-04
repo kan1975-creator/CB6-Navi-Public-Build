@@ -66,10 +66,22 @@ with zipfile.ZipFile(archive) as z:
         elif dest.exists() or dest.is_symlink():
             raise SystemExit('STOP: target already exists: '+str(dest))
         staged.append((dest,data))
+    # Preserve the XML-instantiated CB6 status Fragment in R8 release builds.
+    rules=root/'android/app/proguard-rules.pro'
+    keep_rule='-keep class app.organicmaps.settings.Cb6DataStatusFragment { *; }'
+    if rules.is_symlink() or not rules.is_file():
+        raise SystemExit('STOP: expected regular ProGuard rules file absent or unsafe')
+    rules_content=rules.read_text(encoding='utf-8')
+    if keep_rule in rules_content:
+        raise SystemExit('STOP: CB6 Fragment keep rule already present')
+    if 'Cb6DataStatusFragment' in rules_content:
+        raise SystemExit('STOP: unexpected existing CB6 Fragment rule')
+    rules_updated=rules_content.rstrip('\n')+'\n'+keep_rule+'\n'
     # Only after all checks pass, write to disposable CoMaps workspace.
     if needs_data_dir:
         new_data_dir.mkdir()
     for dest,data in staged:
         dest.write_bytes(data)
     target.write_text(content.replace(before,after,1),encoding='utf-8')
+    rules.write_text(rules_updated,encoding='utf-8')
     print('PASS: 7 files and one-line SignalController edit applied to disposable workspace')
