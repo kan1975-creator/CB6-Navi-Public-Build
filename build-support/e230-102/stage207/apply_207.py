@@ -36,4 +36,6 @@ for rel in ('patches/Cb6DataStatusFragment.patch', 'patches/MwmActivity.patch', 
 # E189 then E194: must remain sequential.
 apply('stage189/after-E185.patch')
 apply('stage194/after-E189.patch')
+# E257: diagnostic logging only, after E194 changes the Coordinator.
+apply('patches/after-E194-Coordinator-diagnostics.patch')
 print('E207 isolated patch sequence applied; compile/runtime NOT verified')

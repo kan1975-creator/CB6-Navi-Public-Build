@@ -1,0 +1,48 @@
+--- a/android/app/src/main/java/app/organicmaps/cb6/signals/Cb6SignalUpdateCoordinator.java
++++ b/android/app/src/main/java/app/organicmaps/cb6/signals/Cb6SignalUpdateCoordinator.java
+@@ -98,10 +98,13 @@
+     changed();
+     try {
+       WORK.execute(() -> {
++      String phase = "manifest-download";
+       File db = null;
+       try {
+         byte[] manifest = Cb6VerifiedDownloader.small(Cb6SignalDistributionConfig.MANIFEST_URL, 65536);
++        phase = "signature-download";
+         byte[] signature = Cb6VerifiedDownloader.small(Cb6SignalDistributionConfig.SIGNATURE_URL, 64);
++        phase = "signature-verification";
+         if (signature.length != 64) throw new SecurityException("Invalid signature size");
+         byte[] spki = Cb6SignalDistributionConfig.SPKI;
+         byte[] prefix = {0x30,0x2a,0x30,0x05,0x06,0x03,0x2b,0x65,0x70,0x03,0x21,0x00};
+@@ -110,6 +113,7 @@
+         byte[] pub = Arrays.copyOfRange(spki,12,44);
+         if (!Ed25519.verify(signature,0,pub,0,manifest,0,manifest.length))
+           throw new SecurityException("Signature verification failed");
++        phase = "manifest-validation";
+         JSONObject m = new JSONObject(new String(manifest,java.nio.charset.StandardCharsets.UTF_8));
+         if (!"cb6-signals-distribution-v1".equals(m.getString("format"))
+             || !"signals".equals(m.getString("package_kind"))
+@@ -123,11 +127,15 @@
+         String sha = m.getString("sha256");
+         if (bytes <= 0 || bytes > 200000000L || !sha.matches("[0-9a-f]{64}"))
+           throw new SecurityException("Manifest bounds invalid");
++        phase = "temporary-file-creation";
+         db = File.createTempFile("cb6-verified-", ".sqlite", app.getCacheDir());
++        phase = "sqlite-download";
+         Cb6VerifiedDownloader.file(Cb6SignalDistributionConfig.SQLITE_URL, db, bytes);
++        phase = "sqlite-hash-verification";
+         if (db.length() != bytes || !sha.equals(Cb6VerifiedDownloader.sha256(db)))
+           throw new SecurityException("SQLite hash/length mismatch");
+         File downloaded = db;
++        phase = "activation-scheduling";
+         SignalDatabaseActivation activation = new SignalDatabaseActivation(app,controller);
+         try { activation.activateDownloaded(downloaded,sha,new SignalDatabaseActivation.Completion() {
+           @Override public void onSuccess() {
+@@ -146,6 +154,7 @@
+           finishActivation(downloaded, activation); throw schedulingError;
+         }
+       } catch (Exception error) {
++        Log.e(TAG, "SQLite update failed at phase=" + phase, error);
+         if (db != null) {
+           try { if (db.exists() && !db.delete()) Log.w(TAG, "Temporary SQLite deletion failed: " + db.getName()); }
+           catch (RuntimeException cleanupError) { Log.w(TAG, "Temporary SQLite cleanup exception", cleanupError); }

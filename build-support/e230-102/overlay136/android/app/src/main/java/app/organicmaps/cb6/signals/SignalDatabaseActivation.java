@@ -2,12 +2,14 @@ package app.organicmaps.cb6.signals;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** Entry point for a DB file that has already been downloaded by an approved source. */
 public final class SignalDatabaseActivation {
+  private static final String DIAG_TAG = "Cb6SignalActivation";
   private final VerifiedPackageStager stager;
   private final SignalController controller;
   private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -32,13 +34,18 @@ public final class SignalDatabaseActivation {
     executor.execute(() -> {
       File staged = null;
       try {
+        Log.i(DIAG_TAG, "phase=staging-start");
         staged = stager.stage(downloaded, trustedSha256);
+        Log.i(DIAG_TAG, "phase=staging-complete");
+        Log.i(DIAG_TAG, "phase=publication-start");
         stager.activate(staged, trustedSha256);
+        Log.i(DIAG_TAG, "phase=publication-complete");
         main.post(() -> {
           controller.onSignalDatabaseActivated();
           completion.onSuccess();
         });
       } catch (Exception error) {
+        Log.e(DIAG_TAG, "Activation failed", error);
         main.post(() -> completion.onFailure(error));
       } finally {
         if (staged != null && staged.exists()) staged.delete();

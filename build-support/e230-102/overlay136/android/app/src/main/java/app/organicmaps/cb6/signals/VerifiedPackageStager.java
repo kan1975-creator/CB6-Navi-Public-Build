@@ -2,6 +2,7 @@ package app.organicmaps.cb6.signals;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +13,7 @@ import java.util.Locale;
 
 /** Candidate: immutable staged bytes and no-overwrite hard-link publication. */
 public final class VerifiedPackageStager {
+  private static final String DIAG_TAG = "Cb6PackageStager";
   private static final Object PUBLICATION_LOCK = new Object();
   private final Context context;
   public VerifiedPackageStager(Context context) {this.context=context.getApplicationContext();}
@@ -74,9 +76,12 @@ public final class VerifiedPackageStager {
     // createLink is atomic and fails if destination exists; no replacement of an active DB.
     boolean created=false;
     try {
+      Log.i(DIAG_TAG, "phase=hardlink-create-start");
       Files.createLink(target.toPath(),staged.toPath());
+      Log.i(DIAG_TAG, "phase=hardlink-create-complete");
       created=true;
     } catch (java.nio.file.FileAlreadyExistsException exists) {
+      Log.i(DIAG_TAG, "phase=hardlink-already-exists");
       // Re-activation is permitted only for an existing file with identical verified bytes.
       if (!target.isFile() || !expectedSha256.equals(sha256(target))) throw exists;
       SQLiteSignalProvider.validate(target);
