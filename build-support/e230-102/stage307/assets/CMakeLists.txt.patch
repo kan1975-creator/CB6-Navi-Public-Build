@@ -1,0 +1,9 @@
+--- a/android/sdk/src/main/cpp/CMakeLists.txt
++++ b/android/sdk/src/main/cpp/CMakeLists.txt
+@@ -51,6 +51,7 @@
+   app/organicmaps/sdk/DownloadResourcesLegacyActivity.cpp
+   app/organicmaps/sdk/editor/Editor.cpp
+   app/organicmaps/sdk/editor/OpeningHours.cpp
+   app/organicmaps/sdk/editor/OsmOAuth.cpp
++  app/organicmaps/sdk/Cb6AtomicPublish.cpp
+   app/organicmaps/sdk/Framework.cpp

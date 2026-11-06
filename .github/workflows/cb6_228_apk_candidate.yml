@@ -108,6 +108,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 handoff/build-support/e230-102/stage207/apply_207.py comaps handoff/build-support/e230-102/stage207/assets
+      - name: Apply E297 JNI no-replace publication candidate after stage207
+        run: |
+          python3 handoff/build-support/e230-102/stage307/apply_307.py comaps handoff/build-support/e230-102/stage307/assets
       - name: Resolve missing Gradle dependencies without feature tests
         run: |
           set -euo pipefail
