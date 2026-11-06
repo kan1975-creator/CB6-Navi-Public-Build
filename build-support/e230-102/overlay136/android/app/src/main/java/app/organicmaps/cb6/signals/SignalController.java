@@ -26,6 +26,36 @@ public final class SignalController
   private int generation;
   private long lastAttempt;
   private double lastLat, lastLon;
+  // Diagnostics only: never used for acquisition, deduplication, or rendering decisions.
+  private long nextTraceId;
+  private long snapshotTraceId = -1L; // -1 denotes cache or pre-acquisition data.
+  private static final ThreadLocal<Trace> TRACE = new ThreadLocal<>();
+
+  private static final class Trace {
+    final long requestId;
+    final int generation;
+    Trace(long requestId, int generation) {
+      this.requestId = requestId;
+      this.generation = generation;
+    }
+  }
+
+  private static void traceLog(String message) {
+    try { Log.i("CB6-SIGNAL-TRACE", message); }
+    catch (Throwable ignored) { /* Diagnostics must not affect app behavior. */ }
+  }
+
+  static void traceSqliteCount(int count) {
+    Trace t = TRACE.get();
+    if (t != null) traceLog("request_id=" + t.requestId + " generation=" + t.generation
+        + " stage=sqlite result=success count=" + count);
+  }
+
+  static void traceMergedCount(int count) {
+    Trace t = TRACE.get();
+    if (t != null) traceLog("request_id=" + t.requestId + " generation=" + t.generation
+        + " stage=merged result=success count=" + count);
+  }
 
   public SignalController(Context context) {
     this.context = context.getApplicationContext();
@@ -51,6 +81,7 @@ public final class SignalController
         main.post(() -> {
           if (!active || token != generation || !snapshot.points.isEmpty()) return;
           snapshot = cached;
+          snapshotTraceId = -1L; // Cached data is not a new SQLite acquisition.
           publish();
         });
       }
@@ -127,21 +158,30 @@ public final class SignalController
     inFlight = true;
     final double lat = lastLat, lon = lastLon;
     final int token = generation;
+    final long requestId = ++nextTraceId;
     worker.execute(() -> {
       SignalSnapshot result = null;
+      TRACE.set(new Trace(requestId, token));
       try { result = provider.load(lat, lon); }
       catch (Exception ignored) { /* Last valid snapshot remains visible. */ }
+      finally { TRACE.remove(); }
       final SignalSnapshot loaded = result;
       main.post(() -> {
-        if (!active || token != generation) return;
+        if (!active || token != generation) {
+          traceLog("request_id=" + requestId + " generation=" + token + " stage=controller result=stale");
+          return;
+        }
         inFlight = false;
         failed = loaded == null;
         if (failed) lastAttempt = SystemClock.elapsedRealtime(); // retry 12s after failure, no busy loop
         else
         {
           snapshot = loaded;
+          snapshotTraceId = requestId;
           publish();
         }
+        if (failed) traceLog("request_id=" + requestId + " generation=" + token
+            + " stage=controller result=error");
 
         if (app.organicmaps.BuildConfig.DEBUG)
           Log.i("CB6-V2-Signal", failed ? "refresh failed; retained snapshot" : "loaded=" + loaded.points.size());
@@ -179,6 +219,9 @@ public final class SignalController
     if (published == snapshot && Arrays.equals(publishedForward, forward))
     {
 
+      traceLog("request_id=" + snapshotTraceId
+          + " source=" + (snapshotTraceId < 0 ? "cache_or_initial" : "live")
+          + " stage=jni result=skipped reason=unchanged count=" + n);
       return;
     }
 
@@ -192,6 +235,9 @@ public final class SignalController
       centerLats[i] = center.lat; centerLons[i] = center.lon;
       memberIds[i] = member.id; centerIds[i] = center.id;
     }
+    traceLog("request_id=" + snapshotTraceId
+        + " source=" + (snapshotTraceId < 0 ? "cache_or_initial" : "live")
+        + " stage=jni result=attempt count=" + ids.length);
     Framework.nativeSetCb6Signals(location.getLatitude(), location.getLongitude(), ids, lats, lons, forward,
         memberLats, memberLons, centerLats, centerLons, memberIds, centerIds);
     published = snapshot;

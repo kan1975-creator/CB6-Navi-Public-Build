@@ -59,6 +59,8 @@ public final class CompositeSignalProvider implements SignalProvider
         }
       }
     }
+    // The outer composite is the one whose supplement is SQLite.
+    if (supplement instanceof SQLiteSignalProvider) SignalController.traceMergedCount(merged.size());
     return new SignalSnapshot(merged, topologyMembers, topologyCenters);
   }
 

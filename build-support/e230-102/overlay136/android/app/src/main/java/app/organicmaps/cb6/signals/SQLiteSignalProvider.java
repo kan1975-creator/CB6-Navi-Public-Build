@@ -155,6 +155,7 @@ public final class SQLiteSignalProvider implements SignalProvider {
       if (!snapshot.delete() && snapshot.exists())
         throw new java.io.IOException("Private read snapshot cleanup failed");
     }
+    SignalController.traceSqliteCount(points.size());
     return new SignalSnapshot(points,members,centers);
   }
 
