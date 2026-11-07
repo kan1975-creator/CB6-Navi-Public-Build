@@ -1,0 +1,35 @@
+name: CB6 G1 fixed-source diff diagnostic
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cb6-g1-fixed-source-diff-diagnostic
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-apk-228-r8-fragment-keep-20261104' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout diagnostic files only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify inputs and generate read-only diff
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+          GH_REF: ${{ github.ref }}
+          GH_EVENT_NAME: ${{ github.event_name }}
+          GH_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: python3 diagnostic/cb6_g1_fixed_diff.py
+      - name: Upload verified diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-G1-FIXED-SOURCE-DIFF-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: diagnostic-output/
+          if-no-files-found: error
+          retention-days: 30
