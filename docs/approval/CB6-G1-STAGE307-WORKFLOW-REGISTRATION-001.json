@@ -1,0 +1,11 @@
+{
+  "proposed_change_id": "CB6-G1-STAGE307-WORKFLOW-REGISTRATION-001",
+  "basis_head": "b9d98b7802c8390b9377bbed4a861849bad7f605",
+  "planned_paths": [
+    ".github/workflows/cb6_g1_baseline_diagnostic.yml"
+  ],
+  "forbidden_scope": [],
+  "affected_domains": [
+    "github-actions-workflow-registration"
+  ]
+}
