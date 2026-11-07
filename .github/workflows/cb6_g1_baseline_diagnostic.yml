@@ -1,0 +1,149 @@
+name: CB6 G1 stage307 baseline diagnostic
+on:
+  workflow_dispatch:
+    inputs:
+      approved_commit:
+        description: Exact approved fixed commit
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cb6-g1-stage307-diagnostic
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/cb6-apk-228-r8-fragment-keep-20261104'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
+      SKIP_MAP_DOWNLOAD: '1'
+      SKIP_GENERATE_SYMBOLS: '1'
+      SKIP_GENERATE_DRULES: '1'
+      SKIP_GENERATE_JSON_STRINGS: '1'
+      SKIP_GENERATE_STRINGS: '1'
+      SKIP_GENERATE_SERBIAN_LATIN_STRINGS: '1'
+      SKIP_PYTHON_VENV: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Verify exact actor, branch, commit and first attempt
+        env:
+          APPROVED_COMMIT: ${{ inputs.approved_commit }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'kan1975-creator/CB6-Navi-Public-Build'
+          test "$GITHUB_ACTOR" = 'kan1975-creator'
+          test "$GITHUB_TRIGGERING_ACTOR" = 'kan1975-creator'
+          test "$GITHUB_RUN_ATTEMPT" = '1'
+          test "$APPROVED_COMMIT" = 'b2e481d99ecb30b6444175b0327b3450f1c29250'
+      - uses: actions/checkout@v4
+        with:
+          ref: b2e481d99ecb30b6444175b0327b3450f1c29250
+          persist-credentials: false
+          path: handoff
+      - name: Create evidence directory
+        run: |
+          set -euo pipefail
+          test "$(git -C handoff rev-parse HEAD)" = "b2e481d99ecb30b6444175b0327b3450f1c29250"
+          mkdir -p handoff/build-support/e230-102/out
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.4'
+          cache-disabled: true
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Install fixed Android tools and host dependencies
+        run: |
+          set -euo pipefail
+          sdkmanager 'platforms;android-36' 'build-tools;35.0.0' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1' 2>&1 | tee handoff/build-support/e230-102/out/sdk.log
+          sudo apt-get update
+          sudo apt-get install -y ninja-build cmake build-essential python3-venv zlib1g-dev
+          python3 -m venv "$RUNNER_TEMP/cb6-python"
+          "$RUNNER_TEMP/cb6-python/bin/pip" install protobuf==3.20.3
+          echo "$RUNNER_TEMP/cb6-python/bin" >> "$GITHUB_PATH"
+      - name: Fetch immutable CoMaps source and pinned submodules
+        run: |
+          set -euo pipefail
+          git init comaps
+          git -C comaps remote add origin https://github.com/comaps/comaps.git
+          git -C comaps fetch --depth=1 origin "$COMAPS_SHA"
+          git -C comaps checkout --detach FETCH_HEAD
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          git -C comaps submodule sync --recursive
+          git -C comaps config submodule.3party/freetype/freetype.url https://github.com/freetype/freetype.git
+          git -C comaps config submodule.3party/protobuf/protobuf.url https://github.com/protocolbuffers/protobuf.git
+          git -C comaps submodule update --init --recursive --depth=1 --jobs=4 2>&1 | tee handoff/build-support/e230-102/out/submodules.log
+          git -C comaps submodule status --recursive > handoff/build-support/e230-102/out/submodules.txt
+          if grep -E '^[+U-]' handoff/build-support/e230-102/out/submodules.txt; then exit 1; fi
+      - name: Apply successful handoff, overlay136 and 211 candidate in disposable tree
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/apply_handoff.py comaps
+          cp -a handoff/build-support/e230-102/overlay136/. comaps/
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          p = Path('comaps/android/sdk/src/main/cpp/CMakeLists.txt')
+          source = p.read_text()
+          anchor = 'omim_add_library(${PROJECT_NAME} SHARED ${SRC})'
+          marker = '# CB6 Gold correction: organicmaps-only IPO disable'
+          if source.count(anchor) != 1 or marker in source:
+              raise SystemExit('STOP: Gold correction anchor changed')
+          patch = """\nif(ANDROID AND PROJECT_NAME STREQUAL "organicmaps")\n  set_target_properties(${PROJECT_NAME} PROPERTIES\n    INTERPROCEDURAL_OPTIMIZATION FALSE\n    INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO FALSE)\nendif()"""
+          p.write_text(source.replace(anchor, anchor + '\n\n' + marker + patch, 1))
+          PYCODE
+          if [ ! -d comaps/3party/boost/boost ]; then
+            (cd comaps/3party/boost && ./bootstrap.sh && ./b2 headers)
+          fi
+          printf 'sdk.dir=%s\n' "$ANDROID_HOME" > comaps/android/local.properties
+          echo "722fa05ed4de73fcc1b7c47161b66933d88efdd1b99c606195d0746e5933073a" | awk '{print $1 "  handoff/build-support/e230-102/candidate211.zip"}' | sha256sum -c -
+          python3 handoff/build-support/e230-102/apply_211.py handoff/build-support/e230-102/candidate211.zip comaps
+          python3 handoff/build-support/e230-102/stage105/apply_105_after_211.py comaps handoff/build-support/e230-102/stage105/Cb6DataStatusFragment.java
+      - name: Apply isolated E185 E189 E194 candidate after stage105
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/stage207/apply_207.py comaps handoff/build-support/e230-102/stage207/assets
+      - name: Apply E297 JNI no-replace publication candidate after stage207
+        run: |
+          python3 handoff/build-support/e230-102/stage307/apply_307.py comaps handoff/build-support/e230-102/stage307/assets
+      - name: Capture exact G1 files immediately after stage307
+        run: |
+          set -euo pipefail
+          OUT=handoff/build-support/e230-102/out/g1
+          mkdir -p "$OUT"
+          test "$(git -C comaps rev-parse HEAD)" = "$COMAPS_SHA"
+          printf '%s\n' "$(git -C handoff rev-parse HEAD)" > "$OUT/handoff_commit.txt"
+          printf '%s\n' "$GITHUB_SHA" > "$OUT/workflow_commit.txt"
+          printf '%s\n' "$COMAPS_SHA" > "$OUT/comaps_commit.txt"
+          for p in android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc libs/map/cb6_signal_mark.hpp; do
+            test -f "comaps/$p"
+            mkdir -p "$OUT/$(dirname "$p")"
+            cp "comaps/$p" "$OUT/$p"
+            cmp "comaps/$p" "$OUT/$p"
+            (cd "$OUT" && sha256sum "$p") >> "$OUT/SHA256SUMS.txt"
+            wc -c < "$OUT/$p" | tr -d ' ' | xargs printf '%s bytes\n' >> "$OUT/sizes.txt"
+            printf '%s\n' "$p" >> "$OUT/paths.txt"
+          done
+          (cd "$OUT" && sha256sum -c SHA256SUMS.txt)
+          cp handoff/build-support/e230-102/out/submodules.txt "$OUT/submodules.txt"
+          printf '%s\n' 'stage307 completed; G1 capture succeeded' > "$OUT/stage307_status.txt"
+          printf '%s\n' 'G1_BASELINE_VERIFIED' > "$OUT/G1_SUCCESS.txt"
+      - name: Upload diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CB6-G1-STAGE307-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: |
+            handoff/build-support/e230-102/out/g1/
+            handoff/build-support/e230-102/out/submodules.log
+            handoff/build-support/e230-102/out/sdk.log
+          if-no-files-found: warn
+          retention-days: 30
