@@ -1,0 +1,11 @@
+{
+  "proposed_change_id": "CB6-G1-FIXED-SOURCE-DIFF-WORKFLOW-001",
+  "basis_head": "4f14525aee322d24dd151d0ef4c639a8c2b71cdb",
+  "planned_paths": [
+    ".github/workflows/cb6_g1_fixed_source_diff_diagnostic.yml"
+  ],
+  "forbidden_scope": [],
+  "affected_domains": [
+    "github-actions-workflow-registration"
+  ]
+}
