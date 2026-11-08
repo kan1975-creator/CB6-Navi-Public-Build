@@ -32,13 +32,74 @@ SPECS = [
 ]
 
 def fetch(url, token, accept):
+    """Fetch API inputs; never forward the bearer token to an artifact host."""
+    import urllib.error
+    from urllib.parse import urlsplit
+
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, req, fp, code, msg, headers, newurl):
+            return None
+
+    try:
+        api_url = urlsplit(url)
+        valid_api = (api_url.scheme == 'https' and api_url.hostname == 'api.github.com'
+                     and api_url.username is None and api_url.password is None
+                     and api_url.port in (None, 443))
+    except ValueError:
+        valid_api = False
+    if not valid_api:
+        raise RuntimeError('API_URL_REJECTED')
+    is_artifact = api_url.path.endswith(f'/actions/artifacts/{ARTIFACT_ID}/zip')
+    opener = urllib.request.build_opener(NoRedirect)
     req = urllib.request.Request(url, headers={
         'Authorization': 'Bearer ' + token,
         'Accept': accept,
         'X-GitHub-Api-Version': '2022-11-28',
         'User-Agent': 'cb6-g1-fixed-diff-readonly'})
-    with urllib.request.urlopen(req, timeout=45) as response:
-        return response.read()
+    stage = 'ARTIFACT_API' if is_artifact else 'CONTENTS_API'
+    try:
+        with opener.open(req, timeout=45) as response:
+            if is_artifact:
+                raise RuntimeError('ARTIFACT_API_EXPECTED_302')
+            if response.getcode() != 200:
+                raise RuntimeError('CONTENTS_API_UNEXPECTED_STATUS')
+            return response.read()
+    except urllib.error.HTTPError as exc:
+        if not is_artifact or exc.code != 302:
+            raise RuntimeError(f'{stage}_HTTP_{exc.code}') from None
+        location = exc.headers.get('Location', '')
+        # GitHub documents these domains for workflow artifact transfer.
+        # This is a transport-domain restriction, NOT proof of GitHub ownership
+        # of an individual Azure Blob account. Trust starts at the TLS API 302.
+        allowed_exact = {'results-receiver.actions.githubusercontent.com'}
+        def allowed_artifact_host(host):
+            return (host in allowed_exact or
+                    re.fullmatch(r'[a-z0-9-]+\.blob\.core\.windows\.net', host) is not None)
+        try:
+            target = urlsplit(location)
+            host = (target.hostname or '').lower()
+            valid = (allowed_artifact_host(host) and target.scheme == 'https'
+                     and target.port in (None, 443) and target.username is None
+                     and target.password is None and not target.fragment)
+        except (ValueError, TypeError):
+            valid = False
+        if not valid:
+            raise RuntimeError('ARTIFACT_REDIRECT_REJECTED') from None
+        download = urllib.request.Request(location, headers={
+            'User-Agent': 'cb6-g1-fixed-diff-readonly'})
+        try:
+            with opener.open(download, timeout=45) as response:
+                if response.getcode() != 200:
+                    raise RuntimeError('ARTIFACT_DOWNLOAD_UNEXPECTED_STATUS')
+                return response.read()
+        except urllib.error.HTTPError as download_error:
+            if download_error.code in (301, 302, 303, 307, 308):
+                raise RuntimeError('ARTIFACT_SECOND_REDIRECT_REJECTED') from None
+            raise RuntimeError(f'ARTIFACT_DOWNLOAD_HTTP_{download_error.code}') from None
+        except (urllib.error.URLError, TimeoutError, OSError):
+            raise RuntimeError('ARTIFACT_DOWNLOAD_NETWORK_ERROR') from None
+    except (urllib.error.URLError, TimeoutError, OSError):
+        raise RuntimeError(f'{stage}_NETWORK_ERROR') from None
 
 def verify(label, data, expected_bytes, expected_sha):
     sha = hashlib.sha256(data).hexdigest()
