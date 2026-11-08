@@ -54,9 +54,18 @@ jobs:
       - name: Install Gradle 8.14.4 without setup-gradle action
         run: |
           set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/handoff/build-support/e230-102/out"
+          exec > >(tee "$OUT/gradle-install.log") 2>&1
+          # Official Gradle 8.14.4 binary release asset; avoid distribution redirects.
           curl --fail --location --retry 2 --retry-delay 5 \
+            --connect-timeout 30 --max-time 300 \
+            --header 'Accept: application/octet-stream' \
+            --header 'X-GitHub-Api-Version: 2022-11-28' \
             --output "$RUNNER_TEMP/gradle-8.14.4-bin.zip" \
-            https://services.gradle.org/distributions/gradle-8.14.4-bin.zip
+            https://api.github.com/repos/gradle/gradle-distributions/releases/assets/344871718
+          printf '%s  %s\n' \
+            'f1771298a70f6db5a29daf62378c4e18a17fc33c9ba6b14362e0cdf40610380d' \
+            "$RUNNER_TEMP/gradle-8.14.4-bin.zip" | sha256sum --check --strict
           unzip -q "$RUNNER_TEMP/gradle-8.14.4-bin.zip" -d "$RUNNER_TEMP"
           test -x "$RUNNER_TEMP/gradle-8.14.4/bin/gradle"
           echo "$RUNNER_TEMP/gradle-8.14.4/bin" >> "$GITHUB_PATH"
