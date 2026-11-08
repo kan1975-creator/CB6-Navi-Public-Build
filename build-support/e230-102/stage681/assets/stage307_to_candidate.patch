@@ -293,11 +293,17 @@
 +}
 --- a/libs/map/cb6_signal_mark.hpp
 +++ b/libs/map/cb6_signal_mark.hpp
-@@ -12,12 +12,10 @@
+@@ -12,12 +12,16 @@
    // Only display selection changes; all marks are retained at their source anchors.
    void SetShowAt200m(bool showAt200m) { m_showAt200m = showAt200m; SetDirty(); }
  
 -  void SetFullScale(bool full) { m_fullScale = full; SetDirty(); }
++  void SetFullScale(bool full)
++  {
++    // Legacy renderer compatibility; display selection uses SetShowAt200m.
++    (void)full;
++  }
++
 -
    drape_ptr<SymbolNameZoomInfo> GetSymbolNames() const override
    {
@@ -307,7 +313,7 @@
        symbols->insert({15, "cb6-signal-xs"});
      if (m_forward)
      {
-@@ -32,12 +30,11 @@
+@@ -32,12 +36,11 @@
    }
    int GetMinZoom() const override
    {
