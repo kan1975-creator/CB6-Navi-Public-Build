@@ -111,6 +111,10 @@ jobs:
       - name: Apply E297 JNI no-replace publication candidate after stage207
         run: |
           python3 handoff/build-support/e230-102/stage307/apply_307.py comaps handoff/build-support/e230-102/stage307/assets
+      - name: Apply isolated G1 signal representative candidate after stage307
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/stage681/apply_681.py comaps handoff/build-support/e230-102/stage681/assets/stage307_to_candidate.patch
       - name: Resolve missing Gradle dependencies without feature tests
         run: |
           set -euo pipefail
