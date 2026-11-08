@@ -51,10 +51,15 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.14.4'
-          cache-disabled: true
+      - name: Install Gradle 8.14.4 without setup-gradle action
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --retry-delay 5 \
+            --output "$RUNNER_TEMP/gradle-8.14.4-bin.zip" \
+            https://services.gradle.org/distributions/gradle-8.14.4-bin.zip
+          unzip -q "$RUNNER_TEMP/gradle-8.14.4-bin.zip" -d "$RUNNER_TEMP"
+          test -x "$RUNNER_TEMP/gradle-8.14.4/bin/gradle"
+          echo "$RUNNER_TEMP/gradle-8.14.4/bin" >> "$GITHUB_PATH"
       - uses: android-actions/setup-android@v3
         with:
           packages: platform-tools
