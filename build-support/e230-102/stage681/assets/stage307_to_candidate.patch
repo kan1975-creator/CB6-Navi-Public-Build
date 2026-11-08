@@ -1,6 +1,12 @@
 --- a/android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc
 +++ b/android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc
-@@ -5,9 +5,11 @@
+@@ -1,3 +1,5 @@
++#include <unordered_map>
++
+ // Included inside Framework.cpp's existing extern "C" section.
+ // Caller: Android main thread, matching BookmarkManager's thread contract.
+ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
+@@ -5,9 +7,11 @@
  {
    if (!idArray || !latArray || !lonArray || !forwardArray || !memberLatArray || !memberLonArray || !centerLatArray || !centerLonArray || !memberIdArray || !centerIdArray)
    {
@@ -12,7 +18,7 @@
    if (n > 1400 || env->GetArrayLength(idArray) != n || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
    jsize const topologyN = env->GetArrayLength(memberLatArray);
    if (topologyN > 1400 || env->GetArrayLength(memberLonArray) != topologyN || env->GetArrayLength(centerLatArray) != topologyN || env->GetArrayLength(centerLonArray) != topologyN || env->GetArrayLength(memberIdArray) != topologyN || env->GetArrayLength(centerIdArray) != topologyN) return;
-@@ -40,28 +42,257 @@
+@@ -40,28 +44,268 @@
    for (jsize i = 0; i < n; ++i)
      if (!std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0
          || lons[i] < -180.0 || lons[i] > 180.0) return;
@@ -66,18 +72,29 @@
 +
 +  // Group identity is the topology-verified centre ID, never centre proximity.
 +  // If the same ID refers to inconsistent centre coordinates, it is untrusted.
++  // Validate each centre ID at most once per JNI invocation.  The cache is
++  // local: it cannot retain stale topology across subsequent input updates.
++  std::unordered_map<jlong, bool> groupReliabilityCache;
 +  auto const reliableGroupId = [&](jlong groupId)
 +  {
 +    if (groupId <= 0) return false;
++    auto const cached = groupReliabilityCache.find(groupId);
++    if (cached != groupReliabilityCache.end()) return cached->second;
 +    jsize first = -1;
++    bool reliable = true;
 +    for (jsize t = 0; t < topologyN; ++t)
 +    {
 +      if (centerIds[t] != groupId) continue;
 +      if (first < 0) { first = t; continue; }
 +      if (distanceMeters(centerLats[t], centerLons[t], centerLats[first], centerLons[first]) > kDirectDuplicateM)
-+        return false;
++      {
++        reliable = false;
++        break;
++      }
 +    }
-+    return first >= 0;
++    reliable = reliable && first >= 0;
++    groupReliabilityCache.emplace(groupId, reliable);
++    return reliable;
 +  };
 +
 +  // Keep all original MWM signal anchors at every z17+ scale.
@@ -303,8 +320,7 @@
 +    // Legacy renderer compatibility; display selection uses SetShowAt200m.
 +    (void)full;
 +  }
-+
--
+ 
    drape_ptr<SymbolNameZoomInfo> GetSymbolNames() const override
    {
      auto symbols = make_unique_dp<SymbolNameZoomInfo>();
