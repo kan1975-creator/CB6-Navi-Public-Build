@@ -15,9 +15,18 @@ def one(source, before, after, label):
     if count != 1:
         raise SystemExit(f"STOP: {label}: expected one anchor, got {count}")
     return source.replace(before, after, 1)
-j = one(j,
-    "this.provider = new CompositeSignalProvider(\n        new CompositeSignalProvider(new OverpassSignalProvider(), new VerifiedSignalProvider()),\n        new SQLiteSignalProvider(this.context));",
-    "this.provider = new SQLiteSignalProvider(this.context);", "offline provider")
+# Accept formatting changes in the composed provider expression, not unrelated code.
+import re
+provider_pattern = re.compile(r"(?m)^(?P<indent>[ \\t]*)this\\.provider\\s*=\\s*new\\s+CompositeSignalProvider\\s*\\([\\s\\S]*?\\);")
+matches = list(provider_pattern.finditer(j))
+if len(matches) != 1:
+    raise SystemExit(f"STOP: offline provider: expected one assignment, got {len(matches)}")
+expression = matches[0].group(0)
+for required in ("OverpassSignalProvider", "VerifiedSignalProvider", "SQLiteSignalProvider"):
+    if required not in expression:
+        raise SystemExit("STOP: offline provider: unexpected source " + required)
+j = j[:matches[0].start()] + matches[0].group("indent") + "this.provider = new SQLiteSignalProvider(this.context);" + j[matches[0].end():]
+
 n = one(n, "#include <unordered_map>",
     "#include <unordered_map>\n#include <unordered_set>", "header")
 n = one(n, "std::vector<jlong> createdGroupIds;",
