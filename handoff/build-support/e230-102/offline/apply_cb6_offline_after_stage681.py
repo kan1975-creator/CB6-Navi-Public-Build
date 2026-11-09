@@ -17,7 +17,7 @@ def one(source, before, after, label):
     return source.replace(before, after, 1)
 # Accept formatting changes in the composed provider expression, not unrelated code.
 import re
-provider_pattern = re.compile(r"(?m)^(?P<indent>[ \\t]*)this\\.provider\\s*=\\s*new\\s+CompositeSignalProvider\\s*\\([\\s\\S]*?\\);")
+provider_pattern = re.compile(r"(?m)^(?P<indent>[ \t]*)this\.provider\s*=\s*new\s+CompositeSignalProvider\s*\([\s\S]*?\);")
 matches = list(provider_pattern.finditer(j))
 if len(matches) != 1:
     raise SystemExit(f"STOP: offline provider: expected one assignment, got {len(matches)}")
