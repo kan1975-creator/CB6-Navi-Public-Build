@@ -129,6 +129,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 handoff/build-support/e230-102/stage681/apply_681.py comaps handoff/build-support/e230-102/stage681/assets/stage307_to_candidate.patch
+      - name: Apply offline-only signal provider after stage681
+        run: |
+          python3 handoff/build-support/e230-102/offline/apply_cb6_offline_after_stage681.py comaps
       - name: Resolve missing Gradle dependencies without feature tests
         run: |
           set -euo pipefail
