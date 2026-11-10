@@ -137,6 +137,41 @@ jobs:
           set -euo pipefail
           python3 handoff/build-support/e230-102/e713/apply_e712_after_offline.py \
             comaps handoff/build-support/e230-102/e713/CB6_E710_HEADING_REFRESH_MINIMAL.patch
+      - name: Capture final CB6 source files after all overlays (nonblocking)
+        if: always()
+        run: |
+          python3 - <<'PYCB6CAPTURE'
+          import hashlib, json, zipfile
+          from pathlib import Path
+          root = Path("comaps")
+          out = Path("handoff/build-support/e230-102/out")
+          out.mkdir(parents=True, exist_ok=True)
+          targets = [
+              "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp",
+              "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc",
+              "libs/map/framework.cpp",
+              "libs/map/cb6_signal_mark.hpp",
+              "libs/map/cb6_signal_renderer.inc",
+              "libs/map/bookmark_manager.cpp",
+              "libs/map/bookmark_manager.hpp",
+              "indexer/data_source.hpp",
+              "map/features_fetcher.cpp",
+          ]
+          records = []
+          archive = out / "CB6_FINAL_SOURCES.zip"
+          with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as z:
+              for relative in targets:
+                  p = root / relative
+                  if p.is_file():
+                      data = p.read_bytes()
+                      z.writestr(relative, data)
+                      records.append({"path": relative, "status": "FOUND", "bytes": len(data),
+                                      "sha256": hashlib.sha256(data).hexdigest()})
+                  else:
+                      records.append({"path": relative, "status": "MISSING"})
+              z.writestr("capture_manifest.json", json.dumps(records, ensure_ascii=False, indent=2))
+          print("CB6 source capture:", archive, "found", sum(r["status"] == "FOUND" for r in records))
+          PYCB6CAPTURE
       - name: Resolve missing Gradle dependencies without feature tests
         run: |
           set -euo pipefail
