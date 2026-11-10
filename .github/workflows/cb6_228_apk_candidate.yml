@@ -139,7 +139,7 @@ jobs:
             comaps handoff/build-support/e230-102/e713/CB6_E710_HEADING_REFRESH_MINIMAL.patch
       - name: Apply E774 four-file signal candidate (fail closed)
         run: |
-          python3 handoff/build-support/e230-102/e774/apply_e774.py comaps
+          python3 handoff/handoff/build-support/e230-102/e774/apply_e774.py comaps
 
       - name: Capture final CB6 source files after all overlays (nonblocking)
         if: always()
