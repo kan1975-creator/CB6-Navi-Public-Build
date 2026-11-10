@@ -1,0 +1,20 @@
+{
+  "files": {
+    "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp": {
+      "expected_final_sha256": "8792ea9df5716876397b7629928c92529bf8c94bda90ceae9fdaaa4ea8e7c806",
+      "candidate_sha256": "04053238be32629dd82b44e037c1c07e87128659c157e6028adddf111cdaaf22"
+    },
+    "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc": {
+      "expected_final_sha256": "f0f86d74014f4da470a02736587aa7c99e00d7693c2d1e6b61307e0df1cd2df6",
+      "candidate_sha256": "6ca4bc0be799aa7077ccd594363e158f42947b348e503a6a7b16432870ae0b3e"
+    },
+    "libs/map/framework.cpp": {
+      "expected_final_sha256": "f3654032319f072d78ef0d74ddb19ac52332fb5c31028a67c12af0269df3965d",
+      "candidate_sha256": "056c8edd1f03a2fc4ea155f72de71feaaf46e13fed420cd7e3d668110114d556"
+    },
+    "libs/map/cb6_signal_renderer.inc": {
+      "expected_final_sha256": "26423e68da765c88c975979e528c4ee2f4d24a93d32d233c08af56c31e62ed1a",
+      "candidate_sha256": "8b333d6aab53c40256cef14c7797581f399a7185e7ba0ab24e4792d29d0c033e"
+    }
+  }
+}
