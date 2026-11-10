@@ -1,0 +1,46 @@
+--- a/android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java
++++ b/android/app/src/main/java/app/organicmaps/cb6/signals/SignalController.java
+@@ -26,6 +26,11 @@
+   private String invalidatedDatabase;
+   private int generation;
+   private long lastAttempt;
++  // Rate-limit heading-only native mark rebuilds; never defer a new snapshot.
++  private static final long HEADING_REFRESH_MIN_MS = 2000L;
++  private static final float HEADING_REFRESH_MOVE_M = 150.0f;
++  private long lastNativePublishAt;
++  private double lastNativeLat, lastNativeLon;
+   private double lastLat, lastLon;
+   // Diagnostics only: never used for acquisition, deduplication, or rendering decisions.
+   private long nextTraceId;
+@@ -236,6 +241,22 @@
+       return;
+     }
+ 
++    // A fresh SQLite snapshot is always published immediately. Only throttle
++    // bearing-only changes for the already published snapshot.
++    if (published == snapshot)
++    {
++      long now = SystemClock.elapsedRealtime();
++      float[] moved = new float[1];
++      Location.distanceBetween(lastNativeLat, lastNativeLon,
++          location.getLatitude(), location.getLongitude(), moved);
++      if (now - lastNativePublishAt < HEADING_REFRESH_MIN_MS
++          && moved[0] < HEADING_REFRESH_MOVE_M)
++      {
++        traceLog("request_id=" + snapshotTraceId
++            + " stage=jni result=skipped reason=heading_throttle count=" + n);
++        return;
++      }
++    }
+     int t = snapshot.topologyMembers.size();
+     double[] memberLats = new double[t], memberLons = new double[t], centerLats = new double[t], centerLons = new double[t];
+     long[] memberIds = new long[t], centerIds = new long[t];
+@@ -253,5 +274,8 @@
+         memberLats, memberLons, centerLats, centerLons, memberIds, centerIds);
+     published = snapshot;
+     publishedForward = forward;
++    lastNativePublishAt = SystemClock.elapsedRealtime();
++    lastNativeLat = location.getLatitude();
++    lastNativeLon = location.getLongitude();
+   }
+ }

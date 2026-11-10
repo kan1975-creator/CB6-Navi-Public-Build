@@ -132,6 +132,11 @@ jobs:
       - name: Apply offline-only signal provider after stage681
         run: |
           python3 handoff/handoff/build-support/e230-102/offline/apply_cb6_offline_after_stage681.py comaps
+      - name: Apply E710 heading-only refresh throttle after offline stage
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/e713/apply_e712_after_offline.py \
+            comaps handoff/build-support/e230-102/e713/CB6_E710_HEADING_REFRESH_MINIMAL.patch
       - name: Resolve missing Gradle dependencies without feature tests
         run: |
           set -euo pipefail
