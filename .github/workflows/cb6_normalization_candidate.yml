@@ -1,0 +1,73 @@
+name: CB6 Governance Normalization Candidate
+on:
+  pull_request:
+    branches: [cb6-v2-clean]
+    paths:
+      - 'docs/CB6_NORMALIZATION_CANDIDATE.md'
+      - 'v2/gates/verify_normalization_candidate.py'
+      - 'v2/tests/test_normalization_candidate_fail_closed.py'
+      - '.github/workflows/cb6_normalization_candidate.yml'
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify checkout and destructive tests
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 v2/tests/test_normalization_candidate_fail_closed.py
+      - name: Audit GitHub evidence; do not authorize release
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          python3 v2/gates/verify_normalization_candidate.py "$PR_NUMBER" "$PR_HEAD" "$PR_BASE"
+      - name: Preserve release block
+        run: |
+          echo 'AUDIT_OK does not mean release authorization. RELEASE_BLOCKED remains until independent evidence.'
+
+  independent-review-candidate:
+    # Separate job on the same PR event; NOT an independent workflow or certified review.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Independent evidence reconstruction (no release authorization)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 v2/tests/test_normalization_candidate_fail_closed.py
+          python3 - <<'PY'
+          import json, pathlib, subprocess
+          root=pathlib.Path('.')
+          allowed={
+            'docs/CB6_NORMALIZATION_CANDIDATE.md',
+            'v2/gates/verify_normalization_candidate.py',
+            'v2/tests/test_normalization_candidate_fail_closed.py',
+            '.github/workflows/cb6_normalization_candidate.yml',
+          }
+          base=subprocess.check_output(['git','merge-base','HEAD','origin/cb6-v2-clean'],text=True).strip()
+          changed=set(subprocess.check_output(['git','diff','--name-only',base,'HEAD'],text=True).splitlines())
+          assert changed==allowed, f'unexpected scope: {changed ^ allowed}'
+          reg=json.loads((root/'v2/gates/operational_rule_registry_v21.json').read_text())
+          rules={x['id']:x for x in reg['rules']}
+          assert rules['OPS-INDEPENDENT-ACCEPTANCE-001']['status']=='ACTIVE'
+          assert rules['OPS-USER-APPROVAL-BEFORE-FIX-001']['status']=='ACTIVE'
+          print('RECONSTRUCTION_CANDIDATE_CHECK_OK: PR-triggered scope and ACTIVE rules reconstructed')
+          print('RELEASE_BLOCKED: same-workflow job does not establish independent review')
+          PY
