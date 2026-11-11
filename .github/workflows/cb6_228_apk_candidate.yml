@@ -140,6 +140,9 @@ jobs:
       - name: Apply E774 four-file signal candidate (fail closed)
         run: |
           python3 handoff/handoff/build-support/e230-102/e774/apply_e774.py comaps
+      - name: Apply E856 signal grouping integration (fail closed)
+        run: |
+          python3 handoff/build-support/e230-102/e856/apply_e856.py comaps
 
       - name: Capture final CB6 source files after all overlays (nonblocking)
         if: always()

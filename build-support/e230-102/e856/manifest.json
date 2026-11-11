@@ -1,0 +1,10 @@
+{
+  "libs/map/cb6_signal_renderer.inc": {
+    "expected_post_e774_sha256": "8b333d6aab53c40256cef14c7797581f399a7185e7ba0ab24e4792d29d0c033e",
+    "replacement_sha256": "e573d4f61655030bf0fdc79b33a1062f552ac74e4685edbfb2ca2a24b6faf1af"
+  },
+  "android/sdk/src/main/cpp/app/organicmaps/sdk/cb6_signal_jni.inc": {
+    "expected_post_e774_sha256": "6ca4bc0be799aa7077ccd594363e158f42947b348e503a6a7b16432870ae0b3e",
+    "replacement_sha256": "cfa9f41ba4a4c94248c3214e462224a3f69985b72b998f36d12099d2e9d2299f"
+  }
+}
