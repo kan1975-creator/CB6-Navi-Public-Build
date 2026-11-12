@@ -1,0 +1,116 @@
+// Included inside Framework.cpp's existing extern "C" section.
+// Caller: Android main thread, matching BookmarkManager's thread contract.
+JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Signals(
+    JNIEnv * env, jclass, jdouble originLat, jdouble originLon, jlongArray idArray, jdoubleArray latArray, jdoubleArray lonArray, jbooleanArray forwardArray, jdoubleArray memberLatArray, jdoubleArray memberLonArray, jdoubleArray centerLatArray, jdoubleArray centerLonArray, jlongArray memberIdArray, jlongArray centerIdArray)
+{
+  if (!idArray || !latArray || !lonArray || !forwardArray || !memberLatArray || !memberLonArray || !centerLatArray || !centerLonArray || !memberIdArray || !centerIdArray)
+  {
+    LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-reject-null"));
+    return;
+  }
+  jsize const n = env->GetArrayLength(latArray);
+  LOG(LINFO, ("CB6-SIGNAL-DIAG", "jni-enter", n));
+  if (env->GetArrayLength(idArray) != n || env->GetArrayLength(lonArray) != n || env->GetArrayLength(forwardArray) != n) return;
+  jsize const topologyN = env->GetArrayLength(memberLatArray);
+  if (env->GetArrayLength(memberLonArray) != topologyN || env->GetArrayLength(centerLatArray) != topologyN || env->GetArrayLength(centerLonArray) != topologyN || env->GetArrayLength(memberIdArray) != topologyN || env->GetArrayLength(centerIdArray) != topologyN) return;
+  std::vector<jdouble> memberLats(topologyN), memberLons(topologyN), centerLats(topologyN), centerLons(topologyN);
+  std::vector<jlong> memberIds(topologyN), centerIds(topologyN);
+  if (topologyN > 0)
+  {
+    env->GetDoubleArrayRegion(memberLatArray, 0, topologyN, memberLats.data()); if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(memberLonArray, 0, topologyN, memberLons.data()); if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(centerLatArray, 0, topologyN, centerLats.data()); if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(centerLonArray, 0, topologyN, centerLons.data()); if (env->ExceptionCheck()) return;
+    env->GetLongArrayRegion(memberIdArray, 0, topologyN, memberIds.data()); if (env->ExceptionCheck()) return;
+    env->GetLongArrayRegion(centerIdArray, 0, topologyN, centerIds.data()); if (env->ExceptionCheck()) return;
+  }
+  std::vector<jlong> ids(n);
+  std::vector<jdouble> lats(n), lons(n);
+  std::vector<jboolean> forward(n);
+  if (n > 0)
+  {
+    env->GetLongArrayRegion(idArray, 0, n, ids.data());
+    if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(latArray, 0, n, lats.data());
+    if (env->ExceptionCheck()) return;
+    env->GetDoubleArrayRegion(lonArray, 0, n, lons.data());
+    if (env->ExceptionCheck()) return;
+    env->GetBooleanArrayRegion(forwardArray, 0, n, forward.data());
+    if (env->ExceptionCheck()) return;
+  }
+  // Reject malformed snapshots before touching the last valid renderer state.
+  for (jsize i = 0; i < n; ++i)
+    if (!std::isfinite(lats[i]) || !std::isfinite(lons[i]) || lats[i] < -90.0 || lats[i] > 90.0
+        || lons[i] < -180.0 || lons[i] > 180.0) return;
+
+  // Reject malformed topology before entering the expensive MWM scan or clearing marks.
+  for (jsize t = 0; t < topologyN; ++t)
+  {
+    if (!std::isfinite(memberLats[t]) || !std::isfinite(memberLons[t])
+        || !std::isfinite(centerLats[t]) || !std::isfinite(centerLons[t])
+        || memberLats[t] < -90.0 || memberLats[t] > 90.0
+        || centerLats[t] < -90.0 || centerLats[t] > 90.0
+        || memberLons[t] < -180.0 || memberLons[t] > 180.0
+        || centerLons[t] < -180.0 || centerLons[t] > 180.0)
+    {
+      LOG(LWARNING, ("CB6-SIGNAL-DIAG", "invalid-topology-coordinate", t));
+      return;
+    }
+  }
+
+  if (!std::isfinite(originLat) || !std::isfinite(originLon) || originLat < -90.0 || originLat > 90.0
+      || originLon < -180.0 || originLon > 180.0) return;
+  // E768: publish a validated immutable snapshot; viewport rendering owns MWM lookup.
+  // This avoids the second, origin-centred 3km scan and mark replacement on JNI entry.
+  Cb6SignalSnapshot snapshot;
+  snapshot.ids.assign(ids.begin(), ids.end());
+  snapshot.lats.assign(lats.begin(), lats.end());
+  snapshot.lons.assign(lons.begin(), lons.end());
+  snapshot.forward.assign(forward.begin(), forward.end());
+  snapshot.memberLats.assign(memberLats.begin(), memberLats.end());
+  snapshot.memberLons.assign(memberLons.begin(), memberLons.end());
+  snapshot.centerLats.assign(centerLats.begin(), centerLats.end());
+  snapshot.centerLons.assign(centerLons.begin(), centerLons.end());
+  snapshot.memberIds.assign(memberIds.begin(), memberIds.end());
+  snapshot.centerIds.assign(centerIds.begin(), centerIds.end());
+  frm()->SetCb6Signals(std::move(snapshot));
+}
+
+
+// Read-only diagnostic: enumerate stock MWM traffic-signal features near the supplied location.
+// Does not create, remove, or alter any map mark.
+JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmSignals(
+    JNIEnv *, jclass, jdouble lat, jdouble lon)
+{
+  if (!std::isfinite(lat) || !std::isfinite(lon) || lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0)
+    return;
+  auto const center = mercator::FromLatLon(lat, lon);
+  auto const rect = mercator::RectByCenterXYAndSizeInMeters(center, 1000.0);
+  static uint32_t const signalType = classif().GetTypeByPath({"highway", "traffic_signals"});
+  size_t count = 0;
+  frm()->GetDataSource().ForEachInRect([&](FeatureType & ft)
+  {
+    if (ft.GetGeomType() != feature::GeomType::Point)
+      return;
+    feature::TypesHolder types(ft);
+    if (!types.Has(signalType))
+      return;
+    auto const pt = ft.GetCenter();
+    auto const ll = mercator::ToLatLon(pt);
+    ++count;
+    LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "point", count, "latE7", std::llround(ll.m_lat * 10000000.0),
+        "lonE7", std::llround(ll.m_lon * 10000000.0)));
+  }, rect, scales::GetUpperScale());
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DIAG", "complete", count, lat, lon));
+}
+
+
+// Read-only diagnostic: compare raw Overpass signal-node coordinates with stock MWM
+// traffic-signal features in the existing 1000 m diagnostic search area.
+// Does not create, remove, filter, or alter any map mark.
+// RESET: retired expensive legacy diagnostic. Keep the JNI entry point for ABI compatibility.
+JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeLogCb6MwmDirectDuplicateCandidates(
+    JNIEnv *, jclass, jdouble, jdouble, jlongArray, jdoubleArray, jdoubleArray)
+{
+  LOG(LINFO, ("CB6-SIGNAL-MWM-DUP-DIAG", "retired-by-clean-reset"));
+}

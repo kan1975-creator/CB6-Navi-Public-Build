@@ -144,6 +144,11 @@ jobs:
         run: |
           python3 handoff/build-support/e230-102/e856/apply_e856.py comaps
 
+      - name: Apply E905 Java and E900 C++ JNI signal candidate (fail closed)
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/e905/apply_e905.py comaps
+
       - name: Capture final CB6 source files after all overlays (nonblocking)
         if: always()
         run: |
