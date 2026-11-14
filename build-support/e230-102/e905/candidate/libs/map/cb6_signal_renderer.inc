@@ -43,7 +43,7 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
   auto matchedGroup=[&](Point const & p)->int64_t{
     if(p.id>0 && !badIds.count(p.id)){
       auto it=byId.find(p.id);
-      if(it!=byId.end()&&!badCenters.count(it->second.center)&&meters(p.lat,p.lon,it->second.lat,it->second.lon)<=0.5)return it->second.center;
+      if(it!=byId.end()&&!badCenters.count(it->second.center))return it->second.center;
     }
     if(!p.mwm)return 0;
     auto k=cell(p.lat,p.lon);
