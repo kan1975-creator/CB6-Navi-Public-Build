@@ -46,7 +46,7 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
   }
   std::unordered_set<int64_t> claimed;
   // E966: SQLite candidates take precedence; MWM only fills uncovered points.
-  std::unordered_map<Cell,std::vector<size_t>,Hash> selectedSqlite;
+  std::unordered_map<Cell,std::vector<Point>,Hash> selectedSqlite;
   auto matchedGroup=[&](Point const & p)->int64_t{
     if(p.id>0 && !badIds.count(p.id)){
       auto it=byId.find(p.id);
@@ -76,13 +76,18 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
       bool duplicate=false;auto k=cell(p.lat,p.lon);
       for(int y=-3;y<=3&&!duplicate;++y)for(int x=-3;x<=3&&!duplicate;++x){
         auto it=selectedSqlite.find({k.a+y,k.b+x});if(it==selectedSqlite.end())continue;
-        for(auto idx:it->second)if(meters(p.lat,p.lon,out.marks[idx].lat,out.marks[idx].lon)<=0.5){duplicate=true;break;}
+        for(auto const & original:it->second)if(meters(p.lat,p.lon,original.lat,original.lon)<=0.5){duplicate=true;break;}
       }
       if(duplicate){++out.rejected;continue;}
     }
     if(group>0)claimed.insert(group);
-    if(!p.mwm)selectedSqlite[cell(p.lat,p.lon)].push_back(out.marks.size());
-    out.marks.push_back(p);
+    if(!p.mwm)selectedSqlite[cell(p.lat,p.lon)].push_back(p);
+    Point mark=p;
+    if(group>0){
+      auto const & center=centers.at(group);
+      mark.id=group;mark.lat=center.centerLat;mark.lon=center.centerLon;
+    }
+    out.marks.push_back(mark);
   }
   return out;
 }
@@ -224,3 +229,4 @@ void Framework::UpdateCb6Signals(ScreenBase const & screen)
   marksValid = true;
   renderedMode = mode;
 }
+

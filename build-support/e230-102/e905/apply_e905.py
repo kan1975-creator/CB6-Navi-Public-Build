@@ -17,3 +17,18 @@ for dst,data in updates:
  dst.write_bytes(data)
  print('APPLIED',dst.relative_to(root))
 print('E905_APPLY_PASS')
+
+# Offline graph topology is prepared once at build time and bundled in the APK.
+graph=here/'graph'
+java_dir=root/'android/app/src/main/java/app/organicmaps/cb6/signals'
+provider=java_dir/'SQLiteSignalProvider.java'
+text=provider.read_text()
+anchor='    return new SignalSnapshot(points,members,centers);'
+if text.count(anchor)!=1:raise SystemExit('Graph topology provider anchor changed')
+provider.write_text(text.replace(anchor,'    GraphSignalTopology.apply(context,points,members,centers);\n'+anchor))
+(java_dir/'GraphSignalTopology.java').write_bytes((graph/'GraphSignalTopology.java').read_bytes())
+assets=root/'android/app/src/main/assets'
+assets.mkdir(parents=True,exist_ok=True)
+(assets/'cb6_graph_topology.csv').write_bytes((graph/'cb6_graph_topology.csv').read_bytes())
+print('Offline road graph topology connected to existing snapshot member/center IDs')
+
