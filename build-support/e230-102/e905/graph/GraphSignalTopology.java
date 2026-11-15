@@ -46,7 +46,7 @@ final class GraphSignalTopology {
       }
       for (Entry e:rows.values()) {
         Entry root=rows.get(e.center);
-        if (root==null || root.center!=e.center || root.lat!=e.centerLat || root.lon!=e.centerLon)
+        if (root==null || root.center!=e.center || root.centerLat!=e.centerLat || root.centerLon!=e.centerLon)
           throw new IllegalStateException("Invalid graph topology root");
       }
       cached=Collections.unmodifiableMap(rows);
