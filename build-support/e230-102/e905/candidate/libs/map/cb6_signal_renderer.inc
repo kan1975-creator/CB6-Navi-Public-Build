@@ -29,7 +29,13 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
   std::unordered_map<Cell,std::vector<size_t>,Hash> memberGrid;
   for(size_t i=0;i<topology.size();++i){
     auto const & m=topology[i];
-    if(m.id<=0||m.center<=0||meters(m.lat,m.lon,m.centerLat,m.centerLon)>15.0)continue;
+    // E981 intersection IDs are authoritative even for wide junctions: the
+    // representative may be farther than 15 m from an individual signal.
+    // Reject invalid coordinates, but do not discard a valid ID by distance.
+    if(m.id<=0||m.center<=0||!std::isfinite(m.lat)||!std::isfinite(m.lon)||
+       !std::isfinite(m.centerLat)||!std::isfinite(m.centerLon)||
+       std::abs(m.lat)>90.0||std::abs(m.centerLat)>90.0||
+       std::abs(m.lon)>180.0||std::abs(m.centerLon)>180.0)continue;
     auto it=byId.find(m.id);
     if(it==byId.end())byId.emplace(m.id,m);
     else if(it->second.center!=m.center||meters(it->second.lat,it->second.lon,m.lat,m.lon)>0.5)badIds.insert(m.id);
