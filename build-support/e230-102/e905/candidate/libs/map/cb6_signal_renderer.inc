@@ -71,6 +71,8 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
     if(p.mwm!=(pass==1))continue;
     if(!p.vehicle||!std::isfinite(p.lat)||!std::isfinite(p.lon)){++out.rejected;continue;}
     auto group=matchedGroup(p);
+    // E1005: unresolved signals are not rendered. Only confirmed intersection groups survive.
+    if(group<=0){++out.rejected;continue;}
     if(group>0&&claimed.count(group)){++out.rejected;continue;}
     if(p.mwm){
       bool duplicate=false;auto k=cell(p.lat,p.lon);
