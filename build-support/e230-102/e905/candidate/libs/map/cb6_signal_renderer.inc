@@ -39,7 +39,8 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
     memberGrid[cell(m.lat,m.lon)].push_back(i);
   }
   std::unordered_set<int64_t> claimed;
-  std::unordered_map<Cell,std::vector<size_t>,Hash> selectedMwm;
+  // E966: SQLite candidates take precedence; MWM only fills uncovered points.
+  std::unordered_map<Cell,std::vector<size_t>,Hash> selectedSqlite;
   auto matchedGroup=[&](Point const & p)->int64_t{
     if(p.id>0 && !badIds.count(p.id)){
       auto it=byId.find(p.id);
@@ -61,20 +62,20 @@ inline Result select(std::vector<Point> const & input,std::vector<Member> const 
     return group;
   };
   for(int pass=0;pass<2;++pass)for(auto const & p:input){
-    if(p.mwm!=(pass==0))continue;
+    if(p.mwm!=(pass==1))continue;
     if(!p.vehicle||!std::isfinite(p.lat)||!std::isfinite(p.lon)){++out.rejected;continue;}
     auto group=matchedGroup(p);
     if(group>0&&claimed.count(group)){++out.rejected;continue;}
-    if(!p.mwm){
+    if(p.mwm){
       bool duplicate=false;auto k=cell(p.lat,p.lon);
       for(int y=-3;y<=3&&!duplicate;++y)for(int x=-3;x<=3&&!duplicate;++x){
-        auto it=selectedMwm.find({k.a+y,k.b+x});if(it==selectedMwm.end())continue;
+        auto it=selectedSqlite.find({k.a+y,k.b+x});if(it==selectedSqlite.end())continue;
         for(auto idx:it->second)if(meters(p.lat,p.lon,out.marks[idx].lat,out.marks[idx].lon)<=0.5){duplicate=true;break;}
       }
       if(duplicate){++out.rejected;continue;}
     }
     if(group>0)claimed.insert(group);
-    if(p.mwm)selectedMwm[cell(p.lat,p.lon)].push_back(out.marks.size());
+    if(!p.mwm)selectedSqlite[cell(p.lat,p.lon)].push_back(out.marks.size());
     out.marks.push_back(p);
   }
   return out;
