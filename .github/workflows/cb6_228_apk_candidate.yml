@@ -79,7 +79,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ninja-build cmake build-essential python3-venv zlib1g-dev
           python3 -m venv "$RUNNER_TEMP/cb6-python"
-          "$RUNNER_TEMP/cb6-python/bin/pip" install protobuf==3.20.3
+          "$RUNNER_TEMP/cb6-python/bin/pip" install protobuf==3.20.3 Pillow
           echo "$RUNNER_TEMP/cb6-python/bin" >> "$GITHUB_PATH"
       - name: Fetch immutable CoMaps source and pinned submodules
         run: |
@@ -148,6 +148,14 @@ jobs:
         run: |
           set -euo pipefail
           python3 handoff/build-support/e230-102/e905/apply_e905.py comaps
+
+      - name: Apply offline MWM convenience icons after E905 (fail closed)
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/convenience/apply_convenience_brand_render.py comaps
+          test -s comaps/data/styles/default/light/mdpi/cb6-seven.png
+          test -s comaps/data/styles/default/dark/mdpi/cb6-seicomart.png
+          grep -q 'nativeCb6CollectConvenienceMarks' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
 
       - name: Capture final CB6 source files after all overlays (nonblocking)
         if: always()
