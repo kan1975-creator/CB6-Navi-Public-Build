@@ -56,13 +56,12 @@ jobs:
           set -euo pipefail
           OUT="$GITHUB_WORKSPACE/handoff/build-support/e230-102/out"
           exec > >(tee "$OUT/gradle-install.log") 2>&1
-          # Official Gradle 8.14.4 binary release asset; avoid distribution redirects.
+          # The GitHub REST release-asset endpoint returned HTTP 403 in Run 43882337920.
+          # Fetch the official distribution via the Gradle CDN; preserve exact SHA-256.
           curl --fail --location --retry 2 --retry-delay 5 \
             --connect-timeout 30 --max-time 300 \
-            --header 'Accept: application/octet-stream' \
-            --header 'X-GitHub-Api-Version: 2022-11-28' \
             --output "$RUNNER_TEMP/gradle-8.14.4-bin.zip" \
-            https://api.github.com/repos/gradle/gradle-distributions/releases/assets/344871718
+            https://downloads.gradle.org/distributions/gradle-8.14.4-bin.zip
           printf '%s  %s\n' \
             'f1771298a70f6db5a29daf62378c4e18a17fc33c9ba6b14362e0cdf40610380d' \
             "$RUNNER_TEMP/gradle-8.14.4-bin.zip" | sha256sum --check --strict
