@@ -6,11 +6,11 @@ import shutil, sys
 from PIL import Image
 
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path("comaps").resolve()
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parent
 sdk = ROOT / "android/sdk/src/main/cpp/app/organicmaps/sdk"
 for src in ("convenience_brand_classifier.hpp","convenience_brand_classifier.cpp",
             "convenience_mwm_collector.hpp","convenience_mwm_collector.cpp"):
-    shutil.copy2(REPO / "v2/poi/native" / src, sdk / src)
+    shutil.copy2(REPO / "native" / src, sdk / src)
 cmake = ROOT / "android/sdk/src/main/cpp/CMakeLists.txt"
 cm = cmake.read_text()
 anchor = "  app/organicmaps/sdk/Framework.cpp\n"
@@ -201,7 +201,7 @@ def cb6_extract_approved_png(svg_filename, svg):
 brand_png = {}
 for png_filename in sorted(CB6_DIRECT_PNG_ALLOWLIST):
     svg_filename = png_filename[:-4] + ".svg"
-    source = Path(__file__).resolve().parent / svg_filename
+    source = Path(__file__).resolve().parent / "assets" / svg_filename
     if not source.is_file():
         raise FileNotFoundError("Approved CB6 convenience source missing: " + svg_filename)
     extracted_name, png = cb6_extract_approved_png(svg_filename, source.read_text())
