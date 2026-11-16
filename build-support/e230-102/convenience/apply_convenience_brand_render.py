@@ -27,7 +27,7 @@ s = uh.read_text()
 old = "    TRAFFIC_LIGHT,\n    USER_MARK_TYPES_COUNT,"
 signal_old = "    TRAFFIC_LIGHT,\n    CB6_SIGNAL,\n    USER_MARK_TYPES_COUNT,"
 new = "    TRAFFIC_LIGHT,\n    CONVENIENCE,\n    USER_MARK_TYPES_COUNT,"
-signal_new = "    TRAFFIC_LIGHT,\n    CONVENIENCE,\n    CB6_SIGNAL,\n    USER_MARK_TYPES_COUNT,"
+signal_new = "    TRAFFIC_LIGHT,\n    CB6_SIGNAL,\n    CONVENIENCE,\n    USER_MARK_TYPES_COUNT,"
 if "    CONVENIENCE," not in s:
     if signal_old in s:
         s = s.replace(signal_old, signal_new, 1)
