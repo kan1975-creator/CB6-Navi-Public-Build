@@ -20,7 +20,7 @@ jobs:
     env:
       COMAPS_SHA: 7113ccb5f086183f8884b2aa4e58c987466b6704
       SKIP_MAP_DOWNLOAD: '1'
-      SKIP_GENERATE_SYMBOLS: '0'
+      SKIP_GENERATE_SYMBOLS: ''
       SKIP_GENERATE_DRULES: '1'
       SKIP_GENERATE_JSON_STRINGS: '1'
       SKIP_GENERATE_STRINGS: '1'
@@ -77,7 +77,7 @@ jobs:
           set -euo pipefail
           sdkmanager 'platforms;android-36' 'build-tools;35.0.0' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1' 2>&1 | tee handoff/build-support/e230-102/out/sdk.log
           sudo apt-get update
-          sudo apt-get install -y ninja-build cmake build-essential python3-venv zlib1g-dev
+          sudo apt-get install -y ninja-build cmake build-essential python3-venv zlib1g-dev qt6-base-dev qt6-declarative-dev qt6-positioning-dev libqt6svg6-dev optipng libfreetype-dev libharfbuzz-dev libxkbcommon-dev libxkbcommon-x11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
           python3 -m venv "$RUNNER_TEMP/cb6-python"
           "$RUNNER_TEMP/cb6-python/bin/pip" install protobuf==3.20.3 Pillow
           echo "$RUNNER_TEMP/cb6-python/bin" >> "$GITHUB_PATH"
@@ -156,6 +156,21 @@ jobs:
           test -s comaps/data/styles/default/light/mdpi/cb6-seven.png
           test -s comaps/data/styles/default/dark/mdpi/cb6-seicomart.png
           grep -q 'nativeCb6CollectConvenienceMarks' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
+
+      - name: Generate convenience brand symbols using proven V2 CoMaps configure flow
+        run: |
+          set -euo pipefail
+          cd comaps
+          bash -x ./configure.sh --skip-map-download 2>&1 | tee ../handoff/build-support/e230-102/out/convenience-configure.log
+          for theme in light dark; do
+            for density in mdpi hdpi xhdpi 6plus xxhdpi xxxhdpi; do
+              test -s "data/symbols/$density/$theme/symbols.png"
+              test -s "data/symbols/$density/$theme/symbols.sdf"
+              for name in cb6-seven cb6-familymart cb6-lawson cb6-seicomart cb6-ministop cb6-mybasket; do
+                grep -a -q "$name" "data/symbols/$density/$theme/symbols.sdf" || { echo "STOP_SYMBOL_MISSING $density/$theme/$name"; exit 1; }
+              done
+            done
+          done
 
       - name: Capture final CB6 source files after all overlays (nonblocking)
         if: always()
