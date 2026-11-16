@@ -17,6 +17,29 @@ with zipfile.ZipFile(apk) as z:
  for n in ['lib/arm64-v8a/liborganicmaps.so','assets/types.txt','assets/classificator.txt','assets/drules_proto_default_light.bin','assets/drules_proto_vehicle_light.bin']:assert n in names,n
  assert b'highway|traffic_signals' in z.read('assets/types.txt')
  assert len([n for n in names if n.startswith('assets/symbols/') and n.endswith('.sdf') and b'cb6-signal-' in z.read(n)])==12
+ # Verify that all six brands and their two reduced zoom variants are in the
+ # actual APK symbol atlases, not merely in the source/Gradle build directory.
+ brands=('seven','familymart','lawson','seicomart','ministop','mybasket')
+ symbols=[f'cb6-{brand}{suffix}' for brand in brands for suffix in ('','-85','-50')]
+ evidence=[]
+ for density in ('mdpi','hdpi','xhdpi','6plus','xxhdpi','xxxhdpi'):
+  for theme in ('light','dark'):
+   for ext in ('sdf','png'):
+    path=f'assets/symbols/{density}/{theme}/symbols.{ext}'
+    assert path in names, f'APK_ATLAS_MISSING: {path}'
+    source=repo/'data/symbols'/density/theme/f'symbols.{ext}'
+    assert source.is_file(), f'SOURCE_ATLAS_MISSING: {source}'
+    apk_bytes=z.read(path)
+    source_bytes=source.read_bytes()
+    assert apk_bytes==source_bytes, f'APK_ATLAS_DIFFERS_FROM_GENERATED: {path}'
+    if ext=='sdf':
+     import xml.etree.ElementTree as ET
+     root=ET.fromstring(apk_bytes)
+     registered={e.attrib['name'] for e in root.iter('symbol') if 'name' in e.attrib}
+     missing=sorted(set(symbols)-registered)
+     assert not missing, f'APK_BRAND_SYMBOLS_MISSING: {path}: {missing}'
+    evidence.append({'path':path,'bytes':len(apk_bytes),'sha256':hashlib.sha256(apk_bytes).hexdigest()})
+ (out/'CONVENIENCE_APK_ATLAS.json').write_text(json.dumps({'brands':list(brands),'symbol_names':symbols,'atlas_files':evidence,'status':'PASS'},indent=2))
  (out/'apk_contents.txt').write_text('\n'.join(names))
 (out/'APK_RESULT.json').write_text(json.dumps({'apk':apk.name,'bytes':apk.stat().st_size,'sha256':hashlib.file_digest(apk.open('rb'),'sha256').hexdigest(),'certificate_sha256':cert,'build_exit':0,'device_acceptance':'NOT_RUN','adoption':'STOP'},indent=2))
 shutil.copy2(apk,out/apk.name)
