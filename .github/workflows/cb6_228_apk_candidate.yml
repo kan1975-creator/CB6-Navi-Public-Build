@@ -161,11 +161,10 @@ jobs:
         run: |
           set -euo pipefail
           cd comaps
-          # Brand PNGs are not part of configure.sh's SVG-only change hash.
-          # Force the original CoMaps skin generator to rebuild its atlas once.
-          rm -f data/symbols_hash
-          bash -x ./configure.sh --skip-map-download 2>&1 | tee ../handoff/build-support/e230-102/out/convenience-configure.log
-          grep -q 'Generating symbols...' ../handoff/build-support/e230-102/out/convenience-configure.log
+          # Use the same pinned CoMaps atlas generator directly: configure.sh
+          # also generates unrelated search categories and fails without their inputs.
+          bash ./tools/unix/generate_symbols.sh 2>&1 | tee ../handoff/build-support/e230-102/out/convenience-symbols.log
+          test -s data/symbols/mdpi/light/symbols.sdf
           for theme in light dark; do
             for density in mdpi hdpi xhdpi 6plus xxhdpi xxxhdpi; do
               test -s "data/symbols/$density/$theme/symbols.png"
