@@ -286,6 +286,81 @@ if "nativeCb6CollectConvenienceMarks(" not in a:
 
 activity.write_text(a)
 
+# Refresh the dedicated offline marks after a settled map gesture, not only GPS.
+# MapView's ACTION_UP is the input event, not an assertion that map animation ended.
+view = ROOT / "android/sdk/src/main/java/app/organicmaps/sdk/MapView.java"
+v = view.read_text()
+view_anchor = "    Map.onTouch(action, event, pointerIndex);\n"
+view_hook = """    Map.onTouch(action, event, pointerIndex);
+    if ((event.getActionMasked() == MotionEvent.ACTION_UP ||
+         event.getActionMasked() == MotionEvent.ACTION_CANCEL) && mCb6OnGestureEnd != null)
+      mCb6OnGestureEnd.run();
+"""
+if "mCb6OnGestureEnd" not in v:
+    if v.count(view_anchor) != 1:
+        raise SystemExit("MapView touch anchor missing")
+    class_anchor = "public class MapView extends SurfaceView\n{\n"
+    if v.count(class_anchor) != 1:
+        raise SystemExit("MapView class anchor missing")
+    v = v.replace(class_anchor, class_anchor + """  private static Runnable mCb6OnGestureEnd;
+  public static void setCb6OnGestureEnd(Runnable listener)
+  {
+    mCb6OnGestureEnd = listener;
+  }
+
+""", 1)
+    v = v.replace(view_anchor, view_hook, 1)
+view.write_text(v)
+
+a = activity.read_text()
+gesture_field = """  private final android.os.Handler mCb6ConvenienceHandler =
+      new android.os.Handler(android.os.Looper.getMainLooper());
+  private final Runnable mCb6ConvenienceRefresh = () ->
+  {
+    if (!mMapController.isRenderingActive())
+      return;
+    final double[] center = Framework.nativeGetScreenRectCenter();
+    if (center == null || center.length != 2)
+      return;
+    final int scale = Framework.nativeGetDrawScale();
+    if (scale < 14)
+    {
+      Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
+      return;
+    }
+    final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(center[0], center[1], 3000, scale);
+    if (cb6 == null || cb6.length != 3 || cb6[0] == null || cb6[1] == null || cb6[2] == null)
+      return;
+    final int n = Math.min(cb6[0].length, Math.min(cb6[1].length, cb6[2].length));
+    final int[] kinds = new int[n];
+    for (int i = 0; i < n; ++i)
+      kinds[i] = (int) cb6[2][i];
+    Framework.nativeSetCb6ConvenienceMarks(
+        java.util.Arrays.copyOf(cb6[0], n), java.util.Arrays.copyOf(cb6[1], n), kinds);
+    android.util.Log.i("CB6-CONVENIENCE-DIAG", "viewport-refresh count=" + n + " scale=" + scale);
+  };
+  private final Runnable mCb6ConvenienceGestureEnd = () ->
+  {
+    mCb6ConvenienceHandler.removeCallbacks(mCb6ConvenienceRefresh);
+    mCb6ConvenienceHandler.postDelayed(mCb6ConvenienceRefresh, 450);
+  };
+"""
+if "mCb6ConvenienceGestureEnd" not in a:
+    if a.count(field) != 1:
+        raise SystemExit("Convenience field anchor missing")
+    a = a.replace(field, field + gesture_field, 1)
+    resume = "  protected void onResume()\n  {\n    super.onResume();\n"
+    pause = "  protected void onPause()\n  {\n"
+    if a.count(resume) != 1 or a.count(pause) != 1:
+        raise SystemExit("Activity lifecycle anchor missing")
+    a = a.replace(resume, resume + """    app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
+    mCb6ConvenienceGestureEnd.run();
+""", 1)
+    a = a.replace(pause, pause + """    app.organicmaps.sdk.MapView.setCb6OnGestureEnd(null);
+    mCb6ConvenienceHandler.removeCallbacks(mCb6ConvenienceRefresh);
+""", 1)
+activity.write_text(a)
+
 # Suppress only stock vehicle-map convenience presentation. Keep the MWM
 # feature, metadata, names and search intact; dedicated CB6 marks own map display.
 icons = ROOT / "data/styles/vehicle/include/Icons.mapcss"
