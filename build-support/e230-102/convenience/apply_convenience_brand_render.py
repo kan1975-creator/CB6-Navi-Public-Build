@@ -313,11 +313,15 @@ if "mCb6OnGestureEnd" not in v:
 view.write_text(v)
 
 a = activity.read_text()
-gesture_field = """  private final android.os.Handler mCb6ConvenienceHandler =
+gesture_field = """  private boolean cb6ConvenienceRenderingActive()
+  {
+    return mMapController != null && mMapController.isRenderingActive();
+  }
+  private final android.os.Handler mCb6ConvenienceHandler =
       new android.os.Handler(android.os.Looper.getMainLooper());
   private final Runnable mCb6ConvenienceRefresh = () ->
   {
-    if (!mMapController.isRenderingActive())
+    if (!cb6ConvenienceRenderingActive())
       return;
     final double[] center = Framework.nativeGetScreenRectCenter();
     if (center == null || center.length != 2)
