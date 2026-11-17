@@ -1,46 +1,57 @@
-# CB6 Navi development rules
+# CB6 Navi — 開発運用ルール（唯一の正本）
 
-## Purpose
-Prevent repeat regressions and unnecessary GitHub Actions runs. A feature is not complete merely because it compiles or displays once.
+本書は**開発の進め方・品質管理・GitHub運用**を定める唯一のルール文書とする。信号機の距離閾値やコンビニ表示縮尺などの**機能仕様**、個別Runの記録は本書に混在させない。変更時は本書を更新し、重複するルール文書を作らない。
 
-## Fixed constraints
-- Preserve previously confirmed PASS results; do not rerun them without a change that invalidates the evidence.
-- Do not alter signal feature E1005, the six convenience-store brand assets, or approved symbol sizes unless the task explicitly requires it.
-- Keep offline MWM as the convenience POI source. Do not silently add online dependencies.
-- Use the pinned repository branch and CoMaps commit; verify current HEAD before a non-force update.
-- Do not launch additional Actions runs or retry a failed run without authorization.
+## 1. 最優先原則
+1. **動作するAPKの完成を最優先**する。調査・ガバナンスのためだけの工程を増やさない。
+2. **過去の既知不具合を先に確認**し、再発を予防する。特に地図スクロールのフリーズ、表示欠落、重複描画を見落とさない。
+3. **既存PASSを継承**する。変更で根拠が失効した部分以外を再試験しない。
+4. **推測修正を禁止**する。根拠がある変更に絞り、関連修正を可能な限り一括で行う。
+5. **確認済み・未確認を区別**し、成功を先取りして報告しない。
 
-## Mandatory pre-implementation review (only changed code and directly affected paths)
-1. Identify the user-visible success criterion and relevant historical failures (especially map pan freezes, missing marks, duplicate intersection signals).
-2. Trace the full execution path across Java, JNI, C++, rendering and lifecycle callbacks. Check declaration order and Java compile-time references.
-3. Identify work performed on Android's UI thread. Never treat a delay/debounce as proof that heavy work is safe.
-4. For MWM reads, establish the native thread-safety contract before moving work to a worker thread. Plan cancellation/stale-result suppression, bounded queries and cache invalidation.
-5. Confirm gesture and zoom behavior, refresh triggers, screen visibility, and behavior on pause/resume.
-6. Define the minimum static checks and the specific runtime checks needed. Do not claim performance or compilation success without evidence.
-7. Consolidate related fixes into one scoped change where possible. Avoid speculative fixes and unrelated cleanup.
+## 2. 変更範囲の保護
+1. 変更対象と直接影響する経路だけを調査・修正する。無関係なリファクタリングは行わない。
+2. 信号機E1005、承認済みコンビニ6ブランド画像・サイズ、既存のネイティブUserMark描画は、明示的な変更要求がない限り維持する。
+3. コンビニPOIはオフラインMWMを使用し、無断でオンライン依存を追加しない。
+4. 対象ブランチと固定CoMaps Commitを維持し、書き込み直前にHEADを照合する。
 
-## Convenience-mark performance acceptance
-- Panning and zooming remain responsive; no reproducible UI stall attributable to convenience POI collection.
-- No unnecessary repeated full-range MWM query on every gesture.
-- Latest viewport wins: obsolete results cannot overwrite a newer viewport.
-- Work is bounded by viewport/cache strategy, with explicit limits; do not assume a fixed 3 km radius is optimal.
-- Preserve the six brand marks, sizes, native UserMark rendering, and offline behavior.
-- Check on device at the approved scales, including pan, zoom and pause/resume.
+## 3. 実装前に行う確認（必要最小限）
+1. 目的、実機での完成条件、関連する過去の不具合を整理する。
+2. 変更箇所のJava・JNI・C++・描画・ライフサイクルの接続を追い、宣言順序、メソッド署名、リソース参照を確認する。
+3. UIスレッド上の重い処理を洗い出す。**遅延・デバウンスだけではフリーズ対策にならない**。
+4. MWM処理を非同期化する場合はネイティブ側のスレッド安全性を先に確認する。古い要求の破棄、結果の世代管理、取得範囲の制限、キャッシュ更新条件を設計する。
+5. スクロール、ズーム、画面の一時停止・復帰で更新処理がどう動くか確認する。
+6. 変更範囲に応じた最小限の静的確認を定める。実行できない検査は未確認として報告する。
 
-## Build and evidence discipline
-- Before a new run, review the exact diff for Java compile risks, JNI signatures, thread use, lifecycle and resource paths.
-- Prefer local/static validation where available; do not rerun unrelated previously passing stages.
-- One authorized new Actions run per candidate. Record commit SHA, run ID, first failing step, and APK artifact name/size.
-- Diagnostic artifact is not an installable APK unless APK contents are verified.
-- Distinguish: source reviewed / compiled / built / installed / device verified. Never conflate these states.
-- On failure, inspect the first concrete error, make the smallest justified correction, and request a new authorized run.
-- No extra governance-only steps that delay APK delivery.
+## 4. 性能と安定性の完成条件
+1. 地図のスクロール・ズームの応答性を維持し、コンビニ取得による再現性あるUI停止を残さない。
+2. 地図操作ごとに不要な全範囲MWM再取得を繰り返さない。
+3. 古い取得結果が最新ビューポートの表示を上書きしない。
+4. 取得対象は表示範囲とキャッシュ戦略に応じて制限する。半径3km固定を最適と決めつけない。
+5. ブランド画像・サイズ・UserMark・オフライン動作を維持する。
+6. コンパイル成功だけで完成とせず、必要な実機操作で確認する。
 
-## Review checklist
-- [ ] Previous relevant defects reviewed and addressed or explicitly marked as outstanding
-- [ ] UI-thread workload and native thread safety evaluated
-- [ ] Java/JNI/C++ interfaces and lifecycle reviewed
-- [ ] Offline behavior, brand assets, sizes and E1005 preserved
-- [ ] Changed code checked without rerunning unrelated PASS stages
-- [ ] Acceptance criteria and remaining risks reported accurately
-- [ ] HEAD and authorized Actions run scope verified
+## 5. GitHub・Actions・APKの運用
+1. GitHubへの更新は対象HEADを確認してから非強制で行い、変更ファイルとCommitを記録する。
+2. Actionsは**候補ごとに本人が承認した新規Run1回のみ**。旧Runの再実行・追加Runを無断で行わない。
+3. ビルド前に変更差分のコンパイル上の問題、JNI接続、スレッド、ライフサイクル、リソースを確認する。
+4. 失敗した場合は**最初の具体的なエラー**を特定し、最小限の根拠ある修正を行う。次のRunは改めて承認を得る。
+5. Run ID、Commit SHA、成否、最初の失敗ステップ、Artifact名・サイズ・APK実体の有無を報告する。
+6. 診断Artifactとインストール可能なAPKを混同しない。
+7. 状態は「ソース確認」「コンパイル成功」「APKビルド成功」「インストール成功」「実機動作確認」を分けて記録する。
+
+## 6. 変更前の確認チェックリスト
+- [ ] 既知の関連不具合を確認し、再発対策または残存リスクを明示した
+- [ ] 変更対象と非変更対象を明確にした
+- [ ] Java・JNI・C++・描画・ライフサイクルを確認した
+- [ ] UI負荷、MWMスレッド安全性、古い要求の破棄、キャッシュを検討した
+- [ ] オフライン動作・E1005・ブランド画像・サイズ・UserMarkを保護した
+- [ ] 既存PASSを再利用し、不要な再試験を追加していない
+- [ ] 完成条件と未確認事項を明示した
+- [ ] GitHub HEADとActions承認範囲を照合した
+
+## 7. 文書管理
+- 本書を唯一の開発ルール正本とする。
+- Pull Requestテンプレートは本書への参照のみとし、独立したルールや重複チェックリストを持たせない。
+- 機能仕様、実験結果、個別のRun記録は本書とは別に管理する。
+- ルール変更は理由と変更内容をCommitで追跡できるようにする。
