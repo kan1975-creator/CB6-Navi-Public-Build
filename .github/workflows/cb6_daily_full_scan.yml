@@ -1,0 +1,45 @@
+name: CB6 Daily Full Scan
+
+on:
+  schedule:
+    - cron: '17 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cb6-daily-full-scan
+  cancel-in-progress: false
+
+jobs:
+  full-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout existing verifier source
+        uses: actions/checkout@v4
+        with:
+          ref: cb6-v2-clean
+          persist-credentials: false
+
+      - name: Record verification target
+        run: |
+          echo "Scan Run ID: $GITHUB_RUN_ID"
+          echo "Target branch: cb6-v2-clean"
+          echo "Target commit: $(git rev-parse HEAD)"
+
+      - name: Workflow meta verification
+        run: python3 v2/gates/verify_workflow_meta.py
+
+      - name: Verification mechanism catalog
+        run: python3 v2/gates/verify_verification_mechanisms.py
+
+      - name: Registry-Coverage consistency
+        run: python3 v2/gates/verify_rule_coverage.py
+
+      - name: Method-version coverage
+        run: python3 v2/gates/verify_method_version_coverage.py
+
+      - name: Monitoring policy
+        run: python3 v2/monitoring/verify_monitoring_policy.py
