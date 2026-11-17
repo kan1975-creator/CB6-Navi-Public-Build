@@ -1,0 +1,14 @@
+{
+  "proposed_change_id": "CB6-DAILY-FULL-SCAN-20261118",
+  "basis_head": "09b4c82c56d369779b6e82f9dbac441de8f4169c",
+  "planned_paths": [
+    ".github/workflows/cb6_daily_full_scan.yml"
+  ],
+  "forbidden_scope": [
+    ".github/workflows/cb6_approval_enforcement.yml",
+    "v2/gates/verify_user_approval_before_fix.py"
+  ],
+  "affected_domains": [
+    "github_actions_daily_full_scan"
+  ]
+}
