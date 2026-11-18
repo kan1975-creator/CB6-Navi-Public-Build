@@ -149,12 +149,29 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Convenienc
   jdouble * lats = env->GetDoubleArrayElements(latsArray, nullptr);
   jdouble * lons = env->GetDoubleArrayElements(lonsArray, nullptr);
   jint * kinds = env->GetIntArrayElements(kindsArray, nullptr);
+  // Preserve unchanged icons across repeated viewport and GPS refreshes.
+  static std::vector<std::array<double, 3>> previousMarks;
+  static bool hasPreviousMarks = false;
+  std::vector<std::array<double, 3>> incomingMarks;
+  incomingMarks.reserve(static_cast<size_t>(n));
+  for (jsize i = 0; i < n; ++i)
+    incomingMarks.push_back({lats[i], lons[i], static_cast<double>(kinds[i])});
+  if (hasPreviousMarks && incomingMarks == previousMarks)
+  {
+    LOG(LINFO, ("CB6-CONVENIENCE-DIAG nativeSet-skip-identical", "count", n));
+    env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
+    env->ReleaseDoubleArrayElements(lonsArray, lons, JNI_ABORT);
+    env->ReleaseIntArrayElements(kindsArray, kinds, JNI_ABORT);
+    return;
+  }
   auto session = frm()->GetBookmarkManager().GetEditSession();
   session.ClearGroup(UserMark::Type::CONVENIENCE);
   std::array<size_t, 10> setBrandCounts{}; size_t created = 0;
   for (jsize i = 0; i < n; ++i) { auto const pt = mercator::FromLatLon(lats[i], lons[i]); auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(pt); auto const kind = static_cast<int>(kinds[i]); mark->SetKind(kind); if (kind >= 0 && static_cast<size_t>(kind) < setBrandCounts.size()) ++setBrandCounts[static_cast<size_t>(kind)]; ++created; }
   LOG(LINFO, ("CB6-CONVENIENCE-DIAG marks-created", "count", created, "seven", setBrandCounts[1], "familymart", setBrandCounts[2], "lawson", setBrandCounts[3], "seicomart", setBrandCounts[4], "mybasket", setBrandCounts[5], "generic", setBrandCounts[6], "ministop", setBrandCounts[8], "daily", setBrandCounts[9]));
   session.SetIsVisible(UserMark::Type::CONVENIENCE, true);
+  previousMarks = std::move(incomingMarks);
+  hasPreviousMarks = true;
   env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
   env->ReleaseDoubleArrayElements(lonsArray, lons, JNI_ABORT);
   env->ReleaseIntArrayElements(kindsArray, kinds, JNI_ABORT);
