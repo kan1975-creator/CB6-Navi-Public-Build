@@ -50,6 +50,10 @@ ucpp.write_text(us)
 fw = ROOT / "android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp"
 s = fw.read_text()
 inc = '#include "app/organicmaps/sdk/convenience_mwm_collector.hpp"\n'
+extra_inc = '#include <map>\n#include <tuple>\n#include <chrono>\n'
+if extra_inc not in s:
+    s = s.replace('#include "app/organicmaps/sdk/Framework.hpp"\n',
+                  '#include "app/organicmaps/sdk/Framework.hpp"\n' + extra_inc, 1)
 if inc not in s:
     s = s.replace('#include "app/organicmaps/sdk/Framework.hpp"\n',
                   '#include "app/organicmaps/sdk/Framework.hpp"\n' + inc, 1)
@@ -149,29 +153,73 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Convenienc
   jdouble * lats = env->GetDoubleArrayElements(latsArray, nullptr);
   jdouble * lons = env->GetDoubleArrayElements(lonsArray, nullptr);
   jint * kinds = env->GetIntArrayElements(kindsArray, nullptr);
-  // Preserve unchanged icons across repeated viewport and GPS refreshes.
-  static std::vector<std::array<double, 3>> previousMarks;
-  static bool hasPreviousMarks = false;
-  std::vector<std::array<double, 3>> incomingMarks;
-  incomingMarks.reserve(static_cast<size_t>(n));
-  for (jsize i = 0; i < n; ++i)
-    incomingMarks.push_back({lats[i], lons[i], static_cast<double>(kinds[i])});
-  if (hasPreviousMarks && incomingMarks == previousMarks)
+  // Persistent per-shop mark IDs; never clear the whole convenience layer on refresh.
+  using ShopKey = std::tuple<double, double, int>;
+  using ShopState = std::pair<kml::MarkId, unsigned int>;
+  static std::map<ShopKey, ShopState> shopMarks;
+  static decltype(&frm()->GetBookmarkManager()) owner = nullptr;
+  static std::chrono::steady_clock::time_point emptySince{};
+  auto * currentManager = &frm()->GetBookmarkManager();
+  if (owner != currentManager)
   {
-    LOG(LINFO, ("CB6-CONVENIENCE-DIAG nativeSet-skip-identical", "count", n));
-    env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
-    env->ReleaseDoubleArrayElements(lonsArray, lons, JNI_ABORT);
-    env->ReleaseIntArrayElements(kindsArray, kinds, JNI_ABORT);
-    return;
+    shopMarks.clear();  // Old IDs must not be used with a different manager.
+    owner = currentManager;
+    emptySince = {};
   }
-  auto session = frm()->GetBookmarkManager().GetEditSession();
-  session.ClearGroup(UserMark::Type::CONVENIENCE);
-  std::array<size_t, 10> setBrandCounts{}; size_t created = 0;
-  for (jsize i = 0; i < n; ++i) { auto const pt = mercator::FromLatLon(lats[i], lons[i]); auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(pt); auto const kind = static_cast<int>(kinds[i]); mark->SetKind(kind); if (kind >= 0 && static_cast<size_t>(kind) < setBrandCounts.size()) ++setBrandCounts[static_cast<size_t>(kind)]; ++created; }
-  LOG(LINFO, ("CB6-CONVENIENCE-DIAG marks-created", "count", created, "seven", setBrandCounts[1], "familymart", setBrandCounts[2], "lawson", setBrandCounts[3], "seicomart", setBrandCounts[4], "mybasket", setBrandCounts[5], "generic", setBrandCounts[6], "ministop", setBrandCounts[8], "daily", setBrandCounts[9]));
-  session.SetIsVisible(UserMark::Type::CONVENIENCE, true);
-  previousMarks = std::move(incomingMarks);
-  hasPreviousMarks = true;
+  if (n == 0)
+  {
+    // Empty viewport results can be transient while MWM tiles load.
+    auto const now = std::chrono::steady_clock::now();
+    if (emptySince == std::chrono::steady_clock::time_point{})
+      emptySince = now;
+    if (now - emptySince >= std::chrono::seconds(30) && !shopMarks.empty())
+    {
+      auto session = currentManager->GetEditSession();
+      for (auto const & entry : shopMarks)
+        session.DeleteUserMark(entry.second.first);
+      shopMarks.clear();
+      LOG(LINFO, ("CB6-CONVENIENCE-DIAG stale-empty-cleared"));
+    }
+    else
+      LOG(LINFO, ("CB6-CONVENIENCE-DIAG nativeSet-keep-on-empty", "previous", shopMarks.size()));
+  }
+  else
+  {
+    emptySince = {};
+    std::map<ShopKey, unsigned int> incoming;
+    for (jsize i = 0; i < n; ++i)
+      incoming.emplace(ShopKey{lats[i], lons[i], static_cast<int>(kinds[i])}, 0);
+    auto session = frm()->GetBookmarkManager().GetEditSession();
+    size_t added = 0, kept = 0, removed = 0;
+    for (auto const & item : incoming)
+    {
+      auto it = shopMarks.find(item.first);
+      if (it != shopMarks.end())
+      {
+        it->second.second = 0;
+        ++kept;
+        continue;
+      }
+      auto const & key = item.first;
+      auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(
+          mercator::FromLatLon(std::get<0>(key), std::get<1>(key)));
+      mark->SetKind(std::get<2>(key));
+      shopMarks.emplace(key, ShopState{mark->GetId(), 0});
+      ++added;
+    }
+    for (auto it = shopMarks.begin(); it != shopMarks.end(); )
+    {
+      if (incoming.find(it->first) != incoming.end()) { ++it; continue; }
+      // Two non-empty missed snapshots avoid flicker at viewport boundaries.
+      if (++it->second.second < 2) { ++it; continue; }
+      session.DeleteUserMark(it->second.first);
+      it = shopMarks.erase(it);
+      ++removed;
+    }
+    session.SetIsVisible(UserMark::Type::CONVENIENCE, true);
+    LOG(LINFO, ("CB6-CONVENIENCE-DIAG incremental", "added", added,
+                "kept", kept, "removed", removed, "total", shopMarks.size()));
+  }
   env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
   env->ReleaseDoubleArrayElements(lonsArray, lons, JNI_ABORT);
   env->ReleaseIntArrayElements(kindsArray, kinds, JNI_ABORT);
@@ -346,7 +394,7 @@ gesture_field = """  private boolean cb6ConvenienceRenderingActive()
     final int scale = Framework.nativeGetDrawScale();
     if (scale < 14)
     {
-      Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
+      // Cb6ConvenienceMark::GetMinZoom() suppresses rendering at this scale.
       return;
     }
     final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(center[0], center[1], 3000, scale);
