@@ -126,7 +126,7 @@ JNIEXPORT jobjectArray JNICALL Java_app_organicmaps_sdk_Framework_nativeCb6Colle
   auto const delta = mercator::MetersToMercator(radiusMeters);
   m2::RectD const rect(center.x-delta, center.y-delta, center.x+delta, center.y+delta);
   auto const pois = cb6::poi::CollectConveniencePois(frm()->GetDataSource(), rect, scale);
-  auto const n = static_cast<jsize>(std::min<size_t>(pois.size(), 250));
+  auto const n = static_cast<jsize>(pois.size());
   std::array<size_t, 10> brandCounts{};
   for (jsize i = 0; i < n; ++i) { auto const k = Cb6ConvenienceKind(pois[static_cast<size_t>(i)].m_identity.m_brand); if (k >= 0 && static_cast<size_t>(k) < brandCounts.size()) ++brandCounts[static_cast<size_t>(k)]; }
   LOG(LINFO, ("CB6-CONVENIENCE-DIAG mwm-collected", "total", pois.size(), "returned", n, "seven", brandCounts[1], "familymart", brandCounts[2], "lawson", brandCounts[3], "seicomart", brandCounts[4], "mybasket", brandCounts[5], "generic", brandCounts[6], "ministop", brandCounts[8], "daily", brandCounts[9]));
@@ -153,72 +153,41 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Convenienc
   jdouble * lats = env->GetDoubleArrayElements(latsArray, nullptr);
   jdouble * lons = env->GetDoubleArrayElements(lonsArray, nullptr);
   jint * kinds = env->GetIntArrayElements(kindsArray, nullptr);
-  // Persistent per-shop mark IDs; never clear the whole convenience layer on refresh.
+  // Append-only convenience marks: keep IDs until application shutdown.
   using ShopKey = std::tuple<double, double, int>;
-  using ShopState = std::pair<kml::MarkId, unsigned int>;
-  static std::map<ShopKey, ShopState> shopMarks;
+  static std::map<ShopKey, kml::MarkId> shopMarks;
   static decltype(&frm()->GetBookmarkManager()) owner = nullptr;
-  static std::chrono::steady_clock::time_point emptySince{};
   auto * currentManager = &frm()->GetBookmarkManager();
   if (owner != currentManager)
   {
-    shopMarks.clear();  // Old IDs must not be used with a different manager.
+    shopMarks.clear();  // Never reuse IDs from a different BookmarkManager.
     owner = currentManager;
-    emptySince = {};
   }
-  if (n == 0)
+  if (n > 0)
   {
-    // Empty viewport results can be transient while MWM tiles load.
-    auto const now = std::chrono::steady_clock::now();
-    if (emptySince == std::chrono::steady_clock::time_point{})
-      emptySince = now;
-    if (now - emptySince >= std::chrono::seconds(30) && !shopMarks.empty())
-    {
-      auto session = currentManager->GetEditSession();
-      for (auto const & entry : shopMarks)
-        session.DeleteUserMark(entry.second.first);
-      shopMarks.clear();
-      LOG(LINFO, ("CB6-CONVENIENCE-DIAG stale-empty-cleared"));
-    }
-    else
-      LOG(LINFO, ("CB6-CONVENIENCE-DIAG nativeSet-keep-on-empty", "previous", shopMarks.size()));
-  }
-  else
-  {
-    emptySince = {};
-    std::map<ShopKey, unsigned int> incoming;
+    auto session = currentManager->GetEditSession();
+    size_t added = 0, kept = 0;
     for (jsize i = 0; i < n; ++i)
-      incoming.emplace(ShopKey{lats[i], lons[i], static_cast<int>(kinds[i])}, 0);
-    auto session = frm()->GetBookmarkManager().GetEditSession();
-    size_t added = 0, kept = 0, removed = 0;
-    for (auto const & item : incoming)
     {
-      auto it = shopMarks.find(item.first);
-      if (it != shopMarks.end())
+      ShopKey const key{lats[i], lons[i], static_cast<int>(kinds[i])};
+      if (shopMarks.find(key) != shopMarks.end())
       {
-        it->second.second = 0;
         ++kept;
         continue;
       }
-      auto const & key = item.first;
       auto * mark = session.CreateUserMark<Cb6ConvenienceMark>(
           mercator::FromLatLon(std::get<0>(key), std::get<1>(key)));
       mark->SetKind(std::get<2>(key));
-      shopMarks.emplace(key, ShopState{mark->GetId(), 0});
+      shopMarks.emplace(key, mark->GetId());
       ++added;
     }
-    for (auto it = shopMarks.begin(); it != shopMarks.end(); )
-    {
-      if (incoming.find(it->first) != incoming.end()) { ++it; continue; }
-      // Two non-empty missed snapshots avoid flicker at viewport boundaries.
-      if (++it->second.second < 2) { ++it; continue; }
-      session.DeleteUserMark(it->second.first);
-      it = shopMarks.erase(it);
-      ++removed;
-    }
     session.SetIsVisible(UserMark::Type::CONVENIENCE, true);
-    LOG(LINFO, ("CB6-CONVENIENCE-DIAG incremental", "added", added,
-                "kept", kept, "removed", removed, "total", shopMarks.size()));
+    LOG(LINFO, ("CB6-CONVENIENCE-DIAG append-only", "added", added,
+                "kept", kept, "total", shopMarks.size()));
+  }
+  else
+  {
+    LOG(LINFO, ("CB6-CONVENIENCE-DIAG keep-on-empty", "total", shopMarks.size()));
   }
   env->ReleaseDoubleArrayElements(latsArray, lats, JNI_ABORT);
   env->ReleaseDoubleArrayElements(lonsArray, lons, JNI_ABORT);
@@ -327,20 +296,8 @@ if field not in a:
 hook = """    if (mCb6ConvenienceLastLocation == null ||
         location.distanceTo(mCb6ConvenienceLastLocation) >= 800.0f)
     {
-      final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(
-          location.getLatitude(), location.getLongitude(), 3000, 17);
-      if (cb6 != null && cb6.length == 3 && cb6[0] != null && cb6[1] != null && cb6[2] != null)
-      {
-        final int n = Math.min(cb6[0].length, Math.min(cb6[1].length, cb6[2].length));
-        final double[] lats = java.util.Arrays.copyOf(cb6[0], n);
-        final double[] lons = java.util.Arrays.copyOf(cb6[1], n);
-        final int[] kinds = new int[n];
-        for (int i = 0; i < n; ++i)
-          kinds[i] = (int) cb6[2][i];
-        android.util.Log.i("CB6-CONVENIENCE-DIAG", "java-transfer count=" + n);
-        Framework.nativeSetCb6ConvenienceMarks(lats, lons, kinds);
-        mCb6ConvenienceLastLocation = new Location(location);
-      }
+      cb6ScheduleConvenienceViewportRefresh();
+      mCb6ConvenienceLastLocation = new Location(location);
     }
 
 """
@@ -378,40 +335,127 @@ if "mCb6OnGestureEnd" not in v:
 view.write_text(v)
 
 a = activity.read_text()
-gesture_field = """  private boolean cb6ConvenienceRenderingActive()
+gesture_field = """  // CoMaps DataSource is NOT accessed from the worker: only array conversion is.
+  private java.util.concurrent.ExecutorService mCb6ConvenienceTransform =
+      java.util.concurrent.Executors.newSingleThreadExecutor();
+  private final java.util.concurrent.atomic.AtomicInteger mCb6ConvenienceGeneration =
+      new java.util.concurrent.atomic.AtomicInteger();
+  private boolean mCb6ConveniencePaused = true;
+  // Cached successful native collection footprints. Radius 3500m permits a
+  // 500m center shift while covering the original 3000m requested area.
+  private final java.util.ArrayList<double[]> mCb6ConvenienceCovered =
+      new java.util.ArrayList<>();
+  private boolean cb6ConvenienceAlreadyCovered(double lat, double lon, int scale)
+  {
+    final float[] distance = new float[1];
+    for (double[] c : mCb6ConvenienceCovered)
+    {
+      if ((int)c[2] != scale) continue;
+      android.location.Location.distanceBetween(lat, lon, c[0], c[1], distance);
+      if (distance[0] <= 500.0f) return true;
+    }
+    return false;
+  }
+  private void cb6ConvenienceRememberCovered(double lat, double lon, int scale)
+  {
+    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
+    // Bounded cache, mark retention itself is not bounded or altered.
+    if (mCb6ConvenienceCovered.size() >= 128)
+      mCb6ConvenienceCovered.remove(0);
+    mCb6ConvenienceCovered.add(new double[] {lat, lon, scale});
+  }
+  private double[] mCb6ConvenienceLastSample;
+  private int mCb6ConvenienceStableSamples;
+  private final Runnable mCb6ConvenienceSettlePoll = new Runnable()
+  {
+    @Override public void run()
+    {
+      if (mCb6ConveniencePaused || !cb6ConvenienceRenderingActive()) return;
+      final double[] center = Framework.nativeGetScreenRectCenter();
+      if (center == null || center.length != 2)
+      {
+        mCb6ConvenienceLastSample = null;
+        mCb6ConvenienceStableSamples = 0;
+        mCb6ConvenienceHandler.postDelayed(this, 180);
+        return;
+      }
+      final int scale = Framework.nativeGetDrawScale();
+      if (scale < 14)
+      {
+        mCb6ConvenienceLastSample = null;
+        mCb6ConvenienceStableSamples = 0;
+        return;
+      }
+      final double[] now = new double[] {center[0], center[1], scale};
+      if (mCb6ConvenienceLastSample != null &&
+          Math.abs(now[0] - mCb6ConvenienceLastSample[0]) < 1e-7 &&
+          Math.abs(now[1] - mCb6ConvenienceLastSample[1]) < 1e-7 &&
+          now[2] == mCb6ConvenienceLastSample[2])
+        ++mCb6ConvenienceStableSamples;
+      else
+        mCb6ConvenienceStableSamples = 0;
+      mCb6ConvenienceLastSample = now;
+      if (mCb6ConvenienceStableSamples >= 2)
+      {
+        cb6CollectConvenienceSafely(now[0], now[1], scale);
+        return;
+      }
+      mCb6ConvenienceHandler.postDelayed(this, 180);
+    }
+  };
+  private void cb6ScheduleConvenienceViewportRefresh()
+  {
+    if (mCb6ConveniencePaused) return;
+    mCb6ConvenienceGeneration.incrementAndGet();
+    mCb6ConvenienceHandler.removeCallbacks(mCb6ConvenienceSettlePoll);
+    mCb6ConvenienceLastSample = null;
+    mCb6ConvenienceStableSamples = 0;
+    mCb6ConvenienceHandler.postDelayed(mCb6ConvenienceSettlePoll, 180);
+  }
+  private void cb6CollectConvenienceSafely(final double lat, final double lon, final int scale)
+  {
+    if (mCb6ConveniencePaused || !cb6ConvenienceRenderingActive()) return;
+    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
+    final int generation = mCb6ConvenienceGeneration.get();
+    // JNI DataSource collection remains on main thread pending thread-safety proof.
+    // The 500m overlap margin is required for safe viewport coverage reuse.
+    final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(lat, lon, 3500, scale);
+    if (cb6 == null || cb6.length != 3 || cb6[0] == null || cb6[1] == null || cb6[2] == null)
+      return;
+    final int n = Math.min(cb6[0].length, Math.min(cb6[1].length, cb6[2].length));
+    try
+    {
+      mCb6ConvenienceTransform.execute(() ->
+      {
+        final double[] lats = java.util.Arrays.copyOf(cb6[0], n);
+        final double[] lons = java.util.Arrays.copyOf(cb6[1], n);
+        final int[] kinds = new int[n];
+        for (int i = 0; i < n; ++i) kinds[i] = (int) cb6[2][i];
+        mCb6ConvenienceHandler.post(() ->
+        {
+          if (mCb6ConveniencePaused || generation != mCb6ConvenienceGeneration.get() ||
+              !cb6ConvenienceRenderingActive()) return;
+          Framework.nativeSetCb6ConvenienceMarks(lats, lons, kinds);
+          // Empty MWM results may be transient: do not cache them as coverage.
+          if (n > 0)
+            cb6ConvenienceRememberCovered(lat, lon, scale);
+        });
+      });
+    }
+    catch (java.util.concurrent.RejectedExecutionException ignored)
+    {
+      // The activity was paused and the worker was shut down.
+    }
+  }
+  private boolean cb6ConvenienceRenderingActive()
   {
     return mMapController != null && mMapController.isRenderingActive();
   }
   private final android.os.Handler mCb6ConvenienceHandler =
       new android.os.Handler(android.os.Looper.getMainLooper());
-  private final Runnable mCb6ConvenienceRefresh = () ->
-  {
-    if (!cb6ConvenienceRenderingActive())
-      return;
-    final double[] center = Framework.nativeGetScreenRectCenter();
-    if (center == null || center.length != 2)
-      return;
-    final int scale = Framework.nativeGetDrawScale();
-    if (scale < 14)
-    {
-      // Cb6ConvenienceMark::GetMinZoom() suppresses rendering at this scale.
-      return;
-    }
-    final double[][] cb6 = Framework.nativeCb6CollectConvenienceMarks(center[0], center[1], 3000, scale);
-    if (cb6 == null || cb6.length != 3 || cb6[0] == null || cb6[1] == null || cb6[2] == null)
-      return;
-    final int n = Math.min(cb6[0].length, Math.min(cb6[1].length, cb6[2].length));
-    final int[] kinds = new int[n];
-    for (int i = 0; i < n; ++i)
-      kinds[i] = (int) cb6[2][i];
-    Framework.nativeSetCb6ConvenienceMarks(
-        java.util.Arrays.copyOf(cb6[0], n), java.util.Arrays.copyOf(cb6[1], n), kinds);
-    android.util.Log.i("CB6-CONVENIENCE-DIAG", "viewport-refresh count=" + n + " scale=" + scale);
-  };
   private final Runnable mCb6ConvenienceGestureEnd = () ->
   {
-    mCb6ConvenienceHandler.removeCallbacks(mCb6ConvenienceRefresh);
-    mCb6ConvenienceHandler.postDelayed(mCb6ConvenienceRefresh, 450);
+    cb6ScheduleConvenienceViewportRefresh();
   };
 """
 if "mCb6ConvenienceGestureEnd" not in a:
@@ -422,11 +466,17 @@ if "mCb6ConvenienceGestureEnd" not in a:
     pause = "  protected void onPause()\n  {\n"
     if a.count(resume) != 1 or a.count(pause) != 1:
         raise SystemExit("Activity lifecycle anchor missing")
-    a = a.replace(resume, resume + """    app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
+    a = a.replace(resume, resume + """    if (mCb6ConvenienceTransform.isShutdown())
+      mCb6ConvenienceTransform = java.util.concurrent.Executors.newSingleThreadExecutor();
+    mCb6ConveniencePaused = false;
+    app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
     mCb6ConvenienceGestureEnd.run();
 """, 1)
-    a = a.replace(pause, pause + """    app.organicmaps.sdk.MapView.setCb6OnGestureEnd(null);
-    mCb6ConvenienceHandler.removeCallbacks(mCb6ConvenienceRefresh);
+    a = a.replace(pause, pause + """    mCb6ConveniencePaused = true;
+    mCb6ConvenienceGeneration.incrementAndGet();
+    mCb6ConvenienceHandler.removeCallbacks(mCb6ConvenienceSettlePoll);
+    mCb6ConvenienceTransform.shutdownNow();
+    app.organicmaps.sdk.MapView.setCb6OnGestureEnd(null);
 """, 1)
 activity.write_text(a)
 
