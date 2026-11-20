@@ -221,7 +221,17 @@ jobs:
           set -euo pipefail
           SUPPORT="$GITHUB_WORKSPACE/handoff/build-support/e230-102"
           cd comaps/android
-          gradle --no-daemon --max-workers=2 -I "$SUPPORT/dependencies.init.gradle" -Parm64 -Pnjobs=2 cb6ResolveBuildDependencies 2>&1 | tee "$SUPPORT/out/dependencies.log"
+          for attempt in 1 2 3; do
+            echo "G09 Gradle dependency resolution attempt ${attempt}/3" | tee -a "$SUPPORT/out/dependencies.log"
+            if gradle --no-daemon --max-workers=2 -I "$SUPPORT/dependencies.init.gradle" -Parm64 -Pnjobs=2 cb6ResolveBuildDependencies 2>&1 | tee -a "$SUPPORT/out/dependencies.log"; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo 'G09 dependency resolution failed after 3 attempts' | tee -a "$SUPPORT/out/dependencies.log"
+              exit 1
+            fi
+            sleep $((attempt * 30))
+          done
       - name: Build arm64 APK exactly once with upstream debug signing
         run: |
           set -euo pipefail
