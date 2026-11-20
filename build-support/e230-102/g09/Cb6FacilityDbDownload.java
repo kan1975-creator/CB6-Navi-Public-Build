@@ -14,7 +14,7 @@ import java.security.MessageDigest;
 /** Explicitly configured HTTPS-only download, to be invoked on background executor. */
 public final class Cb6FacilityDbDownload {
   private Cb6FacilityDbDownload() {}
-  static boolean valid(File file) {
+  public static boolean valid(File file) {
     if (!file.isFile() || file.length() < 1024) return false;
     try (SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null,
         SQLiteDatabase.OPEN_READONLY)) {
