@@ -156,11 +156,12 @@ jobs:
           test -s comaps/data/styles/default/dark/mdpi/cb6-seicomart.png
           grep -q 'nativeCb6CollectConvenienceMarks' comaps/android/app/src/main/java/app/organicmaps/MwmActivity.java
 
-      - name: Apply G09 SQLite facility source and convenience-only mark reset
+      - name: Apply G09 integrated SQLite facility source and convenience reset
         run: |
           set -euo pipefail
-          python3 handoff/build-support/e230-102/g09/apply_g09_sqlite_single_source.py comaps
-          python3 handoff/build-support/e230-102/g09/apply_g09_convenience_reset.py comaps
+          python3 handoff/build-support/e230-102/g09/apply_g09_integrated.py comaps
+          python3 handoff/build-support/e230-102/g09/g09_prepare_bundled_db.py \
+            handoff/build-support/e230-102/g09/cb6_facilities.sqlite comaps
 
       - name: Generate convenience brand symbols using proven V2 CoMaps configure flow
         run: |
