@@ -64,8 +64,7 @@ if include not in c:
 old='  public static native void nativeSetCb6ConvenienceMarks(double[] lats, double[] lons, int[] kinds);'
 if j.count(old)!=1: raise SystemExit('STOP: Java JNI declaration mismatch')
 j=j.replace(old,old+'\n  public static native void nativeSyncCb6ConvenienceMarks(double[] lats, double[] lons, int[] kinds);',1)
-old='''              Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
-              Framework.nativeSetCb6ConvenienceMarks(marks.lats, marks.lons, marks.kinds);'''
+old='              Framework.nativeSetCb6ConvenienceMarks(marks.lats, marks.lons, marks.kinds);'
 if a.count(old)!=1: raise SystemExit('STOP: SQLite snapshot calls mismatch')
 a=a.replace(old,'              Framework.nativeSyncCb6ConvenienceMarks(marks.lats, marks.lons, marks.kinds);',1)
 # The legacy explanatory comment must not falsely say a reset occurs each frame.
