@@ -51,6 +51,8 @@ replacement='''    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
 '''
 # Install bundled DB on the existing worker; never do I/O on main thread.
 resume='''    mCb6ConveniencePaused = false;
+    Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
+    mCb6ConvenienceCovered.clear();
     app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
 '''
 new_resume='''    mCb6ConveniencePaused = false;
@@ -71,6 +73,8 @@ new_resume='''    mCb6ConveniencePaused = false;
         app.organicmaps.cb6.facilities.Cb6FacilityDbDownload.downloadConfigured(this);
       });
     }
+    Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
+    mCb6ConvenienceCovered.clear();
     app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
 '''
 source_fields = """  private boolean mCb6G09SourceSelected = false;
