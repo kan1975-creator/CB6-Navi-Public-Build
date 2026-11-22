@@ -58,7 +58,7 @@ old=c[c.index(start):function_end+3]
 c=c.replace(old,block+wrappers,1)
 include='#include <set>\n'
 if include not in c:
-  anchor='#include <vector>\n'
+  anchor='#include "app/organicmaps/sdk/Framework.hpp"\n'
   if c.count(anchor)!=1: raise SystemExit('STOP: C++ include anchor mismatch')
   c=c.replace(anchor,anchor+include,1)
 old='  public static native void nativeSetCb6ConvenienceMarks(double[] lats, double[] lons, int[] kinds);'
