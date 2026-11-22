@@ -78,6 +78,7 @@ public:
     case 5: symbol = "cb6-mybasket"; break;
     case 8: symbol = "cb6-ministop"; break;
     case 9: symbol = "cb6-daily"; break;
+    case 26: symbol = "park-m"; break;
     case 28: symbol = "supermarket-m"; break;
     case 29: symbol = "department_store-m"; break;
     case 30: symbol = "airport-m"; break;
@@ -87,7 +88,7 @@ public:
     LOG(LINFO, ("CB6-CONVENIENCE-DIAG symbol-selected", "kind", m_kind, "symbol", symbol));
     // CB6 relative boundary adjustment: keep the proven CoMaps UserMark
     // selection mechanism and move the existing size stages one zoom farther out.
-    if (m_kind >= 28 && m_kind <= 31)
+    if (m_kind == 26 || (m_kind >= 28 && m_kind <= 31))
     {
       symbols->insert({14, symbol});
       symbols->insert({15, symbol});
@@ -183,7 +184,7 @@ JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeSetCb6Convenienc
     for (jsize i = 0; i < n; ++i)
     {
       // G09 unapproved facility icons must not fall back to convenience.
-      if (kinds[i] >= 24 && kinds[i] <= 27) continue;
+      if (kinds[i] == 24 || kinds[i] == 25 || kinds[i] == 27) continue;
       ShopKey const key{lats[i], lons[i], static_cast<int>(kinds[i])};
       if (shopMarks.find(key) != shopMarks.end())
       {
