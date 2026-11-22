@@ -15,9 +15,9 @@ anchor='''    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
     final int generation = mCb6ConvenienceGeneration.get();
 '''
 replacement='''    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
+    // Do not start either MWM or SQLite rendering before worker source selection.
+    if (!mCb6G09SourceSelected) return;
     final int generation = mCb6ConvenienceGeneration.get();
-    // SQLite is the sole source once an installed facility database is available.
-    // Until then the original MWM path below is retained unchanged.
     final java.io.File g09Db = new java.io.File(getFilesDir(), "cb6_facilities.sqlite");
     if (mCb6G09SqliteSelected)
     {
@@ -49,43 +49,59 @@ replacement='''    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
       return;
     }
 '''
-# Install bundled DB on the existing worker; never do I/O on main thread.
 resume='''    mCb6ConveniencePaused = false;
-    Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
-    mCb6ConvenienceCovered.clear();
     app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
+    mCb6ConvenienceGestureEnd.run();
 '''
 new_resume='''    mCb6ConveniencePaused = false;
-    // Freeze source for the Activity lifetime: no mid-session MWM->SQLite
-    // transition while native convenience marks are append-only.
-    if (!mCb6G09SourceSelected)
+    // Choose exactly once after pending promotion on the existing background worker.
+    if (!mCb6G09SourceSelectionScheduled)
     {
-      mCb6G09SourceSelected = true;
-      mCb6G09SqliteSelected =
-          app.organicmaps.cb6.facilities.Cb6FacilityDbDownload.valid(
-              new java.io.File(getFilesDir(), "cb6_facilities.sqlite"));
-      mCb6ConvenienceTransform.execute(() ->
+      mCb6G09SourceSelectionScheduled = true;
+      final int g09SelectionGeneration = mCb6G09SelectionGeneration;
+      try
       {
-        // Bundled DB is optional; never overwrite a downloaded database.
+        mCb6ConvenienceTransform.execute(() ->
+        {
         app.organicmaps.cb6.facilities.Cb6FacilityDbInstaller.ensureInstalled(this);
-        // Download is optional and requires a trusted HTTPS URL + SHA-256
-        // supplied in the APK asset. Newly installed DB activates next launch.
+        final boolean selected =
+            app.organicmaps.cb6.facilities.Cb6FacilityDbDownload.valid(
+                new java.io.File(getFilesDir(), "cb6_facilities.sqlite"));
+        mCb6ConvenienceHandler.post(() ->
+        {
+          if (mCb6ConveniencePaused ||
+              g09SelectionGeneration != mCb6G09SelectionGeneration) return;
+          mCb6G09SqliteSelected = selected;
+          mCb6G09SourceSelected = true;
+          if (!mCb6ConveniencePaused && cb6ConvenienceRenderingActive())
+            mCb6ConvenienceGestureEnd.run();
+        });
+        // New download is staged for a future process launch, not selected now.
         app.organicmaps.cb6.facilities.Cb6FacilityDbDownload.downloadConfigured(this);
-      });
+        });
+      }
+      catch (java.util.concurrent.RejectedExecutionException ignored)
+      {
+        mCb6G09SourceSelectionScheduled = false;
+      }
     }
-    Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
-    mCb6ConvenienceCovered.clear();
     app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
+    mCb6ConvenienceGestureEnd.run();
 '''
-source_fields = """  private boolean mCb6G09SourceSelected = false;
-  private boolean mCb6G09SqliteSelected = false;
+source_fields = """  private boolean mCb6G09SourceSelectionScheduled = false;
+  private int mCb6G09SelectionGeneration = 0;
+  private volatile boolean mCb6G09SourceSelected = false;
+  private volatile boolean mCb6G09SqliteSelected = false;
 """
+# Pause invalidates unfinished source selection; resume may safely reschedule.
+pause_anchor = "    mCb6ConveniencePaused = true;\n    mCb6ConvenienceGeneration.incrementAndGet();\n"
+pause_replacement = "    mCb6ConveniencePaused = true;\n    ++mCb6G09SelectionGeneration;\n    if (!mCb6G09SourceSelected) mCb6G09SourceSelectionScheduled = false;\n    mCb6ConvenienceGeneration.incrementAndGet();\n"
 field_anchor = "  private boolean mCb6ConveniencePaused = true;\n"
 if s.count(field_anchor) != 1: raise SystemExit('STOP: source fields anchor missing')
 s = s.replace(field_anchor, field_anchor + source_fields, 1)
-for old in (anchor,resume):
+for old in (anchor,resume,pause_anchor):
  if s.count(old)!=1: raise SystemExit('STOP: expected source anchor not unique')
-s=s.replace(anchor,replacement,1).replace(resume,new_resume,1)
+s=s.replace(anchor,replacement,1).replace(resume,new_resume,1).replace(pause_anchor,pause_replacement,1)
 for filename in ('SQLiteFacilityRepository.java','Cb6FacilityDbInstaller.java','Cb6FacilityDbDownload.java'):
  if not (base/filename).is_file(): raise SystemExit('STOP: G09 source missing '+filename)
 target.mkdir(parents=True,exist_ok=True)
