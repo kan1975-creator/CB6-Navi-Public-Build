@@ -19,7 +19,7 @@ cpp='android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp'
 needle='JNIEXPORT void JNICALL Java_app_organicmaps_sdk_Framework_nativeShowTrackRect'
 insert="""JNIEXPORT jdoubleArray JNICALL Java_app_organicmaps_sdk_Framework_nativeGetCb6ViewportBounds(JNIEnv * env, jclass)
 {
-  auto const rect = frm()->GetCb6ViewportBounds();
+  auto const rect = frm()->GetCurrentViewport();
   double const bounds[] = {
       mercator::YToLat(rect.minY()), mercator::YToLat(rect.maxY()),
       mercator::XToLon(rect.minX()), mercator::XToLon(rect.maxX())};
