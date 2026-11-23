@@ -160,8 +160,14 @@ jobs:
         run: |
           set -euo pipefail
           python3 handoff/build-support/e230-102/g09/apply_g09_integrated.py comaps
-          python3 handoff/build-support/e230-102/g09/g09_prepare_bundled_db.py \
-            handoff/build-support/e230-102/g09/cb6_facilities.sqlite comaps
+          python3 handoff/build-support/e230-102/g09-facility-stage/stage_facility_db_14934.py \
+            handoff/build-support/e230-102/g09-facility-stage/cb6_facilities.sqlite comaps
+
+      - name: Stage G09 facility symbols and user-initiated safe updates
+        run: |
+          set -euo pipefail
+          python3 handoff/build-support/e230-102/g09-facility-stage/stage_after_g09_overlay.py comaps
+          python3 handoff/build-support/e230-102/g09-facility-stage/facility-update/apply_facility_update_isolated.py comaps
 
       - name: Generate convenience brand symbols using proven V2 CoMaps configure flow
         run: |
