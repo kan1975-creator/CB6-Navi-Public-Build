@@ -50,6 +50,8 @@ replacement='''    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
     }
 '''
 resume='''    mCb6ConveniencePaused = false;
+    Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
+    mCb6ConvenienceCovered.clear();
     app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
     mCb6ConvenienceGestureEnd.run();
 '''
@@ -85,6 +87,8 @@ new_resume='''    mCb6ConveniencePaused = false;
         mCb6G09SourceSelectionScheduled = false;
       }
     }
+    Framework.nativeSetCb6ConvenienceMarks(new double[0], new double[0], new int[0]);
+    mCb6ConvenienceCovered.clear();
     app.organicmaps.sdk.MapView.setCb6OnGestureEnd(mCb6ConvenienceGestureEnd);
     mCb6ConvenienceGestureEnd.run();
 '''
