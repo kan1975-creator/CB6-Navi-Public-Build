@@ -41,7 +41,13 @@ replacement='''    if (cb6ConvenienceAlreadyCovered(lat, lon, scale)) return;
           }
           catch (android.database.sqlite.SQLiteException | IllegalStateException e)
           {
-            android.util.Log.e("CB6-G09", "SQLite query failed; not switching to MWM", e);
+            android.util.Log.e("CB6-G09", "SQLite query failed; restoring MWM convenience fallback", e);
+            mCb6ConvenienceHandler.post(() -> {
+              if (mCb6ConveniencePaused || generation != mCb6ConvenienceGeneration.get()) return;
+              mCb6G09SqliteSelected = false;
+              mCb6ConvenienceCovered.clear();
+              mCb6ConvenienceGestureEnd.run();
+            });
           }
         });
       }

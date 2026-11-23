@@ -50,9 +50,16 @@ public final class Cb6FacilityDbInstaller {
       }
     }
     if (dest.isFile() && Cb6FacilityDbDownload.valid(dest)) return dest;
+    // Preserve a legacy/incompatible DB rather than blocking the bundled baseline.
+    // A retained legacy copy is never overwritten or silently deleted.
+    File legacy = new File(context.getFilesDir(), ASSET + ".legacy");
+    boolean movedLegacy = false;
     if (dest.exists()) {
-      Log.w("CB6-G09", "Invalid installed facility SQLite; not overwriting");
-      return null;
+      if (legacy.exists() || !dest.renameTo(legacy)) {
+        Log.w("CB6-G09", "Legacy facility SQLite cannot be safely preserved");
+        return null;
+      }
+      movedLegacy = true;
     }
     File temp = new File(context.getFilesDir(), ASSET + ".tmp");
     try (InputStream in = context.getAssets().open(ASSET);
@@ -62,11 +69,15 @@ public final class Cb6FacilityDbInstaller {
       out.getFD().sync();
     } catch (IOException e) {
       temp.delete();
+      if (movedLegacy && !dest.exists() && !legacy.renameTo(dest))
+        Log.e("CB6-G09", "Legacy SQLite restore failed; preserved as .legacy");
       Log.w("CB6-G09", "Facility database asset not available; keeping MWM", e);
       return null;
     }
     if (!Cb6FacilityDbDownload.valid(temp) || !temp.renameTo(dest)) {
       temp.delete();
+      if (movedLegacy && !dest.exists() && !legacy.renameTo(dest))
+        Log.e("CB6-G09", "Legacy SQLite restore failed; preserved as .legacy");
       Log.w("CB6-G09", "Facility database install failed; keeping MWM");
       return null;
     }
