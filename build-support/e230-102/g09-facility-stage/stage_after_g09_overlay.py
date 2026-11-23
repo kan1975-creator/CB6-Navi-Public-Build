@@ -2,7 +2,7 @@
 """Post-G09, pre-generate_symbols.sh; never rerun convenience installer."""
 from io import BytesIO
 from pathlib import Path
-import subprocess
+from hashlib import sha256
 
 from PIL import Image
 import sys
@@ -56,11 +56,9 @@ for theme in ("light", "dark"):
         for suffix in suffixes:
             if (style / "symbols" / f"{stem}{suffix}.svg").exists():
                 raise SystemExit(f"STOP: facility SVG collision: {stem}{suffix}")
-        raster = subprocess.run(
-            ["convert", "-background", "none", "-density", "384", str(source), "PNG32:-"],
-            check=True, stdout=subprocess.PIPE,
-        ).stdout
-        with Image.open(BytesIO(raster)) as icon:
+        # Match the bundled transparent master to the exact source SVG.
+        digest = sha256(source.read_bytes()).hexdigest()
+        with Image.open(here / "raster_masters" / f"{stem}-{digest}.png") as icon:
             for density in densities:
                 for suffix in suffixes:
                     reference = edges[density, suffix]
