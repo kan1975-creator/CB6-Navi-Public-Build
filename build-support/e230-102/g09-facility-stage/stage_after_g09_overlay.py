@@ -30,7 +30,7 @@ replacements={
     {
       symbols->insert({18, symbol});
     }''',
-'if (kinds[i] == 24 || kinds[i] == 25 || kinds[i] == 27) continue;':'// All facility kinds 24..31 have dedicated symbols; no silent exclusion.',
+'if (kinds[i] == 24 || kinds[i] == 25 || kinds[i] == 27) continue;':'if (kinds[i] == 26 || kinds[i] == 27) continue;',
 }
 replacements={a.replace('\n','\n'):b.replace('\n','\n') for a,b in replacements.items()}
 for old,new in replacements.items():
