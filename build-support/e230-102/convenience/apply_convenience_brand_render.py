@@ -102,9 +102,9 @@ public:
     }
     return symbols;
   }
-  int GetMinZoom() const override { return 14; }
+  int GetMinZoom() const override { return m_kind == 26 ? 18 : 14; }
   bool SymbolIsPOI() const override { return false; }
-  bool IsNonDisplaceable() const override { return true; }
+  bool IsNonDisplaceable() const override { return m_kind != 26; }
   bool IsMarkAboveText() const override { return true; }
   bool GetDepthTestEnabled() const override { return false; }
 

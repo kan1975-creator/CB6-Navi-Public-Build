@@ -27,5 +27,5 @@ for script in ('apply_g09_safe_update_source.py','apply_g09_facility_update_ui.p
 # Stable GitHub Releases URL; each release carries cb6_facilities.sqlite and its
 # matching cb6_facilities.sha256. No APK rebuild is needed for later releases.
 url_asset=root/'android/app/src/main/assets/cb6_facilities_download.txt'
-url_asset.write_text('https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/latest/download/cb6_facilities.sqlite\n')
+url_asset.write_text('https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/download/cb6-facilities-v1/cb6_facilities.sqlite\n')
 print('G09_UPDATE_ISOLATED_PATCH_APPLIED; RELEASE_URL_CONFIGURED')

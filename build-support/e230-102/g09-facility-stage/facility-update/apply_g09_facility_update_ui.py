@@ -21,7 +21,7 @@ replacement='''      update.setEnabled(false);
             new java.io.InputStreamReader(requireContext().getAssets().open("cb6_facilities_download.txt"),
                 java.nio.charset.StandardCharsets.UTF_8))) {
           String url = reader.readLine();
-          configured = "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/latest/download/cb6_facilities.sqlite".equals(url) && reader.readLine() == null;
+          configured = "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/download/cb6-facilities-v1/cb6_facilities.sqlite".equals(url) && reader.readLine() == null;
         } catch (java.io.IOException ignored) { /* No approved distribution endpoint. */ }
         final boolean pendingUpdate = new java.io.File(requireContext().getFilesDir(),
             "cb6_facilities.sqlite.pending").exists();

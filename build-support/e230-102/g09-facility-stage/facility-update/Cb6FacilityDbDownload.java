@@ -41,7 +41,7 @@ public final class Cb6FacilityDbDownload {
   }
   // Stable latest-release URLs allow new facility data without a new APK.
   private static final String RELEASE_DB =
-      "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/latest/download/cb6_facilities.sqlite";
+      "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/download/cb6-facilities-v1/cb6_facilities.sqlite";
 
   public static boolean downloadConfigured(Context context) {
     String url;
