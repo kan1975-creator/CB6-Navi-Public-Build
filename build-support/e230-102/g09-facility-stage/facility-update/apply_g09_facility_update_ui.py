@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# G09 facility-only offline update UI connection; fail closed without approved URL/SHA.
+# G09 facility-only offline update UI; stable approved GitHub Releases endpoint.
 # Apply to restored CoMaps AFTER stage105 and G09 sources. No network calls at patch time.
 from pathlib import Path
 import sys
@@ -15,14 +15,13 @@ if s.count(anchor)!=1: raise SystemExit('STOP_UPDATE_ANCHOR_MISMATCH')
 replacement='''      update.setEnabled(false);
       update.setSummary("更新先または安全な更新接続が未確定のため利用できません");
       if (kind == Kind.FACILITY_SQLITE) {
-        // G09_FACILITY_UPDATE_WIRING: only an explicitly packaged HTTPS URL/SHA may enable this.
+        // G09_FACILITY_UPDATE_WIRING: approved stable release URL enables manual updates.
         boolean configured = false;
         try (java.io.BufferedReader reader = new java.io.BufferedReader(
             new java.io.InputStreamReader(requireContext().getAssets().open("cb6_facilities_download.txt"),
                 java.nio.charset.StandardCharsets.UTF_8))) {
-          String url = reader.readLine(), sha = reader.readLine();
-          configured = url != null && url.startsWith("https://") && sha != null &&
-              sha.matches("[a-fA-F0-9]{64}") && reader.readLine() == null;
+          String url = reader.readLine();
+          configured = "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/latest/download/cb6_facilities.sqlite".equals(url) && reader.readLine() == null;
         } catch (java.io.IOException ignored) { /* No approved distribution endpoint. */ }
         final boolean pendingUpdate = new java.io.File(requireContext().getFilesDir(),
             "cb6_facilities.sqlite.pending").exists();

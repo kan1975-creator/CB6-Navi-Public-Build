@@ -39,15 +39,66 @@ public final class Cb6FacilityDbDownload {
       }
     } catch (Exception e) { return false; }
   }
+  // Stable latest-release URLs allow new facility data without a new APK.
+  private static final String RELEASE_DB =
+      "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/latest/download/cb6_facilities.sqlite";
+
   public static boolean downloadConfigured(Context context) {
+    String url;
     try (java.io.BufferedReader in = new java.io.BufferedReader(
         new java.io.InputStreamReader(context.getAssets().open("cb6_facilities_download.txt"),
             java.nio.charset.StandardCharsets.UTF_8))) {
-      String url = in.readLine(), sha = in.readLine();
-      if (url == null || sha == null || in.readLine() != null) return false;
-      return download(context, url.trim(), sha.trim());
+      url = in.readLine();
+      if (!RELEASE_DB.equals(url) || in.readLine() != null) return false;
     } catch (java.io.IOException e) { return false; }
+
+    HttpURLConnection shaConn = null;
+    try {
+      shaConn = openReleaseConnection(url.replace(".sqlite", ".sha256"));
+      if (shaConn.getResponseCode() != 200) return false;
+      String sha;
+      try (java.io.BufferedReader in = new java.io.BufferedReader(
+          new java.io.InputStreamReader(shaConn.getInputStream(),
+              java.nio.charset.StandardCharsets.US_ASCII))) {
+        sha = in.readLine();
+        if (sha == null || !sha.matches("[a-fA-F0-9]{64}") || in.readLine() != null)
+          return false;
+      }
+      return download(context, url, sha);
+    } catch (Exception e) {
+      Log.w("CB6-G09", "Release checksum unavailable; active SQLite retained", e);
+      return false;
+    } finally {
+      if (shaConn != null) shaConn.disconnect();
+    }
   }
+
+  private static HttpURLConnection openReleaseConnection(String url) throws Exception {
+    URL current = new URL(url);
+    for (int redirects = 0; redirects <= 5; ++redirects) {
+      if (!"https".equalsIgnoreCase(current.getProtocol()) ||
+          current.getUserInfo() != null) throw new java.io.IOException("Non-HTTPS URL");
+      String host = current.getHost().toLowerCase(Locale.US);
+      if (!host.equals("github.com") && !host.equals("release-assets.githubusercontent.com"))
+        throw new java.io.IOException("Unexpected release host");
+      HttpURLConnection c = (HttpURLConnection) current.openConnection();
+      c.setInstanceFollowRedirects(false);
+      c.setConnectTimeout(15000);
+      c.setReadTimeout(30000);
+      int status = c.getResponseCode();
+      if (status == 200) return c;
+      if (status != 301 && status != 302 && status != 303 && status != 307 && status != 308) {
+        c.disconnect();
+        throw new java.io.IOException("HTTP " + status);
+      }
+      String location = c.getHeaderField("Location");
+      c.disconnect();
+      if (location == null || redirects == 5) throw new java.io.IOException("Redirect limit");
+      current = new URL(current, location);
+    }
+    throw new java.io.IOException("Redirect limit");
+  }
+
   public static synchronized boolean download(Context context, String url, String expectedSha256) {
     if (url == null || !url.startsWith("https://") ||
         expectedSha256 == null || !expectedSha256.matches("[a-fA-F0-9]{64}")) return false;
@@ -58,13 +109,8 @@ public final class Cb6FacilityDbDownload {
     if (pending.exists() || replacement.exists()) return false; // No overwrite of staged updates.
     HttpURLConnection conn = null;
     try {
-      URL endpoint = new URL(url);
-      if (!"https".equalsIgnoreCase(endpoint.getProtocol()) ||
-          endpoint.getUserInfo() != null || endpoint.getHost().isEmpty()) return false;
-      conn = (HttpURLConnection) endpoint.openConnection();
-      conn.setInstanceFollowRedirects(false);
-      conn.setConnectTimeout(15000);
-      conn.setReadTimeout(30000);
+      if (!RELEASE_DB.equals(url)) return false;
+      conn = openReleaseConnection(url);
       if (conn.getResponseCode() != 200) return false;
       MessageDigest sha = MessageDigest.getInstance("SHA-256");
       long total = 0;

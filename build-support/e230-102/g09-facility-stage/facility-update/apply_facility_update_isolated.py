@@ -24,4 +24,8 @@ if fragment.count('      update.setEnabled(false);\n      update.setSummary("更
  raise SystemExit('STOP_UPDATE_UI_ANCHOR')
 for script in ('apply_g09_safe_update_source.py','apply_g09_facility_update_ui.py'):
  subprocess.run([sys.executable,str(here/script),str(root)],check=True)
-print('G09_UPDATE_ISOLATED_PATCH_APPLIED; URL_CONFIG_NOT_PROVIDED')
+# Stable GitHub Releases URL; each release carries cb6_facilities.sqlite and its
+# matching cb6_facilities.sha256. No APK rebuild is needed for later releases.
+url_asset=root/'android/app/src/main/assets/cb6_facilities_download.txt'
+url_asset.write_text('https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/latest/download/cb6_facilities.sqlite\n')
+print('G09_UPDATE_ISOLATED_PATCH_APPLIED; RELEASE_URL_CONFIGURED')
