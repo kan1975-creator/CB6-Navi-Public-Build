@@ -171,6 +171,7 @@ jobs:
           python3 handoff/build-support/e230-102/g09-facility-stage/facility-update/apply_facility_update_isolated.py comaps
           git -C comaps apply ../handoff/build-support/e230-102/position-control/position_control.patch
           git -C comaps apply ../handoff/build-support/e230-102/position-control/startup_follow_200m.patch
+          git -C comaps apply ../handoff/build-support/e230-102/position-control/comaps_pip_follow_100m.patch
 
       - name: Generate convenience brand symbols using proven V2 CoMaps configure flow
         run: |

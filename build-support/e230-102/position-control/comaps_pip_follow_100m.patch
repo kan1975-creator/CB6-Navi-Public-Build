@@ -1,0 +1,297 @@
+--- a/android/app/src/main/AndroidManifest.xml
++++ b/android/app/src/main/AndroidManifest.xml
+@@ -377,7 +377,8 @@
+         android:name="app.organicmaps.MwmActivity"
+         android:theme="@style/MwmTheme.MainActivity"
+         android:launchMode="singleTask"
+-        android:configChanges="uiMode"
++        android:supportsPictureInPicture="true"
++        android:configChanges="uiMode|screenSize|smallestScreenSize|screenLayout|orientation"
+         android:screenOrientation="fullUser"
+         android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+ 
+--- a/android/sdk/src/main/java/app/organicmaps/sdk/MapController.java
++++ b/android/sdk/src/main/java/app/organicmaps/sdk/MapController.java
+@@ -17,6 +17,23 @@
+   private final MapView mMapView;
+   @NonNull
+   private final Map mMap;
++  private boolean mInPip;
++  private boolean mStarted;
++  private boolean mResumed;
++
++  public void setPictureInPicture(boolean inPip)
++  {
++    if (mInPip == inPip)
++      return;
++    mInPip = inPip;
++    if (mStarted && !mResumed)
++    {
++      if (inPip)
++        mMap.onResume();
++      else
++        mMap.onPause();
++    }
++  }
+ 
+   @Nullable
+   private Runnable mOnSurfaceDestroyedListener = null;
+@@ -68,13 +85,17 @@
+   public void onStart(@NonNull LifecycleOwner owner)
+   {
+     Logger.d(TAG);
++    mStarted = true;
+     mMap.onStart();
++    if (mInPip)
++      mMap.onResume();
+   }
+ 
+   @Override
+   public void onResume(@NonNull LifecycleOwner owner)
+   {
+     Logger.d(TAG);
++    mResumed = true;
+     mMap.onResume();
+   }
+ 
+@@ -82,13 +103,18 @@
+   public void onPause(@NonNull LifecycleOwner owner)
+   {
+     Logger.d(TAG);
+-    mMap.onPause();
++    mResumed = false;
++    if (!mInPip)
++      mMap.onPause();
+   }
+ 
+   @Override
+   public void onStop(@NonNull LifecycleOwner owner)
+   {
+     Logger.d(TAG);
++    if (mInPip)
++      mMap.onPause();
++    mStarted = false;
+     mMap.onStop();
+   }
+ 
+--- a/libs/drape_frontend/my_position_controller.cpp
++++ b/libs/drape_frontend/my_position_controller.cpp
+@@ -35,7 +35,7 @@
+ namespace
+ {
+ // A renderer can be recreated during the life of the Android process.
+-std::atomic<bool> g_firstController{true};
++std::atomic<bool> g_startupPending{true};
+ // Background notification arrives outside the rendering thread.
+ std::atomic<double> g_lastValidBearing{std::numeric_limits<double>::quiet_NaN()};
+ char constexpr kLastBearingSetting[] = "Cb6LastArrowBearingRadians";
+@@ -229,7 +229,7 @@
+   using namespace location;
+ 
+   m_mode = PendingPosition;
+-  m_startupFollowPending = g_firstController.exchange(false) && !m_hints.m_isLaunchByDeepLink &&
++  m_startupFollowPending = g_startupPending.load() && !m_hints.m_isLaunchByDeepLink &&
+                            !m_hints.m_screenshotMode && !m_isInRouting;
+   if (m_hints.m_isLaunchByDeepLink)
+   {
+@@ -237,10 +237,10 @@
+   }
+   else if (m_startupFollowPending)
+   {
+-    m_desiredInitMode = FollowAndRotate;
++    m_desiredInitMode = Follow;
+     double savedBearing;
+     if (settings::Get(kLastBearingSetting, savedBearing) && std::isfinite(savedBearing))
+-      SetArrowDirection(savedBearing);
++      m_arrowDirection = savedBearing;  // Display hint until a live bearing arrives.
+   }
+   else if (m_hints.m_isFirstLaunch)
+   {
+@@ -313,14 +313,34 @@
+   return m_mode != location::PendingPosition && m_mode != location::NotFollowNoPosition;
+ }
+ 
+-void MyPositionController::StartFollowingAtInitialScale()
+-{
+-  m_startupFollowPending = false;
+-  m_isPositionAssigned = true;
+-  m_direction = m_arrowDirection;
+-  ChangeMode(m_desiredInitMode, true);
+-  ChangeModelView(m_startupScale, m_position, m_direction, GetFollowPixelCenter());
+-  m_isDirtyViewport = false;
++void MyPositionController::UpdateStartupViewport()
++{
++  if (!m_startupFollowPending || !m_isPositionAssigned || m_positionIsObsolete ||
++      !IsModeChangeViewport() || !m_listener || m_pixelRect.IsEmptyInterior() || m_visiblePixelRect.IsEmptyInterior())
++    return;
++
++  if (m_isArrowDirectionAssigned && m_mode == location::Follow)
++  {
++    m_direction = m_arrowDirection;
++    ChangeMode(location::FollowAndRotate, true);
++    m_isDirtyViewport = true;
++  }
++  if (!m_startupScaleApplied)
++  {
++    // The metric ruler rounds 75 m at its minimum width up to the 100 m label.
++    auto const halfWidth = mercator::MetersToXY(mercator::XToLon(m_position.x), mercator::YToLat(m_position.y),
++                                                75.0, 0.0).SizeX() * 0.5;
++    long const rulerPixels = std::max(1L, std::lround(60.0 * GetVisualScale()));
++    ChangeModelView(halfWidth / rulerPixels, m_position, m_mode == location::Follow ? 0.0 : m_direction,
++                    GetFollowPixelCenter());
++    m_startupScaleApplied = true;
++    m_isDirtyViewport = false;
++  }
++  if (m_mode == location::FollowAndRotate)
++  {
++    m_startupFollowPending = false;
++    g_startupPending.store(false);
++  }
+ }
+ 
+ void MyPositionController::CancelStartupFollow()
+@@ -328,7 +348,9 @@
+   if (m_startupFollowPending)
+   {
+     m_startupFollowPending = false;
+-    m_desiredInitMode = location::NotFollow;
++    g_startupPending.store(false);
++    if (!m_isPositionAssigned)
++      m_desiredInitMode = location::NotFollow;
+   }
+ }
+ 
+@@ -447,12 +469,12 @@
+ 
+ void MyPositionController::NextMode(ScreenBase const & screen)
+ {
++  CancelStartupFollow();
+   // When the app is awaiting location (indicator is active) and the user presses on the indicator, location updates
+   // will be stopped and goes into NotFollowNoPosition state. The next press on the indicator will start location
+   // updates again.
+   if (IsWaitingForLocation())
+   {
+-    CancelStartupFollow();
+     m_desiredInitMode = location::Follow;
+     ChangeMode(location::NotFollowNoPosition);
+     return;
+@@ -582,18 +604,11 @@
+ 
+   if (m_startupFollowPending)
+   {
+-    // The ruler rounds up: 150 m across its minimum width displays the 200 m label.
+-    double const halfWidth = mercator::MetersToXY(info.m_longitude, info.m_latitude, 150.0, 0.0).SizeX() * 0.5;
+-    long const rulerPixels = std::max(1L, std::lround(60.0 * GetVisualScale()));
+-    if (m_startupScale == 0.0 || info.m_timestamp != m_lastLocationTimestamp)
+-    {
+-      m_updateLocationTimer.Reset();
+-      m_lastLocationTimestamp = info.m_timestamp;
+-    }
+-    m_startupScale = halfWidth / rulerPixels;
+-    if (!m_isArrowDirectionAssigned)
+-      return;
+-    StartFollowingAtInitialScale();
++    if (!m_isPositionAssigned || m_mode == location::PendingPosition)
++    {
++      ChangeMode(location::Follow, true);
++      m_isDirtyViewport = true;
++    }
+   }
+   else if (!m_isPositionAssigned)
+   {
+@@ -734,11 +749,8 @@
+ 
+ void MyPositionController::LoseLocation()
+ {
+-  if (m_startupFollowPending)
+-  {
+-    m_startupScale = 0.0;
+-    return;
+-  }
++  if (m_startupFollowPending && !m_isPositionAssigned)
++    return;
+   m_holdingStationaryFix = false;
+   if (m_mode == location::NotFollowNoPosition)
+     return;
+@@ -765,15 +777,6 @@
+     return;
+ 
+   SetArrowDirection(info.m_bearing);
+-  if (m_startupFollowPending && m_startupScale > 0.0 &&
+-      m_updateLocationTimer.ElapsedSeconds() < kMaxUpdateLocationInvervalSec)
+-  {
+-    StartFollowingAtInitialScale();
+-    if (m_listener)
+-      m_listener->PositionChanged(Position(), true);
+-    return;
+-  }
+-
+   if (m_isPositionAssigned && !AlmostCurrentAzimut(oldAzimut) && m_mode == location::FollowAndRotate &&
+       !m_preferRouteDirectionInRouting)
+   {
+@@ -799,6 +802,7 @@
+                                   ScreenBase const & screen, int zoomLevel, FrameValues const & frameValues)
+ {
+   CheckNotFollowRouting();
++  UpdateStartupViewport();
+ 
+   if (m_shape != nullptr && IsModeHasPosition())
+   {
+--- a/libs/drape_frontend/my_position_controller.hpp
++++ b/libs/drape_frontend/my_position_controller.hpp
+@@ -176,7 +176,7 @@
+   void ChangeMode(location::EMyPositionMode newMode, bool persist);
+   void ChangeMode(location::EMyPositionMode newMode);
+   void CancelStartupFollow();
+-  void StartFollowingAtInitialScale();
++  void UpdateStartupViewport();
+   void SetRouteDirection(double bearing);
+   void UpdateDirection(location::GpsInfo const & info, df::NavigationContext const & navigationContext);
+   void SetArrowDirection(double bearing);
+@@ -217,7 +217,7 @@
+   TMyPositionModeChanged m_modeChangeCallback;
+   Hints m_hints;
+   bool m_startupFollowPending = false;
+-  double m_startupScale = 0.0;
++  bool m_startupScaleApplied = false;
+ 
+   bool m_isInRouting = false;
+   bool m_isArrowGluedInRouting = false;
+--- a/libs/map/routing_manager.cpp
++++ b/libs/map/routing_manager.cpp
+@@ -537,12 +537,24 @@
+       mercator::DistanceOnEarth(point, projection.m_point) <= radius)
+   {
+     auto const road = projection.m_edge.GetFeatureId();
+-    if (road == m_previousFreeDriveRoad)
++    bool continuous = road == m_previousFreeDriveRoad;
++    if (!continuous && m_previousFreeDriveRoad.IsValid() &&
++        projection.m_edge.GetStartJunction() == m_previousFreeDriveEnd)
++    {
++      IRoadGraph::EdgeListT outgoing;
++      static_cast<IRoadGraph const &>(graph).GetOutgoingEdges(m_previousFreeDriveEnd, outgoing);
++      continuous = std::any_of(outgoing.begin(), outgoing.end(), [&](auto const & edge)
++      {
++        return edge.SameRoadSegmentAndDirection(projection.m_edge);
++      });
++    }
++    if (continuous)
+     {
+       displayFix.m_latitude = mercator::YToLat(projection.m_point.y);
+       displayFix.m_longitude = mercator::XToLon(projection.m_point.x);
+     }
+     m_previousFreeDriveRoad = road;
++    m_previousFreeDriveEnd = projection.m_edge.GetEndJunction();
+   }
+   else
+   {
+--- a/libs/map/routing_manager.hpp
++++ b/libs/map/routing_manager.hpp
+@@ -404,6 +404,7 @@
+   extrapolation::Extrapolator m_extrapolator;
+   std::shared_ptr<routing::CarModelFactory> m_freeDriveCarModel;
+   FeatureID m_previousFreeDriveRoad;
++  geometry::PointWithAltitude m_previousFreeDriveEnd;
+   location::GpsInfo m_previousFreeDriveFix;
+ 
+   std::vector<dp::DrapeID> m_drapeSubroutes;

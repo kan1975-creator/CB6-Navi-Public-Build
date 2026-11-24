@@ -282,7 +282,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private DirectionsPreviewBottomSheet mDirectionsPreviewBottomSheet;
 
   private boolean mRemoveDisplayListener = true;
-  private static int mLastUiMode = Configuration.UI_MODE_TYPE_UNDEFINED;
+  private int mLastUiMode;
 
   public interface LeftAnimationTrackListener
   {
@@ -507,6 +507,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
   {
     super.onConfigurationChanged(newConfig);
 
+    if (newConfig.uiMode == mLastUiMode)
+      return;
+
     final int newType = newConfig.uiMode & Configuration.UI_MODE_TYPE_MASK;
     final int oldType = mLastUiMode & Configuration.UI_MODE_TYPE_MASK;
 
@@ -528,6 +531,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
   protected void onSafeCreate(@Nullable Bundle savedInstanceState)
   {
     super.onSafeCreate(savedInstanceState);
+    mLastUiMode = getResources().getConfiguration().uiMode;
 
     mIsTabletLayout = getResources().getBoolean(R.bool.tabletLayout);
 
@@ -1248,6 +1252,28 @@ public class MwmActivity extends BaseMwmFragmentActivity
   }
 
   @Override
+  protected void onUserLeaveHint()
+  {
+    super.onUserLeaveHint();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isFinishing() && !isInPictureInPictureMode() &&
+        mMapController != null && mMapController.isRenderingActive() &&
+        getPackageManager().hasSystemFeature(android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE))
+      enterPictureInPictureMode(new android.app.PictureInPictureParams.Builder().build());
+  }
+
+  @Override
+  public void onPictureInPictureModeChanged(boolean inPip, @NonNull Configuration config)
+  {
+    super.onPictureInPictureModeChanged(inPip, config);
+    if (mMapController != null)
+      mMapController.setPictureInPicture(inPip);
+    if (inPip)
+      MwmApplication.from(this).getSensorHelper().addListener(this);
+    else if (!getLifecycle().getCurrentState().isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED))
+      MwmApplication.from(this).getSensorHelper().removeListener(this);
+  }
+
+  @Override
   protected void onResumeFragments()
   {
     super.onResumeFragments();
@@ -1259,7 +1285,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   {
     if (mOnmapDownloader != null)
       mOnmapDownloader.onPause();
-    MwmApplication.from(this).getSensorHelper().removeListener(this);
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isInPictureInPictureMode())
+      MwmApplication.from(this).getSensorHelper().removeListener(this);
     dismissLocationErrorDialog();
     dismissAlertDialog();
     super.onPause();
@@ -1288,6 +1315,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     app.organicmaps.sdk.downloader.ChunkTask.setDiagnosticListener(null);
     if (mCb6Signals != null) mCb6Signals.stop();
     super.onStop();
+    MwmApplication.from(this).getSensorHelper().removeListener(this);
     Framework.nativeRemovePlacePageActivationListener(this);
     BookmarkManager.INSTANCE.removeLoadingListener(this);
     MwmApplication.from(this).getLocationHelper().removeListener(this);
