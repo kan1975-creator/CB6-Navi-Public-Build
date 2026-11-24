@@ -1,0 +1,260 @@
+--- a/libs/drape_frontend/my_position_controller.cpp
++++ b/libs/drape_frontend/my_position_controller.cpp
+@@ -16,6 +16,7 @@
+ #include "geometry/screenbase.hpp"
+ 
+ #include "platform/location.hpp"
++#include "platform/settings.hpp"
+ #include "platform/measurement_utils.hpp"
+ 
+ #include "base/logging.hpp"
+@@ -23,6 +24,9 @@
+ 
+ #include <algorithm>
+ #include <array>
++#include <atomic>
++#include <cmath>
++#include <limits>
+ #include <chrono>
+ #include <vector>
+ 
+@@ -30,6 +34,12 @@
+ {
+ namespace
+ {
++// A renderer can be recreated during the life of the Android process.
++std::atomic<bool> g_firstController{true};
++// Background notification arrives outside the rendering thread.
++std::atomic<double> g_lastValidBearing{std::numeric_limits<double>::quiet_NaN()};
++char constexpr kLastBearingSetting[] = "Cb6LastArrowBearingRadians";
++
+ double constexpr kStationarySpeedMps = 0.5;
+ // Speed threshold to switch to GPS bearing. Use compass for slow walking only.
+ double constexpr kMinSpeedThresholdMps = 0.7;  // 2.5 km/h
+@@ -219,9 +229,18 @@
+   using namespace location;
+ 
+   m_mode = PendingPosition;
++  m_startupFollowPending = g_firstController.exchange(false) && !m_hints.m_isLaunchByDeepLink &&
++                           !m_hints.m_screenshotMode && !m_isInRouting;
+   if (m_hints.m_isLaunchByDeepLink)
+   {
+     m_desiredInitMode = NotFollow;
++  }
++  else if (m_startupFollowPending)
++  {
++    m_desiredInitMode = FollowAndRotate;
++    double savedBearing;
++    if (settings::Get(kLastBearingSetting, savedBearing) && std::isfinite(savedBearing))
++      SetArrowDirection(savedBearing);
+   }
+   else if (m_hints.m_isFirstLaunch)
+   {
+@@ -294,8 +313,28 @@
+   return m_mode != location::PendingPosition && m_mode != location::NotFollowNoPosition;
+ }
+ 
++void MyPositionController::StartFollowingAtInitialScale()
++{
++  m_startupFollowPending = false;
++  m_isPositionAssigned = true;
++  m_direction = m_arrowDirection;
++  ChangeMode(m_desiredInitMode, true);
++  ChangeModelView(m_startupScale, m_position, m_direction, GetFollowPixelCenter());
++  m_isDirtyViewport = false;
++}
++
++void MyPositionController::CancelStartupFollow()
++{
++  if (m_startupFollowPending)
++  {
++    m_startupFollowPending = false;
++    m_desiredInitMode = location::NotFollow;
++  }
++}
++
+ void MyPositionController::DragStarted()
+ {
++  CancelStartupFollow();
+   m_needBlockAnimation = true;
+ }
+ 
+@@ -311,6 +350,7 @@
+ 
+ void MyPositionController::ScaleStarted()
+ {
++  CancelStartupFollow();
+   m_needBlockAnimation = true;
+   ResetBlockAutoZoomTimer();
+ }
+@@ -336,6 +376,8 @@
+ 
+ void MyPositionController::Scrolled(m2::PointD const & distance)
+ {
++  if (distance.Length() > 0)
++    CancelStartupFollow();
+   if (m_mode == location::PendingPosition)
+     return;
+ 
+@@ -410,6 +452,7 @@
+   // updates again.
+   if (IsWaitingForLocation())
+   {
++    CancelStartupFollow();
+     m_desiredInitMode = location::Follow;
+     ChangeMode(location::NotFollowNoPosition);
+     return;
+@@ -482,6 +525,13 @@
+ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+                                             df::NavigationContext const & navigationContext, ScreenBase const & screen)
+ {
++  // A queued fix may arrive after the user explicitly stopped the location request.
++  if (!m_isPositionAssigned && m_mode == location::NotFollowNoPosition && !m_isInRouting)
++    return;
++  if (m_startupFollowPending && (!std::isfinite(info.m_latitude) || std::abs(info.m_latitude) > 90.0 ||
++                                 !std::isfinite(info.m_longitude) || std::abs(info.m_longitude) > 180.0))
++    return;
++
+   m2::PointD const oldPos = GetDrawablePosition();
+   double const oldAzimut = GetDrawableAzimut();
+ 
+@@ -530,7 +580,22 @@
+   // on valid time settings on endpoint device.
+   m_positionIsObsolete = false;
+ 
+-  if (!m_isPositionAssigned)
++  if (m_startupFollowPending)
++  {
++    // The ruler rounds up: 150 m across its minimum width displays the 200 m label.
++    double const halfWidth = mercator::MetersToXY(info.m_longitude, info.m_latitude, 150.0, 0.0).SizeX() * 0.5;
++    long const rulerPixels = std::max(1L, std::lround(60.0 * GetVisualScale()));
++    if (m_startupScale == 0.0 || info.m_timestamp != m_lastLocationTimestamp)
++    {
++      m_updateLocationTimer.Reset();
++      m_lastLocationTimestamp = info.m_timestamp;
++    }
++    m_startupScale = halfWidth / rulerPixels;
++    if (!m_isArrowDirectionAssigned)
++      return;
++    StartFollowingAtInitialScale();
++  }
++  else if (!m_isPositionAssigned)
+   {
+     ChangeMode(m_isInRouting ? m_preferredRoutingMode : m_desiredInitMode, true);
+ 
+@@ -658,7 +723,7 @@
+     }
+   }
+ 
+-  if ((!m_isCompassAvailable || glueArrowInRouting || isMovingFast) && info.HasBearing())
++  if ((!m_isCompassAvailable || glueArrowInRouting || isMovingFast) && info.HasBearing() && std::isfinite(info.m_bearing))
+   {
+     SetArrowDirection(math::DegToRad(info.m_bearing));
+     m_lastGPSBearingTimer.Reset();
+@@ -669,6 +734,11 @@
+ 
+ void MyPositionController::LoseLocation()
+ {
++  if (m_startupFollowPending)
++  {
++    m_startupScale = 0.0;
++    return;
++  }
+   m_holdingStationaryFix = false;
+   if (m_mode == location::NotFollowNoPosition)
+     return;
+@@ -684,6 +754,8 @@
+ void MyPositionController::OnCompassUpdate(location::CompassInfo const & info, ScreenBase const & screen)
+ {
+   double const oldAzimut = GetDrawableAzimut();
++  if (!std::isfinite(info.m_bearing))
++    return;
+   m_isCompassAvailable = true;
+   if (m_holdingStationaryFix && (m_isArrowDirectionAssigned || m_isRouteDirectionAssigned))
+     return;
+@@ -693,6 +765,14 @@
+     return;
+ 
+   SetArrowDirection(info.m_bearing);
++  if (m_startupFollowPending && m_startupScale > 0.0 &&
++      m_updateLocationTimer.ElapsedSeconds() < kMaxUpdateLocationInvervalSec)
++  {
++    StartFollowingAtInitialScale();
++    if (m_listener)
++      m_listener->PositionChanged(Position(), true);
++    return;
++  }
+ 
+   if (m_isPositionAssigned && !AlmostCurrentAzimut(oldAzimut) && m_mode == location::FollowAndRotate &&
+       !m_preferRouteDirectionInRouting)
+@@ -778,6 +858,7 @@
+ 
+ void MyPositionController::SetArrowDirection(double bearing)
+ {
++  g_lastValidBearing.store(bearing, std::memory_order_relaxed);
+   m_arrowDirection = bearing;
+   m_isArrowDirectionAssigned = true;
+ }
+@@ -816,6 +897,7 @@
+ 
+ void MyPositionController::StopLocationFollow()
+ {
++  CancelStartupFollow();
+   if (m_mode == location::Follow || m_mode == location::FollowAndRotate)
+   {
+     m_lastFollowMode = m_mode;
+@@ -847,10 +929,16 @@
+   }
+ }
+ 
+-void MyPositionController::OnEnterBackground() {}
++void MyPositionController::OnEnterBackground()
++{
++  double const bearing = g_lastValidBearing.load(std::memory_order_relaxed);
++  if (std::isfinite(bearing))
++    settings::Set(kLastBearingSetting, bearing);
++}
+ 
+ void MyPositionController::OnCompassTapped()
+ {
++  CancelStartupFollow();
+   if (m_mode == location::FollowAndRotate)
+   {
+     ChangeMode(location::Follow);
+@@ -1014,6 +1102,7 @@
+ {
+   if (!m_isInRouting)
+   {
++    CancelStartupFollow();
+     m_isInRouting = true;
+     m_isArrowGluedInRouting = isArrowGlued;
+     m_enableAutoZoomInRouting = enableAutoZoom;
+--- a/libs/drape_frontend/my_position_controller.hpp
++++ b/libs/drape_frontend/my_position_controller.hpp
+@@ -175,6 +175,8 @@
+ private:
+   void ChangeMode(location::EMyPositionMode newMode, bool persist);
+   void ChangeMode(location::EMyPositionMode newMode);
++  void CancelStartupFollow();
++  void StartFollowingAtInitialScale();
+   void SetRouteDirection(double bearing);
+   void UpdateDirection(location::GpsInfo const & info, df::NavigationContext const & navigationContext);
+   void SetArrowDirection(double bearing);
+@@ -214,6 +216,8 @@
+ 
+   TMyPositionModeChanged m_modeChangeCallback;
+   Hints m_hints;
++  bool m_startupFollowPending = false;
++  double m_startupScale = 0.0;
+ 
+   bool m_isInRouting = false;
+   bool m_isArrowGluedInRouting = false;
+@@ -235,7 +239,7 @@
+ 
+   bool m_enablePerspectiveInRouting;
+   bool m_enableAutoZoomInRouting;
+-  bool m_preferRouteDirectionInRouting;
++  bool m_preferRouteDirectionInRouting = false;
+   double m_autoScale2d;
+   double m_autoScale3d;
+ 
