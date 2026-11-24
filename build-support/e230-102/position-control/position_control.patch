@@ -1,0 +1,522 @@
+diff --git a/libs/drape_frontend/my_position_controller.cpp b/libs/drape_frontend/my_position_controller.cpp
+index 7678a921b54e470e854113aba5ef88c895be0c0f..6124332152679b8d952364309a306b94b1ec3e77 100644
+--- a/libs/drape_frontend/my_position_controller.cpp
++++ b/libs/drape_frontend/my_position_controller.cpp
+@@ -30,7 +30,7 @@ namespace df
+ {
+ namespace
+ {
+-int constexpr kPositionRoutingOffsetY = 104;
++double constexpr kStationarySpeedMps = 0.5;
+ // Speed threshold to switch to GPS bearing. Use compass for slow walking only.
+ double constexpr kMinSpeedThresholdMps = 0.7;  // 2.5 km/h
+ double constexpr kGpsBearingLifetimeSec = 5.0;
+@@ -203,7 +203,6 @@ MyPositionController::MyPositionController(Params && params, ref_ptr<DrapeNotifi
+   , m_autoScale3d(m_autoScale2d)
+   , m_lastGPSBearingTimer(false)
+   , m_lastLocationTimestamp(0.0)
+-  , m_positionRoutingOffsetY(kPositionRoutingOffsetY * GetVisualScale())
+   , m_isDirtyViewport(false)
+   , m_isDirtyAutoZoom(false)
+   , m_isPendingAnimation(false)
+@@ -262,6 +261,7 @@ void MyPositionController::OnUpdateScreen(ScreenBase const & screen)
+ void MyPositionController::SetVisibleViewport(m2::RectD const & rect)
+ {
+   m_visiblePixelRect = rect;
++  m_isDirtyViewport = true;
+ }
+ 
+ void MyPositionController::SetListener(ref_ptr<MyPositionController::Listener> listener)
+@@ -466,7 +466,7 @@ void MyPositionController::NextMode(ScreenBase const & screen)
+     if (m_isInRouting && screen.isPerspective())
+       preferredZoomLevel = static_cast<int>(GetZoomLevel(ScreenBase::GetStartPerspectiveScale() * 1.1));
+     ChangeMode(location::Follow, true);
+-    ChangeModelView(m_position, 0.0, m_visiblePixelRect.Center(), preferredZoomLevel);
++    ChangeModelView(m_position, 0.0, GetFollowPixelCenter(), preferredZoomLevel);
+   }
+ }
+ 
+@@ -488,7 +488,16 @@ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+   m2::RectD const rect = mercator::MetersToXY(info.m_longitude, info.m_latitude, info.m_horizontalAccuracy);
+   // Use FromLatLon instead of rect.Center() since in case of large info.m_horizontalAccuracy
+   // there is significant difference between the real location and the estimated one.
+-  m_position = mercator::FromLatLon(info.m_latitude, info.m_longitude);
++  auto const fix = mercator::FromLatLon(info.m_latitude, info.m_longitude);
++  bool const freshAnchor = m_isPositionAssigned && IsModeHasPosition() && !m_positionIsObsolete &&
++                           std::abs(info.m_timestamp - m_lastLocationTimestamp) < kMaxUpdateLocationInvervalSec;
++  double const driftRadius = std::clamp(info.m_horizontalAccuracy, 5.0, 15.0);
++  bool const insideDriftRadius = freshAnchor && mercator::DistanceOnEarth(fix, m_position) <= driftRadius;
++  bool const slow = info.HasSpeed() ? info.m_speed <= kStationarySpeedMps : insideDriftRadius;
++  m_holdingStationaryFix = freshAnchor && slow &&
++                           (insideDriftRadius || (m_holdingStationaryFix && info.HasSpeed()));
++  if (!m_holdingStationaryFix)
++    m_position = fix;
+   m_errorRadius = rect.SizeX() * 0.5;
+   m_horizontalAccuracy = info.m_horizontalAccuracy;
+ 
+@@ -507,71 +516,8 @@ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+     m_autoScale2d = m_autoScale3d = kUnknownAutoZoom;
+   }
+ 
+-  // Sets arrow direction based on GPS if:
+-  // 1. Compass is not available.
+-  // 2. Direction must be glued to the route during routing (route-corrected angle is set only in
+-  // OnLocationUpdate(): in OnCompassUpdate() the angle always has the original value.
+-  // 3. Device is moving faster then pedestrian.
+-  bool const isMovingFast = info.HasSpeed() && info.m_speed > kMinSpeedThresholdMps;
+-  bool const glueArrowInRouting = navigationContext.m_isNavigable && m_isArrowGluedInRouting;
+-
+-  // Calculate the route direction by sampling points along the route up to the lookahead distance
+-  // and taking the average direction
+-  if (glueArrowInRouting && !navigationContext.m_routeSubPolyline.empty())
+-  {
+-    double const speedLimitMps =
+-        (navigationContext.m_speedLimit > 0 ? navigationContext.m_speedLimit : kDefaultLookaheadSpeedMps);
+-    double const lookaheadTimeSec = std::min(speedLimitMps * kLookaheadTimeSpeedRatio, kMaxLookaheadTimeSec);
+-    double const lookaheadDistanceM =
+-        std::min(df::NavigationContext::kSubPolylineDistanceM,
+-                 std::min(speedLimitMps * lookaheadTimeSec, navigationContext.m_distanceToNextTurn));
+-
+-    m2::PointD const currentPoint = navigationContext.m_currentRoutePoint;
+-
+-    int const numSamples =
+-        navigationContext.m_distanceToNextTurn < kExtendedSamplesThresholdM ? kLookaheadSamples / 2 : kLookaheadSamples;
+-
+-    ang::AverageCalc calc;
+-    bool valid = true;
+-
+-    for (int i = 0; i < numSamples; i++)
+-    {
+-      double const sampleDist = kLookaheadSampleMultipliers[i] * lookaheadDistanceM;
+-      m2::PointD const samplePoint = LookaheadPoint(navigationContext.m_routeSubPolyline, sampleDist);
+-      double const angle = ang::AngleTo(currentPoint, samplePoint);
+-
+-      if (std::isnan(angle) || std::isinf(angle))
+-      {
+-        valid = false;
+-        break;
+-      }
+-
+-      calc.Add(angle);
+-    }
+-
+-    if (!valid)
+-    {
+-      SetRouteDirection(info.m_bearing);
+-    }
+-    else
+-    {
+-      // The angle is clamped to a cone in front of the driver to prevent situations
+-      // where the route direction faces the opposite way the driver is actually
+-      // going
+-      double const bisect = ang::AngleTo(
+-          currentPoint,
+-          LookaheadPoint(navigationContext.m_routeSubPolyline, std::min(speedLimitMps, lookaheadDistanceM * 0.1)));
+-      SetRouteDirection(location::RadiansToBearing(ang::ClampAngle(calc.GetAverage(), bisect, math::DegToRad(15.0))));
+-    }
+-  }
+-
+-  if ((!m_isCompassAvailable || glueArrowInRouting || isMovingFast) && info.HasBearing())
+-  {
+-    SetArrowDirection(math::DegToRad(info.m_bearing));
+-    m_lastGPSBearingTimer.Reset();
+-  }
+-
+-  m_direction = m_preferRouteDirectionInRouting ? m_routeDirection : m_arrowDirection;
++  if (!m_holdingStationaryFix || (!m_isArrowDirectionAssigned && !m_isRouteDirectionAssigned))
++    UpdateDirection(info, navigationContext);
+ 
+   if (m_isPositionAssigned && (!AlmostCurrentPosition(oldPos) || !AlmostCurrentAzimut(oldAzimut)))
+   {
+@@ -596,9 +542,7 @@ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+       }
+       else if (m_mode == location::FollowAndRotate)
+       {
+-        ChangeModelView(m_position, m_direction,
+-                        m_isInRouting ? GetRoutingRotationPixelCenter() : m_visiblePixelRect.Center(),
+-                        kDoNotChangeZoom);
++        ChangeModelView(m_position, m_direction, GetFollowPixelCenter(), kDoNotChangeZoom);
+       }
+     }
+   }
+@@ -619,8 +563,7 @@ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+       }
+       else if (GetZoomLevel(screen, m_position, m_errorRadius) <= kMaxScaleZoomLevel)
+       {
+-        m2::PointD const size(m_errorRadius, m_errorRadius);
+-        ChangeModelView(m2::RectD(m_position - size, m_position + size));
++        ChangeModelView(m_position, GetZoomLevel(screen, m_position, m_errorRadius));
+       }
+       else
+       {
+@@ -655,8 +598,78 @@ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+   }
+ }
+ 
++void MyPositionController::UpdateDirection(location::GpsInfo const & info, df::NavigationContext const & navigationContext)
++{
++  // Sets arrow direction based on GPS if:
++  // 1. Compass is not available.
++  // 2. Direction must be glued to the route during routing (route-corrected angle is set only in
++  // OnLocationUpdate(): in OnCompassUpdate() the angle always has the original value.
++  // 3. Device is moving faster then pedestrian.
++  bool const isMovingFast = info.HasSpeed() && info.m_speed > kMinSpeedThresholdMps;
++  bool const glueArrowInRouting = navigationContext.m_isNavigable && m_isArrowGluedInRouting;
++
++  // Calculate the route direction by sampling points along the route up to the lookahead distance
++  // and taking the average direction
++  if (glueArrowInRouting && !navigationContext.m_routeSubPolyline.empty())
++  {
++    double const speedLimitMps =
++        (navigationContext.m_speedLimit > 0 ? navigationContext.m_speedLimit : kDefaultLookaheadSpeedMps);
++    double const lookaheadTimeSec = std::min(speedLimitMps * kLookaheadTimeSpeedRatio, kMaxLookaheadTimeSec);
++    double const lookaheadDistanceM =
++        std::min(df::NavigationContext::kSubPolylineDistanceM,
++                 std::min(speedLimitMps * lookaheadTimeSec, navigationContext.m_distanceToNextTurn));
++
++    m2::PointD const currentPoint = navigationContext.m_currentRoutePoint;
++
++    int const numSamples =
++        navigationContext.m_distanceToNextTurn < kExtendedSamplesThresholdM ? kLookaheadSamples / 2 : kLookaheadSamples;
++
++    ang::AverageCalc calc;
++    bool valid = true;
++
++    for (int i = 0; i < numSamples; i++)
++    {
++      double const sampleDist = kLookaheadSampleMultipliers[i] * lookaheadDistanceM;
++      m2::PointD const samplePoint = LookaheadPoint(navigationContext.m_routeSubPolyline, sampleDist);
++      double const angle = ang::AngleTo(currentPoint, samplePoint);
++
++      if (std::isnan(angle) || std::isinf(angle))
++      {
++        valid = false;
++        break;
++      }
++
++      calc.Add(angle);
++    }
++
++    if (!valid)
++    {
++      SetRouteDirection(info.m_bearing);
++    }
++    else
++    {
++      // The angle is clamped to a cone in front of the driver to prevent situations
++      // where the route direction faces the opposite way the driver is actually
++      // going
++      double const bisect = ang::AngleTo(
++          currentPoint,
++          LookaheadPoint(navigationContext.m_routeSubPolyline, std::min(speedLimitMps, lookaheadDistanceM * 0.1)));
++      SetRouteDirection(location::RadiansToBearing(ang::ClampAngle(calc.GetAverage(), bisect, math::DegToRad(15.0))));
++    }
++  }
++
++  if ((!m_isCompassAvailable || glueArrowInRouting || isMovingFast) && info.HasBearing())
++  {
++    SetArrowDirection(math::DegToRad(info.m_bearing));
++    m_lastGPSBearingTimer.Reset();
++  }
++
++  m_direction = m_preferRouteDirectionInRouting ? m_routeDirection : m_arrowDirection;
++}
++
+ void MyPositionController::LoseLocation()
+ {
++  m_holdingStationaryFix = false;
+   if (m_mode == location::NotFollowNoPosition)
+     return;
+   else if (m_mode == location::Follow || m_mode == location::FollowAndRotate)
+@@ -672,6 +685,8 @@ void MyPositionController::OnCompassUpdate(location::CompassInfo const & info, S
+ {
+   double const oldAzimut = GetDrawableAzimut();
+   m_isCompassAvailable = true;
++  if (m_holdingStationaryFix && (m_isArrowDirectionAssigned || m_isRouteDirectionAssigned))
++    return;
+ 
+   bool const existsFreshGpsBearing = m_lastGPSBearingTimer.ElapsedSeconds() < kGpsBearingLifetimeSec;
+   if ((IsInRouting() && m_isArrowGluedInRouting) || existsFreshGpsBearing)
+@@ -694,7 +709,7 @@ bool MyPositionController::UpdateViewportWithAutoZoom()
+   if (autoScale > 0.0 && m_mode == location::FollowAndRotate && m_isInRouting && m_enableAutoZoomInRouting &&
+       !m_needBlockAutoZoom)
+   {
+-    ChangeModelView(autoScale, m_position, m_direction, GetRoutingRotationPixelCenter());
++    ChangeModelView(autoScale, m_position, m_direction, GetFollowPixelCenter());
+     return true;
+   }
+   return false;
+@@ -839,7 +854,7 @@ void MyPositionController::OnCompassTapped()
+   if (m_mode == location::FollowAndRotate)
+   {
+     ChangeMode(location::Follow);
+-    ChangeModelView(m_position, 0.0, m_visiblePixelRect.Center(), kDoNotChangeZoom);
++    ChangeModelView(m_position, 0.0, GetFollowPixelCenter(), kDoNotChangeZoom);
+   }
+   else
+   {
+@@ -850,7 +865,7 @@ void MyPositionController::OnCompassTapped()
+ void MyPositionController::ChangeModelView(m2::PointD const & center, int zoomLevel)
+ {
+   if (m_listener)
+-    m_listener->ChangeModelView(center, zoomLevel, m_animCreator);
++    m_listener->ChangeModelView(center, 0.0, GetFollowPixelCenter(), zoomLevel, {}, m_animCreator);
+   m_animCreator = nullptr;
+ }
+ 
+@@ -895,31 +910,27 @@ void MyPositionController::UpdateViewport(int zoomLevel)
+   }
+   else if (m_mode == location::FollowAndRotate)
+   {
+-    ChangeModelView(m_position, m_direction,
+-                    m_isInRouting ? GetRoutingRotationPixelCenter() : m_visiblePixelRect.Center(), zoomLevel);
++    ChangeModelView(m_position, m_direction, GetFollowPixelCenter(), zoomLevel);
+   }
+ }
+ 
+ m2::PointD MyPositionController::GetRotationPixelCenter() const
+ {
+-  if (m_mode == location::Follow)
+-    return m_visiblePixelRect.Center();
+-
+-  if (m_mode == location::FollowAndRotate)
+-    return m_isInRouting ? GetRoutingRotationPixelCenter() : m_visiblePixelRect.Center();
++  if (m_mode == location::Follow || m_mode == location::FollowAndRotate)
++    return GetFollowPixelCenter();
+ 
+   return m2::PointD::Zero();
+ }
+ 
+-m2::PointD MyPositionController::GetRoutingRotationPixelCenter() const
++m2::PointD MyPositionController::GetFollowPixelCenter() const
+ {
+-  return {m_visiblePixelRect.Center().x, m_visiblePixelRect.maxY() - m_positionRoutingOffsetY};
++  return {m_visiblePixelRect.Center().x, m_visiblePixelRect.minY() + 0.75 * m_visiblePixelRect.SizeY()};
+ }
+ 
+-void MyPositionController::UpdateRoutingOffsetY(bool useDefault, int offsetY)
++void MyPositionController::UpdateRoutingOffsetY(bool /* useDefault */, int /* offsetY */)
+ {
+-  double const vs = GetVisualScale();
+-  m_positionRoutingOffsetY = useDefault ? kPositionRoutingOffsetY * vs : offsetY + Arrow3d::GetMaxBottomSize() * vs;
++  // Reapply the visible-viewport anchor when routing controls change layout.
++  m_isDirtyViewport = true;
+ }
+ 
+ m2::PointD MyPositionController::GetDrawablePosition()
+@@ -1017,7 +1028,7 @@ void MyPositionController::ActivateRouting(int zoomLevel, bool enableAutoZoom, b
+     {
+       ChangeMode(location::FollowAndRotate);
+       ChangeModelView(m_position, m_isRouteDirectionAssigned ? m_routeDirection : m_arrowDirection,
+-                      GetRoutingRotationPixelCenter(), zoomLevel,
++                      GetFollowPixelCenter(), zoomLevel,
+                       [this](ref_ptr<Animation> anim) { UpdateViewport(kDoNotChangeZoom); });
+     }
+     ResetRoutingNotFollowTimer();
+@@ -1036,7 +1047,7 @@ void MyPositionController::DeactivateRouting()
+     m_isRouteDirectionAssigned = false;
+ 
+     ChangeMode(location::Follow);
+-    ChangeModelView(m_position, 0.0, m_visiblePixelRect.Center(), kDoNotChangeZoom);
++    ChangeModelView(m_position, 0.0, GetFollowPixelCenter(), kDoNotChangeZoom);
+   }
+ }
+ 
+diff --git a/libs/drape_frontend/my_position_controller.hpp b/libs/drape_frontend/my_position_controller.hpp
+index 25c62af6980d7daf4126a792b2d1c7990f62ef95..2e08de3d15c1a842608677deaacf7be0fe23c5d9 100644
+--- a/libs/drape_frontend/my_position_controller.hpp
++++ b/libs/drape_frontend/my_position_controller.hpp
+@@ -176,6 +176,7 @@ private:
+   void ChangeMode(location::EMyPositionMode newMode, bool persist);
+   void ChangeMode(location::EMyPositionMode newMode);
+   void SetRouteDirection(double bearing);
++  void UpdateDirection(location::GpsInfo const & info, df::NavigationContext const & navigationContext);
+   void SetArrowDirection(double bearing);
+ 
+   void ChangeModelView(m2::PointD const & center, int zoomLevel);
+@@ -188,7 +189,7 @@ private:
+   void UpdateViewport(int zoomLevel);
+   bool UpdateViewportWithAutoZoom();
+   m2::PointD GetRotationPixelCenter() const;
+-  m2::PointD GetRoutingRotationPixelCenter() const;
++  m2::PointD GetFollowPixelCenter() const;
+ 
+   double GetDrawableAzimut();
+   void CreateAnim(m2::PointD const & oldPos, double oldAzimut, ScreenBase const & screen);
+@@ -247,7 +248,7 @@ private:
+ 
+   m2::RectD m_pixelRect;
+   m2::RectD m_visiblePixelRect;
+-  double m_positionRoutingOffsetY;
++  bool m_holdingStationaryFix = false;
+ 
+   bool m_isDirtyViewport;
+   bool m_isDirtyAutoZoom;
+diff --git a/libs/map/extrapolation/extrapolator.cpp b/libs/map/extrapolation/extrapolator.cpp
+index 4f1a59ac1109ef1c8aa917059bae8aee14745977..6aa1d074cef47b14a0ee74ae13c38f6bfdf4e302 100644
+--- a/libs/map/extrapolation/extrapolator.cpp
++++ b/libs/map/extrapolation/extrapolator.cpp
+@@ -203,6 +203,9 @@ bool Extrapolator::DoesExtrapolationWork() const
+   if (!m_isEnabled || m_consecutiveRuns == kExtrapolationCounterUndefined)
+     return false;
+ 
++  // Keep actual low-speed fixes intact. Extrapolated drift would move the parked arrow.
++  if (m_lastGpsInfo.HasSpeed() && m_lastGpsInfo.m_speed <= 0.5)
++    return false;
+   return AreCoordsGoodForExtrapolation(m_beforeLastGpsInfo, m_lastGpsInfo);
+ }
+ }  // namespace extrapolation
+diff --git a/libs/map/routing_manager.cpp b/libs/map/routing_manager.cpp
+index 407b6b9b8a6e9fae4efe0c19b2d66ec24cb17ba6..9fcda475371f20ce738ef80a9e1a730d12e4ef41 100644
+--- a/libs/map/routing_manager.cpp
++++ b/libs/map/routing_manager.cpp
+@@ -12,6 +12,9 @@
+ #include "routing/checkpoints.hpp"
+ #include "routing/following_info.hpp"
+ #include "routing/index_router.hpp"
++#include "routing/data_source.hpp"
++#include "routing_common/car_model.hpp"
++
+ #include "routing/route.hpp"
+ #include "routing/routing_callbacks.hpp"
+ #include "routing/routing_settings.hpp"
+@@ -56,6 +59,8 @@
+ #include "base/stl_helpers.hpp"
+ #include "base/string_utils.hpp"
+ 
++#include <algorithm>
++#include <cmath>
+ #include <ios>
+ #include <map>
+ 
+@@ -488,7 +493,62 @@ void RoutingManager::OnRoutePointPassed(RouteMarkType type, size_t intermediateI
+ 
+ void RoutingManager::OnLocationUpdate(location::GpsInfo const & info)
+ {
+-  m_extrapolator.OnLocationUpdate(info);
++  m_extrapolator.OnLocationUpdate(MatchFreeDriveFix(info));
++}
++
++location::GpsInfo RoutingManager::MatchFreeDriveFix(location::GpsInfo const & info)
++{
++  // Work on real GPS samples. Never share road-graph caches with the route-building thread.
++  bool const freeDrive = !IsRoutingActive() || (m_routingSession.IsNoFollowing() && !IsRoutingFollowing() &&
++                                                m_currentRouterType == RouterType::Vehicle);
++  auto const previous = m_previousFreeDriveFix;
++  m_previousFreeDriveFix = freeDrive ? info : location::GpsInfo{};
++  bool const recent = previous.IsValid() && info.m_timestamp > previous.m_timestamp &&
++                      info.m_timestamp - previous.m_timestamp <= 5.0;
++  bool const reliable = info.m_horizontalAccuracy > 0.0 && info.m_horizontalAccuracy <= 30.0;
++  if (!freeDrive || !info.IsValid() || !recent || !reliable || (info.HasSpeed() && info.m_speed <= 0.5))
++  {
++    m_previousFreeDriveRoad = {};
++    return info;
++  }
++
++  auto const point = mercator::FromLatLon(info.m_latitude, info.m_longitude);
++  auto const prevPoint = mercator::FromLatLon(previous.m_latitude, previous.m_longitude);
++  auto direction = point - prevPoint;
++  if (info.HasBearing() && info.HasSpeed() && info.m_speed > 0.7)
++  {
++    double const radians = math::DegToRad(info.m_bearing);
++    direction = {std::sin(radians), std::cos(radians)};
++  }
++  else if (mercator::DistanceOnEarth(prevPoint, point) < 3.0)
++  {
++    m_previousFreeDriveRoad = {};
++    return info;
++  }
++
++  if (!m_freeDriveCarModel)
++    m_freeDriveCarModel = make_shared<CarModelFactory>(m_callbacks.m_countryParentNameGetterFn);
++  MwmDataSource source(m_callbacks.m_dataSourceGetter(), nullptr);
++  FeaturesRoadGraphBase graph(source, IRoadGraph::Mode::ObeyOnewayTag, m_freeDriveCarModel);
++  EdgeProj projection;
++  auto displayFix = info;
++  double const radius = std::clamp(info.m_horizontalAccuracy, 6.0, 20.0);
++  if (IndexRouter::FindClosestProjectionToRoad(graph, point, direction, radius, projection) &&
++      mercator::DistanceOnEarth(point, projection.m_point) <= radius)
++  {
++    auto const road = projection.m_edge.GetFeatureId();
++    if (road == m_previousFreeDriveRoad)
++    {
++      displayFix.m_latitude = mercator::YToLat(projection.m_point.y);
++      displayFix.m_longitude = mercator::XToLon(projection.m_point.x);
++    }
++    m_previousFreeDriveRoad = road;
++  }
++  else
++  {
++    m_previousFreeDriveRoad = {};
++  }
++  return displayFix;
+ }
+ 
+ RouterType RoutingManager::GetBestRouter(m2::PointD const & startPoint, m2::PointD const & finalPoint) const
+diff --git a/libs/map/routing_manager.hpp b/libs/map/routing_manager.hpp
+index f024d4c82177842d38d1abc5268c6cf1664509a7..32e6cf5fca87f059d372dd507508209d9d561f7f 100644
+--- a/libs/map/routing_manager.hpp
++++ b/libs/map/routing_manager.hpp
+@@ -62,6 +62,7 @@ class CountryInfoGetter;
+ namespace routing
+ {
+ class NumMwmIds;
++class CarModelFactory;
+ using NumMwmId = std::uint16_t;
+ RouterType GetLastUsedRouter();
+ }  // namespace routing
+@@ -385,6 +386,7 @@ private:
+ 
+   std::vector<RouteMarkData> GetRoutePointsToSave() const;
+ 
++  location::GpsInfo MatchFreeDriveFix(location::GpsInfo const & info);
+   void OnExtrapolatedLocationUpdate(location::GpsInfo const & info);
+ 
+   RouteBuildingCallback m_routingBuildingCallback;
+@@ -400,6 +402,9 @@ private:
+ 
+   BookmarkManager * m_bmManager = nullptr;
+   extrapolation::Extrapolator m_extrapolator;
++  std::shared_ptr<routing::CarModelFactory> m_freeDriveCarModel;
++  FeatureID m_previousFreeDriveRoad;
++  location::GpsInfo m_previousFreeDriveFix;
+ 
+   std::vector<dp::DrapeID> m_drapeSubroutes;
+   mutable std::mutex m_drapeSubroutesMutex;
+diff --git a/libs/routing/index_router.cpp b/libs/routing/index_router.cpp
+index 62675e1bc7ef570bd0193c3218eaf29b1bff640b..838cec759e6b86e6dff56c4bff712ee15f663945 100644
+--- a/libs/routing/index_router.cpp
++++ b/libs/routing/index_router.cpp
+@@ -304,12 +304,18 @@ void IndexRouter::ClearState()
+ 
+ bool IndexRouter::FindClosestProjectionToRoad(m2::PointD const & point, m2::PointD const & direction, double radius,
+                                               EdgeProj & proj)
++{
++  return FindClosestProjectionToRoad(m_roadGraph, point, direction, radius, proj);
++}
++
++bool IndexRouter::FindClosestProjectionToRoad(IRoadGraph const & graph, m2::PointD const & point,
++                                              m2::PointD const & direction, double radius, EdgeProj & proj)
+ {
+   auto const rect = mercator::RectByCenterXYAndSizeInMeters(point, radius);
+   std::vector<EdgeProjectionT> candidates;
+ 
+   uint32_t const count = direction.IsAlmostZero() ? 1 : 4;
+-  m_roadGraph.FindClosestEdges(rect, count, candidates);
++  graph.FindClosestEdges(rect, count, candidates);
+ 
+   if (candidates.empty())
+     return false;
+diff --git a/libs/routing/index_router.hpp b/libs/routing/index_router.hpp
+index c7ed18c95f1286d4548bcaaf798399278d79e7db..73227402aba34ef59451a54711aa2cfe6424b4f1 100644
+--- a/libs/routing/index_router.hpp
++++ b/libs/routing/index_router.hpp
+@@ -84,6 +84,8 @@ public:
+ 
+   bool FindClosestProjectionToRoad(m2::PointD const & point, m2::PointD const & direction, double radius,
+                                    EdgeProj & proj) override;
++  static bool FindClosestProjectionToRoad(IRoadGraph const & graph, m2::PointD const & point,
++                                          m2::PointD const & direction, double radius, EdgeProj & proj);
+ 
+   bool GetBestOutgoingEdges(m2::PointD const & checkpoint, WorldGraph & graph, std::vector<Edge> & edges);
+ 
