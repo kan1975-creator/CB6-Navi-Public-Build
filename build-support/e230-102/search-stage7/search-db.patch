@@ -1,0 +1,674 @@
+diff --git a/android/app/build.gradle b/android/app/build.gradle
+index 12839bc..2927f95 100644
+--- a/android/app/build.gradle
++++ b/android/app/build.gradle
+@@ -334,6 +334,7 @@ android {
+ 
+ dependencies {
+   implementation project(':sdk')
++  implementation 'org.tukaani:xz:1.10'
+   implementation 'org.bouncycastle:bcprov-jdk15to18:1.85.2'
+ 
+   coreLibraryDesugaring libs.android.tools.desugar
+diff --git a/android/app/src/main/java/app/organicmaps/MwmActivity.java b/android/app/src/main/java/app/organicmaps/MwmActivity.java
+index 233dfd3..9975aca 100644
+--- a/android/app/src/main/java/app/organicmaps/MwmActivity.java
++++ b/android/app/src/main/java/app/organicmaps/MwmActivity.java
+@@ -337,6 +337,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
+       throw new AssertionError("Must be called with initialized Drape");
+ 
+     final Intent intent = getIntent();
++    if (app.organicmaps.search.Cb6SearchRows.isDestination(intent)) {
++      if (getLifecycle().getCurrentState().isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED))
++        app.organicmaps.search.Cb6SearchRows.consume(this);
++      return;
++    }
+     if (intent == null || intent.getBooleanExtra(EXTRA_CONSUMED, false))
+       return;
+     intent.putExtra(EXTRA_CONSUMED, true);
+@@ -1278,6 +1283,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
+   {
+     super.onResumeFragments();
+     RoutingController.get().restore();
++    if (mMapController.isRenderingActive()) app.organicmaps.search.Cb6SearchRows.consume(this);
+   }
+ 
+   @Override
+diff --git a/android/app/src/main/java/app/organicmaps/search/Cb6SearchRows.java b/android/app/src/main/java/app/organicmaps/search/Cb6SearchRows.java
+new file mode 100644
+index 0000000..f4c5f45
+--- /dev/null
++++ b/android/app/src/main/java/app/organicmaps/search/Cb6SearchRows.java
+@@ -0,0 +1,132 @@
++package app.organicmaps.search;
++
++import android.app.Activity;
++import android.app.AlertDialog;
++import android.content.Intent;
++import android.location.Location;
++import android.widget.TextView;
++import androidx.recyclerview.widget.RecyclerView;
++import app.organicmaps.MwmActivity;
++import app.organicmaps.sdk.bookmarks.data.FeatureId;
++import app.organicmaps.sdk.bookmarks.data.MapObject;
++import app.organicmaps.sdk.routing.RoutingController;
++import app.organicmaps.sdk.search.SearchResult;
++import jp.cb6.search.Cb6SearchEngine;
++import java.util.ArrayList;
++import java.util.Collections;
++import java.util.List;
++
++/** Display indices are independent of JNI result indices. */
++public final class Cb6SearchRows {
++  static final int CUSTOM = 16;
++  private static final String DESTINATION = "jp.cb6.search.SELECT_DESTINATION";
++  static final class Row {
++    final int nativeIndex;
++    final Cb6SearchEngine.Result result;
++    double score;
++    Row(int index, Cb6SearchEngine.Result r, double value) {
++      nativeIndex = index;
++      result = r;
++      score = value;
++    }
++  }
++
++  static List<Row> merge(String query, SearchResult[] nativeRows, List<Cb6SearchEngine.Result> custom) {
++    List<Row> rows = new ArrayList<>();
++    String q = Cb6SearchEngine.normalize(query);
++    for (int i = 0; i < nativeRows.length; i++) {
++      SearchResult n = nativeRows[i];
++      double score = 0;
++      if (!custom.isEmpty()) {
++        score = n.type == SearchResult.TYPE_RESULT
++            ? Math.max(Cb6SearchEngine.score(q, n.name), Cb6SearchEngine.score(q, n.description.region))
++            : 101; // Native query completions remain above places, in their original order.
++      }
++      rows.add(new Row(i, null, score));
++    }
++    for (Cb6SearchEngine.Result r : custom) {
++      boolean duplicate = false;
++      for (Row row : rows) {
++        if (row.result != null) {
++          if (!row.result.hasPosition() || !same(r, row.result.name, row.result.lat, row.result.lon)) continue;
++        } else {
++          SearchResult n = nativeRows[row.nativeIndex];
++          if (n.type != SearchResult.TYPE_RESULT || !same(r, n.name, n.lat, n.lon)) continue;
++        }
++        row.score = Math.max(row.score, r.score);
++        duplicate = true;
++        break;
++      }
++      if (!duplicate) rows.add(new Row(-1, r, r.score));
++    }
++    if (!custom.isEmpty()) Collections.sort(rows, (a,b) -> Double.compare(b.score, a.score));
++    return rows;
++  }
++
++  private static boolean same(Cb6SearchEngine.Result r, String name, double lat, double lon) {
++    if (!r.hasPosition() || !Double.isFinite(lat) || !Double.isFinite(lon)) return false;
++    String normalized = Cb6SearchEngine.normalize(name);
++    if (normalized.isEmpty() || !normalized.equals(Cb6SearchEngine.normalize(r.name))) return false;
++    float[] distance = new float[1];
++    Location.distanceBetween(r.lat, r.lon, lat, lon, distance);
++    return distance[0] <= 15;
++  }
++
++  static final class Holder extends RecyclerView.ViewHolder {
++    final TextView text;
++    Holder(TextView v) {
++      super(v);
++      text = v;
++      int pad = (int)(16 * v.getResources().getDisplayMetrics().density);
++      v.setPadding(pad, pad, pad, pad);
++      v.setTextSize(16);
++      v.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
++    }
++    void bind(SearchFragment host, Cb6SearchEngine.Result r) {
++      String label = r.name + "\n" + r.address + "\n" + r.source +
++          (r.hasPosition() ? ("place_point_bbox_only".equals(r.precision) ? " ／ 施設代表点" : " ／ " + r.precision) : " ／ 座標なし");
++      text.setText(label);
++      text.setOnClickListener(v -> {
++        if (!host.isAdded()) return;
++        AlertDialog.Builder dialog = new AlertDialog.Builder(host.requireContext())
++            .setTitle(r.name).setMessage(label).setNegativeButton("閉じる", null);
++        if (r.hasPosition()) dialog.setPositiveButton(RoutingController.get().isWaitingPoiPick() ? "地点を選択" : "目的地に設定",
++            (d,w) -> {
++              if (!host.isAdded()) return;
++              Activity activity = host.requireActivity();
++              if (activity instanceof MwmActivity map) select(map, r.name, r.address, r.lat, r.lon);
++              else {
++                Intent intent = new Intent(activity, MwmActivity.class).setAction(DESTINATION)
++                    .putExtra("name", r.name).putExtra("address", r.address)
++                    .putExtra("lat", r.lat.doubleValue()).putExtra("lon", r.lon.doubleValue());
++                activity.startActivity(intent);
++                activity.finish();
++              }
++            });
++        dialog.show();
++      });
++    }
++  }
++
++  /** MwmActivity can be stopped while the standalone search activity is visible. */
++  public static boolean isDestination(Intent intent) {
++    return intent != null && DESTINATION.equals(intent.getAction());
++  }
++
++  public static void consume(MwmActivity map) {
++    Intent intent = map.getIntent();
++    if (!isDestination(intent)) return;
++    intent.setAction(null);
++    double lat = intent.getDoubleExtra("lat", Double.NaN);
++    double lon = intent.getDoubleExtra("lon", Double.NaN);
++    String name = intent.getStringExtra("name");
++    if (name != null && lat >= 40 && lat <= 46 && lon >= 139 && lon <= 147)
++      select(map, name, intent.getStringExtra("address"), lat, lon);
++  }
++
++  private static void select(MwmActivity map, String name, String address, double lat, double lon) {
++    MapObject point = MapObject.createMapObject(FeatureId.EMPTY, MapObject.SEARCH, name, address, lat, lon);
++    if (RoutingController.get().isWaitingPoiPick()) RoutingController.get().onPoiSelected(point);
++    else map.startLocationToPoint(point);
++  }
++}
+diff --git a/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java b/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
+index 08cbe52..f2398a2 100644
+--- a/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
++++ b/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
+@@ -17,14 +17,16 @@ import app.organicmaps.util.ThemeUtils;
+ import app.organicmaps.util.UiUtils;
+ import com.google.android.material.textview.MaterialTextView;
+ 
+-class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHolder>
++class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+ {
+   private static final int SHORT_HORIZON_CLOSE_MIN = 60;
+   private static final int SHORT_HORIZON_OPEN_MIN = 15;
+ 
+   private final SearchFragment mSearchFragment;
+-  @Nullable
+-  private SearchResult[] mResults;
++  private SearchResult[] mResults = new SearchResult[0];
++  private java.util.List<jp.cb6.search.Cb6SearchEngine.Result> custom = java.util.Collections.emptyList();
++  private java.util.List<Cb6SearchRows.Row> rows = java.util.Collections.emptyList();
++  private String query = "";
+ 
+   static abstract class SearchDataViewHolder extends RecyclerView.ViewHolder
+   {
+@@ -204,12 +206,13 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
+ 
+   @NonNull
+   @Override
+-  public SearchDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
++  public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+   {
+     final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+ 
+     return switch (viewType)
+     {
++      case Cb6SearchRows.CUSTOM -> new Cb6SearchRows.Holder(new android.widget.TextView(parent.getContext()));
+       case SearchResult.TYPE_SUGGEST, SearchResult.TYPE_PURE_SUGGEST ->
+         new SuggestViewHolder(inflater.inflate(R.layout.item_search_suggest, parent, false));
+       case SearchResult.TYPE_RESULT ->
+@@ -219,42 +222,37 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchDataViewHol
+   }
+ 
+   @Override
+-  public void onBindViewHolder(@NonNull SearchDataViewHolder holder, int position)
++  public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
+   {
+-    holder.bind(mResults[position], position);
++    Cb6SearchRows.Row row = rows.get(position);
++    if (holder instanceof Cb6SearchRows.Holder customHolder) customHolder.bind(mSearchFragment, row.result);
++    else ((SearchDataViewHolder) holder).bind(mResults[row.nativeIndex], row.nativeIndex);
+   }
+ 
+-  @Override
+-  public int getItemViewType(int position)
++  @Override public int getItemViewType(int position)
+   {
+-    return mResults[position].type;
++    int index = rows.get(position).nativeIndex;
++    return index < 0 ? Cb6SearchRows.CUSTOM : mResults[index].type;
+   }
+ 
+-  @Override
+-  public long getItemId(int position)
+-  {
+-    return position;
+-  }
++  @Override public int getItemCount() { return rows.size(); }
+ 
+-  @Override
+-  public int getItemCount()
+-  {
+-    int res = 0;
+-    if (mResults == null)
+-      return res;
++  public void clear() { begin(""); }
+ 
+-    res += mResults.length;
+-    return res;
++  void begin(String q) {
++    query = q;
++    custom = java.util.Collections.emptyList();
++    refreshData(null);
+   }
+ 
+-  public void clear()
+-  {
+-    refreshData(null);
++  void custom(java.util.List<jp.cb6.search.Cb6SearchEngine.Result> candidates) {
++    custom = candidates;
++    refreshData(mResults);
+   }
+ 
+-  void refreshData(@Nullable SearchResult[] results)
+-  {
+-    mResults = results;
++  void refreshData(@Nullable SearchResult[] results) {
++    mResults = results == null ? new SearchResult[0] : results;
++    rows = Cb6SearchRows.merge(query, mResults, custom);
+     notifyDataSetChanged();
+   }
+ }
+diff --git a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+index 1788cc0..33eccff 100644
+--- a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
++++ b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+@@ -56,6 +56,28 @@ import java.util.List;
+ public class SearchFragment extends BaseMwmFragment implements SearchListener, CategoriesAdapter.CategoriesUiListener
+ {
+   private long mLastQueryTimestamp;
++  private jp.cb6.search.Cb6SearchEngine cb6Engine;
++  private boolean cb6Pending;
++
++  private void startCustomSearch() {
++    final long ticket = mLastQueryTimestamp;
++    mSearchAdapter.begin(getQuery());
++    cb6Pending = false;
++    if (isCategory()) {
++      if (cb6Engine != null) cb6Engine.cancel();
++      return;
++    }
++    java.io.File db = jp.cb6.search.Cb6SearchDb.file(requireContext());
++    if (!db.isFile()) return;
++    if (cb6Engine == null) cb6Engine = new jp.cb6.search.Cb6SearchEngine(db);
++    cb6Pending = true;
++    cb6Engine.search(getQuery(), (rows, error) -> {
++      if (ticket != mLastQueryTimestamp || getView() == null) return;
++      cb6Pending = false;
++      if (error != null) android.util.Log.w("CB6Search", "Search failed", error);
++      mSearchAdapter.custom(rows);
++    });
++  }
+   private boolean compatibleContactsAppInstalled = true;
+   @NonNull
+   private final List<HiddenCommand> mHiddenCommands = new ArrayList<>();
+@@ -253,7 +275,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+ 
+   private void updateResultsPlaceholder()
+   {
+-    final boolean show = !mSearchRunning && mSearchAdapter.getItemCount() == 0 && mToolbarController.hasQuery();
++    final boolean show = !mSearchRunning && !cb6Pending && mSearchAdapter.getItemCount() == 0 && mToolbarController.hasQuery();
+ 
+     UiUtils.showIf(show, mResultsPlaceholder);
+   }
+@@ -371,6 +393,16 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     mToolbarController.detach();
+   }
+ 
++  @Override
++  public void onDestroyView()
++  {
++    ++mLastQueryTimestamp;
++    cb6Pending = false;
++    if (cb6Engine != null) cb6Engine.close();
++    cb6Engine = null;
++    super.onDestroyView();
++  }
++
+   @Override
+   public void onDestroy()
+   {
+@@ -496,6 +528,9 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+ 
+   private void stopSearch()
+   {
++    ++mLastQueryTimestamp;
++    cb6Pending = false;
++    if (cb6Engine != null) cb6Engine.cancel();
+     SearchEngine.INSTANCE.cancel();
+     updateSearchView();
+   }
+@@ -513,6 +548,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     SearchEngine.INSTANCE.cancel();
+ 
+     mLastQueryTimestamp = System.nanoTime();
++    startCustomSearch();
+     if (isTabletSearch())
+     {
+       SearchEngine.INSTANCE.searchInteractive(requireContext(), getQuery(), isCategory(), mLastQueryTimestamp,
+@@ -523,6 +559,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+       if (!SearchEngine.INSTANCE.search(requireContext(), getQuery(), isCategory(), mLastQueryTimestamp,
+                                         mLastPosition.valid, mLastPosition.lat, mLastPosition.lon))
+       {
++        updateSearchView();
+         return;
+       }
+     }
+@@ -539,13 +576,13 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     if (!isAdded() || !mToolbarController.hasQuery())
+       return;
+ 
+-    refreshSearchResults(results);
++    if (timestamp == mLastQueryTimestamp && getView() != null) refreshSearchResults(results);
+   }
+ 
+   @Override
+   public void onResultsEnd(long timestamp)
+   {
+-    onSearchEnd();
++    if (timestamp == mLastQueryTimestamp && getView() != null) onSearchEnd();
+   }
+ 
+   @Override
+diff --git a/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java b/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
+index 8e369ee..bea1352 100644
+--- a/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
++++ b/android/app/src/main/java/app/organicmaps/settings/Cb6DataStatusFragment.java
+@@ -19,6 +19,53 @@ import app.organicmaps.cb6.data.Cb6DataStatusRepository.Status;
+ 
+ /** Safe status-only UI. Update actions are deliberately disabled until verified providers exist. */
+ public final class Cb6DataStatusFragment extends BaseXmlSettingsFragment {
++  private final androidx.activity.result.ActivityResultLauncher<String[]> searchDocument =
++      registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.OpenDocument(), uri -> {
++        if (uri != null) {
++          jp.cb6.search.Cb6SearchDb.install(requireContext(), uri);
++          updateSearchStatus();
++        }
++      });
++  private Preference searchData;
++  private final Runnable searchProgress = this::updateSearchStatus;
++
++  private void updateSearchStatus() {
++    main.removeCallbacks(searchProgress);
++    if (searchData == null || !isAdded()) return;
++    boolean busy = jp.cb6.search.Cb6SearchDb.busy();
++    searchData.setEnabled(!busy);
++    String status = jp.cb6.search.Cb6SearchDb.status();
++    boolean installed = jp.cb6.search.Cb6SearchDb.file(requireContext()).isFile();
++    searchData.setSummary((installed ? "利用可能" : "未取得") + (status.isEmpty() ? "" : " ／ " + status));
++    if (busy && isResumed()) main.postDelayed(searchProgress, 500);
++  }
++
++  @Override public void onCreatePreferences(Bundle state, String key) {
++    super.onCreatePreferences(state, key);
++    searchData = new Preference(requireContext());
++    searchData.setKey("cb6_search_db_update");
++    searchData.setTitle("検索データの取得・更新");
++    getPreferenceScreen().addPreference(searchData);
++    searchData.setOnPreferenceClickListener(pref -> {
++      String[] choices = {"Drive・端末のXZを選んで取り込む", "配信元をGoogle Driveで開く", "公開リリースから更新"};
++      new android.app.AlertDialog.Builder(requireContext()).setTitle("検索データの取得・更新")
++          .setItems(choices, (dialog, index) -> {
++            try {
++              if (index == 0) searchDocument.launch(new String[]{"*/*"});
++              else if (index == 1) startActivity(new android.content.Intent(android.content.Intent.ACTION_VIEW,
++                  android.net.Uri.parse(jp.cb6.search.Cb6SearchDb.DRIVE)));
++              else {
++                jp.cb6.search.Cb6SearchDb.install(requireContext(), null);
++                updateSearchStatus();
++              }
++            } catch (android.content.ActivityNotFoundException error) {
++              android.widget.Toast.makeText(requireContext(), "対応するアプリがありません", android.widget.Toast.LENGTH_LONG).show();
++            }
++          }).show();
++      return true;
++    });
++  }
++
+   private Cb6DataStatusRepository repository;
+   private final ExecutorService worker=Executors.newSingleThreadExecutor();
+   private final Handler main=new Handler(Looper.getMainLooper());
+@@ -93,12 +140,14 @@ public final class Cb6DataStatusFragment extends BaseXmlSettingsFragment {
+   }
+   @Override public void onResume() {
+     super.onResume();
++    updateSearchStatus();
+     Cb6SignalUpdateCoordinator.observe(updateStateChanged);
+     syncSignalUpdateAvailability();
+     if (repository != null) refresh();
+   }
+   @Override public void onPause() {
+     Cb6SignalUpdateCoordinator.unobserve(updateStateChanged);
++    main.removeCallbacks(searchProgress);
+     super.onPause();
+   }
+   @Override public void onDestroy() {
+diff --git a/android/app/src/main/java/jp/cb6/search/Cb6SearchDb.java b/android/app/src/main/java/jp/cb6/search/Cb6SearchDb.java
+new file mode 100644
+index 0000000..a1f0674
+--- /dev/null
++++ b/android/app/src/main/java/jp/cb6/search/Cb6SearchDb.java
+@@ -0,0 +1,123 @@
++package jp.cb6.search;
++
++import android.content.Context;
++import android.database.Cursor;
++import android.database.sqlite.SQLiteDatabase;
++import android.net.Uri;
++import android.system.Os;
++import org.tukaani.xz.XZInputStream;
++import java.io.*;
++import java.net.*;
++import java.security.MessageDigest;
++import java.util.Locale;
++import java.util.concurrent.ExecutorService;
++import java.util.concurrent.Executors;
++
++/** Search-only distribution. Open readers keep their inode across an atomic replacement. */
++public final class Cb6SearchDb {
++  public static final String DRIVE = "https://drive.google.com/file/d/1w2KIHg1N3pQVQeSx-T90-DKuG9vyQZvk/view";
++  private static final String RELEASE = "https://github.com/kan1975-creator/CB6-Navi-Public-Build/releases/download/cb6-search-v1/cb6_search.";
++  private static final String INITIAL_SHA = "72632e1944250dbdfcb5986fc2c790592d392aa23cf160b22405494223b9ecf3";
++  private static final long INITIAL_SIZE = 760750080L;
++  private static final ExecutorService IO = Executors.newSingleThreadExecutor();
++  private static volatile boolean busy;
++  private static volatile String status = "";
++
++  public static File file(Context c) { return new File(c.getFilesDir(), "cb6_search.sqlite"); }
++  public static boolean busy() { return busy; }
++  public static String status() { return status; }
++
++  public static synchronized void install(Context context, Uri document) {
++    if (busy) return;
++    busy = true;
++    status = "取得を開始しています";
++    Context app = context.getApplicationContext();
++    IO.execute(() -> {
++      File tmp = null;
++      try {
++        File dest = file(app);
++        String expected = document != null ? INITIAL_SHA : releaseSha();
++        long limit = INITIAL_SHA.equals(expected) ? INITIAL_SIZE : 2L * 1024 * 1024 * 1024;
++        if (INITIAL_SHA.equals(expected) && app.getFilesDir().getUsableSpace() < INITIAL_SIZE)
++          throw new IOException("展開先の空き容量が不足しています");
++        tmp = new File(app.getFilesDir(), "cb6_search.sqlite.installing");
++        MessageDigest digest = MessageDigest.getInstance("SHA-256");
++        long size = 0;
++        try (InputStream raw = document == null ? remote("sqlite.xz") : app.getContentResolver().openInputStream(document)) {
++          if (raw == null) throw new IOException("選択ファイルを開けません");
++          try (XZInputStream xz = new XZInputStream(new BufferedInputStream(raw, 65536), 98304);
++               FileOutputStream out = new FileOutputStream(tmp)) {
++            byte[] buffer = new byte[131072];
++            for (int n; (n = xz.read(buffer)) != -1;) {
++              size += n;
++              if (size > limit) throw new IOException("展開サイズが上限を超えました");
++              digest.update(buffer, 0, n);
++              out.write(buffer, 0, n);
++              status = "取得・展開中 " + (size >> 20) + " MiB";
++            }
++            out.getFD().sync();
++          }
++        }
++        StringBuilder hex = new StringBuilder(64);
++        for (byte b : digest.digest()) hex.append(String.format(Locale.ROOT, "%02x", b & 255));
++        if (!expected.contentEquals(hex) || (INITIAL_SHA.equals(expected) && size != INITIAL_SIZE))
++          throw new IOException("SHA-256または展開サイズが一致しません");
++        validate(tmp);
++        Os.rename(tmp.getAbsolutePath(), dest.getAbsolutePath());
++        tmp = null;
++        status = "利用可能・SHA-256照合済み";
++      } catch (Exception e) {
++        status = "取得失敗：" + (e.getLocalizedMessage() == null ? e.getClass().getSimpleName() : e.getLocalizedMessage());
++      } finally {
++        if (tmp != null) tmp.delete();
++        busy = false;
++      }
++    });
++  }
++
++  private static InputStream remote(String suffix) throws IOException {
++    URL url = new URL(RELEASE + suffix);
++    for (int i = 0; i < 6; i++) {
++      HttpURLConnection conn = (HttpURLConnection)url.openConnection();
++      conn.setInstanceFollowRedirects(false);
++      conn.setConnectTimeout(15000);
++      conn.setReadTimeout(60000);
++      try {
++        int code = conn.getResponseCode();
++        if (code == 200) {
++          return new FilterInputStream(conn.getInputStream()) {
++            @Override public void close() throws IOException { try { super.close(); } finally { conn.disconnect(); } }
++          };
++        }
++        if (code < 300 || code >= 400 || conn.getHeaderField("Location") == null)
++          throw new IOException("配信先の応答 HTTP " + code);
++        url = new URL(url, conn.getHeaderField("Location"));
++        if (!"https".equals(url.getProtocol())) throw new IOException("HTTPSが必要です");
++      } catch (IOException e) { conn.disconnect(); throw e; }
++      conn.disconnect();
++    }
++    throw new IOException("リダイレクトが多すぎます");
++  }
++
++  private static String releaseSha() throws IOException {
++    try (InputStream in = remote("sha256"); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
++      int ch;
++      while ((ch = in.read()) != -1) {
++        if (out.size() >= 256) throw new IOException("SHAファイルが大きすぎます");
++        out.write(ch);
++      }
++      String line = out.toString("US-ASCII").trim();
++      if (!line.matches("[0-9a-fA-F]{64}(?:[ \\t]+\\*?cb6_search\\.sqlite)?"))
++        throw new IOException("配信SHAの形式が不正です");
++      return line.substring(0, 64).toLowerCase(Locale.ROOT);
++    }
++  }
++
++  private static void validate(File file) throws IOException {
++    try (SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getPath(), null, SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
++         Cursor records = db.rawQuery("SELECT id,source,level,name,reading,aliases,address,lat,lon,precision,provenance FROM records LIMIT 1", null);
++         Cursor grams = db.rawQuery("SELECT gram,id FROM grams LIMIT 1", null)) {
++      if (!records.moveToFirst() || !grams.moveToFirst()) throw new IOException("検索テーブルが空です");
++    }
++  }
++}
+diff --git a/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java b/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java
+new file mode 100644
+index 0000000..f3d2abb
+--- /dev/null
++++ b/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java
+@@ -0,0 +1,90 @@
++package jp.cb6.search;
++import android.database.Cursor;
++import android.database.sqlite.SQLiteDatabase;
++import android.os.Handler;
++import android.os.Looper;
++import java.io.File;
++import java.text.Normalizer;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.AtomicLong;
++
++/** Read-only Stage2 records/grams adapter. Host retains its native search. */
++public final class Cb6SearchEngine implements AutoCloseable {
++ public interface Callback { void done(List<Result> results, Exception error); }
++ public static final class Result {
++  public final long id; public final String source,name,address,precision,level,provenance; public final Double lat,lon; public final double score;
++  Result(Cursor c,double s){id=c.getLong(0);source=c.getString(1);level=c.getString(2);name=c.getString(3);address=c.getString(6);lat=c.isNull(7)?null:c.getDouble(7);lon=c.isNull(8)?null:c.getDouble(8);precision=c.getString(9);provenance=c.getString(10);score=s;}
++  public boolean hasPosition(){return lat!=null&&lon!=null&&Double.isFinite(lat)&&Double.isFinite(lon)&&lat>=40&&lat<=46&&lon>=139&&lon<=147&&precision!=null&&!precision.equals("unknown")&&!precision.isEmpty();}
++  // Host must explicitly display precision and confirm destination; no automatic routing.
++ }
++ private final File file;
++ private final ExecutorService worker = Executors.newSingleThreadExecutor();
++ private final Handler main = new Handler(Looper.getMainLooper());
++ private final AtomicLong epoch = new AtomicLong();
++ private android.os.CancellationSignal cancellation;
++ private Future<?> pending;
++ private boolean closed;
++
++ public Cb6SearchEngine(File file) { this.file = file; }
++
++ public synchronized void cancel() {
++   epoch.incrementAndGet();
++   if (cancellation != null) cancellation.cancel();
++   if (pending != null) pending.cancel(true);
++ }
++
++ public synchronized void search(String query, Callback callback) {
++   if (closed) throw new IllegalStateException("closed");
++   cancel();
++   long ticket = epoch.get();
++   android.os.CancellationSignal signal = new android.os.CancellationSignal();
++   cancellation = signal;
++   pending = worker.submit(() -> {
++     List<Result> rows = Collections.emptyList();
++     Exception error = null;
++     try { rows = run(query, signal); }
++     catch (android.os.OperationCanceledException ignored) { return; }
++     catch (Exception e) { error = e; }
++     final List<Result> result = rows;
++     final Exception failure = error;
++     main.post(() -> { if (epoch.get() == ticket) callback.done(result, failure); });
++   });
++ }
++
++ @Override public synchronized void close() {
++   closed = true;
++   cancel();
++   worker.shutdownNow();
++ }
++ public static String normalize(String s){StringBuilder b=new StringBuilder();Normalizer.normalize(s==null?"":s,Normalizer.Form.NFKC).toLowerCase(Locale.ROOT).codePoints().forEach(x->{if(Character.isLetterOrDigit(x)||Character.getType(x)==Character.LETTER_NUMBER||Character.getType(x)==Character.OTHER_NUMBER)b.appendCodePoint(x>=0x30a1&&x<=0x30f6?x-96:x);});return b.toString();}
++ static int distance(String a,String b){int[] x=a.codePoints().toArray(),y=b.codePoints().toArray(),r=new int[y.length+1];for(int j=0;j<=y.length;j++)r[j]=j;for(int i=1;i<=x.length;i++){int prev=r[0];r[0]=i;for(int j=1;j<=y.length;j++){int old=r[j];r[j]=Math.min(Math.min(r[j]+1,r[j-1]+1),prev+(x[i-1]==y[j-1]?0:1));prev=old;}}return r[y.length];}
++ public static double score(String q,String v){v=normalize(v);if(v.isEmpty())return 0;if(q.equals(v))return 100;if(v.startsWith(q))return 85;if(v.contains(q))return 75;return 60.0*(1.0-(double)distance(q,v)/Math.max(q.codePointCount(0,q.length()),v.codePointCount(0,v.length())));}
++ private List<Result> run(String query, android.os.CancellationSignal signal) {
++   String q = normalize(query);
++   int[] cp = q.codePoints().toArray();
++   if (cp.length == 0 || cp.length > 128) return Collections.emptyList();
++   Set<String> grams = new LinkedHashSet<>();
++   for (int i = 0; i < cp.length; i++) {
++     grams.add(new String(cp, i, 1));
++     if (i + 1 < cp.length) grams.add(new String(cp, i, 2));
++   }
++   String parameters = String.join(",", Collections.nCopies(grams.size(), "?"));
++   String sql = "SELECT r.id,r.source,r.level,r.name,r.reading,r.aliases,r.address,r.lat,r.lon,r.precision,r.provenance "
++       + "FROM records r JOIN (SELECT id,count(*) n FROM grams WHERE gram IN (" + parameters
++       + ") GROUP BY id ORDER BY n DESC,id LIMIT 3000) g ON r.id=g.id";
++   List<Result> results = new ArrayList<>();
++   try (SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getPath(), null,
++            SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
++        Cursor c = db.rawQuery(sql, grams.toArray(new String[0]), signal)) {
++     while (c.moveToNext()) {
++       signal.throwIfCanceled();
++       double best = 0;
++       for (int i = 3; i <= 6; i++) best = Math.max(best, score(q, c.getString(i)));
++       if (best >= 35) results.add(new Result(c, best));
++     }
++   }
++   results.sort(Comparator.comparingDouble((Result r) -> -r.score).thenComparingLong(r -> r.id));
++   return new ArrayList<>(results.subList(0, Math.min(30, results.size())));
++ }
++}
