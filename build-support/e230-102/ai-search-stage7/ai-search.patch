@@ -385,10 +385,10 @@ index 0000000000000000000000000000000000000000..0982431f5b0fad017fcf35de94d721f3
 +}
 diff --git a/android/app/src/main/java/jp/cb6/search/AiSearch.java b/android/app/src/main/java/jp/cb6/search/AiSearch.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5a65a6128d238cbcab608059830c837d90faa981
+index 0000000000000000000000000000000000000000..f5266f38737ca121aa6a9c03e1f5eadef493115d
 --- /dev/null
 +++ b/android/app/src/main/java/jp/cb6/search/AiSearch.java
-@@ -0,0 +1,320 @@
+@@ -0,0 +1,348 @@
 +package jp.cb6.search;
 +
 +import android.app.AlertDialog;
@@ -436,6 +436,14 @@ index 0000000000000000000000000000000000000000..5a65a6128d238cbcab608059830c837d
 +  private static final class Diagnostic {
 +    Stage stage = Stage.ACCOUNT;
 +    int http = -1;
++    int contractCount = -1;
++    String freeFailure;
++
++    IOException failure(String code, String field, boolean missing) {
++      String count = contractCount < 0 ? "不明" : Integer.toString(contractCount);
++      freeFailure = code + " 契約件数=" + count + " 項目=" + field + " 欠落=" + (missing ? "あり" : "なし");
++      return new IOException();
++    }
 +
 +    void begin(Stage next) {
 +      stage = next;
@@ -443,6 +451,7 @@ index 0000000000000000000000000000000000000000..5a65a6128d238cbcab608059830c837d
 +    }
 +
 +    String message() {
++      if (stage == Stage.FREE && freeFailure != null) return freeFailure;
 +      return stage.label + (http >= 100 && http <= 599 ? " (HTTP " + http + ")" : "")
 +          + "。端末内検索を表示します";
 +    }
@@ -569,24 +578,43 @@ index 0000000000000000000000000000000000000000..5a65a6128d238cbcab608059830c837d
 +    JSONObject subscriptions = request(diagnostic, ticket, base + "/subscriptions", token, null, null);
 +    if (!Boolean.TRUE.equals(subscriptions.opt("success"))) throw new IOException();
 +    diagnostic.stage = Stage.FREE;
-+    JSONArray entries = subscriptions.getJSONArray("result");
-+    if (entries.length() == 0) throw new IOException();
++    JSONArray entries = subscriptions.optJSONArray("result");
++    if (entries == null)
++      throw diagnostic.failure("AI-02-01", "result", subscriptions.isNull("result"));
++    diagnostic.contractCount = entries.length();
++    if (entries.length() == 0)
++      throw diagnostic.failure("AI-02-01", "result", false);
 +    for (int i = 0; i < entries.length(); i++) {
-+      JSONObject sub = entries.getJSONObject(i);
-+      JSONObject plan = sub.getJSONObject("rate_plan");
++      JSONObject sub = entries.optJSONObject(i);
++      if (sub == null)
++        throw diagnostic.failure("AI-02-02", "契約行", entries.isNull(i));
++      JSONObject plan = sub.optJSONObject("rate_plan");
++      if (plan == null)
++        throw diagnostic.failure("AI-02-02", "rate_plan", sub.isNull("rate_plan"));
 +      Object price = sub.opt("price");
-+      if (!"free".equals(plan.opt("id"))
-+          || !"Workers Free".equalsIgnoreCase(plan.optString("public_name"))
-+          || !"Provisioned".equals(sub.opt("state"))
-+          || !(price instanceof Number) || new java.math.BigDecimal(price.toString()).signum() != 0)
-+        throw new IOException();
++      if (!"free".equals(plan.opt("id")))
++        throw diagnostic.failure("AI-02-03", "rate_plan.id", plan.isNull("id"));
++      if (!"Workers Free".equalsIgnoreCase(plan.optString("public_name")))
++        throw diagnostic.failure("AI-02-04", "rate_plan.public_name", plan.isNull("public_name"));
++      if (!"Provisioned".equals(sub.opt("state")))
++        throw diagnostic.failure("AI-02-05", "state", sub.isNull("state"));
++      if (!(price instanceof Number) || new java.math.BigDecimal(price.toString()).signum() != 0)
++        throw diagnostic.failure("AI-02-06", "price", sub.isNull("price"));
 +    }
 +    if (subscriptions.has("result_info")) {
-+      JSONObject page = subscriptions.getJSONObject("result_info");
-+      if (!pageValue(page, "total_count", entries.length()) || !pageValue(page, "total_pages", 1)
-+          || !pageValue(page, "page", 1) || !pageValue(page, "count", entries.length())
-+          || (!page.has("total_count") && !page.has("total_pages")))
-+        throw new IOException();
++      JSONObject page = subscriptions.optJSONObject("result_info");
++      if (page == null)
++        throw diagnostic.failure("AI-02-07", "result_info", subscriptions.isNull("result_info"));
++      if (!pageValue(page, "total_count", entries.length()))
++        throw diagnostic.failure("AI-02-07", "result_info.total_count", page.isNull("total_count"));
++      if (!pageValue(page, "total_pages", 1))
++        throw diagnostic.failure("AI-02-07", "result_info.total_pages", page.isNull("total_pages"));
++      if (!pageValue(page, "page", 1))
++        throw diagnostic.failure("AI-02-07", "result_info.page", page.isNull("page"));
++      if (!pageValue(page, "count", entries.length()))
++        throw diagnostic.failure("AI-02-07", "result_info.count", page.isNull("count"));
++      if (!page.has("total_count") && !page.has("total_pages"))
++        throw diagnostic.failure("AI-02-07", "result_info.total_count / result_info.total_pages", true);
 +    }
 +  }
 +
