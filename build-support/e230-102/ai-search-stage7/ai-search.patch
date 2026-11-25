@@ -66,10 +66,10 @@ index f2398a2b368352f0050bd920b19e36fddc0c5b75..e5b8d6477c4230c1fc3fa5775c36530d
    }
  }
 diff --git a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
-index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591aa5321d6f 100644
+index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..ba80dc46274950c67f83913c371e097b010a8489 100644
 --- a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
 +++ b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
-@@ -58,10 +58,59 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -58,10 +58,60 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
    private long mLastQueryTimestamp;
    private jp.cb6.search.Cb6SearchEngine cb6Engine;
    private boolean cb6Pending;
@@ -85,24 +85,23 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
 +    }
 +  }
 +
-+  private void confirmAiSearch() {
++  private android.app.AlertDialog consentDialog;
++
++  private void submitSearch() {
++    if (!isResumed() || consentDialog != null) return;
 +    String input = getQuery().trim();
 +    if (input.isEmpty() || input.length() > 128) {
 +      android.widget.Toast.makeText(requireContext(), "検索語を1～128文字で入力してください", android.widget.Toast.LENGTH_SHORT).show();
 +      return;
 +    }
-+    new android.app.AlertDialog.Builder(requireContext()).setTitle("AI検索")
-+        .setMessage("検索文をCloudflareへ送信します。現在地を取得できた場合は、周辺の施設をOpenStreetMapで検索するため位置を送信します。1日10回まで。")
-+        .setNegativeButton("閉じる", null)
-+        .setNeutralButton("API設定", (dialog, which) -> {
-+          if (getView() != null) aiSearch.configure(requireContext());
-+        })
-+        .setPositiveButton("検索する", (dialog, which) -> {
-+          if (getView() == null || !input.equals(getQuery().trim())) return;
-+          String term = jp.cb6.search.AiSearch.localTerm(input);
-+          // Launch the same SQLite and native search paths even when the network is offline.
-+          runSearch(term);
-+          final long ticket = mLastQueryTimestamp;
++    runSearch(jp.cb6.search.AiSearch.localTerm(input));
++    final long ticket = mLastQueryTimestamp;
++    if (!aiSearch.onlineAvailable()) return;
++    consentDialog = new android.app.AlertDialog.Builder(requireContext()).setTitle("オンライン検索")
++        .setMessage("Cloudflareに検索文を送信します。現在地がある場合は周辺検索のためOverpassに位置を送信します。")
++        .setNegativeButton("端末内のみ", null)
++        .setPositiveButton("送信に同意", (dialog, which) -> {
++          if (!isResumed() || ticket != mLastQueryTimestamp || !aiSearch.onlineAvailable()) return;
 +          Location fix = jp.cb6.search.AiSearch.recent(aiFix);
 +          mSearchAdapter.aiResults(java.util.Collections.emptyList(), fix);
 +          aiSearch.start(input, fix, (rows, category, status) -> {
@@ -120,7 +119,9 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
 +            }
 +            android.widget.Toast.makeText(requireContext(), status, android.widget.Toast.LENGTH_SHORT).show();
 +          });
-+        }).show();
++        }).create();
++    consentDialog.setOnDismissListener(dialog -> consentDialog = null);
++    consentDialog.show();
 +  }
  
 -  private void startCustomSearch() {
@@ -131,7 +132,7 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
      cb6Pending = false;
      if (isCategory()) {
        if (cb6Engine != null) cb6Engine.cancel();
-@@ -71,7 +120,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -71,7 +121,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
      if (!db.isFile()) return;
      if (cb6Engine == null) cb6Engine = new jp.cb6.search.Cb6SearchEngine(db);
      cb6Pending = true;
@@ -140,7 +141,15 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
        if (ticket != mLastQueryTimestamp || getView() == null) return;
        cb6Pending = false;
        if (error != null) android.util.Log.w("CB6Search", "Search failed", error);
-@@ -214,6 +263,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -131,6 +181,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     protected boolean onStartSearchClick()
+     {
+       deactivate();
++      submitSearch();
+       return true;
+     }
+ 
+@@ -214,6 +265,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
      @Override
      public void onLocationUpdated(@NonNull Location location)
      {
@@ -148,20 +157,30 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
        mLastPosition.set(location.getLatitude(), location.getLongitude());
      }
    };
-@@ -299,6 +349,12 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -299,6 +351,13 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
      ViewPager2 pager = mTabFrame.findViewById(R.id.pages);
  
      mToolbarController = new ToolbarController(view);
 +    aiSearch = new jp.cb6.search.AiSearch(requireContext());
-+    android.widget.Button aiButton = new android.widget.Button(requireContext());
-+    aiButton.setText("AI検索");
-+    aiButton.setOnClickListener(v -> confirmAiSearch());
-+    aiButton.setOnLongClickListener(v -> { aiSearch.configure(requireContext()); return true; });
-+    ((AppBarLayout) root.findViewById(R.id.app_bar)).addView(aiButton);
++    android.widget.Button searchButton = new android.widget.Button(requireContext());
++    searchButton.setText("検索");
++    searchButton.setOnClickListener(v -> submitSearch());
++    searchButton.setContentDescription("検索（長押しでAPI設定）");
++    searchButton.setOnLongClickListener(v -> { aiSearch.configure(requireContext()); return true; });
++    ((AppBarLayout) root.findViewById(R.id.app_bar)).addView(searchButton);
      TabLayout tabLayout = root.findViewById(R.id.tabs);
  
      if (Config.isSearchHistoryEnabled())
-@@ -400,6 +456,10 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -382,6 +441,8 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+   @Override
+   public void onPause()
+   {
++    if (consentDialog != null) consentDialog.dismiss();
++    cancelAiSearch();
+     MwmApplication.from(requireContext()).getLocationHelper().removeListener(mLocationListener);
+     super.onPause();
+   }
+@@ -400,6 +461,10 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
      cb6Pending = false;
      if (cb6Engine != null) cb6Engine.close();
      cb6Engine = null;
@@ -172,7 +191,7 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
      super.onDestroyView();
    }
  
-@@ -528,6 +588,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -528,6 +593,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
  
    private void stopSearch()
    {
@@ -180,7 +199,7 @@ index 33eccfff0c49e35249dbf0049ca9dc29f3e08435..88a547ffb574a4f6f7536d495015591a
      ++mLastQueryTimestamp;
      cb6Pending = false;
      if (cb6Engine != null) cb6Engine.cancel();
-@@ -541,22 +602,25 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+@@ -541,22 +607,25 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
      return requireActivity() instanceof MwmActivity;
    }
  
@@ -282,10 +301,10 @@ index 0000000000000000000000000000000000000000..bde38c5d75af6db4f87967479e73ac23
 +}
 diff --git a/android/app/src/main/java/jp/cb6/search/AiPreferences.java b/android/app/src/main/java/jp/cb6/search/AiPreferences.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d072858e6106b65e56061cc315fea837f1b1de6b
+index 0000000000000000000000000000000000000000..0982431f5b0fad017fcf35de94d721f32b0de78b
 --- /dev/null
 +++ b/android/app/src/main/java/jp/cb6/search/AiPreferences.java
-@@ -0,0 +1,72 @@
+@@ -0,0 +1,78 @@
 +package jp.cb6.search;
 +
 +import android.content.Context;
@@ -297,10 +316,6 @@ index 0000000000000000000000000000000000000000..d072858e6106b65e56061cc315fea837
 +import java.nio.charset.StandardCharsets;
 +import java.security.GeneralSecurityException;
 +import java.security.KeyStore;
-+import java.text.SimpleDateFormat;
-+import java.util.Date;
-+import java.util.Locale;
-+import java.util.TimeZone;
 +import javax.crypto.Cipher;
 +import javax.crypto.KeyGenerator;
 +import javax.crypto.SecretKey;
@@ -348,22 +363,32 @@ index 0000000000000000000000000000000000000000..d072858e6106b65e56061cc315fea837
 +    return new JSONObject(new String(cipher.doFinal(Base64.decode(fields[1], 0)), StandardCharsets.UTF_8));
 +  }
 +
-+  static synchronized boolean reserve(SharedPreferences prefs) {
-+    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ROOT);
-+    format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-+    int today = Integer.parseInt(format.format(new Date()));
-+    int saved = prefs.getInt("day", 0);
-+    int used = saved == today ? prefs.getInt("used", 0) : 0;
-+    if (today < saved || used >= 10) return false;
-+    return prefs.edit().putInt("day", today).putInt("used", used + 1).commit();
++  boolean quotaBlocked() {
++    return System.currentTimeMillis() < prefs.getLong("freeResetAt", 0L);
++  }
++
++  void blockUntilReset(long serverTime, long retryAfterSeconds, long retryDate) {
++    long deadline = resetAt(System.currentTimeMillis(), serverTime, retryAfterSeconds, retryDate);
++    synchronized (AiPreferences.class) {
++      prefs.edit().putLong("freeResetAt", Math.max(prefs.getLong("freeResetAt", 0L), deadline)).commit();
++    }
++  }
++
++  static long resetAt(long now, long serverTime, long retryAfterSeconds, long retryDate) {
++    long base = serverTime > 0 ? serverTime : now;
++    long midnightDelay = 86400000L - base % 86400000L;
++    long delay = Math.max(midnightDelay, retryDate > base ? retryDate - base : 0);
++    if (retryAfterSeconds > 0 && retryAfterSeconds <= (Long.MAX_VALUE - now) / 1000)
++      delay = Math.max(delay, retryAfterSeconds * 1000);
++    return now + Math.min(delay, Long.MAX_VALUE - now);
 +  }
 +}
 diff --git a/android/app/src/main/java/jp/cb6/search/AiSearch.java b/android/app/src/main/java/jp/cb6/search/AiSearch.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e25e509d38
+index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61bcbb76d0
 --- /dev/null
 +++ b/android/app/src/main/java/jp/cb6/search/AiSearch.java
-@@ -0,0 +1,247 @@
+@@ -0,0 +1,274 @@
 +package jp.cb6.search;
 +
 +import android.app.AlertDialog;
@@ -400,13 +425,21 @@ index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e2
 +  }
 +
 +  private final AiPreferences settings;
++  private final android.net.ConnectivityManager network;
++
++  public boolean onlineAvailable() {
++    if (!settings.prefs.contains("credentials") || settings.quotaBlocked() || network == null) return false;
++    android.net.NetworkInfo state = network.getActiveNetworkInfo();
++    return state != null && state.isConnected();
++  }
 +  private final ExecutorService worker = Executors.newSingleThreadExecutor();
 +  private final Handler main = new Handler(Looper.getMainLooper());
 +  private long generation;
 +  private Future<?> pending;
 +  private HttpsURLConnection active;
 +
-+  public AiSearch(Context context) { settings = new AiPreferences(context); }
++  public AiSearch(Context context) { settings = new AiPreferences(context);
++    network = (android.net.ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); }
 +
 +  public static String localTerm(String query) { return new AiIntent(query).term; }
 +
@@ -470,34 +503,29 @@ index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e2
 +      String expansion = "";
 +      try {
 +        check(ticket);
-+        if (!AiPreferences.reserve(settings.prefs)) {
-+          status = "本日のAI検索は利用できません。端末内検索を表示します";
++        if (!onlineAvailable()) {
++          status = "端末内検索を表示します";
 +        } else {
 +          AiIntent intent = new AiIntent(query);
 +          int category = intent.category;
-+          String modelStatus = "Gemma 4";
-+          try {
-+            JSONObject credentials = settings.credentials();
-+            String base = "https://api.cloudflare.com/client/v4/accounts/" + credentials.getString("account");
-+            String token = credentials.getString("token");
-+            requireFreeAccount(ticket, base, token);
-+            int suggested = classify(ticket, base, token, query);
-+            if (category < 0 && suggested >= 0) {
-+              category = suggested;
-+              expansion = AiIntent.TYPES[suggested][0];
-+            }
-+          } catch (Exception e) {
-+            check(ticket);
-+            modelStatus = "独自解析（AI未接続）";
++          JSONObject credentials = settings.credentials();
++          String base = "https://api.cloudflare.com/client/v4/accounts/" + credentials.getString("account");
++          String token = credentials.getString("token");
++          requireFreeAccount(ticket, base, token);
++          int suggested = classify(ticket, base, token, query);
++          if (category < 0 && suggested >= 0) {
++            category = suggested;
++            expansion = AiIntent.TYPES[suggested][0];
 +          }
-+          if (fix == null) status = modelStatus + "・現在地未取得。端末内検索を表示します";
++          if (fix == null) status = "Gemma 4・現在地未取得。端末内検索を表示します";
 +          else {
 +            rows = nearby(ticket, intent, category, fix);
-+            status = modelStatus + "・周辺のOSM候補 " + rows.size() + "件";
++            status = "Gemma 4・周辺のOSM候補 " + rows.size() + "件";
 +          }
 +        }
 +      } catch (Exception e) {
-+        status = "通信できません。端末内検索を表示します";
++        expansion = "";
++        status = settings.quotaBlocked() ? "無料枠に到達しました。端末内検索を表示します" : "オンライン検索を利用できません。端末内検索を表示します";
 +      }
 +      List<Cb6SearchEngine.Result> delivered = rows;
 +      String message = status;
@@ -520,7 +548,7 @@ index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e2
 +      if (!"free".equals(sub.getJSONObject("rate_plan").getString("id")) || sub.getDouble("price") != 0)
 +        throw new IOException();
 +    }
-+    JSONObject page = subscriptions.optJSONObject("result_info");
++    JSONObject page = subscriptions.has("result_info") ? subscriptions.getJSONObject("result_info") : null;
 +    if (page != null && (page.optInt("total_count", entries.length()) != entries.length() || page.optInt("total_pages", 1) > 1))
 +      throw new IOException();
 +  }
@@ -540,7 +568,9 @@ index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e2
 +    String value = result.has("choices")
 +        ? result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim()
 +        : result.getString("response").trim();
-+    return value.matches("[0-8]") ? Integer.parseInt(value) : -1;
++    if ("-1".equals(value)) return -1;
++    if (!value.matches("[0-8]")) throw new IOException();
++    return Integer.parseInt(value);
 +  }
 +
 +  private List<Cb6SearchEngine.Result> nearby(long ticket, AiIntent intent, int type, Location fix) throws Exception {
@@ -577,12 +607,24 @@ index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e2
 +    return rows;
 +  }
 +
++  static boolean exhausted(JSONObject envelope) {
++    JSONArray errors = envelope.optJSONArray("errors");
++    if (errors == null) return false;
++    for (int i = 0; i < errors.length(); ++i) {
++      JSONObject error = errors.optJSONObject(i);
++      if (error != null && (error.optInt("code") == 4006 ||
++          error.optString("message").toLowerCase(Locale.ROOT).contains("used up your daily free allocation"))) return true;
++    }
++    return false;
++  }
++
 +  private JSONObject request(long ticket, String url, String token, String contentType, String body) throws Exception {
 +    HttpsURLConnection c = (HttpsURLConnection)new URL(url).openConnection();
-+    synchronized (this) { check(ticket); active = c; }
++    synchronized (this) { check(ticket); if (!onlineAvailable()) throw new IOException(); active = c; }
 +    try {
 +      c.setInstanceFollowRedirects(false);
 +      c.setUseCaches(false);
++      c.setRequestProperty("Connection", "close");
 +      c.setConnectTimeout(5000);
 +      c.setReadTimeout(12000);
 +      c.setRequestProperty("User-Agent", "CB6-Navi/1.0 (https://github.com/kan1975-creator/CB6-Navi-Public-Build)");
@@ -595,15 +637,25 @@ index 0000000000000000000000000000000000000000..46f80658069332bdc6fdd990182517e2
 +        c.setFixedLengthStreamingMode(bytes.length);
 +        try (OutputStream output = c.getOutputStream()) { output.write(bytes); }
 +      }
-+      if (c.getResponseCode() != 200) throw new IOException();
-+      try (InputStream in = c.getInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
++      int http = c.getResponseCode();
++      try (InputStream in = http == 200 ? c.getInputStream() : c.getErrorStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
++        if (in == null) throw new IOException();
 +        byte[] buffer = new byte[4096];
 +        for (int n; (n = in.read(buffer)) != -1;) {
 +          check(ticket);
 +          if (out.size() + n > 262144) throw new IOException();
 +          out.write(buffer, 0, n);
 +        }
-+        return new JSONObject(out.toString("UTF-8"));
++        JSONObject json = new JSONObject(out.toString("UTF-8"));
++        if (url.contains("/ai/run/") && exhausted(json)) {
++          long seconds = 0;
++          try { seconds = Long.parseLong(c.getHeaderField("Retry-After")); }
++          catch (NumberFormatException ignored) { }
++          settings.blockUntilReset(c.getDate(), seconds, c.getHeaderFieldDate("Retry-After", 0));
++          throw new IOException();
++        }
++        if (http != 200) throw new IOException();
++        return json;
 +      }
 +    } finally {
 +      c.disconnect();
