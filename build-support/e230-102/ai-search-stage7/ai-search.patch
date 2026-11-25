@@ -385,10 +385,10 @@ index 0000000000000000000000000000000000000000..0982431f5b0fad017fcf35de94d721f3
 +}
 diff --git a/android/app/src/main/java/jp/cb6/search/AiSearch.java b/android/app/src/main/java/jp/cb6/search/AiSearch.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61bcbb76d0
+index 0000000000000000000000000000000000000000..5a65a6128d238cbcab608059830c837d90faa981
 --- /dev/null
 +++ b/android/app/src/main/java/jp/cb6/search/AiSearch.java
-@@ -0,0 +1,274 @@
+@@ -0,0 +1,320 @@
 +package jp.cb6.search;
 +
 +import android.app.AlertDialog;
@@ -422,6 +422,30 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +public final class AiSearch implements AutoCloseable {
 +  public interface Callback {
 +    void finish(List<Cb6SearchEngine.Result> rows, String expandedCategory, String status);
++  }
++
++  private enum Stage {
++    ACCOUNT("AI-01 契約照会"), FREE("AI-02 無料確認不能"),
++    CLASSIFY("AI-03 AI分類通信"), PARSE("AI-04 分類応答解析"),
++    OVERPASS("AI-05 Overpass通信"), QUOTA("AI-06 無料枠到達");
++
++    final String label;
++    Stage(String label) { this.label = label; }
++  }
++
++  private static final class Diagnostic {
++    Stage stage = Stage.ACCOUNT;
++    int http = -1;
++
++    void begin(Stage next) {
++      stage = next;
++      http = -1;
++    }
++
++    String message() {
++      return stage.label + (http >= 100 && http <= 599 ? " (HTTP " + http + ")" : "")
++          + "。端末内検索を表示します";
++    }
 +  }
 +
 +  private final AiPreferences settings;
@@ -499,33 +523,37 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +    long ticket = generation;
 +    pending = worker.submit(() -> {
 +      List<Cb6SearchEngine.Result> rows = Collections.emptyList();
++      Diagnostic diagnostic = new Diagnostic();
 +      String status;
 +      String expansion = "";
 +      try {
 +        check(ticket);
 +        if (!onlineAvailable()) {
-+          status = "端末内検索を表示します";
++          if (settings.quotaBlocked()) diagnostic.stage = Stage.QUOTA;
++          status = diagnostic.stage == Stage.QUOTA ? diagnostic.message() : "端末内検索を表示します";
 +        } else {
 +          AiIntent intent = new AiIntent(query);
 +          int category = intent.category;
 +          JSONObject credentials = settings.credentials();
 +          String base = "https://api.cloudflare.com/client/v4/accounts/" + credentials.getString("account");
 +          String token = credentials.getString("token");
-+          requireFreeAccount(ticket, base, token);
-+          int suggested = classify(ticket, base, token, query);
++          requireFreeAccount(diagnostic, ticket, base, token);
++          diagnostic.begin(Stage.CLASSIFY);
++          int suggested = classify(diagnostic, ticket, base, token, query);
 +          if (category < 0 && suggested >= 0) {
 +            category = suggested;
 +            expansion = AiIntent.TYPES[suggested][0];
 +          }
 +          if (fix == null) status = "Gemma 4・現在地未取得。端末内検索を表示します";
 +          else {
-+            rows = nearby(ticket, intent, category, fix);
++            diagnostic.begin(Stage.OVERPASS);
++            rows = nearby(diagnostic, ticket, intent, category, fix);
 +            status = "Gemma 4・周辺のOSM候補 " + rows.size() + "件";
 +          }
 +        }
 +      } catch (Exception e) {
 +        expansion = "";
-+        status = settings.quotaBlocked() ? "無料枠に到達しました。端末内検索を表示します" : "オンライン検索を利用できません。端末内検索を表示します";
++        status = diagnostic.message();
 +      }
 +      List<Cb6SearchEngine.Result> delivered = rows;
 +      String message = status;
@@ -537,23 +565,38 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +    });
 +  }
 +
-+  private void requireFreeAccount(long ticket, String base, String token) throws Exception {
-+    JSONObject subscriptions = request(ticket, base + "/subscriptions", token, null, null);
-+    // Conservative policy: default Free or explicitly free subscriptions. Reject any paid,
-+    // unknown or discounted subscription, including subscriptions for other products.
-+    if (!subscriptions.getBoolean("success")) throw new IOException();
++  private void requireFreeAccount(Diagnostic diagnostic, long ticket, String base, String token) throws Exception {
++    JSONObject subscriptions = request(diagnostic, ticket, base + "/subscriptions", token, null, null);
++    if (!Boolean.TRUE.equals(subscriptions.opt("success"))) throw new IOException();
++    diagnostic.stage = Stage.FREE;
 +    JSONArray entries = subscriptions.getJSONArray("result");
++    if (entries.length() == 0) throw new IOException();
 +    for (int i = 0; i < entries.length(); i++) {
 +      JSONObject sub = entries.getJSONObject(i);
-+      if (!"free".equals(sub.getJSONObject("rate_plan").getString("id")) || sub.getDouble("price") != 0)
++      JSONObject plan = sub.getJSONObject("rate_plan");
++      Object price = sub.opt("price");
++      if (!"free".equals(plan.opt("id"))
++          || !"Workers Free".equalsIgnoreCase(plan.optString("public_name"))
++          || !"Provisioned".equals(sub.opt("state"))
++          || !(price instanceof Number) || new java.math.BigDecimal(price.toString()).signum() != 0)
 +        throw new IOException();
 +    }
-+    JSONObject page = subscriptions.has("result_info") ? subscriptions.getJSONObject("result_info") : null;
-+    if (page != null && (page.optInt("total_count", entries.length()) != entries.length() || page.optInt("total_pages", 1) > 1))
-+      throw new IOException();
++    if (subscriptions.has("result_info")) {
++      JSONObject page = subscriptions.getJSONObject("result_info");
++      if (!pageValue(page, "total_count", entries.length()) || !pageValue(page, "total_pages", 1)
++          || !pageValue(page, "page", 1) || !pageValue(page, "count", entries.length())
++          || (!page.has("total_count") && !page.has("total_pages")))
++        throw new IOException();
++    }
 +  }
 +
-+  private int classify(long ticket, String base, String token, String query) throws Exception {
++  private static boolean pageValue(JSONObject page, String key, int expected) {
++    if (!page.has(key)) return true;
++    Object value = page.opt(key);
++    return value instanceof Number && Integer.toString(expected).equals(value.toString());
++  }
++
++  private int classify(Diagnostic diagnostic, long ticket, String base, String token, String query) throws Exception {
 +    StringBuilder instruction = new StringBuilder("検索の施設分類番号だけを半角数字で返す。不明は -1。");
 +    for (int i = 0; i < AiIntent.TYPES.length; i++)
 +      instruction.append(i).append('=').append(AiIntent.TYPES[i][0]).append(' ');
@@ -561,7 +604,7 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +        .put(new JSONObject().put("role","system").put("content", instruction.toString()))
 +        .put(new JSONObject().put("role","user").put("content",query));
 +    JSONObject input = new JSONObject().put("messages",messages).put("max_tokens",128).put("temperature",0);
-+    JSONObject response = request(ticket, base + "/ai/run/@cf/google/gemma-4-26b-a4b-it",
++    JSONObject response = request(diagnostic, ticket, base + "/ai/run/@cf/google/gemma-4-26b-a4b-it",
 +        token, "application/json", input.toString());
 +    if (!response.getBoolean("success")) throw new IOException();
 +    JSONObject result = response.getJSONObject("result");
@@ -573,12 +616,12 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +    return Integer.parseInt(value);
 +  }
 +
-+  private List<Cb6SearchEngine.Result> nearby(long ticket, AiIntent intent, int type, Location fix) throws Exception {
++  private List<Cb6SearchEngine.Result> nearby(Diagnostic diagnostic, long ticket, AiIntent intent, int type, Location fix) throws Exception {
 +    String selector = type < 0 ? "[\"name\"=" + JSONObject.quote(intent.term) + "]"
 +        : "[" + AiIntent.TYPES[type][1] + "=" + AiIntent.TYPES[type][2] + "][name]";
 +    String q = String.format(Locale.ROOT, "[out:json][timeout:8];nwr%s(around:%d,%.6f,%.6f);out center 60;",
 +        selector, intent.radius, fix.getLatitude(), fix.getLongitude());
-+    JSONObject data = request(ticket, "https://overpass-api.de/api/interpreter", null,
++    JSONObject data = request(diagnostic, ticket, "https://overpass-api.de/api/interpreter", null,
 +        "application/x-www-form-urlencoded", "data=" + URLEncoder.encode(q, "UTF-8"));
 +    if (data.has("remark")) throw new IOException();
 +    JSONArray elements = data.getJSONArray("elements");
@@ -618,7 +661,7 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +    return false;
 +  }
 +
-+  private JSONObject request(long ticket, String url, String token, String contentType, String body) throws Exception {
++  private JSONObject request(Diagnostic diagnostic, long ticket, String url, String token, String contentType, String body) throws Exception {
 +    HttpsURLConnection c = (HttpsURLConnection)new URL(url).openConnection();
 +    synchronized (this) { check(ticket); if (!onlineAvailable()) throw new IOException(); active = c; }
 +    try {
@@ -638,6 +681,7 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +        try (OutputStream output = c.getOutputStream()) { output.write(bytes); }
 +      }
 +      int http = c.getResponseCode();
++      diagnostic.http = http;
 +      try (InputStream in = http == 200 ? c.getInputStream() : c.getErrorStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 +        if (in == null) throw new IOException();
 +        byte[] buffer = new byte[4096];
@@ -646,8 +690,10 @@ index 0000000000000000000000000000000000000000..271fc7a61deee2e15bba41312ef92c61
 +          if (out.size() + n > 262144) throw new IOException();
 +          out.write(buffer, 0, n);
 +        }
++        if (http == 200 && diagnostic.stage == Stage.CLASSIFY) diagnostic.stage = Stage.PARSE;
 +        JSONObject json = new JSONObject(out.toString("UTF-8"));
 +        if (url.contains("/ai/run/") && exhausted(json)) {
++          diagnostic.stage = Stage.QUOTA;
 +          long seconds = 0;
 +          try { seconds = Long.parseLong(c.getHeaderField("Retry-After")); }
 +          catch (NumberFormatException ignored) { }
