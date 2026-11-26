@@ -1,0 +1,614 @@
+diff --git a/android/app/build.gradle b/android/app/build.gradle
+--- a/android/app/build.gradle
++++ b/android/app/build.gradle
+@@ -65,6 +65,8 @@
+   compileSdk = propCompileSdkVersion.toInteger()
+ 
+   defaultConfig {
++    proguardFiles 'ruri-rules.pro'
++    if (project.hasProperty('arm64')) ndk.abiFilters.add('arm64-v8a')
+     versionCode = rootProject.ext.versionCode
+     versionName = rootProject.ext.versionName
+     println('Version: ' + versionName)
+@@ -334,6 +336,7 @@
+ 
+ dependencies {
+   implementation project(':sdk')
++  implementation files('libs/onnxruntime-android-1.22.0.aar')
+   implementation 'org.tukaani:xz:1.10'
+   implementation 'org.bouncycastle:bcprov-jdk15to18:1.85.2'
+ 
+diff --git a/android/app/ruri-rules.pro b/android/app/ruri-rules.pro
+new file mode 100644
+--- /dev/null
++++ b/android/app/ruri-rules.pro
+@@ -0,0 +1,2 @@
++-keep class ai.onnxruntime.** { *; }
++-keep class jp.cb6.search.RuriSearch { native <methods>; }
+diff --git a/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java b/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
+--- a/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
++++ b/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
+@@ -248,7 +248,15 @@
+     refreshData(mResults);
+   }
+ 
++  private boolean verifiedOnly;
++
++  void requireVerifiedRows(boolean active) {
++    verifiedOnly = active;
++    refreshData(mResults);
++  }
++
+   void begin(String q) {
++    verifiedOnly = false;
+     origin = null;
+     online = java.util.Collections.emptyList();
+     query = q;
+@@ -286,6 +294,12 @@
+ 
+   void refreshData(@Nullable SearchResult[] results) {
+     mResults = results == null ? new SearchResult[0] : results;
++    if (verifiedOnly) {
++      rows = Cb6SearchRows.merge(query, new SearchResult[0], online);
++      if (origin != null) rankNearby();
++      notifyDataSetChanged();
++      return;
++    }
+     java.util.List<jp.cb6.search.Cb6SearchEngine.Result> places = custom;
+     if (!online.isEmpty()) {
+       places = new java.util.ArrayList<>(custom);
+diff --git a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+--- a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
++++ b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+@@ -60,53 +60,32 @@
+   private boolean cb6Pending;
+   private jp.cb6.search.AiSearch aiSearch;
+   private Location aiFix;
+-  private jp.cb6.search.Cb6SearchEngine aiCategoryEngine;
++  private jp.cb6.search.RuriSearch ruri;
++  private android.widget.TextView ruriStatus;
+ 
+   private void cancelAiSearch() {
+-    if (aiSearch != null) aiSearch.cancel();
+-    if (aiCategoryEngine != null) {
+-      aiCategoryEngine.close();
+-      aiCategoryEngine = null;
+-    }
+-  }
+-
+-  private android.app.AlertDialog consentDialog;
++    if (ruri != null) ruri.cancel();
++    if (ruriStatus != null) ruriStatus.setVisibility(View.GONE);
++  }
+ 
+   private void submitSearch() {
+-    if (!isResumed() || consentDialog != null) return;
++    if (!isResumed()) return;
+     String input = getQuery().trim();
+     if (input.isEmpty() || input.length() > 128) {
+       android.widget.Toast.makeText(requireContext(), "検索語を1～128文字で入力してください", android.widget.Toast.LENGTH_SHORT).show();
+       return;
+     }
+-    runSearch(jp.cb6.search.AiSearch.localTerm(input));
++    runSearch(input);
+     final long ticket = mLastQueryTimestamp;
+-    if (!aiSearch.onlineAvailable()) return;
+-    consentDialog = new android.app.AlertDialog.Builder(requireContext()).setTitle("オンライン検索")
+-        .setMessage("GoogleのGemma 4に検索文を送信します。現在地がある場合は周辺検索のためOverpassに位置を送信します。")
+-        .setNegativeButton("端末内のみ", null)
+-        .setPositiveButton("送信に同意", (dialog, which) -> {
+-          if (!isResumed() || ticket != mLastQueryTimestamp || !aiSearch.onlineAvailable()) return;
+-          Location fix = jp.cb6.search.AiSearch.recent(aiFix);
+-          mSearchAdapter.aiResults(java.util.Collections.emptyList(), fix);
+-          aiSearch.start(input, fix, (rows, category, status) -> {
+-            if (getView() == null || ticket != mLastQueryTimestamp) return;
+-            mSearchAdapter.aiResults(rows, fix);
+-            java.io.File db = jp.cb6.search.Cb6SearchDb.file(requireContext());
+-            if (!category.isEmpty() && db.isFile()) {
+-              aiCategoryEngine = new jp.cb6.search.Cb6SearchEngine(db);
+-              aiCategoryEngine.search(category, (extra, error) -> {
+-                if (getView() == null || ticket != mLastQueryTimestamp || error != null) return;
+-                java.util.List<jp.cb6.search.Cb6SearchEngine.Result> combined = new java.util.ArrayList<>(rows);
+-                combined.addAll(extra);
+-                mSearchAdapter.aiResults(combined, fix);
+-              });
+-            }
+-            android.widget.Toast.makeText(requireContext(), status, android.widget.Toast.LENGTH_SHORT).show();
+-          });
+-        }).create();
+-    consentDialog.setOnDismissListener(dialog -> consentDialog = null);
+-    consentDialog.show();
++    Location fix = jp.cb6.search.AiSearch.recent(aiFix);
++    mSearchAdapter.requireVerifiedRows(jp.cb6.search.RuriSearch.hasConstraint(input));
++    ruriStatus.setText("端末内で分類中…");
++    ruriStatus.setVisibility(View.VISIBLE);
++    ruri.start(input, fix, (rows, status) -> {
++      if (!isResumed() || getView() == null || ticket != mLastQueryTimestamp) return;
++      mSearchAdapter.aiResults(rows, fix);
++      ruriStatus.setText(status);
++    });
+   }
+ 
+   private void startCustomSearch(String query) {
+@@ -352,12 +331,18 @@
+ 
+     mToolbarController = new ToolbarController(view);
+     aiSearch = new jp.cb6.search.AiSearch(requireContext());
++    ruri = new jp.cb6.search.RuriSearch(requireContext());
+     android.widget.Button searchButton = new android.widget.Button(requireContext());
+     searchButton.setText("検索");
+     searchButton.setOnClickListener(v -> submitSearch());
+     searchButton.setContentDescription("検索（長押しでAPI設定）");
+     searchButton.setOnLongClickListener(v -> { aiSearch.configure(requireContext()); return true; });
+-    ((AppBarLayout) root.findViewById(R.id.app_bar)).addView(searchButton);
++    AppBarLayout appBar = root.findViewById(R.id.app_bar);
++    appBar.addView(searchButton);
++    ruriStatus = new android.widget.TextView(requireContext());
++    ruriStatus.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
++    ruriStatus.setVisibility(View.GONE);
++    appBar.addView(ruriStatus);
+     TabLayout tabLayout = root.findViewById(R.id.tabs);
+ 
+     if (Config.isSearchHistoryEnabled())
+@@ -441,7 +426,6 @@
+   @Override
+   public void onPause()
+   {
+-    if (consentDialog != null) consentDialog.dismiss();
+     cancelAiSearch();
+     MwmApplication.from(requireContext()).getLocationHelper().removeListener(mLocationListener);
+     super.onPause();
+@@ -462,6 +446,9 @@
+     if (cb6Engine != null) cb6Engine.close();
+     cb6Engine = null;
+     cancelAiSearch();
++    ruri.close();
++    ruri = null;
++    ruriStatus = null;
+     aiSearch.close();
+     aiSearch = null;
+     aiFix = null;
+diff --git a/android/app/src/main/java/jp/cb6/search/RuriCatalog.java b/android/app/src/main/java/jp/cb6/search/RuriCatalog.java
+new file mode 100644
+--- /dev/null
++++ b/android/app/src/main/java/jp/cb6/search/RuriCatalog.java
+@@ -0,0 +1,127 @@
++package jp.cb6.search;
++
++import android.database.Cursor;
++import android.database.sqlite.SQLiteDatabase;
++import android.location.Location;
++import android.os.CancellationSignal;
++import java.io.File;
++import java.nio.ByteBuffer;
++import java.nio.ByteOrder;
++import java.nio.charset.StandardCharsets;
++import java.util.*;
++import org.json.JSONArray;
++import org.json.JSONObject;
++
++final class RuriCatalog {
++  static final int COUNT = 1083, DIM = 256;
++  final String[] keys = new String[COUNT], labels = new String[COUNT];
++  private final ByteBuffer vectors, places;
++  private static final Map<String,String> terms = new HashMap<>();
++  static {
++    String[][] pairs = {
++      {"コンビニ","convenience_store"},{"コンビニエンスストア","convenience_store"},
++      {"スーパー","grocery_store"},{"ガソリンスタンド","gas_station"},{"給油","gas_station"},
++      {"温泉","onsen"},{"銭湯","public_bath_house"},{"カフェ","cafe"},{"喫茶店","coffee_shop"},
++      {"公園","park"},{"空港","airport"},{"病院","hospital"},{"本屋","bookstore"},
++      {"パン屋","bakery"},{"パンを買いたい","bakery"},{"薬局","pharmacy"},{"宿泊","lodging"},
++      {"食事","restaurant"},{"飲食店","restaurant"},{"レストラン","restaurant"},
++      {"寿司","sushi_restaurant"},{"和食","japanese_restaurant"},{"ラーメン","ramen_restaurant"},
++      {"中華","chinese_restaurant"},{"駐車場","parking"},
++      {"トイレ","public_restroom"},{"映画館","movie_theater"},{"買い物","shopping"},
++      {"ホテル","hotel"},{"宿","lodging"},{"銀行","bank"},{"水族館","aquarium"}
++    };
++    for (String[] p : pairs) terms.put(p[0],p[1]);
++  }
++  RuriCatalog(byte[] text, byte[] weights, byte[] rows) {
++    String[] lines = new String(text, StandardCharsets.UTF_8).split("\n");
++    if (lines.length != COUNT || weights.length != COUNT*DIM*4) throw new IllegalArgumentException();
++    for (int i=0;i<COUNT;i++) {
++      String[] fields=lines[i].split("\t",2);
++      keys[i]=fields[0]; labels[i]=fields[1];
++    }
++    vectors=ByteBuffer.wrap(weights).order(ByteOrder.LITTLE_ENDIAN);
++    places=ByteBuffer.wrap(rows).order(ByteOrder.LITTLE_ENDIAN);
++    if (rows.length != (COUNT+1)*4 + 12L*offset(COUNT)) throw new IllegalArgumentException();
++  }
++  int exact(String value) {
++    String key=terms.getOrDefault(value,value);
++    for (int i=0;i<COUNT;i++) if (keys[i].equals(key) || labels[i].equals(value)) return i;
++    return -1;
++  }
++  int best(float[] query, String literal, boolean requireLiteral) {
++    int best=-1; double high=-Double.MAX_VALUE;
++    for (int i=0;i<COUNT;i++) {
++      if (requireLiteral && !labels[i].contains(literal)) continue;
++      double score=0;
++      for (int k=0;k<DIM;k++) score+=vectors.getFloat((i*DIM+k)*4)*query[k];
++      if (score>high) { high=score; best=i; }
++    }
++    return best;
++  }
++  private int offset(int category) { return places.getInt(category*4); }
++  private int field(int row,int field) { return places.getInt((COUNT+1)*4 + 12*row + 4*field); }
++  private boolean excluded(int category,int id) {
++    if (category<0) return false;
++    int low=offset(category), end=offset(category+1), high=end;
++    while (low<high) {
++      int mid=(low+high)>>>1;
++      if (field(mid,0)<id) low=mid+1; else high=mid;
++    }
++    return low<end && field(low,0)==id;
++  }
++  private static boolean tagged(JSONObject data,String key) {
++    if (key.equals(data.optString("basic_category"))) return true;
++    JSONObject tax=data.optJSONObject("taxonomy");
++    if (tax==null) return false;
++    if (key.equals(tax.optString("primary"))) return true;
++    for (String field:new String[]{"alternates","hierarchy"}) {
++      JSONArray array=tax.optJSONArray(field);
++      if (array!=null) for(int i=0;i<array.length();i++) if(key.equals(array.optString(i))) return true;
++    }
++    return false;
++  }
++  private static final class Hit {
++    final int id;
++    final double distance;
++    Hit(int id,double distance) { this.id=id; this.distance=distance; }
++  }
++  List<Cb6SearchEngine.Result> lookup(File file,int category,int negative,Location fix,
++                                       CancellationSignal stop) throws Exception {
++    if (!file.isFile()) throw new java.io.FileNotFoundException();
++    Comparator<Hit> order=Comparator.comparingDouble((Hit h)->h.distance).thenComparingInt(h->h.id);
++    PriorityQueue<Hit> nearest=new PriorityQueue<>(32,order.reversed());
++    double scale=fix==null?1:Math.cos(Math.toRadians(fix.getLatitude()));
++    for (int i=offset(category);i<offset(category+1);i++) {
++      if ((i&127)==0) stop.throwIfCanceled();
++      int id=field(i,0);
++      if (excluded(negative,id)) continue;
++      double dist=0;
++      if (fix!=null) {
++        double dy=field(i,1)*1e-6-fix.getLatitude();
++        double dx=(field(i,2)*1e-6-fix.getLongitude())*scale;
++        dist=dx*dx+dy*dy;
++      }
++      if (nearest.size()==32 && dist>=nearest.peek().distance) continue;
++      nearest.add(new Hit(id,dist));
++      if(nearest.size()>32) nearest.remove();
++    }
++    List<Hit> sorted=new ArrayList<>(nearest);
++    sorted.sort(order);
++    List<Cb6SearchEngine.Result> output=new ArrayList<>();
++    String sql="SELECT id,source,level,name,reading,aliases,address,lat,lon,precision,provenance "+
++        "FROM records WHERE id=? AND source='Overture' AND level='place'";
++    try(SQLiteDatabase db=SQLiteDatabase.openDatabase(file.getPath(),null,SQLiteDatabase.OPEN_READONLY)) {
++      for (Hit h:sorted) {
++        stop.throwIfCanceled();
++        try(Cursor c=db.rawQuery(sql,new String[]{Integer.toString(h.id)},stop)) {
++          if(!c.moveToFirst()) continue;
++          JSONObject data=new JSONObject(c.getString(10));
++          if(!tagged(data,keys[category]) || (negative>=0 && tagged(data,keys[negative]))) continue;
++          Cb6SearchEngine.Result place=new Cb6SearchEngine.Result(c,45);
++          if(place.hasPosition()) output.add(place);
++        }
++      }
++    }
++    return output;
++  }
++}
+diff --git a/android/app/src/main/java/jp/cb6/search/RuriHashes.java b/android/app/src/main/java/jp/cb6/search/RuriHashes.java
+new file mode 100644
+--- /dev/null
++++ b/android/app/src/main/java/jp/cb6/search/RuriHashes.java
+@@ -0,0 +1,14 @@
++package jp.cb6.search;
++
++final class RuriHashes {
++  static String of(String name) {
++    switch (name) {
++      case "model_int8.onnx": return "bd07545fa4eb8e7765939536944da1138a7e61441d81633adfa1faf218df6bb1";
++      case "tokenizer.model": return "008293028e1a9d9a1038d9b63d989a2319797dfeaa03f171093a57b33a3a8277";
++      case "categories.tsv": return "e394297af46b87b99f8da37ceab5d9e578633c0e0a29b179d8e82a2d96401d9c";
++      case "categories.f32": return "f9ba93a9ff756fb1ccf4b17310c2d89f9c2db45df12868eae5950905ff11709d";
++      case "places.bin": return "f85101c3ac68484f7ff973108af89b1557fe4c962db7368e1ca7d52c91af1d54";
++      default: throw new IllegalArgumentException(name);
++    }
++  }
++}
+diff --git a/android/app/src/main/java/jp/cb6/search/RuriSearch.java b/android/app/src/main/java/jp/cb6/search/RuriSearch.java
+new file mode 100644
+--- /dev/null
++++ b/android/app/src/main/java/jp/cb6/search/RuriSearch.java
+@@ -0,0 +1,189 @@
++package jp.cb6.search;
++
++import ai.onnxruntime.*;
++import android.app.ActivityManager;
++import android.content.Context;
++import android.location.Location;
++import android.os.CancellationSignal;
++import android.os.Handler;
++import android.os.Looper;
++import android.os.OperationCanceledException;
++import java.io.*;
++import java.nio.LongBuffer;
++import java.nio.charset.StandardCharsets;
++import java.security.MessageDigest;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.regex.Matcher;
++import java.util.regex.Pattern;
++
++/** A single background lane also serializes native resource disposal across fragment recreation. */
++public final class RuriSearch implements AutoCloseable {
++  public interface Callback { void done(List<Cb6SearchEngine.Result> rows,String status); }
++  private static final ThreadPoolExecutor worker = new ThreadPoolExecutor(1,1,0,TimeUnit.MILLISECONDS,
++      new LinkedBlockingQueue<>(), task -> new Thread(() -> {
++        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
++        task.run();
++      },"CB6 Ruri"));
++  private static final Pattern except = Pattern.compile("^(.+?)(?:以外の|を除く)(.+)$");
++  private final Context app;
++  private final Handler ui = new Handler(Looper.getMainLooper());
++  private long generation;
++  private boolean closed;
++  private CancellationSignal signal;
++  private Future<?> task;
++  private OrtSession.RunOptions running;
++  // Accessed only on the worker.
++  private OrtSession session;
++  private OrtEnvironment env;
++  private RuriCatalog catalog;
++  private long processor;
++
++  public RuriSearch(Context context) { app=context.getApplicationContext(); }
++  private static native long openTokenizer(byte[] model);
++  private static native long[] encode(long pointer,byte[] utf8);
++  private static native void closeTokenizer(long pointer);
++
++  public synchronized void cancel() {
++    generation++;
++    if(signal!=null) signal.cancel();
++    if(running!=null) try { running.setTerminate(true); } catch(OrtException ignored) {}
++    if(task!=null) { task.cancel(false); worker.remove((Runnable)task); }
++    signal=null; task=null;
++  }
++  public synchronized void start(String input,Location origin,Callback callback) {
++    cancel();
++    if(closed) return;
++    final long ticket=generation;
++    final CancellationSignal stop=new CancellationSignal();
++    signal=stop;
++    task=worker.submit(() -> {
++      try {
++        checkMemory();
++        initialize(stop);
++        String phrase=input.replaceFirst("(?:を探してください|を探して|を検索して|を教えてください|を教えて)[。？?]?$","").trim();
++        int negative=-1;
++        Matcher m=except.matcher(phrase);
++        if(m.matches()) {
++          negative=catalog.exact(m.group(1).trim());
++          if(negative<0) {
++            deliver(ticket,callback,Collections.emptyList(),"除外条件を確認できないため候補の追加を保留しました");
++            return;
++          }
++          phrase=m.group(2).trim();
++        }
++        float[] query=embedding(phrase,stop);
++        int category=catalog.exact(phrase);
++        if(category<0 && phrase.length()>=2 && !phrase.matches(".*(?:以外|除|ない|なし|なく|不要|禁止|不可|未満|以上|以内|以下|営業中|限定).*"))
++          category=catalog.best(query,phrase,true);
++        if(category<0) {
++          int suggestion=catalog.best(query,phrase,false);
++          deliver(ticket,callback,Collections.emptyList(),"条件未確認・施設追加を保留。関連分類「"+catalog.labels[suggestion]+"」");
++          return;
++        }
++        List<Cb6SearchEngine.Result> rows=catalog.lookup(Cb6SearchDb.file(app),category,negative,origin,stop);
++        deliver(ticket,callback,rows,"端末内候補 "+rows.size()+"件："+catalog.labels[category]);
++      } catch(OperationCanceledException ignored) {
++      } catch(OutOfMemoryError e) {
++        release();
++        deliver(ticket,callback,Collections.emptyList(),"メモリ不足のため端末内分類を停止しました");
++      } catch(FileNotFoundException e) {
++        deliver(ticket,callback,Collections.emptyList(),"端末内検索の資材または施設DBが見つかりません");
++      } catch(Exception | LinkageError e) {
++        release();
++        deliver(ticket,callback,Collections.emptyList(),"端末内分類を停止しました。資材または端末の状態を確認してください");
++      }
++    });
++  }
++  public static boolean hasConstraint(String input) {
++    return input.matches("(?s).*(?:以外|除[くき外]|ない|なし|なく|不要|禁止|不可|未満|以上|以内|以下|営業中|限定|対応|近く|最寄|半径|徒歩|駐車場付き|無料|有料|喫煙|禁煙|深夜|24時間|２４時間|だけ|のみ).*");
++  }
++  private void deliver(long ticket,Callback cb,List<Cb6SearchEngine.Result> rows,String status) {
++    ui.post(() -> {
++      synchronized(this) { if(closed || generation!=ticket) return; }
++      cb.done(rows,status);
++    });
++  }
++  private void checkMemory() {
++    ActivityManager manager=(ActivityManager)app.getSystemService(Context.ACTIVITY_SERVICE);
++    ActivityManager.MemoryInfo mem=new ActivityManager.MemoryInfo();
++    manager.getMemoryInfo(mem);
++    if(mem.lowMemory || mem.availMem-mem.threshold < (session==null?128L:32L)*1024*1024)
++      throw new OutOfMemoryError();
++  }
++  private void copyVerified(String name, OutputStream out,CancellationSignal stop) throws Exception {
++    MessageDigest sha=MessageDigest.getInstance("SHA-256");
++    try(InputStream raw=app.getAssets().open("cb6_ruri/"+name)) {
++      byte[] buf=new byte[65536];
++      int n;
++      while((n=raw.read(buf))!=-1) {
++        stop.throwIfCanceled(); sha.update(buf,0,n); out.write(buf,0,n);
++      }
++    }
++    StringBuilder hex=new StringBuilder();
++    for(byte b:sha.digest()) hex.append(String.format(Locale.ROOT,"%02x",b&255));
++    if(!hex.toString().equals(RuriHashes.of(name))) throw new IOException("asset integrity");
++  }
++  private byte[] data(String name,CancellationSignal stop) throws Exception {
++    ByteArrayOutputStream bytes=new ByteArrayOutputStream();
++    copyVerified(name,bytes,stop);
++    return bytes.toByteArray();
++  }
++  private void initialize(CancellationSignal stop) throws Exception {
++    stop.throwIfCanceled();
++    if(session!=null) return;
++    try {
++      System.loadLibrary("cb6_ruri_sp");
++      processor=openTokenizer(data("tokenizer.model",stop));
++      catalog=new RuriCatalog(data("categories.tsv",stop),data("categories.f32",stop),data("places.bin",stop));
++      env=OrtEnvironment.getEnvironment();
++      env.setTelemetry(false);
++      File file=File.createTempFile("cb6-ruri-",".onnx",app.getCacheDir());
++      try {
++        try(OutputStream out=new FileOutputStream(file)) { copyVerified("model_int8.onnx",out,stop); }
++        try(OrtSession.SessionOptions options=new OrtSession.SessionOptions()) {
++          options.setIntraOpNumThreads(1);
++          options.setInterOpNumThreads(1);
++          options.setExecutionMode(OrtSession.SessionOptions.ExecutionMode.SEQUENTIAL);
++          options.setCPUArenaAllocator(false);
++          options.setMemoryPatternOptimization(false);
++          stop.throwIfCanceled(); checkMemory();
++          session=env.createSession(file.getPath(),options);
++        }
++      } finally { file.delete(); }
++    } finally { if(session==null) release(); }
++  }
++  private float[] embedding(String phrase,CancellationSignal stop) throws Exception {
++    long[] ids=encode(processor,("検索クエリ: "+phrase).getBytes(StandardCharsets.UTF_8));
++    long[] mask=new long[ids.length]; Arrays.fill(mask,1L);
++    long[] shape={1,ids.length};
++    try(OnnxTensor tokens=OnnxTensor.createTensor(env,LongBuffer.wrap(ids),shape);
++        OnnxTensor attention=OnnxTensor.createTensor(env,LongBuffer.wrap(mask),shape);
++        OrtSession.RunOptions opts=new OrtSession.RunOptions()) {
++      Map<String,OnnxTensor> inputs=new HashMap<>();
++      inputs.put("input_ids",tokens); inputs.put("attention_mask",attention);
++      synchronized(this) { stop.throwIfCanceled(); running=opts; }
++      try(OrtSession.Result result=session.run(inputs,opts)) {
++        float[][][] hidden=(float[][][])result.get(0).getValue();
++        float[] vector=new float[RuriCatalog.DIM];
++        for(float[] token:hidden[0]) for(int k=0;k<vector.length;k++) vector[k]+=token[k];
++        double norm=0;
++        for(int k=0;k<vector.length;k++) { vector[k]/=ids.length; norm+=(double)vector[k]*vector[k]; }
++        if(!Double.isFinite(norm) || norm<=0) throw new IOException("embedding");
++        float scale=(float)(1/Math.sqrt(norm));
++        for(int k=0;k<vector.length;k++) vector[k]*=scale;
++        stop.throwIfCanceled();
++        return vector;
++      } finally { synchronized(this) { running=null; } }
++    }
++  }
++  private void release() {
++    if(session!=null) try { session.close(); } catch(OrtException ignored) {}
++    session=null; catalog=null;
++    if(processor!=0) { closeTokenizer(processor); processor=0; }
++  }
++  @Override public synchronized void close() {
++    if(closed) return;
++    closed=true; cancel(); worker.execute(this::release);
++  }
++}
+diff --git a/android/sdk/build.gradle b/android/sdk/build.gradle
+--- a/android/sdk/build.gradle
++++ b/android/sdk/build.gradle
+@@ -44,7 +44,7 @@
+             '-DSKIP_TESTS=ON', '-DSKIP_TOOLS=ON', "-DUSE_PCH=$pchFlag",
+             "-DNJOBS=$njobs", "-DENABLE_VULKAN_DIAGNOSTICS=$enableVulkanDiagnostics",
+             "-DENABLE_TRACE=$enableTrace"
+-        targets 'organicmaps'
++        targets 'organicmaps', 'cb6_ruri_sp'
+       }
+     }
+ 
+diff --git a/android/sdk/src/main/cpp/CMakeLists.txt b/android/sdk/src/main/cpp/CMakeLists.txt
+--- a/android/sdk/src/main/cpp/CMakeLists.txt
++++ b/android/sdk/src/main/cpp/CMakeLists.txt
+@@ -100,6 +100,8 @@
+ 
+ target_include_directories(${PROJECT_NAME} PRIVATE .)
+ 
++add_subdirectory(cb6_ruri)
++
+ target_link_libraries(${PROJECT_NAME}
+   # CoMaps libs
+   map
+diff --git a/android/sdk/src/main/cpp/cb6_ruri/CMakeLists.txt b/android/sdk/src/main/cpp/cb6_ruri/CMakeLists.txt
+new file mode 100644
+--- /dev/null
++++ b/android/sdk/src/main/cpp/cb6_ruri/CMakeLists.txt
+@@ -0,0 +1,11 @@
++cmake_minimum_required(VERSION 3.22.1)
++project(cb6_ruri_sp LANGUAGES C CXX)
++set(SPM_ENABLE_SHARED OFF CACHE BOOL "" FORCE)
++set(SPM_ENABLE_TCMALLOC OFF CACHE BOOL "" FORCE)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++add_subdirectory(sentencepiece upstream EXCLUDE_FROM_ALL)
++add_library(cb6_ruri_sp SHARED ruri_sp.cpp)
++target_compile_features(cb6_ruri_sp PRIVATE cxx_std_17)
++target_include_directories(cb6_ruri_sp PRIVATE sentencepiece/src)
++target_link_libraries(cb6_ruri_sp PRIVATE sentencepiece-static log)
++target_link_options(cb6_ruri_sp PRIVATE "-Wl,--exclude-libs,ALL")
+diff --git a/android/sdk/src/main/cpp/cb6_ruri/ruri_sp.cpp b/android/sdk/src/main/cpp/cb6_ruri/ruri_sp.cpp
+new file mode 100644
+--- /dev/null
++++ b/android/sdk/src/main/cpp/cb6_ruri/ruri_sp.cpp
+@@ -0,0 +1,54 @@
++#include <jni.h>
++#include <memory>
++#include <stdexcept>
++#include <string>
++#include <vector>
++#include "sentencepiece_processor.h"
++
++namespace {
++std::string bytes(JNIEnv *env, jbyteArray input) {
++  std::string result(env->GetArrayLength(input), '\0');
++  env->GetByteArrayRegion(input, 0, result.size(), reinterpret_cast<jbyte *>(&result[0]));
++  return result;
++}
++void fail(JNIEnv *env, const char *type) {
++  if (!env->ExceptionCheck()) env->ThrowNew(env->FindClass(type), "SentencePiece");
++}
++}
++extern "C" JNIEXPORT jlong JNICALL
++Java_jp_cb6_search_RuriSearch_openTokenizer(JNIEnv *env, jclass, jbyteArray data) {
++  try {
++    auto p = std::make_unique<sentencepiece::SentencePieceProcessor>();
++    auto model = bytes(env, data);
++    if (env->ExceptionCheck()) return 0;
++    if (!p->LoadFromSerializedProto(model).ok() || p->bos_id()!=1 || p->eos_id()!=2 || p->pad_id()!=3)
++      throw std::runtime_error("model");
++    return reinterpret_cast<jlong>(p.release());
++  } catch (const std::bad_alloc &) { fail(env,"java/lang/OutOfMemoryError"); }
++    catch (...) { fail(env,"java/lang/IllegalStateException"); }
++  return 0;
++}
++extern "C" JNIEXPORT jlongArray JNICALL
++Java_jp_cb6_search_RuriSearch_encode(JNIEnv *env, jclass, jlong handle, jbyteArray data) {
++  try {
++    auto text = bytes(env,data);
++    if (env->ExceptionCheck()) return nullptr;
++    std::vector<int> tokens;
++    auto *p = reinterpret_cast<sentencepiece::SentencePieceProcessor *>(handle);
++    if (!p->Encode(text, &tokens).ok()) throw std::runtime_error("encode");
++    std::vector<jlong> ids;
++    ids.reserve(tokens.size()+2);
++    ids.push_back(1);
++    ids.insert(ids.end(),tokens.begin(),tokens.end());
++    ids.push_back(2);
++    auto result = env->NewLongArray(ids.size());
++    if (result) env->SetLongArrayRegion(result,0,ids.size(),ids.data());
++    return result;
++  } catch (const std::bad_alloc &) { fail(env,"java/lang/OutOfMemoryError"); }
++    catch (...) { fail(env,"java/lang/IllegalStateException"); }
++  return nullptr;
++}
++extern "C" JNIEXPORT void JNICALL
++Java_jp_cb6_search_RuriSearch_closeTokenizer(JNIEnv *, jclass, jlong handle) {
++  delete reinterpret_cast<sentencepiece::SentencePieceProcessor *>(handle);
++}
