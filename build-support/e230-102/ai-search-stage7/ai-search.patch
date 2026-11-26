@@ -300,10 +300,10 @@ index 0000000000000000000000000000000000000000..bde38c5d75af6db4f87967479e73ac23
 +}
 diff --git a/android/app/src/main/java/jp/cb6/search/AiPreferences.java b/android/app/src/main/java/jp/cb6/search/AiPreferences.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..75b02486ad6a51bdb74184deb823a2a6422f970d
+index 0000000000000000000000000000000000000000..14b04823f151b5d82e50835841ce1b21db863491
 --- /dev/null
 +++ b/android/app/src/main/java/jp/cb6/search/AiPreferences.java
-@@ -0,0 +1,95 @@
+@@ -0,0 +1,174 @@
 +package jp.cb6.search;
 +
 +import android.content.Context;
@@ -325,6 +325,8 @@ index 0000000000000000000000000000000000000000..75b02486ad6a51bdb74184deb823a2a6
 +  private static final String ALIAS = "jp.cb6.search.google.gemma4.v1";
 +  private static final String FREE_TERMS = "gemma-4-26b-a4b-it/no-billing/v1";
 +  private static long processDeadline;
++  // In-flight requests from a previous registration cannot update the new record.
++  static long registrationGeneration;
 +  final SharedPreferences prefs;
 +
 +  AiPreferences(Context context) {
@@ -353,8 +355,32 @@ index 0000000000000000000000000000000000000000..75b02486ad6a51bdb74184deb823a2a6
 +        .toString().getBytes(StandardCharsets.UTF_8);
 +    String envelope = Base64.encodeToString(cipher.getIV(), Base64.NO_WRAP) + "." +
 +        Base64.encodeToString(cipher.doFinal(clear), Base64.NO_WRAP);
-+    if (!prefs.edit().putString("credentials", envelope).commit()) throw new IOException();
++    synchronized (AiPreferences.class) {
++      SharedPreferences.Editor editor = prefs.edit().putString("credentials", envelope);
++      boolean sameKey = false;
++      if (prefs.contains("credentials")) {
++        try { sameKey = apiKey.equals(confirmedKey()); } catch (Exception ignored) { }
++      }
++      if (!sameKey) {
++        ++registrationGeneration;
++        clearHistory(editor);
++      }
++      if (!editor.commit()) throw new IOException();
++    }
 +  }
++
++  private static SharedPreferences.Editor clearHistory(SharedPreferences.Editor editor) {
++    return editor.remove("lastGoogleResult").remove("lastGoogleAt").remove("googleAuth");
++  }
++
++  void unregister() {
++    synchronized (AiPreferences.class) {
++      ++registrationGeneration;
++      clearHistory(prefs.edit().remove("credentials")).apply();
++    }
++  }
++
++  private static final class TermsUnconfirmed extends GeneralSecurityException { }
 +
 +  String confirmedKey() throws Exception {
 +    String[] fields = prefs.getString("credentials", "").split("[.]", -1);
@@ -362,10 +388,60 @@ index 0000000000000000000000000000000000000000..75b02486ad6a51bdb74184deb823a2a6
 +    Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 +    cipher.init(Cipher.DECRYPT_MODE, key(false), new GCMParameterSpec(128, Base64.decode(fields[0], 0)));
 +    JSONObject record = new JSONObject(new String(cipher.doFinal(Base64.decode(fields[1], 0)), StandardCharsets.UTF_8));
-+    if (!FREE_TERMS.equals(record.opt("freeTerms"))) throw new GeneralSecurityException();
++    if (!FREE_TERMS.equals(record.opt("freeTerms"))) throw new TermsUnconfirmed();
 +    String apiKey = record.getString("apiKey");
 +    if (!apiKey.matches("[A-Za-z0-9._~-]{16,512}")) throw new GeneralSecurityException();
 +    return apiKey;
++  }
++
++  String statusText() {
++    synchronized (AiPreferences.class) {
++      boolean registered = prefs.contains("credentials");
++      String encryption = "対象外";
++      String terms = "記録なし";
++      if (registered) {
++        try {
++          confirmedKey();
++          encryption = "正常（復号確認済み）";
++          terms = "本人確認の記録あり";
++        } catch (TermsUnconfirmed ignored) {
++          encryption = "正常（復号確認済み）";
++          terms = "現行条件の記録なし";
++        } catch (Exception ignored) {
++          encryption = "確認不能";
++          terms = "確認不能";
++        }
++      }
++      long time = registered ? prefs.getLong("lastGoogleAt", 0L) : 0L;
++      String date = time == 0L ? "記録なし" :
++          java.text.DateFormat.getDateTimeInstance().format(new java.util.Date(time));
++      return "APIキー登録：" + (registered ? "登録済み" : "未登録")
++          + "\n暗号化：" + encryption + "\n無料条件：" + terms
++          + "\nAPI認証（直近の判定）：" + (registered ? prefs.getString("googleAuth", "未確認") : "未確認")
++          + "\n最終Google通信：" + (registered ? prefs.getString("lastGoogleResult", "記録なし") : "記録なし")
++          + "\n通信日時：" + date;
++    }
++  }
++
++  void recordGoogle(long generation, int http, boolean parsed) {
++    synchronized (AiPreferences.class) {
++      if (generation != registrationGeneration || !prefs.contains("credentials")) return;
++      SharedPreferences.Editor editor = prefs.edit();
++      String result;
++      if (http == 200) {
++        editor.putString("googleAuth", "認証成功");
++        result = parsed ? "分類成功" : "応答読取・解析失敗";
++      } else if (http == 401 || http == 403) {
++        editor.putString("googleAuth", http == 401 ? "認証拒否" : "アクセス拒否（原因未確定）");
++        result = "HTTP " + http;
++      } else if (http == 429) {
++        result = "無料枠停止（HTTP 429）";
++      } else {
++        result = http >= 100 && http <= 599 ? "HTTP " + http : "応答取得不能";
++      }
++      editor.putString("lastGoogleResult", result)
++          .putLong("lastGoogleAt", System.currentTimeMillis()).apply();
++    }
 +  }
 +
 +  boolean quotaBlocked() {
@@ -379,7 +455,10 @@ index 0000000000000000000000000000000000000000..75b02486ad6a51bdb74184deb823a2a6
 +    synchronized (AiPreferences.class) {
 +      processDeadline = Math.max(Math.max(processDeadline, prefs.getLong("freeResetAt", 0L)), deadline);
 +      if (!prefs.edit().putLong("freeResetAt", processDeadline).commit())
-+        prefs.edit().remove("credentials").commit();
++        {
++          ++registrationGeneration;
++          clearHistory(prefs.edit().remove("credentials")).commit();
++        }
 +    }
 +  }
 +
@@ -401,10 +480,10 @@ index 0000000000000000000000000000000000000000..75b02486ad6a51bdb74184deb823a2a6
 +}
 diff --git a/android/app/src/main/java/jp/cb6/search/AiSearch.java b/android/app/src/main/java/jp/cb6/search/AiSearch.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..a087dcbd3a99ad148d955b377624173eae77a28b
+index 0000000000000000000000000000000000000000..572cd4c1f0e1ce88990c90a0ad307fb315c385bd
 --- /dev/null
 +++ b/android/app/src/main/java/jp/cb6/search/AiSearch.java
-@@ -0,0 +1,293 @@
+@@ -0,0 +1,312 @@
 +package jp.cb6.search;
 +
 +import android.app.AlertDialog;
@@ -456,6 +535,7 @@ index 0000000000000000000000000000000000000000..a087dcbd3a99ad148d955b377624173e
 +  private static final class Diagnostic {
 +    Stage stage = Stage.FREE;
 +    int http = -1;
++    boolean googleAttempt;
 +    void begin(Stage next) {
 +      stage = next;
 +      http = -1;
@@ -505,12 +585,17 @@ index 0000000000000000000000000000000000000000..a087dcbd3a99ad148d955b377624173e
 +    if (android.os.Build.VERSION.SDK_INT >= 26) token.setImportantForAutofill(android.view.View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
 +    token.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 +    token.setHint("既存のGoogle APIキー");
++    android.widget.TextView status = new android.widget.TextView(context);
++    status.setText(settings.statusText());
++    form.addView(status);
 +    form.addView(token);
 +    form.addView(confirmed);
++    android.widget.ScrollView scroll = new android.widget.ScrollView(context);
++    scroll.addView(form);
 +    AlertDialog dialog = new AlertDialog.Builder(context).setTitle("Google Gemma 4の設定")
 +        .setMessage("Gemma 4 26B A4B ITのみ使用します。請求設定・料金の変更は自動検出できません。無料条件が変わった場合は登録を解除してください。")
-+        .setView(form).setNegativeButton("閉じる", null)
-+        .setNeutralButton("登録を解除", (d,w) -> { cancel(); settings.prefs.edit().remove("credentials").apply(); })
++        .setView(scroll).setNegativeButton("閉じる", null)
++        .setNeutralButton("登録を解除", (d,w) -> { cancel(); settings.unregister(); })
 +        .setPositiveButton("暗号化して保存", (d,w) -> {
 +          try {
 +            cancel();
@@ -560,9 +645,21 @@ index 0000000000000000000000000000000000000000..a087dcbd3a99ad148d955b377624173e
 +          synchronized (GOOGLE_REQUEST_LOCK) {
 +            check(ticket);
 +            if (settings.quotaBlocked()) { diagnostic.begin(Stage.QUOTA); throw new IOException(); }
-+            String apiKey = settings.confirmedKey();
++            String apiKey;
++            long registration;
++            synchronized (AiPreferences.class) {
++              apiKey = settings.confirmedKey();
++              registration = AiPreferences.registrationGeneration;
++            }
 +            diagnostic.begin(Stage.CLASSIFY);
-+            suggested = classify(diagnostic, ticket, apiKey, query);
++            boolean parsed = false;
++            try {
++              suggested = classify(diagnostic, ticket, apiKey, query);
++              parsed = true;
++            } finally {
++              if (diagnostic.googleAttempt)
++                settings.recordGoogle(registration, diagnostic.http, parsed);
++            }
 +          }
 +          if (category < 0 && suggested >= 0) {
 +            category = suggested;
@@ -668,6 +765,7 @@ index 0000000000000000000000000000000000000000..a087dcbd3a99ad148d955b377624173e
 +        c.setRequestProperty("Content-Type", contentType);
 +        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
 +        c.setFixedLengthStreamingMode(bytes.length);
++        if (token != null) diagnostic.googleAttempt = true;
 +        try (OutputStream output = c.getOutputStream()) { output.write(bytes); }
 +      }
 +      int http = c.getResponseCode();
