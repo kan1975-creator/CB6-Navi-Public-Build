@@ -541,13 +541,14 @@ diff --git a/android/sdk/src/main/cpp/cb6_ruri/CMakeLists.txt b/android/sdk/src/
 new file mode 100644
 --- /dev/null
 +++ b/android/sdk/src/main/cpp/cb6_ruri/CMakeLists.txt
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,12 @@
 +cmake_minimum_required(VERSION 3.22.1)
 +project(cb6_ruri_sp LANGUAGES C CXX)
 +set(SPM_ENABLE_SHARED OFF CACHE BOOL "" FORCE)
 +set(SPM_ENABLE_TCMALLOC OFF CACHE BOOL "" FORCE)
 +set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 +add_subdirectory(sentencepiece upstream EXCLUDE_FROM_ALL)
++set_target_properties(sentencepiece-static PROPERTIES UNITY_BUILD OFF)
 +add_library(cb6_ruri_sp SHARED ruri_sp.cpp)
 +target_compile_features(cb6_ruri_sp PRIVATE cxx_std_17)
 +target_include_directories(cb6_ruri_sp PRIVATE sentencepiece/src)
