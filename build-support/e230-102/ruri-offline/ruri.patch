@@ -589,7 +589,7 @@ new file mode 100644
 +    auto p = std::make_unique<sentencepiece::SentencePieceProcessor>();
 +    auto model = bytes(env, data);
 +    if (env->ExceptionCheck()) return 0;
-+    if (!p->LoadFromSerializedProto(model).ok() || p->bos_id()!=1 || p->eos_id()!=2 || p->pad_id()!=3)
++    if (!p->LoadFromSerializedProto(model).ok() || p->bos_id()!=1 || p->eos_id()!=2 || (p->pad_id()!=-1 && p->pad_id()!=3))
 +      throw std::runtime_error("model");
 +    return reinterpret_cast<jlong>(p.release());
 +  } catch (const std::bad_alloc &) { fail(env,"java/lang/OutOfMemoryError"); }
