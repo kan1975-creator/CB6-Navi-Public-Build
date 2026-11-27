@@ -1,7 +1,7 @@
 diff --git a/android/app/build.gradle b/android/app/build.gradle
 --- a/android/app/build.gradle
 +++ b/android/app/build.gradle
-@@ -65,6 +65,8 @@
+@@ -65,11 +65,13 @@
    compileSdk = propCompileSdkVersion.toInteger()
  
    defaultConfig {
@@ -10,6 +10,12 @@ diff --git a/android/app/build.gradle b/android/app/build.gradle
      versionCode = rootProject.ext.versionCode
      versionName = rootProject.ext.versionName
      println('Version: ' + versionName)
+     println('VersionCode: ' + versionCode)
+-    minSdk = propMinSdkVersion.toInteger()
++    minSdk = Math.max(24, propMinSdkVersion.toInteger())
+     targetSdk = propTargetSdkVersion.toInteger()
+     applicationId project.ext.appId
+     buildConfigField 'String', 'SUPPORT_MAIL', '"android@comaps.app"'
 @@ -334,6 +336,7 @@
  
  dependencies {
