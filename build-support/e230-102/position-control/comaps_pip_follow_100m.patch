@@ -76,25 +76,30 @@
  
 --- a/libs/drape_frontend/my_position_controller.cpp
 +++ b/libs/drape_frontend/my_position_controller.cpp
-@@ -35,7 +35,7 @@
+@@ -34,8 +34,9 @@
+ {
  namespace
  {
- // A renderer can be recreated during the life of the Android process.
+-// A renderer can be recreated during the life of the Android process.
 -std::atomic<bool> g_firstController{true};
-+std::atomic<bool> g_startupPending{true};
++// Activity launch intents cross from the UI thread to the renderer.
++enum class LaunchFollow { Idle, Requested, AwaitingBearing, Cancel };
++std::atomic<LaunchFollow> g_launchFollow{LaunchFollow::Idle};
  // Background notification arrives outside the rendering thread.
  std::atomic<double> g_lastValidBearing{std::numeric_limits<double>::quiet_NaN()};
  char constexpr kLastBearingSetting[] = "Cb6LastArrowBearingRadians";
-@@ -229,7 +229,7 @@
+@@ -229,18 +230,23 @@
    using namespace location;
  
    m_mode = PendingPosition;
 -  m_startupFollowPending = g_firstController.exchange(false) && !m_hints.m_isLaunchByDeepLink &&
-+  m_startupFollowPending = g_startupPending.load() && !m_hints.m_isLaunchByDeepLink &&
-                            !m_hints.m_screenshotMode && !m_isInRouting;
+-                           !m_hints.m_screenshotMode && !m_isInRouting;
++  auto const launch = g_launchFollow.load();
++  m_startupFollowPending = (launch == LaunchFollow::Requested || launch == LaunchFollow::AwaitingBearing) &&
++                           !m_hints.m_isLaunchByDeepLink && !m_hints.m_screenshotMode && !m_isInRouting;
    if (m_hints.m_isLaunchByDeepLink)
    {
-@@ -237,10 +237,10 @@
+     m_desiredInitMode = NotFollow;
    }
    else if (m_startupFollowPending)
    {
@@ -102,66 +107,93 @@
 +    m_desiredInitMode = Follow;
      double savedBearing;
      if (settings::Get(kLastBearingSetting, savedBearing) && std::isfinite(savedBearing))
--      SetArrowDirection(savedBearing);
-+      m_arrowDirection = savedBearing;  // Display hint until a live bearing arrives.
++    {
+       SetArrowDirection(savedBearing);
++      m_direction = savedBearing;
++      m_holdStationaryBearing = true;
++    }
    }
    else if (m_hints.m_isFirstLaunch)
    {
-@@ -313,14 +313,34 @@
+@@ -313,23 +319,65 @@
    return m_mode != location::PendingPosition && m_mode != location::NotFollowNoPosition;
  }
  
 -void MyPositionController::StartFollowingAtInitialScale()
 -{
--  m_startupFollowPending = false;
++void MyPositionController::RequestStartupFollow(bool requested)
++{
++  g_launchFollow.store(requested ? LaunchFollow::Requested : LaunchFollow::Cancel);
++}
++
++void MyPositionController::UpdateStartupViewport()
++{
++  auto command = g_launchFollow.load();
++  if (command == LaunchFollow::Cancel)
++  {
++    CancelStartupFollow();
++    return;
++  }
++  if (command == LaunchFollow::Requested &&
++      g_launchFollow.compare_exchange_strong(command, LaunchFollow::AwaitingBearing))
++  {
++    if (m_isInRouting || m_hints.m_screenshotMode)
++    {
++      CancelStartupFollow();
++      return;
++    }
++    m_startupFollowPending = true;
++    m_desiredInitMode = location::Follow;
++    if (!m_isPositionAssigned || m_positionIsObsolete ||
++        m_updateLocationTimer.ElapsedSeconds() >= kMaxUpdateLocationInvervalSec)
++    {
++      if (m_mode != location::PendingPosition)
++        ChangeMode(location::PendingPosition);
++    }
++    else
++    {
++      ChangeMode(location::Follow, true);
++      m_isDirtyViewport = true;
++    }
++  }
++  if (!m_startupFollowPending || !m_isPositionAssigned || m_positionIsObsolete ||
++      m_mode != location::Follow || !m_isArrowDirectionAssigned || !m_listener ||
++      m_pixelRect.IsEmptyInterior() || m_visiblePixelRect.IsEmptyInterior())
++    return;
++
++  m_direction = m_arrowDirection;
++  ChangeMode(location::FollowAndRotate, true);
++  m_isDirtyViewport = true;  // Render uses kDoNotChangeZoom.
+   m_startupFollowPending = false;
 -  m_isPositionAssigned = true;
 -  m_direction = m_arrowDirection;
 -  ChangeMode(m_desiredInitMode, true);
 -  ChangeModelView(m_startupScale, m_position, m_direction, GetFollowPixelCenter());
 -  m_isDirtyViewport = false;
-+void MyPositionController::UpdateStartupViewport()
-+{
-+  if (!m_startupFollowPending || !m_isPositionAssigned || m_positionIsObsolete ||
-+      !IsModeChangeViewport() || !m_listener || m_pixelRect.IsEmptyInterior() || m_visiblePixelRect.IsEmptyInterior())
-+    return;
-+
-+  if (m_isArrowDirectionAssigned && m_mode == location::Follow)
-+  {
-+    m_direction = m_arrowDirection;
-+    ChangeMode(location::FollowAndRotate, true);
-+    m_isDirtyViewport = true;
-+  }
-+  if (!m_startupScaleApplied)
-+  {
-+    // The metric ruler rounds 75 m at its minimum width up to the 100 m label.
-+    auto const halfWidth = mercator::MetersToXY(mercator::XToLon(m_position.x), mercator::YToLat(m_position.y),
-+                                                75.0, 0.0).SizeX() * 0.5;
-+    long const rulerPixels = std::max(1L, std::lround(60.0 * GetVisualScale()));
-+    ChangeModelView(halfWidth / rulerPixels, m_position, m_mode == location::Follow ? 0.0 : m_direction,
-+                    GetFollowPixelCenter());
-+    m_startupScaleApplied = true;
-+    m_isDirtyViewport = false;
-+  }
-+  if (m_mode == location::FollowAndRotate)
-+  {
-+    m_startupFollowPending = false;
-+    g_startupPending.store(false);
-+  }
++  command = LaunchFollow::AwaitingBearing;
++  g_launchFollow.compare_exchange_strong(command, LaunchFollow::Idle);
  }
  
  void MyPositionController::CancelStartupFollow()
-@@ -328,7 +348,9 @@
-   if (m_startupFollowPending)
-   {
-     m_startupFollowPending = false;
+ {
+-  if (m_startupFollowPending)
+-  {
+-    m_startupFollowPending = false;
 -    m_desiredInitMode = location::NotFollow;
-+    g_startupPending.store(false);
-+    if (!m_isPositionAssigned)
+-  }
++  auto const command = g_launchFollow.exchange(LaunchFollow::Idle);
++  if (m_startupFollowPending || command == LaunchFollow::Requested)
++  {
++    if (!m_isPositionAssigned || m_mode == location::PendingPosition)
 +      m_desiredInitMode = location::NotFollow;
-   }
++    if (m_isPositionAssigned && m_mode == location::PendingPosition && !m_isInRouting)
++      ChangeMode(location::NotFollow, true);
++  }
++  m_startupFollowPending = false;
  }
  
-@@ -447,12 +469,12 @@
+ void MyPositionController::DragStarted()
+@@ -447,12 +495,12 @@
  
  void MyPositionController::NextMode(ScreenBase const & screen)
  {
@@ -175,7 +207,30 @@
      m_desiredInitMode = location::Follow;
      ChangeMode(location::NotFollowNoPosition);
      return;
-@@ -582,18 +604,11 @@
+@@ -525,6 +573,8 @@
+ void MyPositionController::OnLocationUpdate(location::GpsInfo const & info,
+                                             df::NavigationContext const & navigationContext, ScreenBase const & screen)
+ {
++  // Consume warm launch requests before the queued fix is classified.
++  UpdateStartupViewport();
+   // A queued fix may arrive after the user explicitly stopped the location request.
+   if (!m_isPositionAssigned && m_mode == location::NotFollowNoPosition && !m_isInRouting)
+     return;
+@@ -546,6 +596,13 @@
+   bool const slow = info.HasSpeed() ? info.m_speed <= kStationarySpeedMps : insideDriftRadius;
+   m_holdingStationaryFix = freshAnchor && slow &&
+                            (insideDriftRadius || (m_holdingStationaryFix && info.HasSpeed()));
++  if (!m_isInRouting)
++  {
++    if (info.HasSpeed())
++      m_holdStationaryBearing = info.m_speed <= kStationarySpeedMps && m_isArrowDirectionAssigned;
++    else if (freshAnchor)
++      m_holdStationaryBearing = insideDriftRadius && m_isArrowDirectionAssigned;
++  }
+   if (!m_holdingStationaryFix)
+     m_position = fix;
+   m_errorRadius = rect.SizeX() * 0.5;
+@@ -582,18 +639,11 @@
  
    if (m_startupFollowPending)
    {
@@ -199,7 +254,18 @@
    }
    else if (!m_isPositionAssigned)
    {
-@@ -734,11 +749,8 @@
+@@ -723,7 +773,9 @@
+     }
+   }
+ 
+-  if ((!m_isCompassAvailable || glueArrowInRouting || isMovingFast) && info.HasBearing() && std::isfinite(info.m_bearing))
++  bool const useGps = m_isInRouting ? (!m_isCompassAvailable || glueArrowInRouting || isMovingFast)
++                                    : !m_holdStationaryBearing && (!info.HasSpeed() || info.m_speed > kStationarySpeedMps);
++  if (useGps && info.HasBearing() && std::isfinite(info.m_bearing) && info.m_bearing >= 0.0 && info.m_bearing < 360.0)
+   {
+     SetArrowDirection(math::DegToRad(info.m_bearing));
+     m_lastGPSBearingTimer.Reset();
+@@ -734,11 +786,8 @@
  
  void MyPositionController::LoseLocation()
  {
@@ -213,7 +279,17 @@
    m_holdingStationaryFix = false;
    if (m_mode == location::NotFollowNoPosition)
      return;
-@@ -765,15 +777,6 @@
+@@ -757,7 +806,8 @@
+   if (!std::isfinite(info.m_bearing))
+     return;
+   m_isCompassAvailable = true;
+-  if (m_holdingStationaryFix && (m_isArrowDirectionAssigned || m_isRouteDirectionAssigned))
++  if ((!m_isInRouting && m_holdStationaryBearing) ||
++      (m_holdingStationaryFix && (m_isArrowDirectionAssigned || m_isRouteDirectionAssigned)))
+     return;
+ 
+   bool const existsFreshGpsBearing = m_lastGPSBearingTimer.ElapsedSeconds() < kGpsBearingLifetimeSec;
+@@ -765,15 +815,6 @@
      return;
  
    SetArrowDirection(info.m_bearing);
@@ -229,7 +305,7 @@
    if (m_isPositionAssigned && !AlmostCurrentAzimut(oldAzimut) && m_mode == location::FollowAndRotate &&
        !m_preferRouteDirectionInRouting)
    {
-@@ -799,6 +802,7 @@
+@@ -799,6 +840,7 @@
                                    ScreenBase const & screen, int zoomLevel, FrameValues const & frameValues)
  {
    CheckNotFollowRouting();
@@ -239,7 +315,15 @@
    {
 --- a/libs/drape_frontend/my_position_controller.hpp
 +++ b/libs/drape_frontend/my_position_controller.hpp
-@@ -176,7 +176,7 @@
+@@ -106,6 +106,7 @@
+ 
+   MyPositionController(Params && params, ref_ptr<DrapeNotifier> notifier);
+ 
++  static void RequestStartupFollow(bool requested);
+   void UpdatePosition();
+   void OnUpdateScreen(ScreenBase const & screen);
+   void SetVisibleViewport(m2::RectD const & rect);
+@@ -176,7 +177,7 @@
    void ChangeMode(location::EMyPositionMode newMode, bool persist);
    void ChangeMode(location::EMyPositionMode newMode);
    void CancelStartupFollow();
@@ -248,12 +332,12 @@
    void SetRouteDirection(double bearing);
    void UpdateDirection(location::GpsInfo const & info, df::NavigationContext const & navigationContext);
    void SetArrowDirection(double bearing);
-@@ -217,7 +217,7 @@
+@@ -217,7 +218,7 @@
    TMyPositionModeChanged m_modeChangeCallback;
    Hints m_hints;
    bool m_startupFollowPending = false;
 -  double m_startupScale = 0.0;
-+  bool m_startupScaleApplied = false;
++  bool m_holdStationaryBearing = false;
  
    bool m_isInRouting = false;
    bool m_isArrowGluedInRouting = false;
@@ -295,3 +379,119 @@
    location::GpsInfo m_previousFreeDriveFix;
  
    std::vector<dp::DrapeID> m_drapeSubroutes;
+--- a/android/app/src/main/java/app/organicmaps/MwmActivity.java
++++ b/android/app/src/main/java/app/organicmaps/MwmActivity.java
+@@ -584,3 +584,5 @@
+     final Intent intent = getIntent();
+-    final boolean isLaunchByDeepLink = intent != null && !intent.hasCategory(Intent.CATEGORY_LAUNCHER);
++    final boolean isLaunchByDeepLink = !isPlainMapLaunch(intent);
++    if (savedInstanceState == null || !Map.isEngineCreated())
++      nativeCb6SetStartupFollow(!isLaunchByDeepLink);
+     mCb6Signals = new app.organicmaps.cb6.signals.SignalController(getApplicationContext());
+@@ -589,2 +591,4 @@
+     initViews(isLaunchByDeepLink);
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPictureInPictureMode())
++      mMapController.setPictureInPicture(true);
+     updateViewsInsets();
+@@ -1216,2 +1220,16 @@
+ 
++  @Keep
++  private static native void nativeCb6SetStartupFollow(boolean requested);
++
++  private static boolean isPlainMapLaunch(@Nullable Intent intent)
++  {
++    if (intent == null)
++      return true;
++    String action = intent.getAction();
++    return (action == null || Intent.ACTION_MAIN.equals(action)) && intent.getData() == null &&
++           !Factory.isStartedForApiResult(intent) && !intent.hasExtra(EXTRA_COUNTRY_ID) &&
++           !intent.hasExtra(EXTRA_CATEGORY_ID) && !intent.hasExtra(EXTRA_BOOKMARK_ID) &&
++           !intent.hasExtra(EXTRA_TRACK_ID) && !intent.hasExtra(EXTRA_UPDATE_THEME);
++  }
++
+   @Override
+@@ -1219,2 +1237,3 @@
+   {
++    nativeCb6SetStartupFollow(isPlainMapLaunch(intent));
+     setIntent(intent);
+--- a/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
++++ b/android/sdk/src/main/cpp/app/organicmaps/sdk/Framework.cpp
+@@ -33,6 +33,7 @@
+ #include "storage/storage_defines.hpp"
+ #include "storage/storage_helpers.hpp"
+ 
++#include "drape_frontend/my_position_controller.hpp"
+ #include "drape_frontend/user_event_stream.hpp"
+ #include "drape_frontend/visual_params.hpp"
+ 
+@@ -928,6 +929,13 @@
+ RoutingManager::LoadRouteHandler g_loadRouteHandler;
+ 
+ /// @name JNI EXPORTS
++JNIEXPORT void JNICALL Java_app_organicmaps_MwmActivity_nativeCb6SetStartupFollow(JNIEnv *, jclass, jboolean requested)
++{
++  df::MyPositionController::RequestStartupFollow(requested == JNI_TRUE);
++  if (g_framework)
++    frm()->InvalidateRendering();
++}
++
+ JNIEXPORT jstring JNICALL Java_app_organicmaps_sdk_Framework_nativeGetAddress(JNIEnv * env, jclass clazz, jdouble lat,
+                                                                               jdouble lon)
+ {
+--- a/libs/map/framework.cpp
++++ b/libs/map/framework.cpp
+@@ -103,6 +103,7 @@
+ #include "defines.hpp"
+ 
+ #include <algorithm>
++#include <cmath>
+ 
+ using namespace location;
+ using namespace routing;
+@@ -137,6 +138,7 @@
+ std::string_view constexpr kFontScaleFactor = "FontScaleFactor";
+ std::string_view constexpr kPreferredGraphicsAPI = "PreferredGraphicsAPI";
+ std::string_view constexpr kShowDebugInfo = "DebugInfo";
++std::string_view constexpr kCb6ViewportScale = "Cb6ViewportScale";
+ std::string_view constexpr kScreenViewport = "ScreenClipRect";
+ 
+ // Old (pre-modes) settings keys, kept for backward-compatible fallback reads.
+@@ -1018,6 +1020,14 @@
+ 
+ void Framework::SaveViewport()
+ {
++  // Store only the scale during guidance. The route viewport remains transient.
++  if (m_drapeEngine && df::GetWorldRect().IsPointInside(m_currentModelView.GetOrg()))
++  {
++    double const scale = m_currentModelView.GetScale();
++    if (std::isfinite(scale) && scale > 0.0)
++      settings::Set(kCb6ViewportScale, scale);
++  }
++
+   if (m_routingManager.IsRoutingActive())
+     return;
+ 
+@@ -1612,7 +1622,22 @@
+ 
+   RefreshMapLanguage();
+ 
+-  LoadViewport();
++  // Reconstruct the clip at the new surface size, including a cold PiP start.
++  double savedScale;
++  if (params.m_surfaceWidth > 0 && params.m_surfaceHeight > 0 &&
++      settings::Get(kCb6ViewportScale, savedScale) && std::isfinite(savedScale) && savedScale > 0.0)
++  {
++    m2::AnyRectD savedRect;
++    auto const world = df::GetWorldRect();
++    if (!settings::Get(kScreenViewport, savedRect) || !world.IsPointInside(savedRect.GlobalCenter()))
++      savedRect = m2::AnyRectD(world);
++    double const w = 0.5 * params.m_surfaceWidth * savedScale;
++    double const h = 0.5 * params.m_surfaceHeight * savedScale;
++    m2::AnyRectD const rect(savedRect.GlobalCenter(), savedRect.Angle(), m2::RectD(-w, -h, w, h));
++    m_drapeEngine->SetModelViewAnyRect(rect, false /* isAnim */, false /* useVisibleViewport */);
++  }
++  else
++    LoadViewport();
+ 
+   if (m_connectToGpsTrack)
+     GpsTracker::Instance().Connect(bind(&Framework::OnUpdateGpsTrackPointsCallback, this, _1, _2, _3));
