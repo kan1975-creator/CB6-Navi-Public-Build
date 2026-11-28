@@ -22,10 +22,12 @@ public final class Cb6LiteRtSearch implements AutoCloseable {
   }catch(IOException|RuntimeException e){i.close();throw e;}
   interpreter=i;
  }
- public Cb6CategoryResolver.Decision search(String query){
-  Cb6QueryConstraintParser.Result c=parser.parse(query);
+ Cb6QueryConstraintParser.Result constraints(String query){return parser.parse(query);}
+ public Cb6CategoryResolver.Decision search(String query, Cb6QueryConstraintParser.Result c){
   float[][] scores=new float[1][1083];
   if(!c.requiresReview())interpreter.run(new int[][]{Cb6NgramEncoder.encode(query)},scores);
+  for(float score:scores[0]) if(!Float.isFinite(score)||score<0||score>1)
+    throw new IllegalStateException("分類スコアが不正です");
   return new Cb6CategoryResolver().resolve(scores[0],0.925f,c);
  }
  public void close(){interpreter.close();}

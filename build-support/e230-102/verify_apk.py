@@ -15,6 +15,12 @@ with zipfile.ZipFile(apk) as z:
  names=z.namelist()
  assert {n.split('/')[1] for n in names if n.startswith('lib/') and n.endswith('.so')}=={'arm64-v8a'}
  for n in ['lib/arm64-v8a/liborganicmaps.so','assets/types.txt','assets/classificator.txt','assets/drules_proto_default_light.bin','assets/drules_proto_vehicle_light.bin']:assert n in names,n
+ for asset in ('fg_model.tflite','categories.tsv','all_label_terms.tsv','places.bin'):
+  name='assets/cb6_litert/'+asset
+  staged=repo/'android/app/src/main'/name
+  assert z.read(name)==staged.read_bytes(),name
+ assert any(n.startswith('lib/arm64-v8a/') and ('tensorflowlite' in n or 'litert' in n.lower()) and n.endswith('.so') for n in names)
+ print('APK verified: LiteRT model, categories, terms, places index and arm64 native library')
  assert b'highway|traffic_signals' in z.read('assets/types.txt')
  assert len([n for n in names if n.startswith('assets/symbols/') and n.endswith('.sdf') and b'cb6-signal-' in z.read(n)])==12
  # Verify that all six brands and their two reduced zoom variants are in the
@@ -43,3 +49,5 @@ with zipfile.ZipFile(apk) as z:
  (out/'apk_contents.txt').write_text('\n'.join(names))
 (out/'APK_RESULT.json').write_text(json.dumps({'apk':apk.name,'bytes':apk.stat().st_size,'sha256':hashlib.file_digest(apk.open('rb'),'sha256').hexdigest(),'certificate_sha256':cert,'build_exit':0,'device_acceptance':'NOT_RUN','adoption':'STOP'},indent=2))
 shutil.copy2(apk,out/apk.name)
+
+print((out/'APK_RESULT.json').read_text())

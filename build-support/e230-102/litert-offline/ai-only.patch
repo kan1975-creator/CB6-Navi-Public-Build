@@ -1,0 +1,516 @@
+diff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml
+index caeaffc..f32256b 100644
+--- a/android/app/src/main/AndroidManifest.xml
++++ b/android/app/src/main/AndroidManifest.xml
+@@ -23,6 +23,7 @@
+   <uses-permission
+       android:name="android.permission.READ_EXTERNAL_STORAGE"
+       android:maxSdkVersion="22" />
++  <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+   <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+diff --git a/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java b/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
+index e5b8d64..173d5c5 100644
+--- a/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
++++ b/android/app/src/main/java/app/organicmaps/search/SearchAdapter.java
+@@ -284,18 +284,26 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+     rows.sort((first, second) -> Double.compare(second.score, first.score));
+   }
+ 
+-  void refreshData(@Nullable SearchResult[] results) {
+-    mResults = results == null ? new SearchResult[0] : results;
+-    java.util.List<jp.cb6.search.Cb6SearchEngine.Result> places = custom;
+-    if (!online.isEmpty()) {
+-      places = new java.util.ArrayList<>(custom);
+-      java.util.HashSet<String> seen = new java.util.HashSet<>();
+-      for (jp.cb6.search.Cb6SearchEngine.Result place : custom)
+-        seen.add(place.source + "/" + place.provenance + "/" + place.id);
+-      for (jp.cb6.search.Cb6SearchEngine.Result place : online)
+-        if (seen.add(place.source + "/" + place.provenance + "/" + place.id)) places.add(place);
++  boolean hasMapPoints() {
++    for (Cb6SearchRows.Row row : rows) if (row.result.hasPosition()) return true;
++    return false;
++  }
++
++  boolean appendMapPoints(android.net.Uri.Builder uri) {
++    boolean any = false;
++    for (Cb6SearchRows.Row row : rows) {
++      jp.cb6.search.Cb6SearchEngine.Result r = row.result;
++      if (!r.hasPosition()) continue;
++      uri.appendQueryParameter("ll", r.lat + "," + r.lon);
++      uri.appendQueryParameter("n", r.name == null ? "" : r.name);
++      any = true;
+     }
+-    rows = Cb6SearchRows.merge(query, mResults, places);
++    return any;
++  }
++
++  void refreshData(@Nullable SearchResult[] ignored) {
++    mResults = new SearchResult[0];
++    rows = Cb6SearchRows.merge(query, mResults, online);
+     if (origin != null) rankNearby();
+     notifyDataSetChanged();
+   }
+diff --git a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+index eb32e12..8543edc 100644
+--- a/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
++++ b/android/app/src/main/java/app/organicmaps/search/SearchFragment.java
+@@ -5,6 +5,9 @@ import android.content.Context;
+ import android.content.Intent;
+ import android.location.Location;
+ import android.os.Bundle;
++import android.speech.RecognitionListener;
++import android.speech.RecognizerIntent;
++import android.speech.SpeechRecognizer;
+ import android.text.TextUtils;
+ import android.view.LayoutInflater;
+ import android.view.View;
+@@ -53,81 +56,38 @@ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
+ 
+-public class SearchFragment extends BaseMwmFragment implements SearchListener, CategoriesAdapter.CategoriesUiListener
++public class SearchFragment extends BaseMwmFragment implements CategoriesAdapter.CategoriesUiListener
+ {
+-  private long mLastQueryTimestamp;
+-  private jp.cb6.search.Cb6SearchEngine cb6Engine;
+-  private boolean cb6Pending;
+-  private jp.cb6.search.AiSearch aiSearch;
++  private jp.cb6.search.Cb6LiteRtController lite;
++  private android.widget.TextView liteStatus;
+   private Location aiFix;
+-  private jp.cb6.search.Cb6SearchEngine aiCategoryEngine;
+-
+-  private void cancelAiSearch() {
+-    if (aiSearch != null) aiSearch.cancel();
+-    if (aiCategoryEngine != null) {
+-      aiCategoryEngine.close();
+-      aiCategoryEngine = null;
+-    }
+-  }
+-
+-  private android.app.AlertDialog consentDialog;
++  private boolean completed;
+ 
+   private void submitSearch() {
+-    if (!isResumed() || consentDialog != null) return;
+-    String input = getQuery().trim();
+-    if (input.isEmpty() || input.length() > 128) {
+-      android.widget.Toast.makeText(requireContext(), "検索語を1～128文字で入力してください", android.widget.Toast.LENGTH_SHORT).show();
++    if (getView() == null || lite == null) return;
++    String query = getQuery().trim();
++    stopSearch();
++    liteStatus.setVisibility(View.VISIBLE);
++    if (query.isEmpty() || query.codePointCount(0, query.length()) > 128) {
++      liteStatus.setText("AI検索失敗：検索語を1～128文字で入力してください");
+       return;
+     }
+-    runSearch(jp.cb6.search.AiSearch.localTerm(input));
+-    final long ticket = mLastQueryTimestamp;
+-    if (!aiSearch.onlineAvailable()) return;
+-    consentDialog = new android.app.AlertDialog.Builder(requireContext()).setTitle("オンライン検索")
+-        .setMessage("GoogleのGemma 4に検索文を送信します。現在地がある場合は周辺検索のためOverpassに位置を送信します。")
+-        .setNegativeButton("端末内のみ", null)
+-        .setPositiveButton("送信に同意", (dialog, which) -> {
+-          if (!isResumed() || ticket != mLastQueryTimestamp || !aiSearch.onlineAvailable()) return;
+-          Location fix = jp.cb6.search.AiSearch.recent(aiFix);
+-          mSearchAdapter.aiResults(java.util.Collections.emptyList(), fix);
+-          aiSearch.start(input, fix, (rows, category, status) -> {
+-            if (getView() == null || ticket != mLastQueryTimestamp) return;
+-            mSearchAdapter.aiResults(rows, fix);
+-            java.io.File db = jp.cb6.search.Cb6SearchDb.file(requireContext());
+-            if (!category.isEmpty() && db.isFile()) {
+-              aiCategoryEngine = new jp.cb6.search.Cb6SearchEngine(db);
+-              aiCategoryEngine.search(category, (extra, error) -> {
+-                if (getView() == null || ticket != mLastQueryTimestamp || error != null) return;
+-                java.util.List<jp.cb6.search.Cb6SearchEngine.Result> combined = new java.util.ArrayList<>(rows);
+-                combined.addAll(extra);
+-                mSearchAdapter.aiResults(combined, fix);
+-              });
+-            }
+-            android.widget.Toast.makeText(requireContext(), status, android.widget.Toast.LENGTH_SHORT).show();
+-          });
+-        }).create();
+-    consentDialog.setOnDismissListener(dialog -> consentDialog = null);
+-    consentDialog.show();
+-  }
+-
+-  private void startCustomSearch(String query) {
+-    final long ticket = mLastQueryTimestamp;
++    Location fix = jp.cb6.search.AiSearch.recent(aiFix);
+     mSearchAdapter.begin(query);
+-    cb6Pending = false;
+-    if (isCategory()) {
+-      if (cb6Engine != null) cb6Engine.cancel();
+-      return;
+-    }
+-    java.io.File db = jp.cb6.search.Cb6SearchDb.file(requireContext());
+-    if (!db.isFile()) return;
+-    if (cb6Engine == null) cb6Engine = new jp.cb6.search.Cb6SearchEngine(db);
+-    cb6Pending = true;
+-    cb6Engine.search(query, (rows, error) -> {
+-      if (ticket != mLastQueryTimestamp || getView() == null) return;
+-      cb6Pending = false;
+-      if (error != null) android.util.Log.w("CB6Search", "Search failed", error);
+-      mSearchAdapter.custom(rows);
++    mSearchRunning = true;
++    mToolbarController.showProgress(true);
++    liteStatus.setText("AI検索開始・端末内で分類中…");
++    updateResultsPlaceholder();
++    lite.start(query, fix, (rows, status) -> {
++      mSearchAdapter.aiResults(rows, fix);
++      completed = status == null;
++      liteStatus.setText(completed ? "AI検索完了：" + mSearchAdapter.getItemCount() + "件" : status);
++      updateSearchView();
++      if (mInitialSearchOnMap && completed) showAllResultsOnMap();
++      mInitialSearchOnMap = false;
+     });
+   }
++
+   private boolean compatibleContactsAppInstalled = true;
+   @NonNull
+   private final List<HiddenCommand> mHiddenCommands = new ArrayList<>();
+@@ -174,7 +134,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+         return;
+       }
+ 
+-      runSearch();
++      stopSearch();
+     }
+ 
+     @Override
+@@ -194,7 +154,16 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     @Override
+     protected void startVoiceRecognition(Intent intent)
+     {
+-      startVoiceRecognitionForResult.launch(intent);
++      if (android.os.Build.VERSION.SDK_INT < 31 || !SpeechRecognizer.isOnDeviceRecognitionAvailable(requireContext())) {
++        voiceError("端末内の音声認識を利用できません");
++        return;
++      }
++      if (androidx.core.content.ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO)
++          != android.content.pm.PackageManager.PERMISSION_GRANTED) {
++        voicePermission.launch(android.Manifest.permission.RECORD_AUDIO);
++        return;
++      }
++      listenOnDevice();
+     }
+ 
+     @Override
+@@ -247,16 +216,69 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+   private String mInitialLocale;
+   private boolean mInitialSearchOnMap = false;
+ 
+-  private final ActivityResultLauncher<Intent> startVoiceRecognitionForResult =
+-      registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+-                                activityResult -> mToolbarController.onVoiceRecognitionResult(activityResult));
++  private SpeechRecognizer speech;
++  private final ActivityResultLauncher<String> voicePermission =
++      registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
++        if (getView() == null) return;
++        if (granted) listenOnDevice();
++        else voiceError("マイクの使用が許可されていません");
++      });
++
++  private void voiceError(String message) {
++    stopSearch();
++    liteStatus.setText("音声入力失敗：" + message);
++    liteStatus.setVisibility(View.VISIBLE);
++  }
++
++  private void listenOnDevice() {
++    if (android.os.Build.VERSION.SDK_INT < 31 || speech != null) return;
++    try {
++      speech = SpeechRecognizer.createOnDeviceSpeechRecognizer(requireContext());
++      speech.setRecognitionListener(new RecognitionListener() {
++        public void onReadyForSpeech(Bundle b) {}
++        public void onBeginningOfSpeech() {}
++        public void onRmsChanged(float rms) {}
++        public void onBufferReceived(byte[] buffer) {}
++        public void onEndOfSpeech() {}
++        public void onPartialResults(Bundle b) {}
++        public void onEvent(int event, Bundle b) {}
++        public void onError(int code) {
++          releaseSpeech();
++          if (getView() != null) voiceError("端末内の音声認識エラー (" + code + ")");
++        }
++        public void onResults(Bundle results) {
++          releaseSpeech();
++          if (getView() == null) return;
++          ArrayList<String> words = results == null ? null : results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
++          if (words == null || words.isEmpty() || TextUtils.isEmpty(words.get(0))) voiceError("音声を認識できませんでした");
++          else setQuery(words.get(0), false);
++        }
++      });
++      Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
++          .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
++          .putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP");
++      speech.startListening(intent);
++      liteStatus.setVisibility(View.VISIBLE);
++      liteStatus.setText("端末内で音声を認識中…");
++    } catch (RuntimeException e) {
++      releaseSpeech();
++      voiceError("端末内の音声認識を開始できません");
++    }
++  }
++
++  private void releaseSpeech() {
++    if (speech != null) {
++      speech.destroy();
++      speech = null;
++    }
++  }
+ 
+   private final ActivityResultLauncher<Intent> mContactPickerLauncher =
+           registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+           result -> {
+             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null)
+             {
+-              mToolbarController.setQuery(Utils.getContactAddress(requireContext(), result.getData().getData()));
++              setQuery(Utils.getContactAddress(requireContext(), result.getData().getData()), false);
+             }
+           }
+   );
+@@ -310,7 +332,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     toolbar.setLayoutParams(lp);
+ 
+     UiUtils.showIf(hasQuery, mResultsFrame);
+-    UiUtils.showIf(hasQuery, mShowOnMapFab);
++    UiUtils.showIf(mSearchAdapter.hasMapPoints(), mShowOnMapFab);
+ 
+     if (hasQuery)
+       mTabFrame.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
+@@ -327,7 +349,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+ 
+   private void updateResultsPlaceholder()
+   {
+-    final boolean show = !mSearchRunning && !cb6Pending && mSearchAdapter.getItemCount() == 0 && mToolbarController.hasQuery();
++    final boolean show = completed && !mSearchRunning && mSearchAdapter.getItemCount() == 0 && mToolbarController.hasQuery();
+ 
+     UiUtils.showIf(show, mResultsPlaceholder);
+   }
+@@ -351,13 +373,16 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+     ViewPager2 pager = mTabFrame.findViewById(R.id.pages);
+ 
+     mToolbarController = new ToolbarController(view);
+-    aiSearch = new jp.cb6.search.AiSearch(requireContext());
++    lite = new jp.cb6.search.Cb6LiteRtController(requireContext());
+     android.widget.Button searchButton = new android.widget.Button(requireContext());
+-    searchButton.setText("検索");
++    searchButton.setText("AI検索");
+     searchButton.setOnClickListener(v -> submitSearch());
+-    searchButton.setContentDescription("検索（長押しでAPI設定）");
+-    searchButton.setOnLongClickListener(v -> { aiSearch.configure(requireContext()); return true; });
+-    ((AppBarLayout) root.findViewById(R.id.app_bar)).addView(searchButton);
++    AppBarLayout appBar = root.findViewById(R.id.app_bar);
++    appBar.addView(searchButton);
++    liteStatus = new android.widget.TextView(requireContext());
++    liteStatus.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
++    liteStatus.setVisibility(View.GONE);
++    appBar.addView(liteStatus);
+     TabLayout tabLayout = root.findViewById(R.id.tabs);
+ 
+     if (Config.isSearchHistoryEnabled())
+@@ -412,12 +437,11 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+ 
+     mToolbarController.activate();
+ 
+-    SearchEngine.INSTANCE.addListener(this);
++
+ 
+     tabAdapter.setTabSelectedListener(tab -> mToolbarController.deactivate());
+ 
+-    if (mInitialSearchOnMap)
+-      showAllResultsOnMap();
++
+   }
+ 
+   @Override
+@@ -441,8 +465,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+   @Override
+   public void onPause()
+   {
+-    if (consentDialog != null) consentDialog.dismiss();
+-    cancelAiSearch();
++
+     MwmApplication.from(requireContext()).getLocationHelper().removeListener(mLocationListener);
+     super.onPause();
+   }
+@@ -457,13 +480,10 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+   @Override
+   public void onDestroyView()
+   {
+-    ++mLastQueryTimestamp;
+-    cb6Pending = false;
+-    if (cb6Engine != null) cb6Engine.close();
+-    cb6Engine = null;
+-    cancelAiSearch();
+-    aiSearch.close();
+-    aiSearch = null;
++    releaseSpeech();
++    lite.close();
++    lite = null;
++    liteStatus = null;
+     aiFix = null;
+     super.onDestroyView();
+   }
+@@ -475,7 +495,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+       v.removeOnScrollListener(mRecyclerListener);
+ 
+     mAttachedRecyclers.clear();
+-    SearchEngine.INSTANCE.removeListener(this);
++
+     super.onDestroy();
+   }
+ 
+@@ -490,6 +510,7 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+   void setQuery(String text, boolean isCategory)
+   {
+     mToolbarController.setQuery(text, isCategory);
++    submitSearch();
+   }
+ 
+   private void readArguments()
+@@ -557,30 +578,10 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+ 
+   void showAllResultsOnMap()
+   {
+-    SearchEngine.INSTANCE.updateViewportWithLastResults();
+-
+-    // The previous search should be cancelled before the new one is started, since previous search
+-    // results are no longer needed.
+-    SearchEngine.INSTANCE.cancel();
+-
+-    final String query = getQuery();
+-    if (Config.isSearchHistoryEnabled())
+-      SearchRecents.add(query, requireContext());
+-    mLastQueryTimestamp = System.nanoTime();
+-
+-    SearchEngine.INSTANCE.searchInteractive(
+-        query, isCategory(),
+-        !TextUtils.isEmpty(mInitialLocale) ? mInitialLocale : Language.getKeyboardLocale(requireContext()),
+-        mLastQueryTimestamp, false /* isMapAndTable */);
+-
+-    SearchEngine.INSTANCE.setQuery(query);
+-    Utils.navigateToParent(requireActivity());
+-  }
+-
+-  private void onSearchEnd()
+-  {
+-    if (mSearchRunning && isAdded())
+-      updateSearchView();
++    android.net.Uri.Builder uri = new android.net.Uri.Builder().scheme("cm").authority("map");
++    if (!mSearchAdapter.appendMapPoints(uri)) return;
++    if (Config.isSearchHistoryEnabled()) SearchRecents.add(getQuery(), requireContext());
++    startActivity(new Intent(Intent.ACTION_VIEW, uri.build()).setPackage(requireContext().getPackageName()));
+   }
+ 
+   private void updateSearchView()
+@@ -593,79 +594,17 @@ public class SearchFragment extends BaseMwmFragment implements SearchListener, C
+ 
+   private void stopSearch()
+   {
+-    cancelAiSearch();
+-    ++mLastQueryTimestamp;
+-    cb6Pending = false;
+-    if (cb6Engine != null) cb6Engine.cancel();
+-    SearchEngine.INSTANCE.cancel();
++    lite.cancel();
++    completed = false;
++    mSearchAdapter.clear();
++    liteStatus.setVisibility(View.GONE);
+     updateSearchView();
+   }
+ 
+-  private boolean isTabletSearch()
+-  {
+-    // TODO @yunitsky Implement more elegant solution.
+-    return requireActivity() instanceof MwmActivity;
+-  }
+-
+-  private void runSearch() { runSearch(getQuery()); }
+-
+-  private void runSearch(String query)
+-  {
+-    cancelAiSearch();
+-    // The previous search should be cancelled before the new one is started, since previous search
+-    // results are no longer needed.
+-    SearchEngine.INSTANCE.cancel();
+-
+-    mLastQueryTimestamp = System.nanoTime();
+-    startCustomSearch(query);
+-    if (isTabletSearch())
+-    {
+-      SearchEngine.INSTANCE.searchInteractive(requireContext(), query, isCategory(), mLastQueryTimestamp,
+-                                              true /* isMapAndTable */);
+-    }
+-    else
+-    {
+-      if (!SearchEngine.INSTANCE.search(requireContext(), query, isCategory(), mLastQueryTimestamp,
+-                                        mLastPosition.valid, mLastPosition.lat, mLastPosition.lon))
+-      {
+-        updateSearchView();
+-        return;
+-      }
+-    }
+-
+-    mSearchRunning = true;
+-    mToolbarController.showProgress(true);
+-
+-    updateFrames();
+-  }
+-
+-  @Override
+-  public void onResultsUpdate(@NonNull SearchResult[] results, long timestamp)
+-  {
+-    if (!isAdded() || !mToolbarController.hasQuery())
+-      return;
+-
+-    if (timestamp == mLastQueryTimestamp && getView() != null) refreshSearchResults(results);
+-  }
+-
+-  @Override
+-  public void onResultsEnd(long timestamp)
+-  {
+-    if (timestamp == mLastQueryTimestamp && getView() != null) onSearchEnd();
+-  }
+-
+   @Override
+   public void onSearchCategorySelected(@Nullable String category)
+   {
+-    mToolbarController.setQuery(category, true);
+-  }
+-
+-  private void refreshSearchResults(@NonNull SearchResult[] results)
+-  {
+-    mSearchRunning = true;
+-    updateFrames();
+-    mSearchAdapter.refreshData(results);
+-    mToolbarController.showProgress(true);
++    setQuery(category, true);
+   }
+ 
+   @Override
+diff --git a/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java b/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java
+index f3d2abb..b736127 100644
+--- a/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java
++++ b/android/app/src/main/java/jp/cb6/search/Cb6SearchEngine.java
+@@ -43,7 +43,7 @@ public final class Cb6SearchEngine implements AutoCloseable {
+    pending = worker.submit(() -> {
+      List<Result> rows = Collections.emptyList();
+      Exception error = null;
+-     try { rows = run(query, signal); }
++     try { rows = match(file, query, signal); }
+      catch (android.os.OperationCanceledException ignored) { return; }
+      catch (Exception e) { error = e; }
+      final List<Result> result = rows;
+@@ -60,7 +60,7 @@ public final class Cb6SearchEngine implements AutoCloseable {
+  public static String normalize(String s){StringBuilder b=new StringBuilder();Normalizer.normalize(s==null?"":s,Normalizer.Form.NFKC).toLowerCase(Locale.ROOT).codePoints().forEach(x->{if(Character.isLetterOrDigit(x)||Character.getType(x)==Character.LETTER_NUMBER||Character.getType(x)==Character.OTHER_NUMBER)b.appendCodePoint(x>=0x30a1&&x<=0x30f6?x-96:x);});return b.toString();}
+  static int distance(String a,String b){int[] x=a.codePoints().toArray(),y=b.codePoints().toArray(),r=new int[y.length+1];for(int j=0;j<=y.length;j++)r[j]=j;for(int i=1;i<=x.length;i++){int prev=r[0];r[0]=i;for(int j=1;j<=y.length;j++){int old=r[j];r[j]=Math.min(Math.min(r[j]+1,r[j-1]+1),prev+(x[i-1]==y[j-1]?0:1));prev=old;}}return r[y.length];}
+  public static double score(String q,String v){v=normalize(v);if(v.isEmpty())return 0;if(q.equals(v))return 100;if(v.startsWith(q))return 85;if(v.contains(q))return 75;return 60.0*(1.0-(double)distance(q,v)/Math.max(q.codePointCount(0,q.length()),v.codePointCount(0,v.length())));}
+- private List<Result> run(String query, android.os.CancellationSignal signal) {
++ static List<Result> match(File file, String query, android.os.CancellationSignal signal) {
+    String q = normalize(query);
+    int[] cp = q.codePoints().toArray();
+    if (cp.length == 0 || cp.length > 128) return Collections.emptyList();
