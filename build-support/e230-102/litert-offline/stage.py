@@ -61,6 +61,7 @@ def main():
     atext=replace(atext,'    java.util.List<jp.cb6.search.Cb6SearchEngine.Result> places = custom;', '    if (verifiedOnly) {\n      rows = Cb6SearchRows.merge(query, new SearchResult[0], online);\n      if (origin != null) rankNearby();\n      notifyDataSetChanged();\n      return;\n    }\n    java.util.List<jp.cb6.search.Cb6SearchEngine.Result> places = custom;')
     gradle=APP/'build.gradle'; g=gradle.read_text()
     g=replace(g,'\ndependencies {','\ndependencies {\n    implementation files("libs/litert-1.4.2.aar", "libs/litert-api-1.4.2.aar")')
+    g=replace(g,'\n  defaultConfig {','\n  defaultConfig {\n    ndk { abiFilters "arm64-v8a" }')
     assets=APP/'src/main/assets/cb6_litert'; libs=APP/'libs'; java=APP/'src/main/java/jp/cb6/search'
     copies=[(HERE/n,assets/n) for n in ['fg_model.tflite','categories.tsv','all_label_terms.tsv']]+[(places,assets/'places.bin')]+[(HERE/n,libs/n) for n in ['litert-1.4.2.aar','litert-api-1.4.2.aar']]+[(f,java/f.name) for f in HERE.glob('*.java')]
     for _,dst in copies:
